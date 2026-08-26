@@ -293,16 +293,16 @@
   --dga-font-sans: "IBM Plex Sans", system-ui, sans-serif;
   --dga-text-display-2xl-size: 72px;
   --dga-text-display-2xl-line: 90px;
-  --dga-text-display-2xl-tracking: -2%;
+  --dga-text-display-2xl-tracking: -0.02em;
   --dga-text-display-xl-size: 60px;
   --dga-text-display-xl-line: 72px;
-  --dga-text-display-xl-tracking: -2%;
+  --dga-text-display-xl-tracking: -0.02em;
   --dga-text-display-lg-size: 48px;
   --dga-text-display-lg-line: 60px;
-  --dga-text-display-lg-tracking: -2%;
+  --dga-text-display-lg-tracking: -0.02em;
   --dga-text-display-md-size: 36px;
   --dga-text-display-md-line: 44px;
-  --dga-text-display-md-tracking: -2%;
+  --dga-text-display-md-tracking: -0.02em;
   --dga-text-display-sm-size: 30px;
   --dga-text-display-sm-line: 38px;
   --dga-text-display-xs-size: 24px;
@@ -322,7 +322,9 @@
 }
 
 /* Arabic is a connected script — letter-spacing breaks the joins.
-   DGA applies -2% tracking to Display 2xl..md; it must never reach Arabic text. */
+   DGA's design spec says -2% tracking on Display 2xl..md; CSS letter-spacing does not
+   accept percentages (proposed in css-text-4, never shipped), so the em equivalent
+   -0.02em is used. It must never reach Arabic text. */
 :root:lang(ar), [lang="ar"], [dir="rtl"] { letter-spacing: normal !important; }
 
 /* TODO(harvest): dark theme values exist in the PC 1.0 Figma variable collections

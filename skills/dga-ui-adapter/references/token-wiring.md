@@ -55,7 +55,13 @@ v4 reads CSS, so skip the preset:
 
 ## shadcn/ui + Radix (CSS variables)
 
-shadcn's theme is a fixed set of role variables. Repoint them at DGA's:
+shadcn's theme is a fixed set of role variables. **The wiring differs between Tailwind v4 and
+v3 because of how shadcn consumes those variables.** Using the wrong format silently breaks
+every mapping — no error, just unstyled defaults.
+
+### shadcn + Tailwind v4
+
+v4 shadcn consumes variables as raw values via `@theme inline`. DGA's hex tokens work directly:
 
 ```css
 @import "./dga/tokens.css";
@@ -73,6 +79,36 @@ shadcn's theme is a fixed set of role variables. Repoint them at DGA's:
   --radius:          var(--dga-radius-md);
 }
 ```
+
+### shadcn + Tailwind v3 (pre-v4)
+
+⚠️ **Pre-v4 shadcn components consume variables as `hsl(var(--background))`** — they expect
+**bare HSL channel triplets** (e.g. `210 20% 98%`), not hex values. Feeding hex produces
+`hsl(#f9fafb)` which is invalid CSS, silently dropped by every browser. You must convert
+DGA's hex values to HSL channels:
+
+```css
+@import "./dga/tokens.css";
+
+:root {
+  /* DGA hex → HSL channels for pre-v4 shadcn hsl(var(--x)) consumption */
+  --background:        210 20% 98%;     /* --dga-background-body     #f9fafb */
+  --foreground:        0 0% 8.6%;       /* --dga-text-default         #161616 */
+  --card:              0 0% 100%;       /* --dga-background-card      #ffffff */
+  --primary:           153 65.8% 31%;   /* --dga-background-primary   #1b8354 */
+  --primary-foreground:0 0% 100%;       /* --dga-text-oncolor-primary #ffffff */
+  --destructive:       4 74.3% 48.8%;   /* --dga-background-error     #d92c20 */
+  --muted-foreground:  220 7.7% 45.9%;  /* --dga-text-secondary-paragraph #6c727e */
+  --border:            220 13% 91%;     /* --dga-color-neutral-200    #e5e7eb */
+  --ring:              153 65.8% 31%;   /* --dga-background-primary   #1b8354 */
+  --radius:            0.5rem;          /* --dga-radius-md = 8px      */
+}
+```
+
+If you add more DGA tokens to the shadcn theme, convert each hex to HSL channels with the
+same pattern. The source hex is in the comment so the mapping stays auditable.
+
+### Common to both versions
 
 ⚠️ Do **not** map `--muted-foreground` to `--dga-text-secondary`. That is the gold token that
 fails AA at every size — see rule 2 in `../SKILL.md`. `--dga-text-secondary-paragraph` (#6c727e)
@@ -142,7 +178,8 @@ export const system = createSystem(defaultConfig, defineConfig({
 }))
 ```
 
-Use `colorPalette="brand"` rather than per-instance colours, and put the `-2%` `letterSpacing`
+Use `colorPalette="brand"` rather than per-instance colours, and put the `-0.02em`
+`letterSpacing` (design spec says −2%; CSS `letter-spacing` does not accept percentages)
 on the display scale behind a Latin-only scope.
 
 ## Ant Design
@@ -191,7 +228,8 @@ Arabic is the obvious intent, but DGA does not say so. Confirm with DS-DGA@dga.g
 locking the stack — a bilingual product with a mismatched Arabic fallback changes texture
 mid-sentence.
 
-⚠️ **`letterSpacings` carry -2% on `display-2xl` … `display-md`.** Never let that reach Arabic.
+⚠️ **`letterSpacings` carry `-0.02em` on `display-2xl` … `display-md`** (design spec says −2%;
+CSS `letter-spacing` does not accept percentages). Never let that reach Arabic.
 
 ## Contrast — enforce, do not review
 

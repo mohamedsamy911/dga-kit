@@ -70,10 +70,10 @@ DGA is explicit that display styles are reserved for headings, never body copy.
 
 | Style | Size | Line height | Tracking |
 |---|---|---|---|
-| Display 2xl | 72px / 4.5rem | 90px / 5.625rem | −2% |
-| Display xl | 60px / 3.75rem | 72px / 4.5rem | −2% |
-| Display lg | 48px / 3rem | 60px / 3.75rem | −2% |
-| Display md | 36px / 2.25rem | 44px / 2.75rem | −2% |
+| Display 2xl | 72px / 4.5rem | 90px / 5.625rem | −2% (CSS: `-0.02em`) |
+| Display xl | 60px / 3.75rem | 72px / 4.5rem | −2% (CSS: `-0.02em`) |
+| Display lg | 48px / 3rem | 60px / 3.75rem | −2% (CSS: `-0.02em`) |
+| Display md | 36px / 2.25rem | 44px / 2.75rem | −2% (CSS: `-0.02em`) |
 | Display sm | 30px / 1.875rem | 38px / 2.375rem | — |
 | Display xs | 24px / 1.5rem | 32px / 2rem | — |
 
@@ -91,6 +91,10 @@ DGA is explicit that display styles are reserved for headings, never body copy.
 ⚠️ **Negative tracking (−2%) on the display sizes must not be applied to Arabic.** Arabic is a
 connected script and letter-spacing breaks the joins. Scope tracking to Latin runs only —
 see `../../dga-rtl-i18n/references/rtl-rules.md`.
+
+⚠️ **CSS `letter-spacing` does not accept percentages.** The `-2%` in DGA's spec is expressed
+as `-0.02em` in all generated CSS and Tailwind output. Do not revert to `-2%` — it was
+proposed in css-text-4 and never shipped; every browser silently drops it.
 
 ⚠️ **Text 2xs is 10px.** Below any reasonable minimum for body copy. Use for non-essential
 metadata only, never for content a user must read.

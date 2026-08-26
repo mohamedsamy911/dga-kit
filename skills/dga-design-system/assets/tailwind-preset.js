@@ -291,28 +291,28 @@ export default {
                 "72px",
                 {
                       "lineHeight": "90px",
-                      "letterSpacing": "-2%"
+                      "letterSpacing": "-0.02em"
                 }
           ],
           "display-xl": [
                 "60px",
                 {
                       "lineHeight": "72px",
-                      "letterSpacing": "-2%"
+                      "letterSpacing": "-0.02em"
                 }
           ],
           "display-lg": [
                 "48px",
                 {
                       "lineHeight": "60px",
-                      "letterSpacing": "-2%"
+                      "letterSpacing": "-0.02em"
                 }
           ],
           "display-md": [
                 "36px",
                 {
                       "lineHeight": "44px",
-                      "letterSpacing": "-2%"
+                      "letterSpacing": "-0.02em"
                 }
           ],
           "display-sm": [

@@ -72,8 +72,9 @@ Each of these passes a build, a type check and a casual review.
    is a genuine DGA token *designated for text*, so the name invites the mistake and reviewers
    defer to it. `secondary-gold.800` (#945c01) is the first step that clears AA. Run
    `node <kit>/skills/dga-design-system/assets/check-contrast.mjs` rather than eyeballing it.
-2. **DGA's display type carries -2% tracking that must never reach Arabic.** Arabic is a
-   connected script; letter-spacing breaks the joins.
+2. **DGA's display type carries -0.02em tracking that must never reach Arabic.** Arabic is a
+   connected script; letter-spacing breaks the joins. (The design spec says −2%, but CSS
+   `letter-spacing` does not accept percentages — they are silently dropped by every browser.)
 3. **Nothing in DGA — or in any UI library — provides Hijri dates.** DGA's own datepicker demo is
    Gregorian and its official package contains no Hijri code. That wrapper is yours to build; a
    tested `Intl` implementation ships at `dga-react/assets/reference-impl/dga-date.ts`.

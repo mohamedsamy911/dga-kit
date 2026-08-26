@@ -6,7 +6,8 @@ A Tailwind config extends the DGA display scale and a developer applies it to a 
 ```
 
 ## expect
-- finds: DGA's display scale already carries **-2% tracking**, and `tracking-tight` compounds it.
+- finds: DGA's display scale already carries **-0.02em tracking** (design spec says −2%; CSS
+  `letter-spacing` does not accept percentages), and `tracking-tight` compounds it.
   Arabic is a **connected script** — letter-spacing breaks the joins and renders the word as
   detached glyphs
 - fix: scope tracking to Latin, or zero it under `[dir="rtl"]`

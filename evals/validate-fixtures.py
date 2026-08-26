@@ -38,7 +38,8 @@ chk('case03: paragraph max-width is 720px', t['container']['paragraph-max-width'
 chk('case01: text-secondary on white = 2.30', abs(cr(gold, white) - 2.30) < 0.01, f'{cr(gold, white):.2f}')
 chk('case01: fails 3:1 large-text threshold too', cr(gold, white) < 3.0)
 chk('case01: secondary-gold-800 clears AA', cr(t['color']['secondary-gold']['800'], white) >= 4.5)
-chk('case02: display carries -2% tracking', t['typography']['scale']['display-2xl'].get('tracking') == '-2%')
+# Design spec says -2%; CSS letter-spacing does not accept percentages, so the em equivalent is used.
+chk('case02: display carries -0.02em tracking', t['typography']['scale']['display-2xl'].get('tracking') == '-0.02em')
 chk('typography: 12 steps', len(t['typography']['scale']) == 12, str(len(t['typography']['scale'])))
 chk('breakpoints: 600/960/1280', [t['breakpoint'][k]['token'] for k in ('mobile', 'tablet', 'desktop')] == [600, 960, 1280])
 chk('icons: 24px standard', t['iconography']['$standard'] == 24)
@@ -58,7 +59,7 @@ chk('ui-02: radius is NOT monotonic (2xl < xl)', int(radius['2xl'][:-2]) < int(r
     f"2xl={radius['2xl']} xl={radius['xl']}")
 chk('ui-02: radius is NOT monotonic (3xl < xl)', int(radius['3xl'][:-2]) < int(radius['xl'][:-2]),
     f"3xl={radius['3xl']} xl={radius['xl']}")
-chk('ui-04: display-lg carries -2% tracking', t['typography']['scale']['display-lg'].get('tracking') == '-2%')
+chk('ui-04: display-lg carries -0.02em tracking', t['typography']['scale']['display-lg'].get('tracking') == '-0.02em')
 chk('ui-07: background.body is #f9fafb', body == '#f9fafb', body)
 chk('ui-07: an 8px radius step exists', '8px' in radius.values())
 chk('ui-11: text.default is #161616', t['role']['text']['default'] == '#161616', t['role']['text']['default'])

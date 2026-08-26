@@ -65,7 +65,8 @@ Before the cosmetic passes — RTL errors are structural and invalidate what fol
 - Display styles for headings only, never body copy
 - Line height **≥1.5×** font size for body text
 - **Tracking −2% on Display 2xl–md must not apply to Arabic** — letter-spacing breaks the
-  connected script. Blocker on Arabic text.
+  connected script. Blocker on Arabic text. Note: CSS `letter-spacing` does not accept
+  percentages (proposed in css-text-4, never shipped); the CSS value is `-0.02em`.
 - Text 2xs (10px) used for anything a user must read — Major
 - Heading hierarchy sequential
 
