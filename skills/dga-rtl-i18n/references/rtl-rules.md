@@ -40,6 +40,12 @@ and never revisit it per-screen.
 
 If DGA states a rule for any of these, DGA wins — check `references/components.md` first.
 
+> ⚠️ **Do not cite a count of DGA's RTL statements.** The kit recorded "six references" without
+> listing them, and a later review named four. The number is `TODO(verify)` until someone
+> enumerates the pages. Cite the specific page you are relying on, never a total. The per-component
+> ⚠️ **RTL** notes in `components.md` are this kit's derived guidance — a different and larger set
+> than DGA's own explicit statements.
+
 ## Bidirectional text
 
 The bidi algorithm assigns direction to *neutral* characters — punctuation, brackets, spaces,

@@ -5,7 +5,7 @@ Three ways. Pick one.
 ## 1 · As a plugin — recommended
 
 ```bash
-/plugin marketplace add <your-org>/dga-kit
+/plugin marketplace add mohamedsamy911/dga-kit
 ```
 
 ```bash
@@ -48,8 +48,23 @@ the flat `skills/` layout is required — **don't nest them**.
 ## Naming — why everything is `dga-` prefixed
 
 Both skills and agents are prefixed so nothing in this kit can collide with an agent or skill of
-your own. If you already have a `frontend-dev` or a `code-reviewer`, it is untouched. Nothing
-here overwrites anything you did not install from here.
+your own. If you already have a `frontend-dev` or a `code-reviewer`, it is untouched.
+
+## Ownership — how the installer decides what it may delete
+
+The prefix is not the safeguard; a manifest is. Every path the installer creates is recorded in
+`~/.claude/.dga-kit-manifest`, and **it will only ever delete a path listed there**.
+
+| Situation | What happens |
+|---|---|
+| A skill directory exists that the manifest does not claim | **Skipped, untouched.** Re-run with `--force` / `-Force` to adopt it — that is the upgrade path from a pre-0.5.1 install, and each adoption is printed as `OVERWRITE`. |
+| `--uninstall` with no manifest | **Refuses to run.** It will not delete by name. |
+| `--uninstall` with a manifest | Removes a path only if it is **both** listed in the manifest **and** matches the fixed allowlist (`skills/dga-*` from the shipped list, or `agents/dga-*.md`). |
+| A manifest entry outside that allowlist | **Refused and reported.** The manifest is editable text, so it is treated as a record, not an authority — a corrupted one can under-delete, never delete something unrelated. |
+| Pre-0.5 leftovers (`dga-chakra`, `rga-brand`, `agents/_shared/`) | **Never deleted automatically.** Reported as notes. `--clean-legacy` / `-CleanLegacy` lists each path and requires you to type `DELETE`. |
+
+This matters because `rga-brand` is a plausible name for a skill of your own. Versions before
+0.5.1 deleted it by name during a normal install. They no longer do.
 
 ## What gets installed
 

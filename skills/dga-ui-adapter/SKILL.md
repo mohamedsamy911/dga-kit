@@ -70,7 +70,15 @@ Eight rules. Each is library-independent, and each one has burned somebody.
    `text.primary-light`, `text.secondary-light` and `text.tertiary-light`, which are dark-surface
    tokens. The name invites the mistake and reviewers defer to it, because it *is* a real DGA
    token. Need gold text on white? `secondary-gold.800` (#945c01) is the first step that clears
-   AA. Run `node ../dga-design-system/assets/check-contrast.mjs` for every failing pair, and wire it into CI.
+   AA.
+
+   ⚠️ **Only `text.secondary` actually fails.** The three `-light` roles are **dark-surface
+   tokens**, not defects — on DGA's own `background.black` they measure 10.75:1, 14.79:1 and
+   9.09:1. Do not delete them from your theme; they are the only text roles DGA publishes *for*
+   dark surfaces. Scope them, don't remove them.
+
+   `node ../dga-design-system/assets/check-contrast.mjs` lists every pairing — but read what it
+   does and does not cover before you gate a build on it.
 
 3. **Never letter-space Arabic.** DGA's display scale carries **-2% tracking**. Arabic is a
    connected script — tracking breaks the joins. Scope `letter-spacing` to Latin, or zero it
@@ -139,7 +147,30 @@ Full specs for all of the above: `../dga-design-system/references/patterns.md` a
 |---|---|
 | `references/token-wiring.md` | Wiring the DGA tokens into Tailwind v3/v4, MUI, Chakra v3, shadcn/Radix, Ant Design, styled-components, or plain CSS |
 | `references/component-mapping.md` | All 50 DGA components, your library's name for each, and the DGA constraint to add |
-| `../dga-design-system/assets/check-contrast.mjs` | Runnable WCAG check over DGA's own token pairings. CI-ready: exits non-zero on a failure |
+| `../dga-design-system/assets/check-contrast.mjs` | WCAG audit of **DGA's own** role x background table. It never reads your source — see the CI note below |
+
+## What the contrast checker does and does not do
+
+Worth being precise, because it is easy to wire it up and believe you are covered.
+
+**What it does.** Reads `tokens.json` and scores every DGA text role against every DGA light
+surface. It is an audit of **what DGA publishes**, and it is the evidence behind rule 2.
+
+**What it does not do.** It never opens your source. Nothing you write can change its exit code.
+It also does not score pairings *your theme composes* — a `colorPalette` `fg` on `muted`, a hover
+state, text over a brand fill. Those are where AA actually breaks in a real build, and they are
+invisible to this script.
+
+**So `--ci` cannot be a green gate.** On stock DGA tokens it exits **1**, permanently, because
+`text.secondary` fails. A pipeline that reports it green has the flag missing. Wire it as:
+
+1. **Run it once as a documented artefact** — `--json`, committed. It is your evidence of which
+   upstream tokens are unusable, and it re-runs correctly after a harvest.
+2. **Gate the build on your own source instead** — a grep for hex literals outside the theme
+   layer, and for the role names you have ruled out. ⚠️ A grep for a token you *deleted* can
+   never fail; see the silent-failure note in `references/token-wiring.md`.
+3. **Add a check over the pairings your theme actually composes**, which this script does not
+   generate for you.
 
 ## Honest limits
 

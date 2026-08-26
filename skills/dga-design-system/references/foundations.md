@@ -92,9 +92,12 @@ DGA is explicit that display styles are reserved for headings, never body copy.
 connected script and letter-spacing breaks the joins. Scope tracking to Latin runs only —
 see `../../dga-rtl-i18n/references/rtl-rules.md`.
 
-⚠️ **CSS `letter-spacing` does not accept percentages.** The `-2%` in DGA's spec is expressed
-as `-0.02em` in all generated CSS and Tailwind output. Do not revert to `-2%` — it was
-proposed in css-text-4 and never shipped; every browser silently drops it.
+⚠️ **CSS `letter-spacing` does not accept percentages.** Percentages were proposed in
+css-text-4 and never shipped, so `letter-spacing: -2%` is silently dropped by every browser.
+`tokens.json` keeps DGA's published `-2%` — it is the harvested value, and a re-harvest must
+diff clean against it. `generate-tokens.mjs` converts it to `-0.02em` at the boundary, so all
+generated CSS and Tailwind output is valid. **Never hand-write `-2%` into a stylesheet**, and
+never "correct" the value in `tokens.json`.
 
 ⚠️ **Text 2xs is 10px.** Below any reasonable minimum for body copy. Use for non-essential
 metadata only, never for content a user must read.

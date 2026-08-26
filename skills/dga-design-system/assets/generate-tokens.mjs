@@ -16,6 +16,11 @@ const banner = `/* GENERATED FROM tokens.json — DO NOT EDIT BY HAND.
 // Every loop below must honour this or annotations leak into the generated output.
 const skip = k => k.startsWith('$')
 const kebab = s => String(s).replace(/\./g, '-')
+// DGA publishes display tracking as a percentage (-2%). CSS letter-spacing accepts <length>
+// or normal only - percentages were proposed in css-text-4 and never shipped, so a browser
+// drops the declaration silently. tokens.json keeps DGA's published value so a re-harvest
+// diffs clean; the conversion to em happens here, at the boundary.
+const em = v => (typeof v === 'string' && v.endsWith('%')) ? `${parseFloat(v) / 100}em` : v
 
 /* ---------- CSS ---------- */
 const L = []
@@ -59,7 +64,7 @@ for (const [name, v] of Object.entries(t.typography.scale)) {
   if (skip(name)) continue
   L.push(`  --dga-text-${name}-size: ${v.size};`)
   L.push(`  --dga-text-${name}-line: ${v.lineHeight};`)
-  if (v.tracking) L.push(`  --dga-text-${name}-tracking: ${v.tracking};`)
+  if (v.tracking) L.push(`  --dga-text-${name}-tracking: ${em(v.tracking)};`)
 }
 L.push('}')
 L.push('')
@@ -91,7 +96,7 @@ for (const [k, v] of Object.entries(t.space.named)) if (!skip(k)) spacing[k] = v
 const radius = {}; for (const [k, v] of Object.entries(t.radius)) if (!skip(k)) radius[k] = v
 const shadow = {}; for (const [k, v] of Object.entries(t.shadow)) if (!skip(k)) shadow[k] = v
 const fontSize = {}
-for (const [n, v] of Object.entries(t.typography.scale)) if (!skip(n)) fontSize[n] = [v.size, { lineHeight: v.lineHeight, ...(v.tracking ? { letterSpacing: v.tracking } : {}) }]
+for (const [n, v] of Object.entries(t.typography.scale)) if (!skip(n)) fontSize[n] = [v.size, { lineHeight: v.lineHeight, ...(v.tracking ? { letterSpacing: em(v.tracking) } : {}) }]
 
 const preset = `// GENERATED FROM tokens.json — DO NOT EDIT BY HAND.
 // Source: ${t.$meta.source} | Retrieved: ${t.$meta.retrieved}

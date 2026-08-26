@@ -26,6 +26,7 @@ verbatim from the running site, not transcribed from screenshots.
 | Principles | Design tokens | `/thoughts/designToken` | 2026-08-26 |
 | Principles | Local & global standards | `/thoughts/localAndGlobal` | 2026-08-26 |
 | Components | **All 50 pages** | `/guidelines/components/{category}/{name}` | 2026-08-26 |
+| Templates | **18 of 19** | `/guidelines/templates/*` — home, service, form, contact-us, help, faqs, search, sitemap, page-not-found, feedback-section, cookies, chatbot, e-participation, open-data, performance-statistics, about-the-entity, founding-day, national-day | 2026-08-26 |
 
 **Tokens:** 1,052 CSS custom properties extracted from `:root`, covering 41 colour families,
 spacing, radius, shadow, width, container, and per-component role tokens.
@@ -35,7 +36,7 @@ spacing, radius, shadow, width, container, and per-component role tokens.
 | Section | Count | Note |
 |---|---|---|
 
-| Templates | 13 | home, service, form, contact-us, help, faqs, search, sitemap, page-not-found, feedback-section, hajj, founding-day, national-day |
+| Templates | **1** | `hajj` only. The other 18 are captured — see the table above. Corrected 2026-08-27: this row previously listed 13 and was stale. |
 | Designer | `/designing-for-mobile` | |
 | Developer | `/migration-guide`, `/contributing` | |
 | Principles | `/thoughts/atomic-design`, `/responsive-design`, `/consistency-and-unified-identity` | |

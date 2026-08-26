@@ -1,5 +1,8 @@
 # Contrast audit — DGA text roles on DGA backgrounds
 
+**Derived from:** `../assets/tokens.json` (values harvested from https://design.dga.gov.sa/guidelines/foundations/color-system, 2026-08-26). Not a harvested page —
+every ratio here is computed. Reproduce with `node ../assets/check-contrast.mjs`.
+
 Computed from the verbatim token values extracted from design.dga.gov.sa on 2026-08-26.
 Ratios are WCAG 2.x relative luminance, calculated — not estimated.
 

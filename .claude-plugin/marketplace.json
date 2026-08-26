@@ -1,15 +1,15 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "dga-kit",
-  "description": "Saudi Digital Government Authority \"Platforms Code\" compliance for frontend developers and designers building .gov.sa platforms.",
+  "description": "Unofficial helper for Saudi DGA \"Platforms Code\" — for frontend developers and designers building .gov.sa platforms. Not affiliated with or endorsed by the Digital Government Authority.",
   "owner": {
-    "name": "Mohamed Adel",
+    "name": "Mohamed Samy",
     "email": "mohamedadel74@gmail.com"
   },
   "plugins": [
     {
       "name": "dga-kit",
-      "description": "DGA \"Platforms Code\" — the National Design System of Saudi Arabia — as skills and agents. Tokens, 50 component specs, 19 templates, Arabic-first RTL, accessibility and the launch gate, on any UI library. Every rule cited to source.",
+      "description": "Unofficial DGA \"Platforms Code\" helper — the National Design System of Saudi Arabia as skills and agents. Tokens, 50 component specs, 18 of 19 templates, Arabic-first RTL, accessibility and the launch gate, on any UI library. Not affiliated with or endorsed by DGA.",
       "source": "./",
       "category": "design"
     }

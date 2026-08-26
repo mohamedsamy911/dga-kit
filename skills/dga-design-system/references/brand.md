@@ -1,6 +1,11 @@
 # Brand and identity
 
-**Source:** design.dga.gov.sa templates and foundations · **Retrieved:** 2026-08-26
+**Sources:** https://design.dga.gov.sa/guidelines/templates/* (seasonal and occasion pages, header/footer rules) ·
+https://design.dga.gov.sa/guidelines/foundations/typography · https://design.dga.gov.sa/guidelines/foundations/iconography ·
+**Retrieved:** 2026-08-26
+
+> Brand rules are **cross-cutting**: DGA publishes no single brand page, so these are gathered
+> from the page set above. Individual rules cite their specific page inline where one exists.
 
 ## Entity logo
 

@@ -1,6 +1,6 @@
 # Accessibility
 
-**Sources:** `/thoughts/AccessibilityEase`, `/guidelines/foundations/*`, and the Accessibility
+**Sources:** https://design.dga.gov.sa/thoughts/AccessibilityEase · https://design.dga.gov.sa/guidelines/foundations/* · and the Accessibility
 section of every component page · **Retrieved:** 2026-08-26
 
 DGA's stated target is **WCAG 2.1 AA**:

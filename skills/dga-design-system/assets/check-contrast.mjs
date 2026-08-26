@@ -7,8 +7,18 @@
  *   node check-contrast.mjs --json     # machine-readable
  *
  * Reads tokens.json, so it stays correct across a re-harvest. This is the check behind
- * references/CONTRAST-AUDIT.md and rule 2 of dga-ui-adapter — DGA publishes text roles that
- * fail AA on its own backgrounds, and no build step catches that on its own.
+ * references/CONTRAST-AUDIT.md and rule 2 of dga-ui-adapter — DGA publishes a text role that
+ * fails AA on its own backgrounds, and no build step catches that on its own.
+ *
+ * SCOPE — read before wiring this into CI:
+ *   • It audits DGA's OWN published role x background table. It never reads your source, so
+ *     nothing you write can change its exit code.
+ *   • It does not score the pairings your theme composes (colorPalette fg-on-muted, hover
+ *     states, text over a brand fill). That is where AA breaks in a real build.
+ *   • --ci therefore cannot go green on stock DGA tokens: text.secondary fails, permanently.
+ *     Run it as a committed artefact (--json); gate your build on a grep over your own source.
+ *   • The -light / oncolor-* / *disabled* roles are marked `expected` below: they are
+ *     dark-surface tokens, NOT failures, and are excluded from the verdict on purpose.
  *
  * Thresholds: AA normal 4.5, AA large 3.0 (>=18.66px bold or >=24px regular).
  */
@@ -47,7 +57,6 @@ export function ratio(fg, bg) {
   return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05)
 }
 
-const isLight = (hex) => luminance(parseHex(hex)) > 0.5
 const round = (n) => Math.round(n * 100) / 100
 
 // Backgrounds a body page actually uses. Surface roles only - not the solid brand fills, which
@@ -94,10 +103,13 @@ if (process.argv.includes('--json')) {
   marginal.length ? marginal.forEach((x) => console.log(line(x))) : console.log('  none')
 
   console.log(`\n${results.length} pairings checked. ${results.filter((x) => x.expected).length} dark-surface/oncolor/disabled roles excluded from the verdict.`)
+  console.log(`Those are dark-surface tokens, NOT failures - do not delete them from a theme.`)
   if (fails.length) {
-    console.log(`\nThese are real DGA tokens designated for text. Do not use them on a light`)
-    console.log(`surface at any size. secondary-gold.800 (#945c01) is the first gold step that`)
-    console.log(`clears AA on white.`)
+    const roles = [...new Set(fails.map((x) => x.text))]
+    const one = roles.length === 1
+    console.log(`\n${one ? 'This is a real DGA token' : 'These are real DGA tokens'} designated for text: ${roles.join(', ')}.`)
+    console.log(`Do not use ${one ? 'it' : 'them'} on a light surface at any size. secondary-gold.800`)
+    console.log(`(#945c01) is the first gold step that clears AA on white.`)
   }
 }
 

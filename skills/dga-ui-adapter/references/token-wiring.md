@@ -178,9 +178,43 @@ export const system = createSystem(defaultConfig, defineConfig({
 }))
 ```
 
-Use `colorPalette="brand"` rather than per-instance colours, and put the `-0.02em`
-`letterSpacing` (design spec says −2%; CSS `letter-spacing` does not accept percentages)
-on the display scale behind a Latin-only scope.
+Use `colorPalette="brand"` rather than per-instance colours, and put the display-scale
+`letterSpacing` behind a Latin-only scope.
+
+### 🚩 `createSystem(defaultConfig, ...)` merges — it does not replace
+
+This is the trap in the snippet above, and it has two consequences that both pass a build.
+Both are Chakra's documented defaults — see Chakra UI v3 docs, *Theming → Customization*
+(`defaultConfig` is merged into `createSystem`) and *Color Mode* (the provider follows system
+preference by default). Neither is a quirk of this kit's reading.
+
+**1 · You inherit Chakra's dark theme even with no toggle.** Chakra's `defaultConfig` ships
+`_dark` values on its own semantic tokens (`bg`, `fg`, `border`, the gray ramp its recipes use).
+Chakra's `ColorModeProvider` wraps `next-themes`, which enables system preference by default — so
+a visitor whose OS is in dark mode gets the `.dark` class applied **whether or not you expose a
+toggle**. Chakra's built-ins flip dark underneath DGA roles that stay light, and you ship the
+half-dark theme you were trying to avoid, triggered by an OS setting nobody chose in your app.
+
+Since DGA publishes no dark values (Figma-only), pin it until they are in hand:
+
+```tsx
+<ColorModeProvider forcedTheme="light" />   // or defaultTheme="light" enableSystem={false}
+```
+
+and grep for `_dark` in CI so it cannot reappear by accident.
+
+**2 · Omitting a key does not delete it.** Chakra keeps `xl: 1280px` and `2xl: 1536px` from
+`defaultConfig`, so `lg` and `xl` both sit at 1280px and `2xl` is a phantom band DGA never
+defines. Unknown breakpoint keys are not errors, so a `{ base, xl: ... }` copied from a Chakra
+example silently no-ops. The same goes for Chakra's default palette: `color="blue.500"` keeps
+compiling. Build the config without `defaultConfig`, or remove the keys explicitly — and assert
+the result in a test rather than assuming.
+
+**DGA defines four bands, `xl` included** — mobile 0–599, tablet 600–959, desktop 960–1279,
+xl 1280+. Three Chakra thresholds (600/960/1280) cover all four. Delete Chakra's extra keys
+because your thresholds already cover DGA's bands, **not** because DGA lacks an `xl`. And note
+that DGA "desktop" is Chakra `md` — that off-by-one name will confuse anyone reading a DGA spec
+against your code.
 
 ## Ant Design
 
@@ -228,25 +262,83 @@ Arabic is the obvious intent, but DGA does not say so. Confirm with DS-DGA@dga.g
 locking the stack — a bilingual product with a mismatched Arabic fallback changes texture
 mid-sentence.
 
+**Order the stack Latin-first.** Font fallback resolves *per character*, not per string, so both
+faces get used regardless of order — but the order decides which one renders **Latin**:
+
+```css
+/* right: Latin from the face DGA names, Arabic from the Arabic face */
+font-family: "IBM Plex Sans", "IBM Plex Sans Arabic", system-ui, sans-serif;
+
+/* wrong: IBM Plex Sans Arabic contains Latin glyphs, so it wins for Latin
+   and DGA's named face never renders anything */
+font-family: "IBM Plex Sans Arabic", "IBM Plex Sans", system-ui, sans-serif;
+```
+
+Arabic-first *looks* like the Arabic-first principle applied to the font stack. It is not — it
+silently replaces the one typeface DGA actually specifies.
+
 ⚠️ **`letterSpacings` carry `-0.02em` on `display-2xl` … `display-md`** (design spec says −2%;
 CSS `letter-spacing` does not accept percentages). Never let that reach Arabic.
 
-## Contrast — enforce, do not review
+## Contrast — one real failure, three misreadings
 
-Four DGA text tokens fail WCAG AA on every light background in DGA's own palette:
+**Exactly one DGA text token fails AA outright:**
 
 | Token | on `background.white` | Verdict |
 |---|---|---|
-| `text.secondary` #dba102 | **2.30:1** | Fails AA at every size, large included |
-| `text.primary-light` #88d8ad | 1.68:1 | Dark surfaces only |
-| `text.secondary-light` #fae996 | 1.22:1 | Dark surfaces only |
-| `text.tertiary-light` #ccadd9 | 1.99:1 | Dark surfaces only |
+| `text.secondary` #dba102 | **2.30:1** | Fails at every size, large included. No light surface is safe. |
+
+The three `-light` roles are **not failures** — they are dark-surface tokens, and the naming
+invites the wrong conclusion in both directions:
+
+| Token | on white | on `background.black` #161616 | on `background.neutral-800` |
+|---|---|---|---|
+| `text.primary-light` #88d8ad | 1.68:1 ✗ | **10.75:1** ✓ | 8.63:1 ✓ |
+| `text.secondary-light` #fae996 | 1.22:1 ✗ | **14.79:1** ✓ | 11.88:1 ✓ |
+| `text.tertiary-light` #ccadd9 | 1.99:1 ✗ | **9.09:1** ✓ | 7.30:1 ✓ |
+
+`-light` means *"for use on dark"*, not *"the light-theme variant"*. **Do not delete these from
+your theme** — they are the only text roles DGA publishes for dark surfaces, and removing them
+while keeping a dark slot leaves you with nothing legitimate to put in it. Scope them to dark
+surfaces; do not remove them.
+
+`check-contrast.mjs` already encodes this: it marks `-light`, `oncolor-*` and `*disabled*` roles
+as expected-on-dark and excludes them from its verdict. Its FAIL list is `text.secondary` alone.
 
 Also worth knowing: `text.primary` (#1b8354) clears AA by **0.05** on `background.body`
-(4.55:1). It passes, but any opacity applied to green text on the body background breaks it.
+(4.55:1). It passes, but any opacity applied to green text there breaks it.
 
-Run `node ../../dga-design-system/assets/check-contrast.mjs` in CI rather than trusting a reviewer to spot these.
-Full table: `../../dga-design-system/references/CONTRAST-AUDIT.md`.
+Full table: `../../dga-design-system/references/CONTRAST-AUDIT.md`. Read
+`../SKILL.md` -> *What the contrast checker does and does not do* before gating a build on it.
+
+## 🚩 Deleting a token fails silently
+
+A tempting way to stop `text.secondary` being used is to leave it out of the theme. **It does not
+work, and it makes the failure quieter.**
+
+In Chakra v3 — and in most token systems that resolve by string — an unrecognised token is passed
+through as a raw CSS value:
+
+```tsx
+<Text color="text.secondary">   // token deleted from the theme
+// emits:  color: text.secondary
+// browser: invalid declaration, dropped
+// result:  text renders in the inherited colour. No build error. No type error.
+```
+
+You have converted a loud wrong colour into a silent one, and a visual review will not catch it.
+The same applies to a Tailwind class that no longer maps, and to a CSS variable that is never
+declared — `var(--gone)` with no fallback resolves to nothing.
+
+Two consequences:
+
+1. **Repoint, do not delete.** Keep `text.secondary` defined and resolve it to
+   `secondary-gold.800` (#945c01, 5.54:1 on white), or to your own accent. A defined token that
+   is safe beats an undefined one that fails open.
+2. **A grep for a deleted token can never fail.** If your CI greps `src/` for
+   `text.secondary` *and* you removed the token, the check passes by construction — it is
+   guarding nothing. Grep for what a developer will actually write: the hex literal `#dba102`,
+   `background.secondary` (the same gold under another role), and `colorPalette="secondary"`.
 
 ## Quirks preserved from source
 

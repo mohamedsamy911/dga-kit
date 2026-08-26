@@ -13,6 +13,20 @@ every component instead of remembered at the end.
 **Works with any UI library** — Tailwind, MUI, Chakra, shadcn/Radix, Ant Design, Bootstrap, a Vue
 or Angular kit, plain CSS, or DGA's own React package.
 
+## Before you install — read this
+
+> **This is an unofficial project.** It is **not affiliated with, endorsed by, or certified by**
+> the Digital Government Authority. "Platforms Code" and "DGA" are theirs, not mine; this kit is
+> one reading of their **publicly published** material, and it can be wrong.
+>
+> **It cannot make your platform compliant, and it is not evidence of compliance.** Use it to
+> find issues faster and to know what to ask — then **verify anything that matters directly with
+> DGA at DS-DGA@dga.gov.sa.**
+>
+> The interpretation has **not been signed off by a DGA-literate designer**. Token values are
+> exact; what they mean is a reading. [COVERAGE.md](COVERAGE.md) lists every known gap and
+> unverified claim, including where DGA's own published pages are defective.
+
 ## Install
 
 ```bash
@@ -32,7 +46,7 @@ Then restart Claude Code. Prefer per-project or global copies without the plugin
 
 | Skill | Use it for |
 |---|---|
-| `dga-design-system` | The rules. Foundations, 50 components, 19 templates, content, tokens. Everything else reads from it. |
+| `dga-design-system` | The rules. Foundations, 50 components, 18 of 19 templates, content, tokens. Everything else reads from it. |
 | `dga-ui-adapter` | **Building UI on any library.** Token wiring, all 50 components mapped, the compliance build list. |
 | `dga-react` | Building on DGA's own `platformscode-new-react` package. |
 | `dga-rtl-i18n` | Arabic-first RTL, bidi text, Arabic typography, Hijri dates, numerals, i18n wiring. |
@@ -70,9 +84,16 @@ That is the kind of thing this kit exists to catch. Wire the script into CI with
 
 ## The one rule
 
-**Cite or omit.** Every DGA rule in `references/` carries its source URL and the date it was
-retrieved. Where DGA is silent, a skill says so and names its fallback — WCAG 2.1 AA, or a stated
-project default. Nothing is invented.
+**Cite or omit.** Every reference file names the DGA page set it was gathered from and the date
+it was retrieved. Component and foundation rules cite an exact page URL; cross-cutting references
+(brand, content, mobile) name the page set, because DGA publishes no single page for them.
+Where DGA is silent, a skill says so and names its fallback — WCAG 2.1 AA, or a stated project
+default. Nothing is invented.
+
+**This is auditable, and it is not yet per-rule.** A handful of rules carry the page set rather
+than the individual URL. Where a claim matters to you, check it against DGA directly and
+[open an issue](https://github.com/mohamedsamy911/dga-kit/issues) if it does not hold — that is the most useful contribution you can
+make to this kit.
 
 A compliance tool that is confidently wrong is worse than no tool at all. So the kit also states,
 out loud, [where DGA itself is silent or self-contradictory](COVERAGE.md#where-dga-itself-is-silent)
@@ -85,7 +106,8 @@ Token values were **extracted from the live site's CSS custom properties**, not 
 
 | | |
 |---|---|
-| Harvest — 5 foundations, 50 components, 19 templates, 1,052 tokens | ✅ Complete |
+| Harvest — 5 foundations, 50 components, 1,052 tokens | ✅ Complete |
+| Templates — **18 of 19** | ⚠️ Hajj not yet harvested ([gap list](COVERAGE.md#known-gaps--what-this-kit-does-not-cover)) |
 | 11 skills, written and DGA-grounded | ✅ |
 | 6 agents | ✅ |
 | Contrast checker, self-tested | ✅ |
@@ -124,8 +146,13 @@ The most useful contributions are **corrections with a citation**. If a rule her
 what DGA publishes, open an issue with the URL and what it says. Second most useful: token
 re-harvests when DGA updates (`dga-tokens-sync` does the diff).
 
-Not affiliated with or endorsed by the Digital Government Authority. Platforms Code is DGA's;
-this kit is an unofficial reading of it. When it matters, verify with DS-DGA@dga.gov.sa.
+**Reporting a problem:** see [SECURITY.md](SECURITY.md). A factual error in a compliance rule is
+treated with the same priority as a security bug, because a platform shipping on a wrong rule
+fails an assessment it believed it had passed.
+
+**Trademarks.** "Digital Government Authority", "DGA" and "Platforms Code" belong to their
+owners. They are used here descriptively, to say what this kit is about. No affiliation or
+endorsement is claimed or implied — see the notice at the top of this file.
 
 ## Licence
 

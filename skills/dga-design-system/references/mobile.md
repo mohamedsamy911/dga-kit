@@ -1,6 +1,14 @@
 # Mobile
 
-**Source:** /designing-for-mobile · **Retrieved:** 2026-08-26
+**Sources:** https://design.dga.gov.sa/guidelines/templates/* and https://design.dga.gov.sa/guidelines/components/* ·
+**Retrieved:** 2026-08-26
+
+> ⚠️ **`/designing-for-mobile` has NOT been harvested** — it is listed as outstanding in
+> `capture-log.md`. Everything below is gathered from the template and component pages that
+> *were* captured, plus the Mobile UI Kit component names as referenced across the site.
+> The mobile component **specs** are Figma-only and are not reproduced here.
+> An earlier version of this file cited `/designing-for-mobile` as its source with a retrieval
+> date. That was wrong and is corrected here (2026-08-27).
 
 DGA ships a **separate Mobile UI Kit** with components that do not exist in the web set. A
 mobile screen built only from the web component list is missing DGA's own mobile vocabulary.

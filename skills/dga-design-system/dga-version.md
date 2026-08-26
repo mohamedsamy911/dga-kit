@@ -9,7 +9,7 @@ changelog.
 | **Version / last-updated as stated by the site** | Site Version 1.0 · design kits PC 1.0 |
 | **Harvested on** | 2026-08-26 |
 | **Method** | Live DOM extraction of CSS custom properties — values verbatim, not transcribed |
-| **Corroborated by** | An independent extraction dated 2026-06-21 — 48/51 shared colour steps identical. See `../../harvest/CROSSREF-SECOND-EXTRACTION.md` |
+| **Corroborated by** | An independent extraction dated 2026-06-21 — 48/51 shared colour steps identical. See `harvest/CROSSREF-SECOND-EXTRACTION.md` in the dga-kit repository (not shipped with the installed skill) |
 | **Verified by** | — *(designer sign-off gate — still outstanding)* |
 
 ## History

@@ -1,6 +1,11 @@
 # Content and language
 
-**Source:** design.dga.gov.sa templates, components and foundations · **Retrieved:** 2026-08-26
+**Sources:** https://design.dga.gov.sa/guidelines/templates/* · https://design.dga.gov.sa/guidelines/components/* ·
+https://design.dga.gov.sa/guidelines/foundations/* · **Retrieved:** 2026-08-26
+
+> DGA publishes **no standalone content style guide**. Every rule below is gathered from the
+> page set above and cites its specific page inline. Where DGA is silent that is stated, not
+> filled in.
 
 DGA publishes no standalone content style guide. The rules below are gathered from where they
 actually appear — template guidance and component pages. Where DGA is silent, that is recorded
