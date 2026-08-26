@@ -15,6 +15,17 @@ Three ways. Pick one.
 Restart Claude Code. All 11 skills and 6 agents load together, update with the repo, and
 uninstall cleanly with `/plugin uninstall dga-kit`.
 
+## 1b · With OpenAI Codex
+
+The repository also ships `.codex-plugin/plugin.json` alongside the Claude manifest, and an
+[AGENTS.md](AGENTS.md) at the root. `AGENTS.md` is read by Codex and other agentic tools when
+working **in this repository** — it carries the contributor contract (what may not be hand-edited,
+what must be re-run before committing), not DGA guidance.
+
+⚠️ The `.codex-plugin/plugin.json` schema has not been verified against a published Codex plugin
+specification. If Codex rejects it, that manifest is the thing to correct — the skills themselves
+are plain Markdown and work regardless of how they are loaded.
+
 ## 2 · Per-project — versioned with your code
 
 Copy or submodule `skills/` into the project as `.claude/skills/`, and `agents/` as

@@ -1,0 +1,46 @@
+{
+  "name": "dga-kit",
+  "version": "0.5.1",
+  "description": "Unofficial Saudi DGA Platforms Code guidance for Arabic-first frontend work. 11 skills covering foundations, 50 component specs, 18 of 19 templates and 1,052 tokens, on any UI library. Not affiliated with or endorsed by the Digital Government Authority.",
+  "author": {
+    "name": "Mohamed Samy",
+    "email": "mohamedadel74@gmail.com",
+    "url": "https://github.com/mohamedsamy911"
+  },
+  "homepage": "https://github.com/mohamedsamy911/dga-kit",
+  "repository": "https://github.com/mohamedsamy911/dga-kit",
+  "license": "MIT",
+  "keywords": [
+    "dga",
+    "platforms-code",
+    "saudi",
+    "ksa",
+    "gov-sa",
+    "rtl",
+    "arabic",
+    "i18n",
+    "accessibility",
+    "wcag",
+    "design-system",
+    "compliance"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "dga-kit",
+    "shortDescription": "Unofficial DGA guidance for Arabic-first frontend work.",
+    "longDescription": "An unofficial helper for teams building Saudi government platforms: DGA Platforms Code guidance, Arabic-first RTL, accessibility, tokens, and launch-readiness checks. Works with any UI library — Tailwind, MUI, Chakra, shadcn/Radix, Ant Design, plain CSS, or DGA's own React package. Every rule names the DGA page set it came from and the date it was retrieved; where DGA is silent, the kit says so and names its fallback rather than inventing a rule. It is not DGA-endorsed, is not a compliance certification, and cannot make a platform compliant — verify anything that matters with DGA at DS-DGA@dga.gov.sa.",
+    "developerName": "Mohamed Samy",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Review this screen against DGA Platforms Code.",
+      "Help me implement Arabic-first RTL for this page.",
+      "Check this frontend code for DGA and WCAG issues.",
+      "Wire the DGA design tokens into our theme.",
+      "Is this platform ready to launch under the DGA requirements?"
+    ],
+    "brandColor": "#1B8354"
+  }
+}
