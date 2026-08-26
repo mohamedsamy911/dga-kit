@@ -1,0 +1,27 @@
+{
+  "name": "dga-kit",
+  "version": "0.5.0",
+  "description": "Saudi DGA \"Platforms Code\" compliance for designers and developers, on any UI library. 11 skills + 6 agents. Foundations, 50 components, 19 templates, 1,052 tokens — all cited to source.",
+  "author": {
+    "name": "Mohamed Adel",
+    "email": "mohamedadel74@gmail.com"
+  },
+  "homepage": "https://design.dga.gov.sa/",
+  "keywords": [
+    "dga",
+    "platforms-code",
+    "saudi",
+    "ksa",
+    "gov-sa",
+    "design-system",
+    "accessibility",
+    "wcag",
+    "rtl",
+    "arabic",
+    "i18n",
+    "react",
+    "tailwind",
+    "compliance"
+  ],
+  "license": "MIT"
+}

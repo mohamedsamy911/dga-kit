@@ -1,0 +1,87 @@
+---
+name: dga-tokens-sync
+description: Re-harvest Saudi DGA Platforms Code design tokens from design.dga.gov.sa and diff them against this repo. Use when DGA publishes an update, on the quarterly re-check, or when a token value is disputed.
+---
+
+# DGA token sync
+
+Turns a DGA update into a reviewable diff instead of an archaeology project.
+
+## How the tokens were obtained
+
+Not transcribed from swatches — **extracted from the live site's own CSS custom properties**.
+design.dga.gov.sa exposes **1,052 variables on `:root`**, which is the authoritative machine-
+readable source. Re-run the same extraction:
+
+```js
+const rs = getComputedStyle(document.documentElement);
+const v = {};
+for (const sheet of document.styleSheets) {
+  let rules; try { rules = sheet.cssRules } catch(e) { continue }
+  for (const r of rules||[]) if (r.style)
+    for (const p of r.style) if (p.startsWith('--')) v[p] = rs.getPropertyValue(p).trim();
+}
+```
+
+Run it on `/guidelines/foundations/color-system` — that page loads the full token set. Group
+prefixes: `colors` (479) · `link` · `background` · `button` · `tag` · `form` · `featuredicons` ·
+`alpha` · `spacing` · `border` · `icon` · `notification` · `controls` · `stepper` · `table` ·
+`radius` · `gradient` · `shadow` · `width` · `tooltip`.
+
+## Procedure
+
+1. Extract as above; write to a scratch file
+2. **Diff against `../dga-design-system/assets/tokens.json`**
+3. For every change: is it a correction, a rebrand, or a new token? Note which
+4. Regenerate `tokens.css` and the Tailwind preset:
+   `node ../dga-design-system/assets/generate-tokens.mjs`
+5. **Re-run the contrast check** — `node ../dga-design-system/assets/check-contrast.mjs`. A
+   changed colour can silently break a pairing that previously passed. Update
+   `CONTRAST-AUDIT.md` from its output, and re-run `evals/validate-fixtures.py` — an eval
+   asserting an old value teaches the skill a false rule.
+6. **Update the provenance.** Every section of `tokens.json` carries a `$source` with the page
+   it is documented on and the date it was read. Re-stamp `retrieved` on whatever you actually
+   re-read — do **not** bulk-update the date across sections you did not visit.
+7. **Record what you could not settle as `$verify`, in the data.** A value that looks wrong, is
+   disputed by another extraction, or that DGA publishes inconsistently gets an entry next to the
+   section it belongs to — not a note in prose that a consumer of `tokens.json` will never see:
+
+   ```json
+   { "key": "info.50", "value": "#eff8ff",
+     "issue": "what looks wrong, and what the other reading was",
+     "status": "disputed",
+     "action": "what a consumer should do until it is settled" }
+   ```
+
+   `status` must come from the vocabulary in `$meta.$conventions`, and `evals/validate-fixtures.py`
+   fails the build if it does not. **Anything marked `disputed` must also be written up in
+   `harvest/`** — that is checked too.
+
+   This convention is borrowed from `Sara-Saraireh/dga-platforms-code-claude-skill`, and it is
+   the reason a suspected typo in DGA's `info.50` was caught rather than propagated.
+8. Update `dga-version.md` with the new harvest date and the site's stated version
+9. Open a PR with the diff, the contrast delta, and the affected components
+
+## What is NOT in the CSS variables
+
+Do not assume the extraction is complete coverage:
+
+- **Responsive radius and spacing.** DGA's semantic tokens resolve differently on desktop,
+  tablet and mobile. Those values live only in the **PC 1.0 Foundations Figma** variable
+  collections. `TODO(harvest)`
+- **Dark theme values.** Documented as existing for every semantic colour, but not exposed as
+  CSS variables on the public site.
+
+## Cadence
+
+Quarterly, plus whenever `/updates/change-log` shows a release. Note the site is at **Version
+1.0**, design kits at **PC 1.0**.
+
+## Known quirks to preserve
+
+- DGA's `.5` spacing variables use **U+2024 ONE DOT LEADER**, not a full stop (`--spacing-0․5`).
+  Generated CSS must match or the lookup fails.
+- Radius is **not monotonic**: `2xl` (16px) and `3xl` (20px) are smaller than `xl` (24px).
+  Don't "fix" it — mirror the source and flag it.
+- `primary-sa-flag` has no `600` step; `tertiary-lavendar` has no `500`; `gray` has an extra
+  `1000`. All faithful to source.
