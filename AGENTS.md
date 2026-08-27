@@ -15,8 +15,8 @@ date it was retrieved. Where DGA is silent, say so and name the fallback (usuall
 than no tool — a team ships believing it is compliant and fails an assessment. If you cannot cite
 it, do not write it.
 
-The same applies to coverage claims: this kit documents **18 of DGA's 19 templates** (Hajj is
-outstanding). Do not round that up.
+The same applies to coverage claims. State what the harvest actually holds — all 19 templates as
+of 2026-08-27 — and never round a partial harvest up.
 
 ## Before you commit
 

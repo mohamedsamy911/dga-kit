@@ -11,7 +11,7 @@ reads from here rather than carrying its own copy of the rules.
 > ## Harvest complete — interpretation unverified
 >
 > **Populated and citable:** all 8 reference files. 5 foundations, **50 component pages**,
-> **18 of DGA's 19 templates** (Hajj outstanding), and **1,052 design tokens** taken verbatim from the live site's CSS custom
+> **all 19 templates**, and **1,052 design tokens** taken verbatim from the live site's CSS custom
 > properties. Every rule carries a source URL and retrieval date.
 >
 > **Known gaps, stated so no answer implies coverage it lacks:** the Digital Transformation and

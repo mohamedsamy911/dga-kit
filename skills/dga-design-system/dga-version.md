@@ -17,7 +17,8 @@ changelog.
 | Date | DGA version | What changed | Actioned by |
 |---|---|---|---|
 | 2026-08-26 | 1.0 / PC 1.0 | Initial harvest — 1,052 CSS custom properties | — |
-| 2026-08-26 | 1.0 / PC 1.0 | Cross-checked against an independent extraction. 3 values disputed, carried as `$meta.$disputed` in `tokens.json` | — |
+| 2026-08-26 | 1.0 / PC 1.0 | Cross-checked against an independent extraction. 3 values disputed, carried as `$meta.$disputed` in `tokens.json` |
+| 2026-08-27 | 1.0 / PC 1.0 | Harvested `hajj-template`, the last outstanding template. Template coverage now complete at 19 | — |
 
 ## Open at the next harvest
 

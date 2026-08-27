@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "dga-kit",
-      "description": "Unofficial DGA \"Platforms Code\" helper — the National Design System of Saudi Arabia as skills and agents. Tokens, 50 component specs, 18 of 19 templates, Arabic-first RTL, accessibility and the launch gate, on any UI library. Not affiliated with or endorsed by DGA.",
+      "description": "Unofficial DGA \"Platforms Code\" helper — the National Design System of Saudi Arabia as skills and agents. Tokens, 50 component specs, 19 templates, Arabic-first RTL, accessibility and the launch gate, on any UI library. Not affiliated with or endorsed by DGA.",
       "source": "./",
       "category": "design"
     }

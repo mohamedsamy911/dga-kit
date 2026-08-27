@@ -58,8 +58,7 @@ Gregorian, both), Arabic body typeface, motion durations, dark theme. DGA publis
 any of them. Record the answers in `dga-brand-overlay` so every other decision reads from one
 place — and flag that an inconsistent answer across a product is worse than either choice.
 
-**6 · Routing and information architecture.** Page inventory against DGA's 19 templates (this kit
-documents 18; Hajj is outstanding) and the
+**6 · Routing and information architecture.** Page inventory against DGA's 19 templates and the
 mandated pages (About the Entity, e-Participation, Open Data, performance statistics, privacy,
 accessibility statement). Which are static, which are dynamic, which need a Table of Contents.
 

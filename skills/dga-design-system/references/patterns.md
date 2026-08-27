@@ -318,8 +318,31 @@ Animated.
 **Ehsan element** — an optional floating button linking to the Ehsan platform, included because
 Founding Day 2026 coincides with Ramadan.
 
-### Hajj template
-`TODO(harvest)` — the one remaining template page.
+### Hajj 2026 template
+`/guidelines/templates/hajj-template` · retrieved 2026-08-27
+
+Visual identity drawn from Hajj and the **"Hayyakum Allah"** (حياكم الله) slogan — welcoming the
+Guests of Allah, and DGA's stated framing of the Kingdom's role in serving pilgrims.
+
+**Two section treatments** (DGA calls them Option 1 / Option 2):
+- **Option 1** — decorative dividers between sections, keeping the overall design simple
+- **Option 2** — visual patterns inside certain sections (services, backgrounds), for a richer
+  feel and a stronger identity through the page
+
+**Three hero variants:**
+- **Background – Object** — dark background with an arch-framed image; DGA describes the object
+  treatment as adding depth and a spiritual atmosphere
+- **Background – Color** — neutral background taken from the photo's dominant tone, keeping the
+  text area calm and readable
+- **Background – Image** — image-led, the photo blending softly into the text side
+
+**Ehsan element** — an optional floating button linking to the **Adahi (sacrifice) service** on
+the Ehsan platform during the Hajj season. Same component as the Founding Day one above; the
+floating-button rules below apply unchanged.
+
+> The page repeats the **Saudi Font** rules verbatim: download from the Ministry of Culture,
+> national and seasonal occasions only, **main headings only**, never paragraph or long-form
+> text. See `brand.md` — this page is a second source for the same rule, not a new one.
 
 **Floating-button rules (shared with Chatbot):** must not cover important content, including on
 mobile; must contrast with its background (add shadow or white outline if the colour is fixed);
@@ -336,4 +359,7 @@ Adding to the component-level list, the templates assume RTL as the default read
 - **Language switching** — a direct ar/en toggle that reloads *every* element including
   interactive content
 
-Together with Quote, Steps and Buttons, that is the complete set of places DGA speaks to RTL.
+Together with Quote, Steps and Buttons these are the places DGA speaks to RTL that this harvest
+found. ⚠️ **Do not cite a total** — the count was never enumerated at capture time and is
+`TODO(verify)`; cite the specific page you rely on. See COVERAGE.md, *Disputed and unverified
+claims*.

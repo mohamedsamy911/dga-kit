@@ -46,7 +46,7 @@ Then restart Claude Code. Prefer per-project or global copies without the plugin
 
 | Skill | Use it for |
 |---|---|
-| `dga-design-system` | The rules. Foundations, 50 components, 18 of 19 templates, content, tokens. Everything else reads from it. |
+| `dga-design-system` | The rules. Foundations, 50 components, 19 templates, content, tokens. Everything else reads from it. |
 | `dga-ui-adapter` | **Building UI on any library.** Token wiring, all 50 components mapped, the compliance build list. |
 | `dga-react` | Building on DGA's own `platformscode-new-react` package. |
 | `dga-rtl-i18n` | Arabic-first RTL, bidi text, Arabic typography, Hijri dates, numerals, i18n wiring. |
@@ -106,8 +106,7 @@ Token values were **extracted from the live site's CSS custom properties**, not 
 
 | | |
 |---|---|
-| Harvest — 5 foundations, 50 components, 1,052 tokens | ✅ Complete |
-| Templates — **18 of 19** | ⚠️ Hajj not yet harvested ([gap list](COVERAGE.md#known-gaps--what-this-kit-does-not-cover)) |
+| Harvest — 5 foundations, 50 components, **all 19 templates**, 1,052 tokens | ✅ Complete |
 | 11 skills, written and DGA-grounded | ✅ |
 | 6 agents | ✅ |
 | Contrast checker, self-tested | ✅ |

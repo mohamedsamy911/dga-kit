@@ -13,7 +13,7 @@ duplicates another's rules, because rules live once in `dga-design-system/refere
 | Foundations — elevation | 1 | `foundations.md`, `tokens.json` | `dga-design-system` |
 | Foundations — iconography | 1 | `foundations.md` | `dga-design-system` |
 | Components | **50** | `components.md` | `dga-design-system` |
-| Templates | **18 of 19** | `patterns.md` — Hajj outstanding | `dga-design-system` |
+| Templates | **19** | `patterns.md` | `dga-design-system` |
 | Accessibility (per-component + Accessibility Ease) | 51 | `accessibility.md` | `dga-a11y` |
 | Design tokens (`/thoughts/designToken`) | 1 | `foundations.md` §Token architecture | `dga-tokens-sync` |
 | Local & global standards | 1 | `foundations.md` §Compliance context | `dga-launch-gate` |
@@ -29,7 +29,7 @@ duplicates another's rules, because rules live once in `dga-design-system/refere
 
 | Skill | Owns | Explicitly does NOT |
 |---|---|---|
-| **dga-design-system** | The rules. Foundations, 50 components, 18 of 19 templates, content, tokens. Read by everything else. | Judge a design, write code, or run anything |
+| **dga-design-system** | The rules. Foundations, 50 components, 19 templates, content, tokens. Read by everything else. | Judge a design, write code, or run anything |
 | **dga-design-review** | Auditing a *design* against DGA. Seven fixed passes, severity rubric, verdict. | Audit code, or produce designs |
 | **dga-mockup** | *Producing* compliant screens from DGA templates, Arabic-first | Review its own output — that's design-review's job |
 | **dga-handoff** | The design→dev seam. Component inventory, token map, state matrix, bilingual copy | Design or build |
@@ -92,7 +92,6 @@ Stated plainly so no skill implies coverage it lacks.
 | **Responsive radius & spacing values** | Per-breakpoint tokens can't be resolved; treating them as constants is wrong on two of three breakpoints | PC 1.0 Foundations Figma variable collections |
 | **Dark theme values** | Documented as existing, not exposed in CSS | Same Figma files |
 | **Mobile UI Kit** (6 components) | No spec pages, no web equivalent | Figma-only |
-| **Hajj template** | 1 of 19 templates | Quick harvest |
 | **Migration guide / Contributing** | Developer workflow | Quick harvest |
 | **Arabic-language version of the site** | Arabic terminology for `content.md` | The `العربية` toggle |
 | **Storybook** | Component demos | Marked "soon" by DGA — not available yet |
