@@ -478,6 +478,106 @@ if os.path.exists(_inv_path):
             'sources.py --check' not in _c and 'sources.py --baseline' not in _c,
             'the offline suite must stay runnable without design.dga.gov.sa')
 
+    # --- tier B: the deep harvest ----------------------------------------------
+    sys.path.insert(0, os.path.join(ROOT, 'harvest'))
+    try:
+        import deep as _deep
+        # The extraction contract has three traps that were each hit for real. If the snippet
+        # ever loses one, captures silently become the nav drawer, or Arabic, or the SPA shell.
+        chk('deep: extraction clicks an in-page link rather than deep-linking',
+            ".click()" in _deep.EXTRACT_JS and 'a[href=' in _deep.EXTRACT_JS)
+        chk('deep: extraction walks up from the h1 to the CONTENT main',
+            "querySelector('h1')" in _deep.EXTRACT_JS and "tagName !== 'MAIN'" in _deep.EXTRACT_JS)
+        chk('deep: extraction does not trust querySelector(main)',
+            "querySelector('main')" not in _deep.EXTRACT_JS,
+            'the first <main> is the navigation drawer')
+        # Footer and contact chrome appear on all ~91 pages. Leaving them in means one footer
+        # edit churns every hash at once and buries the real change.
+        _sample = 'Body text.\n\nContact Us\nConnect With Us\n\nDS-DGA@dga.gov.sa\nSitemap'
+        chk('deep: normalisation strips the site chrome',
+            _deep.normalise(_sample) == 'Body text.',
+            repr(_deep.normalise(_sample)))
+        chk('deep: identical text hashes identically',
+            _deep.digest('a\n\nb') == _deep.digest('a\n\nb'))
+        chk('deep: whitespace-only differences do not churn the hash',
+            _deep.digest('a  b') == _deep.digest('a b'))
+
+        # THE REVIEW GATE, tested by behaviour rather than by reading the source. Reporting must
+        # write nothing: a run that stored the new snapshot while reporting the change would
+        # compare against its own output next time, say "unchanged", and destroy a diff nobody
+        # had read - the automation accepting its own finding.
+        import tempfile as _tf
+        _real_snaps, _real_inv = _deep.SNAPS, _deep.INV
+        try:
+            _tmp = _tf.mkdtemp()
+            _deep.SNAPS = os.path.join(_tmp, 'snaps')
+            _deep.INV = os.path.join(_tmp, 'inv.json')
+            _cap = {'/x/page': 'Hello.\n\nContact Us\nConnect With Us\nSitemap'}
+            _fake_inv = {'sources': []}
+
+            _res, _pend, _blk = _deep.process(_cap, _fake_inv)    # default = report only
+            chk('deep: reporting writes no snapshot',
+                not os.path.isdir(_deep.SNAPS) or not os.listdir(_deep.SNAPS))
+            chk('deep: reporting writes no inventory', not os.path.exists(_deep.INV))
+            chk('deep: a page with no baseline is NEW, and NEW is pending',
+                _res[0]['status'] == 'NEW' and len(_pend) == 1,
+                'accepting a first harvest at exit 0 would let it through unread')
+
+            _deep.process(_cap, _fake_inv, accept=True)
+            chk('deep: --accept is what writes the snapshot',
+                os.path.isdir(_deep.SNAPS) and len(os.listdir(_deep.SNAPS)) == 1)
+
+            _res2, _pend2, _ = _deep.process(_cap, _fake_inv)
+            chk('deep: an accepted page then reports unchanged',
+                _res2[0]['status'] == 'unchanged' and not _pend2)
+
+            # And the property the bug actually broke: report twice, diff survives both times.
+            _cap2 = {'/x/page': 'Hello there.\n\nContact Us\nConnect With Us\nSitemap'}
+            _a, _, _ = _deep.process(_cap2, _fake_inv)
+            _b, _, _ = _deep.process(_cap2, _fake_inv)
+            chk('deep: a change stays reproducible across repeated reports',
+                _a[0]['status'] == 'CHANGED' and _b[0]['status'] == 'CHANGED'
+                and _a[0]['diff'] == _b[0]['diff'],
+                'the second run must not compare against the first run own output')
+            # A harvest with holes is a FAILED harvest, not a clean one. A browser that died
+            # on forty routes would otherwise report the pages it managed as the whole run.
+            _r3, _p3, _b3 = _deep.process({'/x/page': None}, _fake_inv)
+            chk('deep: a capture the driver could not take is EMPTY, and blocks',
+                _r3[0]['status'] == 'EMPTY' and len(_b3) == 1)
+
+            _r4, _p4, _b4 = _deep.process({}, _fake_inv, expected=['/x/page', '/x/other'])
+            chk('deep: a route the driver never reported is MISSING, not absent',
+                sorted(r['status'] for r in _r4) == ['MISSING', 'MISSING'] and len(_b4) == 2,
+                'silently omitting a route is how a partial harvest looks clean')
+
+            # And acceptance must be refused outright, not applied to the pages that did return.
+            _snapshot_before = sorted(os.listdir(_deep.SNAPS)) if os.path.isdir(_deep.SNAPS) else []
+            _deep.process({'/x/page': 'text', '/x/gone': None}, _fake_inv, accept=True)
+            _snapshot_after = sorted(os.listdir(_deep.SNAPS)) if os.path.isdir(_deep.SNAPS) else []
+            chk('deep: --accept writes NOTHING while any capture is missing',
+                _snapshot_before == _snapshot_after,
+                'accepting the pages that did return records a partial run as the baseline, and '
+                'the missing ones then look unchanged forever')
+        finally:
+            _deep.SNAPS, _deep.INV = _real_snaps, _real_inv
+
+        # The driver cannot be run here, so pin the property that makes it safe: it seeds every
+        # requested route, so a failure surfaces as an empty capture instead of disappearing.
+        _src = open(os.path.join(ROOT, 'harvest', 'deep.py'), encoding='utf-8').read()
+        chk('deep: the playwright driver seeds every requested route',
+            'out = {r: None for r in routes}' in _src,
+            'a driver that only records successes reports a partial harvest as complete')
+    finally:
+        sys.path.pop(0)
+
+    # Snapshots are machine-owned and must not leak into the human-curated evidence, or the
+    # quote-fidelity corpus fills with unfenced page dumps nobody vetted.
+    _snap = os.path.join(ROOT, 'harvest', 'snapshots')
+    if os.path.isdir(_snap):
+        chk('deep: snapshots are separate from the curated captures',
+            not any(f.endswith('.md') for f in os.listdir(_snap)),
+            'harvest/raw/ is curated evidence with <!-- dga --> fences; snapshots are not')
+
     _fresh = os.path.join(ROOT, 'harvest/FRESHNESS.md')
     chk('sentinel: harvest/FRESHNESS.md exists', os.path.exists(_fresh),
         'run: python3 harvest/sources.py --check')

@@ -462,9 +462,11 @@
         "skills/dga-design-system/references/foundations.md"
       ],
       "tier": "B",
-      "contentHash": null,
+      "contentHash": "f5d7981c8f2be7fc75594978cb48873488e075cf82f857d73d9da83315f4bce5",
       "verified": null,
-      "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it."
+      "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it.",
+      "hashMethod": "browser-innertext",
+      "capturedAt": "2026-08-27"
     },
     {
       "url": "/thoughts/consistency-and-unified-identity",
@@ -509,9 +511,11 @@
         "skills/dga-design-system/references/foundations.md"
       ],
       "tier": "B",
-      "contentHash": null,
+      "contentHash": "f2d39f8af65efe6c7b0c2edd1935f7c638a9cbb766170112f4ea9cba18a7d212",
       "verified": null,
-      "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it."
+      "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it.",
+      "hashMethod": "browser-innertext",
+      "capturedAt": "2026-08-27"
     },
     {
       "url": "/AssessmentCriteria",

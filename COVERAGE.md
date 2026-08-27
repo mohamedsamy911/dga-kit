@@ -211,6 +211,74 @@ The close arm matters as much as the open one. Without it the issue stays open a
 accepts the baseline, and the next unrelated change is appended to an issue whose body describes
 something already resolved — history that reads as still open.
 
+## Tier B — the deep harvest
+
+```bash
+python3 harvest/deep.py --routes            # the 91 pages to visit
+python3 harvest/deep.py --emit-js           # the extraction snippet
+python3 harvest/deep.py --capture out.json  # process {route: innerText} from any driver
+python3 harvest/deep.py --playwright        # drive it locally
+```
+
+Tier B is narrower than the plan assumed, because the bundle gave Tier A the route table and the
+release list. What is left for a browser is page **prose** — a wording change that ships without
+a rebuild is invisible to Tier A, and prose is what every reference file quotes.
+
+**Extraction is separate from processing on purpose.** `deep.py` owns the contract — the JS, the
+normalisation, the hashing, the diff — and not the browser. The driver is the least portable part
+and the most likely to rot; the contract is what has to stay identical across drivers. A capture
+taken by hand in devtools is processed by exactly the same code as an automated one.
+
+> `--playwright` needs `pip install playwright && playwright install chromium`. It is **not**
+> exercised by CI and was not run when it was written. `--capture` is the tested path — the
+> snapshots in `harvest/snapshots/` were produced through it from a real browser session.
+
+Three traps are encoded in the snippet, each hit for real during the harvests:
+
+| Trap | What happens if you miss it |
+|---|---|
+| Deep links bounce to `/` | every page returns the home page |
+| `querySelector('main')` is the **nav drawer** | every hash is the navigation, identical everywhere |
+| Default locale is Arabic | half the corpus is the wrong language and every hash churns |
+
+Snapshots live in `harvest/snapshots/` — machine-owned, overwritten each run, used only for
+hashing and diffing. Deliberately **not** `harvest/raw/`: those are human-curated evidence with
+`<!-- dga -->` fences marking DGA's own words, and auto-dumping page text into them would fill
+the quote-fidelity corpus with unvetted noise. Promote a snapshot by hand, with fences, when you
+need to cite it.
+
+### The review gate applies here too
+
+`--capture` **writes nothing** — no snapshot, no hash, no change in `skills/`. `--accept` is the
+only thing that writes, and it is the Tier B equivalent of `sources.py --baseline`.
+
+That ordering is load-bearing, not tidiness. A run that stored the new snapshot while reporting
+the change would compare live against its own output next time, report *"unchanged"*, and the
+diff nobody had read yet would be gone — the automation quietly accepting its own finding.
+
+A **NEW** page is pending too, not merely unchanged: a page with no baseline has never been
+reviewed, so a first harvest fails until someone accepts it rather than passing at exit 0.
+
+| Status | Meaning | Exit |
+|---|---|---|
+| `unchanged` | matches the accepted snapshot | 0 |
+| `NEW` | no baseline — never reviewed | 1 |
+| `CHANGED` | differs; unified diff printed | 1 |
+| `EMPTY` | the driver returned no text | **2** |
+| `MISSING` | the driver never reported this route at all | **2** |
+
+**A harvest with holes is a failed harvest, not a clean one.** `EMPTY` and `MISSING` refuse
+`--accept` outright — not "accept the pages that came back". Recording a partial run as the
+baseline would make the missing pages look unchanged forever, and a browser that died on forty
+of ninety-one routes would report *"fifty-one unchanged"* and pass.
+
+Every route the driver was asked for comes back in the result set, so a failure surfaces instead
+of disappearing. `--capture` treats the file as the intended set (a deliberate subset is fine);
+add `--all` to assert it covers every Tier B route.
+
+Verified by behaviour in the eval suite, including the specific property the first version broke:
+report twice, and the diff is identical both times.
+
 ## Guarding against our own drift
 
 The monitoring in `dga-tokens-sync` watches **DGA** for changes. `evals/check-quote-fidelity.py`
