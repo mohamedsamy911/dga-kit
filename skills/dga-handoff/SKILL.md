@@ -18,6 +18,11 @@ Every element mapped **three ways**: the DGA guideline name → the `platformsco
 component (`dga-*`) → the repo's wrapper, if any. Flag anything with no DGA equivalent as a
 custom component needing justification.
 
+Group the inventory by DGA's **atomic-design levels** — atoms, molecules, organisms — from
+`/thoughts/atomic-design`. It is DGA's published vocabulary, it is the order a developer builds
+in, and it makes the custom components obvious: anything that will not sit on that ladder is the
+thing needing justification. See `../dga-design-system/references/foundations.md` §Atomic design.
+
 ### 2 · Token map
 Every colour, space, radius, type style and shadow as its **semantic** token name, never a hex.
 Where the design used something off-token, name the substitution made and why.

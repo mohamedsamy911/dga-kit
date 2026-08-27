@@ -300,6 +300,35 @@ its reason options are the core; **additional questions are guidance and may be 
 
 ---
 
+## Rating section
+`/guidelines/templates/rating-section` retrieved 2026-08-27
+
+A **separate template** from the feedback section above, and easy to conflate with it. The two ask
+different questions of different things:
+
+| | Feedback section | Rating section |
+|---|---|---|
+| Question | *"Was this page useful?"* | *"How would you rate this service?"* |
+| Subject | the **page** | the **service** |
+| Control | Yes/No plus reason options | the **star Rating component** |
+
+DGA's own wording:
+
+> The most important element in the evaluation section is the question, "How would you rate this
+> service?" accompanied by a star rating component.
+
+- The star control is the **Rating** component (`/guidelines/components/feedback/rating`) - do not
+  substitute a numeric or thumbs control
+- Show **specific numbers** alongside the stars. DGA's stated reason: it makes it easier to
+  identify issues or strengths accurately rather than reading a bare average
+- **Submission confirmation page** after submitting, same as the feedback section
+- **Mobile:** buttons go **below** the text, same as the feedback section
+
+> Both patterns can appear on one platform. A service page carrying only *"Was this page useful?"*
+> has not satisfied the rating template, and vice versa.
+
+---
+
 ## Seasonal and occasion templates
 
 The only place **Saudi Font** is permitted — and headings only.

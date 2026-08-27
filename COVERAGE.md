@@ -24,6 +24,14 @@ duplicates another's rules, because rules live once in `dga-design-system/refere
 | Developer setup (`/developing`, install) | 2 | `official-packages.md` | `dga-react` |
 | DGA rules expressed in a non-DGA UI library | — | `token-wiring.md`, `component-mapping.md` | `dga-ui-adapter` |
 | Designer setup (`/designing`, Figma install) | 2 | `patterns.md`, `brand.md` | `dga-mockup` |
+| Designing for mobile (`/designing-for-mobile`) | 1 | `mobile.md` | `dga-mockup` |
+| Library migration (`/migration-guide`) | 1 | `library-migration.md` | `dga-tokens-sync` |
+| **Assessment Criteria** (`/AssessmentCriteria`) | 1 | `assessment-criteria.md` | `dga-launch-gate` |
+| Atomic design (`/thoughts/atomic-design`) | 1 | `foundations.md` §Atomic design | `dga-frontend-architect`, `dga-handoff` |
+| Responsive design (`/thoughts/responsive-design`) | 1 | `foundations.md` §Responsive design | `dga-design-system` |
+| Consistency & unified identity (`/thoughts/consistency-and-unified-identity`) | 1 | `brand.md` §Colour identity, §Typeface identity | `dga-brand-overlay` |
+| Contributing (`/contributing`) | 1 | `foundations.md` §Contributing back to DGA | `dga-design-system` |
+| Change log + roadmap (`/updates/*`) | 6 | `harvest/raw/2026-08-27-section-sweep.md` | `dga-tokens-sync` |
 
 ## Skill lanes — what each one alone does
 
@@ -88,12 +96,11 @@ Stated plainly so no skill implies coverage it lacks.
 |---|---|---|
 | **Digital Transformation Measurement Indicator** | `dga-launch-gate` §6 incomplete | Harvest — published outside design.dga.gov.sa |
 | **Digital Experience Maturity Indicator** | same | same |
-| **DGA Assessment Criteria checklist** | same | Download from /designing or /developing |
+| **Assessment Criteria *checklist file*** | The scoring page is captured (`harvest/raw/2026-08-27-section-sweep.md`); the downloadable checklist is a separate file | `Download Checklist` on `/AssessmentCriteria` |
 | **Responsive radius & spacing values** | Per-breakpoint tokens can't be resolved; treating them as constants is wrong on two of three breakpoints | PC 1.0 Foundations Figma variable collections |
 | **Dark theme values** | Documented as existing, not exposed in CSS | Same Figma files |
-| **Mobile UI Kit** (6 components) | No spec pages, no web equivalent | Figma-only |
-| **Migration guide / Contributing** | Developer workflow | Quick harvest |
-| **Arabic-language version of the site** | Arabic terminology for `content.md` | The `العربية` toggle |
+| **Mobile UI Kit** (6 components) | Names confirmed from `/designing-for-mobile` 2026-08-27; **no specs** — that page is a Figma download landing page | Figma-only |
+| **Arabic-language version of the site** | Arabic terminology for `content.md`. The toggle is reachable and renders; only the terminology harvest is outstanding | The `العربية` toggle |
 | **Storybook** | Component demos | Marked "soon" by DGA — not available yet |
 | **Designer sign-off** | Values are exact; the *interpretation* is unverified | A DGA-literate designer reads the references |
 
@@ -105,6 +112,8 @@ Recorded rather than quietly resolved, per the kit's own cite-or-omit rule.
 |---|---|
 | **How many places DGA itself states an RTL rule.** This file previously said "6 references across the whole system". Nothing in the kit enumerates them, so the number cannot be checked from its own files, and a review of the derived skills named four (Quote, Steps, Buttons, Pagination). The 16 ⚠️ **RTL** callouts in `components.md` are the kit's *derived* guidance, which is a different count and must not be conflated with DGA's own statements. | **`TODO(verify)`** — settle by re-reading the live site and listing the pages. Until then no skill may cite a number. |
 | Three colour values disputed against an independent extraction | Carried as `$meta.$disputed` in `tokens.json`; see `harvest/CROSSREF-SECOND-EXTRACTION.md` |
+| **How many components DGA ships.** `/about-platforms-code` publishes a **33+** counter. `/guidelines/components/` enumerates **50** routes. | Recorded, not reconciled. This kit cites **50** — the enumerable count. The counter is stale marketing copy. |
+| **When 1.0.0 and 1.0.2 shipped.** `/updates/roadmap` dates them Feb 2024 and Sep 2024; `/updates/change-log` dates the same versions 20 Feb **2025** and 1 Sep **2025**. | Cite the change log — the more specific record. |
 
 ## Where DGA itself is silent
 

@@ -75,10 +75,30 @@ the two pages carrying the transparency mandate. Full detail in
 The entity is scored against these; adopting Platforms Code feeds both:
 - [ ] **Digital Transformation Measurement Indicator**
 - [ ] **Digital Experience Maturity Indicator**
-- [ ] DGA's own **Assessment Criteria** checklist (downloadable from /designing and /developing)
+- [ ] DGA's own **Assessment Criteria** — `/AssessmentCriteria`, captured 2026-08-27
 
-> `TODO(harvest)` — both indicators are published **outside** design.dga.gov.sa. This skill is
-> not complete until they are captured. Say so rather than implying full coverage.
+> `TODO(harvest)` — the **two indicators** are published **outside** design.dga.gov.sa. This skill
+> is not complete until they are captured. Say so rather than implying full coverage.
+
+**The Assessment Criteria are published.** Full rubric in `references/assessment-criteria.md` —
+read it before any go-live call. In short:
+
+- **Four scored categories:** Accessibility · Consistency · Design · Usability
+- **Four Mandatory criteria** — DGA's page groups them under the heading *Essential*: Design
+  System Compliance · Typography and Color Standards · Layout and Spacing (mobile-first, spacing
+  grid) · Mobile Usability. DGA's stated consequence, verbatim:
+  a project failing these **"*typically* cannot proceed to deployment"**. Report it with the hedge — DGA describes the
+  normal outcome and names no exception process, so this gate must not upgrade it to a guarantee
+- **Four Recommended criteria**, including *"Ensure an **Arabic-first content strategy**"* — DGA's
+  own words, so cite `/AssessmentCriteria` rather than presenting Arabic-first as this kit's
+  inference
+- **Optional** is named but has no published criteria. Do not invent them
+- Submit **two weeks ahead**; the review runs **~20 days** with a revision cycle built in. Budget
+  five weeks from "done" to approval
+- Scored 1–100 in ten named bands. **No passing threshold is published** — do not quote a target
+
+> The downloadable checklist *file* is still **not obtained**. The page is captured; the file is
+> separate. Do not claim item-level coverage of the checklist.
 
 ## Output
 

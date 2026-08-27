@@ -74,8 +74,16 @@ Do not assume the extraction is complete coverage:
 
 ## Cadence
 
-Quarterly, plus whenever `/updates/change-log` shows a release. Note the site is at **Version
-1.0**, design kits at **PC 1.0**.
+Quarterly, plus whenever `/updates/change-log` shows a release.
+
+**Current published version: 1.0.3, released 4 Nov 2025.** Releases so far — 1.0.0 (20 Feb 2025) ·
+1.0.1 (5 May 2025) · 1.0.2 (1 Sep 2025) · 1.0.3 (4 Nov 2025). Roughly one release every three to
+four months, which is what the quarterly cadence above is sized for.
+
+> Do not read the version off the nav badge or the footer — both still say `Version 1.0`. Do not
+> read it off the Figma file names either; `PC 1.0 Foundations` is a **file name**. The change log
+> is the only authority. Each release has its own route,
+> `/updates/change-log/version-history-1-0-3`, so diffing is cheap.
 
 ## Known quirks to preserve
 

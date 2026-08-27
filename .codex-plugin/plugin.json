@@ -1,6 +1,6 @@
 {
   "name": "dga-kit",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Unofficial Saudi DGA Platforms Code guidance for Arabic-first frontend work. 11 skills covering foundations, 50 component specs, 19 templates and 1,052 tokens, on any UI library. Not affiliated with or endorsed by the Digital Government Authority.",
   "author": {
     "name": "Mohamed Samy",
@@ -37,8 +37,6 @@
     "defaultPrompt": [
       "Review this screen against DGA Platforms Code.",
       "Help me implement Arabic-first RTL for this page.",
-      "Check this frontend code for DGA and WCAG issues.",
-      "Wire the DGA design tokens into our theme.",
       "Is this platform ready to launch under the DGA requirements?"
     ],
     "brandColor": "#1B8354"

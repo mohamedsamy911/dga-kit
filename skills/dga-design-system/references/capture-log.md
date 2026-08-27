@@ -3,7 +3,8 @@
 Evidence trail for every DGA rule this kit asserts.
 
 **Source:** https://design.dga.gov.sa/ — "Platforms Code", National Design System of Saudi Arabia
-**Site footer version:** © 2025 · **Design kit version:** PC 1.0
+**Site footer version:** © 2025 · **Design kit version:** **PC 1.0.3**, released 4 Nov 2025
+(per `/updates/change-log`, captured 2026-08-27 — earlier notes in this kit said bare "PC 1.0")
 **Captured by:** Claude, via Claude-in-Chrome on `mohamed-samy`
 **Method:** live page text + CSS custom-property extraction from the DOM. Token values are
 verbatim from the running site, not transcribed from screenshots.
@@ -26,8 +27,19 @@ verbatim from the running site, not transcribed from screenshots.
 | Principles | Design tokens | `/thoughts/designToken` | 2026-08-26 |
 | Principles | Local & global standards | `/thoughts/localAndGlobal` | 2026-08-26 |
 | Components | **All 50 pages** | `/guidelines/components/{category}/{name}` | 2026-08-26 |
-| Templates | **All 19** | `/guidelines/templates/*` — home, service, form, contact-us, help, faqs, search, sitemap, page-not-found, feedback-section, cookies, chatbot, e-participation, open-data, performance-statistics, about-the-entity, founding-day, national-day | 2026-08-26 |
-| Templates | **hajj-template** | `/guidelines/templates/hajj-template` — completes the set | 2026-08-27 |
+| Templates | **17** | `/guidelines/templates/*` — home-page, service-page, form-page, contact-us-page, help-page, faqs-page, search-page, sitemap-page, page-not-found, content-page, feedback-section, cookies-banner, chatbot, e-participation-page, about-page, founding-day, national-day | 2026-08-26 |
+| Templates | **hajj-template** | `/guidelines/templates/hajj-template` | 2026-08-27 |
+| Templates | **rating-section** | `/guidelines/templates/rating-section` — completes the set at **19** | 2026-08-27 |
+| Designer | Designing for mobile | `/designing-for-mobile` | 2026-08-27 |
+| Developer | Contributing | `/contributing` | 2026-08-27 |
+| Principles | Atomic design | `/thoughts/atomic-design` | 2026-08-27 |
+| Principles | Responsive design | `/thoughts/responsive-design` | 2026-08-27 |
+| Principles | Consistency and unified identity | `/thoughts/consistency-and-unified-identity` | 2026-08-27 |
+| Compliance | **Assessment Criteria** | `/AssessmentCriteria` — categories, compliance levels, 20-day review, score bands | 2026-08-27 |
+| Other | About Platforms Code | `/about-platforms-code` | 2026-08-27 |
+| Other | Support + 15 FAQs | `/support` | 2026-08-27 |
+| Other | Roadmap | `/updates/roadmap` | 2026-08-27 |
+| Other | Change log + 4 version pages | `/updates/change-log`, `/updates/change-log/version-history-1-0-{0,1,2,3}` | 2026-08-27 |
 
 **Tokens:** 1,052 CSS custom properties extracted from `:root`, covering 41 colour families,
 spacing, radius, shadow, width, container, and per-component role tokens.
@@ -37,13 +49,23 @@ spacing, radius, shadow, width, container, and per-component role tokens.
 | Section | Count | Note |
 |---|---|---|
 
-| ~~Templates~~ | — | **Closed 2026-08-27** — `hajj-template` harvested; all 19 templates are now captured. |
-| Designer | `/designing-for-mobile` | |
-| Developer | `/migration-guide`, `/contributing` | |
-| Principles | `/thoughts/atomic-design`, `/responsive-design`, `/consistency-and-unified-identity` | |
-| Other | `/support`, `/updates/roadmap`, `/updates/change-log`, FAQ, Assessment Criteria | |
+| ~~Templates~~ | — | **Closed 2026-08-27** — `hajj-template` and `rating-section` harvested; all 19 templates captured. |
+| ~~Designer~~ | — | **Closed 2026-08-27** — `/designing-for-mobile` captured. `/migration-guide` was never outstanding; it was captured 2026-08-26 into `dga-tokens-sync/references/library-migration.md` and this row was wrong. |
+| ~~Developer~~ | — | **Closed 2026-08-27** — `/contributing` captured. |
+| ~~Principles~~ | — | **Closed 2026-08-27** — all three captured; Thoughts is now 6 of 6. |
+| ~~Other~~ | — | **Closed 2026-08-27** — `/support` (with its 15 FAQs), `/updates/roadmap`, `/updates/change-log` and its four version pages, `/about-platforms-code`, and `/AssessmentCriteria` captured. |
+| Site | `/sitemap` | The site's own sitemap page. Navigation only — no rule on it. Not planned. |
 | **Off-site** | Digital Transformation Measurement + Digital Experience Maturity indicators | Needed for `dga-launch-gate`; published outside this site |
+| **Off-site** | **Assessment Criteria checklist file** | The *page* is now captured; the downloadable checklist itself is a separate file and is still not obtained |
 | **Off-site** | PC 1.0 Figma files | Responsive radius/spacing values live only in the Figma variable collections |
+
+> **Correction, 2026-08-27.** This row previously read *"All 19"* and listed `open-data` and
+> `performance-statistics` as templates. Neither is a template route — both are **required
+> sections inside** the e-Participation and About the Entity templates, and they are documented as
+> such in `patterns.md`. The list also omitted `content-page` (which was captured) and
+> `rating-section` (which was not). Actual coverage on 2026-08-26 was **17 of 19**, not 19. Found
+> by extracting the site's own route table; raw evidence in `harvest/raw/2026-08-27-section-sweep.md`.
+
 
 ## Gaps — looked for, not found on the site
 

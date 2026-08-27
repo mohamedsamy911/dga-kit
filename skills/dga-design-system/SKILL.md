@@ -17,7 +17,11 @@ reads from here rather than carrying its own copy of the rules.
 > **Known gaps, stated so no answer implies coverage it lacks:** the Digital Transformation and
 > Digital Experience Maturity indicators (published outside design.dga.gov.sa); the responsive
 > radius/spacing and dark-theme values (PC 1.0 Figma variable collections only); the six
-> mobile-only component specs; the Hajj template.
+> mobile-only component specs; the Assessment Criteria **checklist file** (the rubric page itself
+> is captured — see `../dga-launch-gate/references/assessment-criteria.md`).
+>
+> **Version:** the published system is **PC 1.0.3**, released 4 Nov 2025. The 2026-08-26 token
+> harvest postdates it. See `dga-version.md`.
 >
 > ⚠️ **No designer sign-off yet.** Values are exact; interpretation is not verified.
 
@@ -35,7 +39,7 @@ it in and that it isn't there.
 
 | Question about… | Read |
 |---|---|
-| Colour, type scale, spacing, grid, radii, elevation, icons, motion | `references/foundations.md` |
+| Colour, type scale, spacing, grid, radii, elevation, icons, motion, **responsive design**, **atomic design**, contributing | `references/foundations.md` |
 | A specific component — anatomy, variants, states, RTL notes, ARIA | `references/components.md` |
 | Page templates, forms, tables, search, auth, errors, empty states | `references/patterns.md` |
 | Accessibility requirements and their WCAG mapping | `references/accessibility.md` |

@@ -85,3 +85,21 @@ Tickable form of `SKILL.md`. Attach the completed copy to the go-live approval.
 
 > ⚠️ §6 is **incomplete in this kit** — the two indicators are published outside
 > design.dga.gov.sa and have not been harvested. Do not treat §6 as sufficient coverage.
+
+## 7 · DGA Assessment Criteria — the four Mandatory criteria
+
+DGA: failing these *"typically cannot proceed to deployment"*. Keep the hedge when reporting.
+
+Full rubric and the Recommended set: `assessment-criteria.md`.
+
+- [ ] **Design System Compliance** — Platforms Code correctly implemented
+- [ ] **Typography and Color Standards** — approved text and functional colours
+      (⚠️ `text.secondary` #dba102 is 2.30:1 — use `secondary-gold.800` or darker for gold text)
+- [ ] **Layout and Spacing** — wireframe dimensions, **mobile-first**, spacing grid
+- [ ] **Mobile Usability** — touch interactions, viewport sizing, navigation on small screens
+
+Timing, not a tickbox:
+
+- [ ] Assessment submitted **at least two weeks** before the desired review date
+- [ ] Evidence pack prepared per criterion — references, screenshots, code snippets
+- [ ] Checklist reviewed by **someone other than its author** before submission

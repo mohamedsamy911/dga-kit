@@ -159,6 +159,49 @@ Report these to DS-DGA@dga.gov.sa.
 
 ---
 
+## Responsive design
+
+**Source:** /thoughts/responsive-design · retrieved 2026-08-27
+
+DGA's framing, which is worth quoting when responsiveness is treated as a nice-to-have:
+
+> Responsive design is particularly crucial for **government websites**, which must serve diverse
+> audiences with different devices and accessibility needs.
+
+**Stated for developers**
+
+- **Mobile-first.** *"Start by designing for the smallest screens and progressively enhance the
+  design for larger screens."* It is also part of a **Mandatory** assessment criterion (Layout and
+  Spacing) — see `../../dga-launch-gate/references/assessment-criteria.md`
+- **CSS Flexbox and Grid** for adaptive layouts
+- **Media-query breakpoints** — *"Use common breakpoints but also tailor them to the design's
+  needs"*. The concrete values are in the breakpoint table above, from the Layout and spacing page
+- **Container queries** — DGA says *"when they become widely supported"*. That hedge is now stale;
+  container queries are baseline in current browsers. Treat DGA's caution as dated, not as a ban
+
+**Stated for designers**
+
+- **Relative units for type** — *"like 16px (1em, 1rem)"*, adjusting sizes and line heights for
+  legibility on small and large screens
+- **Fluid grids** that adjust to screen size
+- **Touchscreen navigation** — interactive elements *"appropriately sized and spaced for touch
+  inputs"*. DGA gives no pixel figure here; the 44×44px target comes from WCAG 2.1 AA 2.5.5. Cite
+  WCAG for the number, not DGA
+- **Content hierarchy** — essential information prominent and reachable on small screens
+
+### ⚠️ DGA contradicts itself on the tablet grid
+
+| Page | Tablet columns |
+|---|---|
+| `/guidelines/foundations/layout-and-spacing` | *"reducing to **2–4** on smaller aspect ratios"* |
+| `/thoughts/responsive-design` | *"e.g., 12-column grid for desktop, **8-column grid for tablet**"* |
+
+Both are DGA's. **Cite the Layout and spacing page** — it is the foundation page, it is specific,
+and the Thoughts page marks its own figures as an example (`e.g.`) rather than a rule. Do not
+present 8 columns as a DGA requirement. Recorded in `COVERAGE.md`.
+
+DGA names **no mobile column count** on either page.
+
 ## Elevation
 
 Seven shadow steps (`xs` → `3xl`), several of which are two-layer for a smoother falloff.
@@ -263,3 +306,81 @@ in international digital-government indices.
 
 This is what `dga-launch-gate` checks against. Both indicators need their own harvest — they
 are published outside design.dga.gov.sa. `TODO(harvest)`
+
+DGA's own **Assessment Criteria** — the rubric a project is actually scored against before
+go-live — *is* published on the site and is captured in
+`../../dga-launch-gate/references/assessment-criteria.md`.
+
+---
+
+## Atomic design — DGA's IA vocabulary
+
+**Source:** /thoughts/atomic-design · retrieved 2026-08-27
+
+> We adopt an atomic design methodology to ensure organization and sustainability in the
+> development of user interfaces.
+
+This matters because it is **DGA's own vocabulary**, not a generic methodology reference. When an
+architect or a handoff names a layer, use these five words — they are the terms a DGA reviewer
+will use back.
+
+| Level | DGA's definition | DGA's example |
+|---|---|---|
+| **Atoms** | *"basic building blocks […] that cannot be broken down any further without losing their functionality"* | buttons, input fields, labels |
+| **Molecules** | *"relatively simple groups of UI elements functioning together as a unit"* | a form label + input + button = a search form |
+| **Organisms** | *"relatively complex components made up of groups of molecules and/or atoms"* | a navigation bar with logo, search form and menu items |
+| **Templates** | *"groups of organisms combined to form page layouts"*, focused on content structure | — |
+| **Pages** | *"specific instances of templates […] with real content and data"* | — |
+
+Stated benefits: Consistency · Scalability · Collaboration · Maintainability · Flexibility.
+
+**Use it to organise your own project, not to relabel DGA's.** DGA publishes the methodology and
+publishes a flat set of 50 components; it never says which component sits at which level. So:
+
+- ✅ *"In our inventory we are treating the search bar as a molecule composed of Input and Button."*
+  — your classification, your project's structure.
+- ❌ *"DGA classifies Card as an organism."* — DGA says no such thing.
+
+The useful test is decomposition, not labelling: if a screen will not break down into the DGA
+components you already have, that is the signal to check whether a genuinely custom component is
+being invented — and to price it. See `dga-frontend-architect` decision 8.
+
+> ⚠️ DGA's own `/guidelines/components/` groups the 50 components by **function** — Actions,
+> Content Display, Data Display, Feedback, Forms and Inputs, Loading and Status, Navigational,
+> Search and Filters, UI Shell. Those nine categories, not the five atomic levels, are DGA's
+> published classification. Cite the categories; use the levels as a method.
+
+---
+
+## Contributing back to DGA
+
+**Source:** /contributing · retrieved 2026-08-27 · also /support
+
+Where to send a defect found in DGA's published documentation — this kit has a list of seven in
+`capture-log.md`.
+
+**Is it worth contributing?** DGA's four tests: **Relevance** (fixes an issue or meaningfully
+enhances the platform) · **Broad impact** (benefits the majority, not niche cases) · **Minor
+enhancements** (bug fixes, new icons — *"always valuable"*) · **Major additions** (new components
+need thorough evaluation).
+
+**The four steps, and their real status:**
+
+| # | Step | Status on 2026-08-27 |
+|---|---|---|
+| 1 | Familiarize yourself with core principles and components | live |
+| 2 | Join the community — forums, community meetings | **"soon"** |
+| 3 | Follow contribution guidelines on the GitHub page | **"soon"** |
+| 4 | Submit contributions via GitHub with a clear description | Submit |
+
+Types accepted: **design**, **code**, **documentation**.
+
+> 🚩 **There is no published GitHub URL and no published contribution guideline.** Steps 2 and 3
+> are both marked *"soon"*, and the page names no repository. Until that changes, the only working
+> route is **DS-DGA@dga.gov.sa**. Do not tell anyone to open a pull request against a repository
+> this kit cannot name.
+
+> `/support` describes a **"beem community"** as a support channel and a **Storybook** for
+> developers. Neither is live — Storybook is marked "soon" on every component page. Several
+> `/support` answers are also written for an internal DGA audience (*"our organization"*,
+> *"internal communication platforms"*). Treat that page as intent, not as a citeable rule.

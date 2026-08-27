@@ -30,9 +30,29 @@ diff the component inventory before and after, and check anything that didn't up
 
 ## Version history DGA publishes
 
-Current: **PC 1.0** (site Version 1.0). The only changelog entry on the migration page is
-**May 2024 — General Enhancement**, covering Labels, Textarea and Tabs (clarity, contrast, font
-size; resize behaviour and padding; layout, transitions and keyboard navigation).
+Current published version: **1.0.3**, released **4 Nov 2025**. The Figma downloads are named
+`PC 1.0 …` regardless — that is a file name, not a version.
+
+The migration page carries only one entry of its own, **May 2024 — General Enhancement**, covering
+Labels, Textarea and Tabs (clarity, contrast, font size; resize behaviour and padding; layout,
+transitions and keyboard navigation). The real record is `/updates/change-log`, captured
+2026-08-27:
+
+| Version | Date | What shipped |
+|---|---|---|
+| **1.0.3** | 4 Nov 2025 | Digital Stamp text updated; Digital Stamp component updated across templates |
+| **1.0.2** | 1 Sep 2025 | National Day 95 template added |
+| **1.0.1** | 5 May 2025 | Digital Stamp mobile view; Slide-out menu list item; Progress indicator description alignment |
+| **1.0.0** | 20 Feb 2025 | 18 new components; Structured List and Pagination **gained RTL variants**; Date Picker label-to-field padding corrected 4px → **8px**; "Digital Signature" renamed **Digital Stamp** |
+
+> 🚩 Two migration traps in 1.0.0. **"Digital Signature" was renamed "Digital Stamp"** — a rename
+> is exactly the case that silently fails to swap, per the warning above. And the **Date Picker
+> label-to-field padding changed from 4px to 8px**, so any value taken from a Figma file older than
+> 20 Feb 2025 is wrong.
+
+> ⚠️ `/updates/roadmap` dates 1.0.0 to Feb **2024** and the templates release to Sep **2024** —
+> a year earlier than the change log dates the same versions. Cite the change log. Recorded in
+> `COVERAGE.md`.
 
 Watch `/updates/change-log` and `/updates/roadmap` for releases.
 

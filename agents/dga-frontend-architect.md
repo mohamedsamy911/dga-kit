@@ -69,6 +69,16 @@ the error and empty contract every screen inherits, and what happens offline.
 **8 · The component inventory.** What exists, what is extended, what is genuinely new. Sized. A
 component that appears once is not a component.
 
+Name the layers in **DGA's own atomic-design vocabulary** — atoms, molecules, organisms,
+templates, pages. DGA publishes that methodology at `/thoughts/atomic-design`, so those are the
+words a DGA reviewer will use back at you. See
+`../skills/dga-design-system/references/foundations.md` §Atomic design. A screen that will not
+decompose into that ladder is the signal that a genuinely custom component is being invented —
+which decision 3 has to price.
+
+> DGA does not classify its own 50 components by level. Use the vocabulary; do not assert
+> *"Card is an organism"* as a DGA statement.
+
 ## How to propose
 
 - **One recommendation per decision**, with the runner-up and why it lost. A menu of options with

@@ -102,7 +102,9 @@ out loud, [where DGA itself is silent or self-contradictory](COVERAGE.md#where-d
 ## Status, honestly
 
 Token values were **extracted from the live site's CSS custom properties**, not transcribed —
-1,052 of them, on 2026-08-26. The system is "Platforms Code", site Version 1.0, design kits PC 1.0.
+1,052 of them, on 2026-08-26. The system is "Platforms Code", published version **1.0.3** (released 4 Nov 2025, per
+`/updates/change-log`). The nav badge and footer still read "Version 1.0" and the Figma files
+are still named `PC 1.0 …` — those are chrome and filenames, not the version. The harvest postdates 1.0.3, so the values are current.
 
 | | |
 |---|---|
