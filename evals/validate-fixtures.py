@@ -225,6 +225,166 @@ chk('ui-12: case font stack is Latin-first', _LATIN_FIRST in _c12,
 _c12_input = _c12.split('## expect')[0]
 chk('ui-12: case INPUT never declares the Arabic-first stack', _ARABIC_FIRST not in _c12_input)
 
+# --- the source contract ------------------------------------------------------
+# harvest/source-inventory.json is the map the monitoring is built on. If it drifts from the
+# kit it describes, every later check inherits the drift, so it is pinned here rather than
+# trusted. Both counts below have been wrong in this repo before.
+_inv_path = os.path.join(ROOT, 'harvest/source-inventory.json')
+chk('inventory: harvest/source-inventory.json exists', os.path.exists(_inv_path),
+    'run: python3 harvest/sources.py --baseline')
+
+if os.path.exists(_inv_path):
+    _inv = json.load(open(_inv_path, encoding='utf-8'))
+    _by_cat = {s2['category']: s2 for s2 in _inv['sources'] if 'routes' in s2}
+
+    _n_comp = sum(len(v) for v in _by_cat['component']['routes'].values())
+    chk('inventory: component routes match the declared contract',
+        _n_comp == _inv['contracts']['components'] == 50,
+        f"{_n_comp} routes vs contract {_inv['contracts']['components']}")
+    chk('inventory: template routes match the declared contract',
+        len(_by_cat['template']['routes']) == _inv['contracts']['templates'] == 19)
+    chk('inventory: foundation routes match the declared contract',
+        len(_by_cat['foundation']['routes']) == _inv['contracts']['foundations'] == 5)
+    # Thoughts are listed one source per article, not as a group: the six have genuinely
+    # different dependants (AccessibilityEase -> accessibility.md, consistency -> brand.md), and
+    # a single group owner hid four real dependencies in the first version of this file.
+    _thoughts = sorted(s2['url'] for s2 in _inv['sources'] if s2['url'].startswith('/thoughts/'))
+    chk('inventory: thoughts routes match the declared contract',
+        len(_thoughts) == _inv['contracts']['thoughts'] == 6,
+        str(_thoughts))
+    chk('inventory: every thoughts article is listed as its own source',
+        _thoughts == sorted('/thoughts/' + x for x in _inv['contracts']['thoughtsRoutes']))
+
+    _orphan = [o for s2 in _inv['sources'] for o in s2['owns']
+               if not os.path.exists(os.path.join(ROOT, o))]
+    chk('inventory: every owning reference file exists', not _orphan, str(_orphan))
+
+    # A Tier B hash is only meaningful if a browser produced it: the SPA shell is byte-identical
+    # for every route, including ones that do not exist, so a curl-derived hash proves nothing and
+    # would go green forever. The deep harvest WILL fill these in, so the rule is not "no hash" -
+    # it is "no hash without provenance saying a browser rendered the page".
+    _BROWSER_METHODS = {'browser-innertext', 'browser-dom'}
+    _fake = [f"{s2['url']} (hashMethod={s2.get('hashMethod')!r})"
+             for s2 in _inv['sources']
+             if s2['tier'] == 'B' and s2.get('contentHash')
+             and s2.get('hashMethod') not in _BROWSER_METHODS]
+    chk('inventory: every tier-B hash records a browser method', not _fake,
+        'a tier-B hash without hashMethod in ' + str(sorted(_BROWSER_METHODS))
+        + ' can only be the SPA shell: ' + str(_fake))
+
+    # The sitemap is recorded as a stale lower bound. If it ever catches up, that note is wrong
+    # and the sentinel design changes - so assert the staleness rather than assuming it holds.
+    _sm = _inv['tierA']['sitemap']
+    chk('inventory: sitemap is still stale (signal only, never a count)',
+        _sm['componentsListed'] < _inv['contracts']['components']
+        and _sm['templatesListed'] < _inv['contracts']['templates'],
+        f"sitemap now lists {_sm['componentsListed']} components / {_sm['templatesListed']} "
+        f"templates - if it caught up, update the note in harvest/sources.py")
+
+    chk('inventory: the stylesheet tripwire has a build hash',
+        bool(_inv['tierA'].get('stylesheet', {}).get('buildHash')))
+
+    # Critical facts must still be the facts. A stale watch-list is worse than none: it points
+    # the sentinel at a value nothing depends on any more.
+    _facts = {f['fact']: f['value'] for f in _inv['criticalFacts']}
+    chk('inventory: text.secondary critical fact matches tokens.json',
+        _facts['text.secondary'] == t['role']['text']['secondary'])
+    chk('inventory: dark selector critical fact matches tokens.json',
+        _facts['dark theme selector'] in t['role']['dark']['$activation'])
+    _ver = open(os.path.join(ROOT, 'skills/dga-design-system/dga-version.md'),
+                encoding='utf-8').read()
+    # --- ownership completeness, derived rather than trusted -------------------
+    # The map was built by hand twice and was wrong both times: the first pass read only each
+    # file's opening lines and missed four dependants, the second still missed /support because
+    # foundations.md declares it in a per-SECTION provenance line far down the file. So derive
+    # it: every route a reference file declares as its source must resolve to an inventory
+    # source that lists that file as an owner.
+    _DECL = re.compile(
+        r'(?:\*\*Sources?:\*\*|\*\*Also:\*\*)(?P<a>[^\n]*(?:\n(?![\n#])[^\n]*){0,2})'
+        r'|^`?(?P<b>/[A-Za-z0-9_./-]+)`?\s*\u00b7\s*retrieved',
+        re.M)
+    _ROUTE = re.compile(r'(?:https?://design\.dga\.gov\.sa)(/[A-Za-z0-9_./*-]*)|(?<![\w/])(/[A-Za-z0-9_./*-]+)')
+    # Append-only records: a DGA change does not make a capture log wrong, it stays true as
+    # history. dga-version.md is NOT here - a release means the pin itself must change.
+    _NOT_OWNERS = ('references/capture-log.md',)
+    # Declared routes deliberately absent from the inventory, each mapped to WHY. A set would
+    # let a future exemption be added with no justification, which is precisely how a real
+    # dependency stops being monitored - so the rationale is structural, not a comment asking
+    # nicely, and an empty one fails below.
+    #
+    # Empty on purpose today: the route pattern is tight enough that prose which merely looks
+    # like a path ("header/footer rules", "and/or") no longer reaches here.
+    _UNTRACKED_OK = {
+        # '/some/route': 'why nothing needs to watch this',
+    }
+
+    def _covers(src, route):
+        u = src['url']
+        if u == route:
+            return True
+        if '{' not in u:
+            return False
+        prefix = u.split('{', 1)[0].rstrip('/')
+        return route.rstrip('/*') == prefix or route.startswith(prefix + '/')
+
+    _decls, _unknown, _gaps = set(), set(), []
+    for _d, _, _fs in os.walk(os.path.join(ROOT, 'skills')):
+        for _f in _fs:
+            if not _f.endswith('.md'):
+                continue
+            _p = os.path.join(_d, _f)
+            _rel = os.path.relpath(_p, ROOT).replace('\\', '/')
+            if _rel.endswith(_NOT_OWNERS):
+                continue
+            for _m in _DECL.finditer(open(_p, encoding='utf-8').read()):
+                for _g in _ROUTE.findall(_m.group('a') or _m.group('b') or ''):
+                    _r = (_g[0] or _g[1]).rstrip('.,\u00b7-')
+                    if _r in ('/', '') or _r.startswith('/skills') or 'github' in _r:
+                        continue
+                    _decls.add((_r, _rel))
+
+    for _r, _rel in sorted(_decls):
+        _hit = [s2 for s2 in _inv['sources'] if _covers(s2, _r)]
+        if not _hit:
+            # A reference declaring a DGA page the inventory does not know about is exactly the
+            # gap this contract exists to close - the page is cited but nothing watches it. This
+            # used to be collected and dropped, which made the completeness claim untrue.
+            if _r not in _UNTRACKED_OK:
+                _unknown.add(f'{_r} (declared by {_rel})')
+            continue
+        _own = set()
+        for s2 in _hit:
+            _own |= set(s2['owns'])
+            _slug = _r.rstrip('/*').rsplit('/', 1)[-1]
+            _own |= set((s2.get('routeOwners') or {}).get(_slug, []))
+        if _rel not in _own:
+            _gaps.append(f'{_r} is declared by {_rel}, which is not in its owns[]')
+
+    chk('inventory: every declared source route lists its dependant as an owner', not _gaps,
+        str(_gaps))
+    chk('inventory: every declared source route is tracked by a source entry', not _unknown,
+        'a reference cites a DGA page nothing in the inventory watches - add it to '
+        'harvest/sources.py, or to _UNTRACKED_OK with a reason: ' + str(sorted(_unknown)))
+    _no_reason = sorted(r for r, why in _UNTRACKED_OK.items() if not (why or '').strip())
+    chk('inventory: every untracked-route exemption carries a rationale', not _no_reason,
+        'an exemption with no reason is an unmonitored dependency waiting to happen: '
+        + str(_no_reason))
+
+    # The watch list calls this critical, so it has to be checked against the file it protects.
+    # A silent change from 4 to 3 would mis-state a go/no-go gate.
+    _ac = open(os.path.join(ROOT, 'skills/dga-launch-gate/references/assessment-criteria.md'),
+               encoding='utf-8').read()
+    _mand = _ac.split('### Mandatory compliance', 1)[-1].split('### Recommended', 1)[0]
+    _n_mand = len(re.findall(r'^- \[ \] \*\*', _mand, re.M))
+    chk('inventory: mandatory-criteria fact matches the launch-gate reference',
+        _facts['mandatory assessment criteria'] == _n_mand == 4,
+        f"inventory says {_facts['mandatory assessment criteria']}, "
+        f"assessment-criteria.md lists {_n_mand}, DGA publishes 4")
+
+    chk('inventory: published version agrees with dga-version.md',
+        _inv['$meta']['publishedVersion'] in _ver
+        and _facts['published version'] == _inv['$meta']['publishedVersion'])
+
 # --- installed skills must not point at files the installer does not ship -----
 # `install-skills.sh` copies skills/ and agents/ into ~/.claude. Everything else in this repo -
 # harvest/, evals/, COVERAGE.md, README.md - is left behind. A reference to one of those reads

@@ -1,0 +1,525 @@
+{
+  "$meta": {
+    "purpose": "Authoritative map of every design.dga.gov.sa page this kit depends on, which reference file owns it, and what a change would invalidate.",
+    "source": "https://design.dga.gov.sa/",
+    "generated": "2026-08-27",
+    "generatedBy": "harvest/sources.py --baseline",
+    "publishedVersion": "1.0.3",
+    "publishedVersionDate": "2025-11-04",
+    "publishedVersionSource": "https://design.dga.gov.sa/updates/change-log"
+  },
+  "$ownershipScope": "owns[] lists the reference files that declare a DGA page as their SOURCE. Files derived from those references - dga-ui-adapter/references/component-mapping.md, token-wiring.md, dga-rtl-i18n/references/rtl-rules.md - are NOT listed: this kit's architecture is that rules live once in dga-design-system/references/, and those files read from it rather than from DGA. Follow the chain through the owning reference, not around it. Append-only records are also excluded: references/capture-log.md logs what was captured and when, so a DGA change does not make it wrong - it stays true as history. dga-version.md IS listed, because a release means the pin itself must change.",
+  "$constraints": [
+    "Every route returns the same SPA shell with HTTP 200, including routes that do not exist. HTTP status can never detect a removed or renamed page, and a per-route content hash is identical for every route. Verified 2026-08-27.",
+    "Page text requires a headless browser driving client-side navigation - a real click on a nav anchor. Address-bar deep links bounce to /.",
+    "sitemap.xml is stale and is a lower-bound signal only. Never derive counts from it.",
+    "The stylesheet filename carries the Vite build hash and is the cheapest exact signal that DGA deployed."
+  ],
+  "contracts": {
+    "thoughtsRoutes": [
+      "AccessibilityEase",
+      "atomic-design",
+      "consistency-and-unified-identity",
+      "designToken",
+      "localAndGlobal",
+      "responsive-design"
+    ],
+    "components": 50,
+    "templates": 19,
+    "foundations": 5,
+    "thoughts": 6,
+    "note": "Asserted by evals/validate-fixtures.py. Both counts have been wrong in this repo before - the templates figure was published as 19 while the harvest held 17 - so they are machine-checked rather than trusted."
+  },
+  "criticalFacts": [
+    {
+      "fact": "published version",
+      "value": "1.0.3",
+      "where": "/updates/change-log",
+      "breaks": "skills/dga-design-system/dga-version.md and every \"current version\" claim"
+    },
+    {
+      "fact": "mandatory assessment criteria",
+      "value": 4,
+      "where": "/AssessmentCriteria",
+      "breaks": "skills/dga-launch-gate - a go/no-go verdict"
+    },
+    {
+      "fact": "dark theme selector",
+      "value": "[data-theme=dark] :root",
+      "where": "the stylesheet",
+      "breaks": "If DGA adds the missing space, its dark theme activates everywhere at once and tokens.json role.dark stops being audit-only. Highest-impact single change on this list."
+    },
+    {
+      "fact": "text.secondary",
+      "value": "#dba102",
+      "where": "the stylesheet",
+      "breaks": "The kit's headline finding. If DGA darkens it, CONTRAST-AUDIT.md, check-contrast.mjs and rule 2 of dga-ui-adapter all change."
+    }
+  ],
+  "tierA": {
+    "shell": {
+      "url": "https://design.dga.gov.sa/",
+      "status": 200,
+      "bytes": 4417,
+      "sha256": "0e37ad7480c5799f848bced09a5d24e3c7c416720b20d0946d59755a6efa3647",
+      "note": "The SPA shell. Served for EVERY route, valid or not - see the module docstring. Its hash changes when DGA rebuilds, which is the same signal as the asset filename below, one request earlier."
+    },
+    "stylesheet": {
+      "url": "https://design.dga.gov.sa/assets/index-PDaQ7SHU.css",
+      "status": 200,
+      "bytes": 4044922,
+      "sha256": "a1ccbe89c4c58f65f949f9c1775cee6f23835127b1f2e70d5bea3798489a9a9b",
+      "buildHash": "PDaQ7SHU",
+      "customProperties": 1209,
+      "note": "THE tripwire. The filename carries Vite's build hash, so it changes on every DGA deploy. This file also holds the whole token surface, including the 402 dark-theme declarations under the unmatchable [data-theme=dark] :root selector."
+    },
+    "sitemap": {
+      "url": "https://design.dga.gov.sa/sitemap.xml",
+      "status": 200,
+      "sha256": "eeed49ed59e004473e7f5dcce5cbe3b5e4fa53e89a57bcd79d2d74ef2b44d1e7",
+      "urlCount": 77,
+      "componentsListed": 34,
+      "templatesListed": 16,
+      "urls": [
+        "/",
+        "/AssessmentCriteria",
+        "/about-platforms-code",
+        "/contributing",
+        "/design-installation",
+        "/designing",
+        "/designing-for-mobile",
+        "/developing",
+        "/guidelines",
+        "/guidelines/components/actions/buttons",
+        "/guidelines/components/actions/chip",
+        "/guidelines/components/actions/dropdown",
+        "/guidelines/components/actions/floating-Button",
+        "/guidelines/components/actions/link",
+        "/guidelines/components/content-display/card",
+        "/guidelines/components/content-display/code-snippet",
+        "/guidelines/components/content-display/divider",
+        "/guidelines/components/content-display/list",
+        "/guidelines/components/content-display/quote",
+        "/guidelines/components/forms-and-inputs/DatePicker",
+        "/guidelines/components/forms-and-inputs/Steps",
+        "/guidelines/components/forms-and-inputs/checkbox",
+        "/guidelines/components/forms-and-inputs/file-uploader",
+        "/guidelines/components/forms-and-inputs/input",
+        "/guidelines/components/forms-and-inputs/number-input",
+        "/guidelines/components/forms-and-inputs/radio",
+        "/guidelines/components/forms-and-inputs/slider",
+        "/guidelines/components/forms-and-inputs/switch",
+        "/guidelines/components/forms-and-inputs/textarea",
+        "/guidelines/components/loading-and-status/loading",
+        "/guidelines/components/loading-and-status/progress-bar",
+        "/guidelines/components/loading-and-status/radial-stepper",
+        "/guidelines/components/loading-and-status/skeleton",
+        "/guidelines/components/navigational/breadcrumbs",
+        "/guidelines/components/navigational/menu",
+        "/guidelines/components/navigational/pagination",
+        "/guidelines/components/navigational/slide-out",
+        "/guidelines/components/navigational/tabs",
+        "/guidelines/components/ui-shell/footer",
+        "/guidelines/components/ui-shell/navigation-drawer",
+        "/guidelines/components/ui-shell/navigation-header",
+        "/guidelines/components/ui-shell/second-nav-header",
+        "/guidelines/components/ui-shell/table-of-content",
+        "/guidelines/foundations/color-system",
+        "/guidelines/foundations/elevation",
+        "/guidelines/foundations/iconography",
+        "/guidelines/foundations/layout-and-spacing",
+        "/guidelines/foundations/typography",
+        "/guidelines/templates",
+        "/guidelines/templates/about-page",
+        "/guidelines/templates/chatbot",
+        "/guidelines/templates/contact-us-page",
+        "/guidelines/templates/content-page",
+        "/guidelines/templates/cookies-banner",
+        "/guidelines/templates/e-participation-page",
+        "/guidelines/templates/faqs-page",
+        "/guidelines/templates/feedback-section",
+        "/guidelines/templates/form-page",
+        "/guidelines/templates/help-page",
+        "/guidelines/templates/home-page",
+        "/guidelines/templates/page-not-found",
+        "/guidelines/templates/rating-section",
+        "/guidelines/templates/search-page",
+        "/guidelines/templates/service-page",
+        "/guidelines/templates/sitemap-page",
+        "/migration-guide",
+        "/sitemap",
+        "/support",
+        "/thoughts",
+        "/thoughts/AccessibilityEase",
+        "/thoughts/atomic-design",
+        "/thoughts/consistency-and-unified-identity",
+        "/thoughts/designToken",
+        "/thoughts/localAndGlobal",
+        "/thoughts/responsive-design",
+        "/updates/change-log",
+        "/updates/roadmap"
+      ],
+      "note": "SIGNAL ONLY - do not derive counts from this. It is stale: it lists far fewer components and templates than the site publishes, and its template set matches the Sep 2024 release. Growth in this list means something changed; its size never means the site is that size."
+    },
+    "robots": {
+      "url": "https://design.dga.gov.sa/robots.txt",
+      "status": 200,
+      "sha256": "cc0f5de572dbb7aaaa77a94c7b394d1bf06562435da2e50d901a1077ba8cfc3d",
+      "body": "User-agent: *\nAllow: /\n\nSitemap: https://yourdomain.com/sitemap.xml",
+      "note": "Allow: / - monitoring is permitted. Note the Sitemap: line still points at the scaffold default yourdomain.com; recorded as a DGA defect, not a typo here."
+    }
+  },
+  "sources": [
+    {
+      "url": "/guidelines/foundations/{slug}",
+      "category": "foundation",
+      "owns": [
+        "skills/dga-design-system/references/foundations.md",
+        "skills/dga-design-system/references/accessibility.md",
+        "skills/dga-design-system/references/content.md",
+        "skills/dga-design-system/assets/tokens.json"
+      ],
+      "tier": "B",
+      "contentHash": null,
+      "verified": null,
+      "routes": [
+        "color-system",
+        "elevation",
+        "iconography",
+        "layout-and-spacing",
+        "typography"
+      ],
+      "expectedCount": 5,
+      "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it.",
+      "routeOwners": {
+        "color-system": [
+          "skills/dga-design-system/references/CONTRAST-AUDIT.md",
+          "skills/dga-design-system/assets/check-contrast.mjs"
+        ],
+        "typography": [
+          "skills/dga-design-system/references/brand.md"
+        ],
+        "iconography": [
+          "skills/dga-design-system/references/brand.md"
+        ]
+      }
+    },
+    {
+      "url": "/guidelines/components/{category}/{slug}",
+      "category": "component",
+      "owns": [
+        "skills/dga-design-system/references/components.md",
+        "skills/dga-design-system/references/accessibility.md",
+        "skills/dga-design-system/references/content.md",
+        "skills/dga-design-system/references/mobile.md"
+      ],
+      "tier": "B",
+      "contentHash": null,
+      "verified": null,
+      "routes": {
+        "actions": [
+          "buttons",
+          "chip",
+          "dropdown",
+          "floating-Button",
+          "link"
+        ],
+        "content-display": [
+          "accordion",
+          "card",
+          "carousel",
+          "code-snippet",
+          "digital-stamp",
+          "divider",
+          "list",
+          "quote"
+        ],
+        "data-display": [
+          "avatar",
+          "charts",
+          "content-switcher",
+          "metric",
+          "structured-list",
+          "table"
+        ],
+        "feedback": [
+          "modal",
+          "notification",
+          "rating",
+          "tooltip"
+        ],
+        "forms-and-inputs": [
+          "checkbox",
+          "datepicker",
+          "file-uploader",
+          "input",
+          "number-input",
+          "radio",
+          "slider",
+          "steps",
+          "switch",
+          "textarea"
+        ],
+        "loading-and-status": [
+          "loading",
+          "progress-bar",
+          "radial-stepper",
+          "skeleton"
+        ],
+        "navigational": [
+          "breadcrumbs",
+          "menu",
+          "pagination",
+          "slide-out",
+          "tabs"
+        ],
+        "search-and-filters": [
+          "filtration",
+          "search-box",
+          "tags"
+        ],
+        "ui-shell": [
+          "footer",
+          "navigation-drawer",
+          "navigation-header",
+          "second-nav-header",
+          "table-of-content"
+        ]
+      },
+      "expectedCount": 50,
+      "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it.",
+      "note": "accessibility.md is sourced from \"the Accessibility section of every component page\", so a change to ANY component page can stale it."
+    },
+    {
+      "url": "/guidelines/templates/{slug}",
+      "category": "template",
+      "owns": [
+        "skills/dga-design-system/references/patterns.md",
+        "skills/dga-design-system/references/brand.md",
+        "skills/dga-design-system/references/content.md",
+        "skills/dga-design-system/references/mobile.md"
+      ],
+      "tier": "B",
+      "contentHash": null,
+      "verified": null,
+      "routes": [
+        "about-page",
+        "chatbot",
+        "contact-us-page",
+        "content-page",
+        "cookies-banner",
+        "e-participation-page",
+        "faqs-page",
+        "feedback-section",
+        "form-page",
+        "founding-day",
+        "hajj-template",
+        "help-page",
+        "home-page",
+        "national-day",
+        "page-not-found",
+        "rating-section",
+        "search-page",
+        "service-page",
+        "sitemap-page"
+      ],
+      "expectedCount": 19,
+      "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it."
+    },
+    {
+      "url": "/thoughts/AccessibilityEase",
+      "category": "guidance",
+      "owns": [
+        "skills/dga-design-system/references/accessibility.md"
+      ],
+      "tier": "B",
+      "contentHash": null,
+      "verified": null,
+      "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it."
+    },
+    {
+      "url": "/thoughts/atomic-design",
+      "category": "guidance",
+      "owns": [
+        "skills/dga-design-system/references/foundations.md"
+      ],
+      "tier": "B",
+      "contentHash": null,
+      "verified": null,
+      "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it."
+    },
+    {
+      "url": "/thoughts/consistency-and-unified-identity",
+      "category": "guidance",
+      "owns": [
+        "skills/dga-design-system/references/brand.md"
+      ],
+      "tier": "B",
+      "contentHash": null,
+      "verified": null,
+      "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it.",
+      "watch": "The only page explaining WHY the palette is what it is - the besht gold that became text.secondary."
+    },
+    {
+      "url": "/thoughts/designToken",
+      "category": "guidance",
+      "owns": [
+        "skills/dga-design-system/references/foundations.md",
+        "skills/dga-tokens-sync/SKILL.md"
+      ],
+      "tier": "B",
+      "contentHash": null,
+      "verified": null,
+      "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it."
+    },
+    {
+      "url": "/thoughts/localAndGlobal",
+      "category": "guidance",
+      "owns": [
+        "skills/dga-design-system/references/foundations.md",
+        "skills/dga-launch-gate/SKILL.md"
+      ],
+      "tier": "B",
+      "contentHash": null,
+      "verified": null,
+      "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it."
+    },
+    {
+      "url": "/thoughts/responsive-design",
+      "category": "guidance",
+      "owns": [
+        "skills/dga-design-system/references/foundations.md"
+      ],
+      "tier": "B",
+      "contentHash": null,
+      "verified": null,
+      "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it."
+    },
+    {
+      "url": "/AssessmentCriteria",
+      "category": "assessment",
+      "owns": [
+        "skills/dga-launch-gate/references/assessment-criteria.md",
+        "skills/dga-launch-gate/references/checklist.md"
+      ],
+      "tier": "B",
+      "contentHash": null,
+      "verified": null,
+      "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it.",
+      "watch": "The four Mandatory criteria, and DGA's hedge \"typically cannot proceed to deployment\". A change here changes a go/no-go call."
+    },
+    {
+      "url": "/updates/change-log",
+      "category": "release",
+      "owns": [
+        "skills/dga-design-system/dga-version.md",
+        "skills/dga-tokens-sync/SKILL.md"
+      ],
+      "tier": "B",
+      "contentHash": null,
+      "verified": null,
+      "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it.",
+      "watch": "A new /updates/change-log/version-history-* route is the definitive \"DGA released\" signal. Current published version: 1.0.3 (4 Nov 2025)."
+    },
+    {
+      "url": "/updates/roadmap",
+      "category": "release",
+      "owns": [
+        "skills/dga-tokens-sync/references/library-migration.md"
+      ],
+      "tier": "B",
+      "contentHash": null,
+      "verified": null,
+      "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it.",
+      "watch": "Dates here disagree with the change log by a year. Cite the change log."
+    },
+    {
+      "url": "/designing",
+      "category": "guidance",
+      "owns": [
+        "skills/dga-design-system/references/patterns.md"
+      ],
+      "tier": "B",
+      "contentHash": null,
+      "verified": null,
+      "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it."
+    },
+    {
+      "url": "/designing-for-mobile",
+      "category": "guidance",
+      "owns": [
+        "skills/dga-design-system/references/mobile.md"
+      ],
+      "tier": "B",
+      "contentHash": null,
+      "verified": null,
+      "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it."
+    },
+    {
+      "url": "/design-installation",
+      "category": "guidance",
+      "owns": [
+        "skills/dga-design-system/references/brand.md"
+      ],
+      "tier": "B",
+      "contentHash": null,
+      "verified": null,
+      "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it."
+    },
+    {
+      "url": "/migration-guide",
+      "category": "guidance",
+      "owns": [
+        "skills/dga-tokens-sync/references/library-migration.md"
+      ],
+      "tier": "B",
+      "contentHash": null,
+      "verified": null,
+      "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it."
+    },
+    {
+      "url": "/developing",
+      "category": "guidance",
+      "owns": [
+        "skills/dga-react/references/official-packages.md"
+      ],
+      "tier": "B",
+      "contentHash": null,
+      "verified": null,
+      "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it."
+    },
+    {
+      "url": "/contributing",
+      "category": "guidance",
+      "owns": [
+        "skills/dga-design-system/references/foundations.md"
+      ],
+      "tier": "B",
+      "contentHash": null,
+      "verified": null,
+      "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it."
+    },
+    {
+      "url": "/support",
+      "category": "guidance",
+      "owns": [
+        "skills/dga-design-system/references/foundations.md"
+      ],
+      "tier": "B",
+      "contentHash": null,
+      "verified": null,
+      "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it.",
+      "watch": "Written for an internal DGA audience; treat as intent, not a citeable rule. foundations.md declares it as a source alongside /contributing, and quotes its claims about Storybook and the \"beem community\" - both of which are not live, so a change here can turn a documented not-yet into a yes."
+    },
+    {
+      "url": "/about-platforms-code",
+      "category": "guidance",
+      "owns": [],
+      "tier": "B",
+      "contentHash": null,
+      "verified": null,
+      "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it.",
+      "watch": "Publishes a \"33+ components\" counter that contradicts the 50 published component routes. Recorded as a conflict, never reconciled."
+    }
+  ]
+}

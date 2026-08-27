@@ -76,6 +76,71 @@ duplicates another's rules, because rules live once in `dga-design-system/refere
 | `evals/dga-design-review/` | 11 | Detection vs restraint on design review |
 | `evals/dga-ui-adapter/` | 12 | Detection, restraint, and **library confusion** — advice for the wrong library, or a component it does not have |
 
+## The source contract
+
+`harvest/source-inventory.json` is the map the freshness monitoring is built on: every
+design.dga.gov.sa page this kit depends on, the reference file that owns it, and what a change
+would invalidate. Rebuild it with:
+
+```bash
+python3 harvest/sources.py --baseline
+```
+
+Three measured facts about the site shape everything downstream, and each is recorded in the
+file so nobody rebuilds a monitor on a false premise:
+
+| Measured | Consequence |
+|---|---|
+| Every route returns the same 4,417-byte SPA shell with **HTTP 200 — including routes that do not exist** | HTTP status can never detect a removed or renamed page, and a per-route content hash is identical for every route. A monitor built on either is permanently green and proves nothing. |
+| The shell links `/assets/index-<vite-hash>.css` | The filename carries the build hash, so it changes on every DGA deploy. Cheapest exact "DGA shipped something" signal, and the file holds the whole token surface. |
+| `sitemap.xml` is fetchable but **stale** — 34 components and 16 templates against the real 50 and 19 | A lower-bound signal only. Never a count. Its template set is exactly the Sep 2024 release. |
+
+So monitoring is two tiers, and every source carries which applies:
+
+- **Tier A** — reachable by `curl`: stylesheet, sitemap, robots, shell. Cheap, run often.
+- **Tier B** — needs a headless browser driving client-side navigation. Page text, nav route
+  enumeration, the counts. Expensive, run on a Tier A signal or quarterly.
+
+Tier B sources carry `contentHash: null` until a deep harvest fills it — honest missing data.
+When that harvest lands it **may** write hashes, but only with provenance saying a browser
+rendered the page:
+
+```json
+{ "contentHash": "…", "hashMethod": "browser-innertext" }
+```
+
+`evals/validate-fixtures.py` accepts `browser-innertext` and `browser-dom`, and fails a Tier B
+hash carrying any other method or none — because the only thing `curl` can hash is the shell,
+which is byte-identical for every route including ones that do not exist. A hash like that would
+go green forever and prove nothing. The rule is provenance, not abstinence.
+
+The suite also fails if a reference declares a DGA page the inventory does not track, so citing a
+new page without adding it to the contract is caught rather than silently unmonitored. A route can
+be exempted, but only as `route -> rationale` — a bare list would let a future exemption be added
+with no justification, which is exactly how a dependency stops being monitored. An empty rationale
+fails. The exemption map is currently empty.
+
+The file also pins the **counts as a contract** (50 components, 19 templates, 5 foundations,
+6 Thoughts) and a **critical-facts watch list** — the published version, the four Mandatory
+assessment criteria, the unmatchable dark-theme selector, and `text.secondary`. Every one of
+those is asserted against the file it protects, so a stale watch-list entry fails rather than
+quietly pointing the sentinel at a value nothing depends on any more. One assertion fails if the
+sitemap ever stops being stale.
+
+`owns[]` is **machine-derived and machine-checked**, not curated. The eval suite scans every
+provenance declaration in `skills/` — including the per-section `**Source:**` lines partway down
+a file, which is where the hand-built map kept losing entries — and fails if a declared route's
+inventory entry does not list the declaring file as an owner. Append-only records are excluded
+and say so: `capture-log.md` logs what was captured and when, so a DGA change does not make it
+wrong; `dga-version.md` *is* an owner, because a release means the pin itself must change.
+
+The map covers more than the obvious owner per route —
+a page can stale several references at once. `/guidelines/templates/*` alone owns `patterns.md`,
+`brand.md`, `content.md` and `mobile.md`, and the six Thoughts articles are listed individually
+because their dependants genuinely differ. Files derived from those references — the ui-adapter
+mappings, the RTL rules — are deliberately **not** listed: rules live once in
+`dga-design-system/references/`, so the chain runs through the owning reference, not around it.
+
 ## Guarding against our own drift
 
 The monitoring in `dga-tokens-sync` watches **DGA** for changes. `evals/check-quote-fidelity.py`
