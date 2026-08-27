@@ -418,6 +418,66 @@ if os.path.exists(_inv_path):
     finally:
         sys.path.pop(0)
 
+    # --- the workflows ---------------------------------------------------------
+    # Plain string checks, not a YAML parse: the eval suite is pure stdlib and adding a pyyaml
+    # dependency to assert four facts about two files is a bad trade.
+    _wf_dir = os.path.join(ROOT, '.github', 'workflows')
+    _fresh_wf = os.path.join(_wf_dir, 'dga-freshness.yml')
+    _ci_wf = os.path.join(_wf_dir, 'ci.yml')
+    chk('workflow: the freshness sentinel is wired up', os.path.exists(_fresh_wf))
+    chk('workflow: CI runs the offline checks', os.path.exists(_ci_wf))
+
+    if os.path.exists(_fresh_wf):
+        _w = open(_fresh_wf, encoding='utf-8').read()
+        chk('workflow: the sentinel actually runs --check',
+            'harvest/sources.py --check' in _w)
+        # The whole design rests on the automation reporting rather than deciding. A workflow
+        # with contents:write could commit an accepted baseline, which would silently close the
+        # review gate that everything else in this repo defers to.
+        chk('workflow: the sentinel cannot write to the repo',
+            'contents: read' in _w and 'contents: write' not in _w,
+            'contents:write would let it accept its own findings')
+        chk('workflow: the sentinel can open the review issue', 'issues: write' in _w)
+        # It must not EXECUTE --baseline. Mentioning it in a comment, or printing it into the
+        # issue body as the instruction a human should follow, is the whole point - so look for
+        # an actual invocation rather than the string.
+        _runs_baseline = [l.strip() for l in _w.splitlines()
+                          if 'sources.py --baseline' in l
+                          and not l.strip().startswith('#')
+                          and 'echo' not in l]
+        chk('workflow: the sentinel never executes --baseline', not _runs_baseline,
+            'accepting a baseline is a human step, by design: ' + str(_runs_baseline))
+        # exit 1 is "review pending", a RESULT. Only >1 is a broken sentinel. Conflating them
+        # either turns every real DGA change into a red build, or hides a broken check.
+        chk('workflow: exit 1 is treated as a finding, not a failure',
+            '-gt 1' in _w and "exit_code == '1'" in _w)
+        chk('workflow: the report is uploaded as an artifact',
+            'upload-artifact' in _w and 'harvest/FRESHNESS.md' in _w)
+        chk('workflow: it reuses one rolling issue instead of opening one a week',
+            'gh issue comment' in _w and 'gh issue create' in _w)
+        # An open-only lifecycle leaves the issue standing after a maintainer accepts the
+        # baseline, and the next unrelated finding gets appended to an issue whose body
+        # describes something already resolved - history that reads as still open.
+        chk('workflow: a clean run closes the rolling issue', 'gh issue close' in _w)
+        chk('workflow: the close arm is gated on a clean run',
+            "exit_code == '0'" in _w,
+            'closing must be conditioned on exit 0, not run unconditionally')
+        chk('workflow: both arms of the lifecycle are present',
+            _w.count("steps.sentinel.outputs.exit_code == '1'") >= 1
+            and _w.count("steps.sentinel.outputs.exit_code == '0'") >= 1)
+        chk('workflow: the close only targets its own labelled issue',
+            _w.split('gh issue close')[0].rsplit('gh issue list', 1)[-1].count('dga-freshness') >= 1,
+            'closing an issue this workflow did not open would be someone else\'s ticket')
+
+    if os.path.exists(_ci_wf):
+        _c = open(_ci_wf, encoding='utf-8').read()
+        for _cmd in ('evals/validate-fixtures.py', 'evals/check-quote-fidelity.py --ci',
+                     'check-contrast.mjs --test', 'generate-tokens.mjs', 'install-skills.sh'):
+            chk(f'workflow: CI runs {_cmd}', _cmd in _c)
+        chk('workflow: CI does not reach the network',
+            'sources.py --check' not in _c and 'sources.py --baseline' not in _c,
+            'the offline suite must stay runnable without design.dga.gov.sa')
+
     _fresh = os.path.join(ROOT, 'harvest/FRESHNESS.md')
     chk('sentinel: harvest/FRESHNESS.md exists', os.path.exists(_fresh),
         'run: python3 harvest/sources.py --check')

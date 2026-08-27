@@ -1,0 +1,64 @@
+# The offline checks, on every push and pull request.
+#
+# None of these touch the network: they compare this repo against itself. That is deliberate -
+# the failure mode this kit actually has is the guidance drifting from the evidence on disk, not
+# DGA moving. The network-facing sentinel is a separate, scheduled workflow (dga-freshness.yml).
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fixtures match the harvested tokens
+        run: python evals/validate-fixtures.py
+
+      - name: Quotes still say what DGA said
+        run: python evals/check-quote-fidelity.py --ci
+
+      - name: Contrast maths self-check
+        run: node skills/dga-design-system/assets/check-contrast.mjs --test
+
+      - name: Generated token files are up to date
+        # A hand-edited tokens.css silently diverges from tokens.json, and every consumer gets
+        # the stale one. Regenerate and fail if anything moved.
+        run: |
+          node skills/dga-design-system/assets/generate-tokens.mjs
+          git diff --exit-code -- skills/dga-design-system/assets/tokens.css \
+                                  skills/dga-design-system/assets/tailwind-preset.js
+
+      - name: Installer syntax
+        run: bash -n install-skills.sh
+
+      - name: Manifests are valid JSON
+        run: |
+          for f in .claude-plugin/plugin.json .claude-plugin/marketplace.json \
+                   .codex-plugin/plugin.json harvest/source-inventory.json \
+                   skills/dga-design-system/assets/tokens.json; do
+            python -c "import json,sys;json.load(open(sys.argv[1],encoding='utf-8'))" "$f"
+          done
+
+      - name: Installed layout resolves
+        # Installs into a scratch HOME so the cross-reference and unshipped-reference checks run
+        # against a real installed tree, not the repo layout.
+        run: |
+          export HOME="$RUNNER_TEMP/fakehome"
+          mkdir -p "$HOME"
+          bash install-skills.sh | tee install.log
+          grep -q 'cross-references OK' install.log

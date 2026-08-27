@@ -181,6 +181,36 @@ to Tier A — that is what the quarterly browser harvest is for. Route removal i
 bundle, so it also needs a deploy to surface. Both limits are printed in `FRESHNESS.md` rather
 than left for someone to discover.
 
+### Running on a schedule
+
+| Workflow | Trigger | Does |
+|---|---|---|
+| `.github/workflows/dga-freshness.yml` | Mondays 06:00 UTC, or manual | Runs the sentinel, uploads `FRESHNESS.md`, opens **one rolling issue** when review is pending |
+| `.github/workflows/ci.yml` | push + PR | The offline checks: fixtures, quote fidelity, contrast self-test, generated-file drift, installer, manifests |
+
+Two properties of the sentinel workflow are load-bearing and asserted by the eval suite:
+
+- **`permissions: contents: read`.** It cannot commit. A workflow able to write the repo could
+  accept its own findings, which would silently close the review gate everything else defers to.
+  `--baseline` is a human step, run locally, after the guidance has been updated.
+- **Exit 1 is a result, not a failure.** The job stays green and the issue carries the signal;
+  only exit >1 — a sentinel that could not complete — fails the build. Conflating the two either
+  turns every real DGA change into a red build people learn to ignore, or hides a broken check
+  behind an expected red.
+
+The issue has a full lifecycle, not just an open:
+
+| Sentinel | Workflow does |
+|---|---|
+| exit 1, no open issue | opens one, labelled `dga-freshness` |
+| exit 1, issue already open | **comments** on it — a fresh issue every Monday for the same unread finding is how a queue stops being read |
+| exit 0, issue open | **comments and closes** it: the baseline now matches, so the finding was accepted or reverted upstream |
+| exit 0, no issue | nothing |
+
+The close arm matters as much as the open one. Without it the issue stays open after a maintainer
+accepts the baseline, and the next unrelated change is appended to an issue whose body describes
+something already resolved — history that reads as still open.
+
 ## Guarding against our own drift
 
 The monitoring in `dga-tokens-sync` watches **DGA** for changes. `evals/check-quote-fidelity.py`

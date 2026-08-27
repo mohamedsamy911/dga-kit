@@ -1,0 +1,150 @@
+# Weekly Tier A sentinel against design.dga.gov.sa.
+#
+# It REPORTS. It never edits guidance, never updates the baseline, and never commits: a detected
+# change stays open until a maintainer accepts it with `python3 harvest/sources.py --baseline`
+# after the guidance has been updated. That ordering is the review gate the whole design rests on
+# - see COVERAGE.md, "Freshness".
+#
+# Cadence: DGA shipped four releases in nine months, so weekly is generous. It is affordable
+# because the check reads the 4 KB shell first and only downloads the ~19 MB bundles when the
+# Vite build hash says DGA actually deployed - about a second on a quiet week.
+name: DGA freshness
+
+on:
+  schedule:
+    # Mondays 06:00 UTC (09:00 in Riyadh) - a report waiting at the start of the working week.
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+    inputs:
+      deep:
+        description: 'Force the deep read even if DGA has not deployed'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read      # never writes to the repo - the baseline is accepted by a human, locally
+  issues: write       # the report is delivered as an issue
+
+concurrency:
+  group: dga-freshness
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run the sentinel
+        id: sentinel
+        run: |
+          set +e
+          python harvest/sources.py --check ${{ inputs.deep && '--deep' || '' }} | tee sentinel.log
+          code=${PIPESTATUS[0]}
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          # 0 = nothing changed. 1 = review pending, which is a RESULT, not a failure - the issue
+          # below carries it. Anything else means the sentinel itself broke, and that must fail.
+          if [ "$code" -gt 1 ]; then
+            echo "::error::sentinel exited $code - it could not complete the check"
+            exit "$code"
+          fi
+          exit 0
+
+      - name: Upload the freshness report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dga-freshness-${{ github.run_number }}
+          path: |
+            harvest/FRESHNESS.md
+            sentinel.log
+          if-no-files-found: warn
+          retention-days: 90
+
+      - name: Open or update the review issue
+        if: steps.sentinel.outputs.exit_code == '1'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          TITLE='DGA freshness: review pending'
+          {
+            echo "The sentinel found changes on design.dga.gov.sa that need a human decision."
+            echo
+            echo "**Nothing in this repo was changed.** The baseline still holds the old values,"
+            echo "so this stays open until someone updates the guidance and then runs:"
+            echo
+            echo '```bash'
+            echo 'python3 harvest/sources.py --baseline'
+            echo '```'
+            echo
+            echo "[Workflow run]($RUN_URL) · report attached as an artifact"
+            echo
+            echo '---'
+            echo
+            cat harvest/FRESHNESS.md
+          } > issue-body.md
+
+          # One rolling issue, not one per week: a fresh issue every Monday for the same unread
+          # finding is how a queue stops being read.
+          existing=$(gh issue list --state open --label dga-freshness \
+                     --search "$TITLE in:title" --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file issue-body.md
+            echo "commented on #$existing"
+          else
+            gh label create dga-freshness --color 0E8A16 \
+              --description 'Automated DGA source monitoring' 2>/dev/null || true
+            gh issue create --title "$TITLE" --label dga-freshness --body-file issue-body.md
+          fi
+
+      - name: Close the review issue once the baseline matches again
+        if: steps.sentinel.outputs.exit_code == '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          TITLE='DGA freshness: review pending'
+          existing=$(gh issue list --state open --label dga-freshness \
+                     --search "$TITLE in:title" --json number --jq '.[0].number // empty')
+          if [ -z "$existing" ]; then
+            echo 'no open review issue - nothing to close'
+            exit 0
+          fi
+          {
+            echo "Resolved: the live site now matches the recorded baseline, so the earlier"
+            echo "finding has been accepted (or reverted upstream). Closing."
+            echo
+            echo "[Clean run]($RUN_URL)"
+            echo
+            echo '```'
+            cat sentinel.log
+            echo '```'
+          } > resolved.md
+          gh issue comment "$existing" --body-file resolved.md
+          gh issue close "$existing" --reason completed
+          echo "closed #$existing"
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "### DGA freshness"
+            echo
+            if [ "${{ steps.sentinel.outputs.exit_code }}" = "0" ]; then
+              echo "No change against the recorded baseline."
+            else
+              echo "**Review pending** - see the issue and the attached report."
+            fi
+            echo
+            echo '```'
+            cat sentinel.log 2>/dev/null || echo '(no log)'
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
