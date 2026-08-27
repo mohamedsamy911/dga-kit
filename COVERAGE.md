@@ -279,6 +279,40 @@ add `--all` to assert it covers every Tier B route.
 Verified by behaviour in the eval suite, including the specific property the first version broke:
 report twice, and the diff is identical both times.
 
+## Testing the monitoring itself
+
+```bash
+python3 evals/test-automation.py
+```
+
+The rest of the suite checks the kit's **content** against DGA. This one checks the
+**automation**: given a known change, does the sentinel report it, in the right words, without
+quietly fixing anything? A monitor that has silently stopped working looks exactly like a monitor
+with nothing to report, which is why this is not optional.
+
+| # | Scenario | Asserted |
+|---|---|---|
+| 1 | a quiet week | reports nothing at all |
+| 2 | a new DGA version | named in the finding, and ordered numerically past the ninth patch |
+| 3 | a changed token | both old and new value; includes DGA fixing the dark selector |
+| 4 | a template added, removed, **or renamed** | a rename must not net out to silence |
+| 5 | a blocked source page | Tier A claims nothing it could not read; Tier B is `EMPTY`/`MISSING`, never clean |
+| 6 | a contradiction | reported, and the **contract is not rewritten to match** |
+
+Scenario 6 is the one with teeth. A live count disagreeing with the contract must stay a finding
+for a human — a monitor that adopts the live value has stopped being a contract. The same
+scenario also pins that the contradictions DGA publishes *about itself* stay recorded with both
+sides: **33+ components** against 50 enumerable routes, and the roadmap dating releases a year
+before the change log does. Neither is silently settled in favour of the number the kit prefers.
+
+Making this testable required splitting `compare()` — pure, offline, no clock — out of
+`sources.py --check`, which fetches. Every scenario had been an ad-hoc test during development,
+run once by mutating the real baseline against the live site. Now they run every time.
+
+Each detector was verified by **breaking it**: disabling the release check, the fact diff, the
+route-set diff, or making `compare()` adopt the live count each fails exactly the scenarios that
+name it, and nothing else.
+
 ## Guarding against our own drift
 
 The monitoring in `dga-tokens-sync` watches **DGA** for changes. `evals/check-quote-fidelity.py`

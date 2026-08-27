@@ -578,6 +578,10 @@ if os.path.exists(_inv_path):
             not any(f.endswith('.md') for f in os.listdir(_snap)),
             'harvest/raw/ is curated evidence with <!-- dga --> fences; snapshots are not')
 
+    chk('automation: the scenario suite exists',
+        os.path.exists(os.path.join(ROOT, 'evals', 'test-automation.py')),
+        'without it a monitor that silently stopped working looks like a quiet week')
+
     _fresh = os.path.join(ROOT, 'harvest/FRESHNESS.md')
     chk('sentinel: harvest/FRESHNESS.md exists', os.path.exists(_fresh),
         'run: python3 harvest/sources.py --check')

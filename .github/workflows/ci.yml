@@ -32,6 +32,9 @@ jobs:
       - name: Quotes still say what DGA said
         run: python evals/check-quote-fidelity.py --ci
 
+      - name: The monitoring detects what it claims to
+        run: python evals/test-automation.py
+
       - name: Contrast maths self-check
         run: node skills/dga-design-system/assets/check-contrast.mjs --test
 

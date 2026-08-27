@@ -418,6 +418,50 @@ def summarise(doc):
           f"GET can meaningfully hash")
 
 
+def compare(base, obs, contracts):
+    """Baseline vs what this run observed. Pure: no network, no files, no clock.
+
+    Split out of check() so every scenario - a release, a token recoloured, a template removed,
+    a blocked page - can be exercised offline from a fixture instead of by mutating the real
+    baseline and hitting the live site. See evals/test-automation.py.
+
+    It REPORTS. It never edits the contract: a live count that disagrees with the contract is a
+    finding for a human, not a number to quietly adopt.
+    """
+    out = []
+
+    if obs.get('sitemapSha') and obs['sitemapSha'] != base.get('sitemap', {}).get('sha256'):
+        live, was = set(obs.get('sitemapUrls') or []), set(base.get('sitemap', {}).get('urls') or [])
+        out.append(('sitemap changed', f'+{sorted(live - was)} -{sorted(was - live)}'))
+    if obs.get('robotsSha') and obs['robotsSha'] != base.get('robots', {}).get('sha256'):
+        out.append(('robots.txt changed', obs.get('robotsText', '')))
+
+    routes = obs.get('routes')
+    if routes:
+        for group in ('components', 'templates', 'foundations', 'thoughts'):
+            got = routes.get(group) or []
+            want = contracts.get(group)
+            if want is not None and len(got) != want:
+                out.append((f'{group} count broke the contract',
+                            f'{len(got)} live vs {want} contracted'))
+            was = set((base.get('bundle') or {}).get('routes', {}).get(group) or [])
+            if was and set(got) != was:
+                out.append((f'{group} routes changed',
+                            f'+{sorted(set(got) - was)} -{sorted(was - set(got))}'))
+
+        was_rel = set((base.get('bundle') or {}).get('routes', {}).get('releases') or [])
+        new_rel = sorted(set(routes.get('releases') or []) - was_rel, key=version_key)
+        if new_rel:
+            out.append(('NEW RELEASE published', ', '.join(new_rel)))
+
+    for k, was_v in ((base.get('stylesheet') or {}).get('facts') or {}).items():
+        if obs.get('facts') is None:
+            break                      # not read this run - absence is not a change
+        if obs['facts'].get(k) != was_v:
+            out.append((f'critical fact changed: {k}', f'{was_v!r} -> {obs["facts"][k]!r}'))
+    return out
+
+
 def check():
     """Tier A sentinel. Diffs the live site against the recorded baseline.
 
@@ -462,15 +506,12 @@ def check():
 
     # Cheap regardless - a few KB.
     _, sm = fetch(BASE + '/sitemap.xml')
-    if sha(sm) != base['sitemap']['sha256']:
-        live = {u.replace(BASE, '') or '/' for u in
-                re.findall(r'<loc>(.*?)</loc>', sm.decode('utf-8'))}
-        was = set(base['sitemap']['urls'])
-        findings.append(('sitemap changed',
-                         f'+{sorted(live - was)} -{sorted(was - live)}'))
+    obs['sitemapSha'] = sha(sm)
+    obs['sitemapUrls'] = sorted({u.replace(BASE, '') or '/' for u in
+                                 re.findall(r'<loc>(.*?)</loc>', sm.decode('utf-8'))})
     _, rb = fetch(BASE + '/robots.txt')
-    if sha(rb) != base['robots']['sha256']:
-        findings.append(('robots.txt changed', rb.decode('utf-8').strip()))
+    obs['robotsSha'] = sha(rb)
+    obs['robotsText'] = rb.decode('utf-8').strip()
 
     if missing:
         notes.append('Deep read skipped - the shell asset pattern did not match, so there was '
@@ -490,32 +531,12 @@ def check():
         obs['deepRead'] = True
 
         live_routes = routes_from_js(js)
+        obs['routes'] = live_routes
         obs['counts'] = {k: len(v) for k, v in live_routes.items()}
         obs['releases'] = live_routes['releases']
-        for group, expected in (('components', inv['contracts']['components']),
-                                ('templates', inv['contracts']['templates']),
-                                ('foundations', inv['contracts']['foundations']),
-                                ('thoughts', inv['contracts']['thoughts'])):
-            got = live_routes[group]
-            if len(got) != expected:
-                findings.append((f'{group} count broke the contract',
-                                 f'{len(got)} live vs {expected} contracted'))
-            was = set(base.get('bundle', {}).get('routes', {}).get(group, []))
-            if was and set(got) != was:
-                findings.append((f'{group} routes changed',
-                                 f'+{sorted(set(got) - was)} -{sorted(was - set(got))}'))
+        obs['facts'] = facts_from_css(css)
 
-        was_rel = set(base.get('bundle', {}).get('routes', {}).get('releases', []))
-        new_rel = sorted(set(live_routes['releases']) - was_rel, key=version_key)
-        if new_rel:
-            findings.append(('NEW RELEASE published', ', '.join(new_rel)))
-
-        live_facts = facts_from_css(css)
-        obs['facts'] = live_facts
-        for k, was_v in (base.get('stylesheet', {}).get('facts') or {}).items():
-            if live_facts.get(k) != was_v:
-                findings.append((f'critical fact changed: {k}', f'{was_v!r} -> {live_facts[k]!r}'))
-
+    findings += compare(base, obs, inv['contracts'])
     write_freshness(inv, obs, findings, notes)
     print('DGA freshness check  ' + obs['checkedAt'])
     for n in notes:
