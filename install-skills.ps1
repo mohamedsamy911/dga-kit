@@ -189,12 +189,15 @@ foreach ($f in ($installed | Get-ChildItem -Recurse -Filter *.md -File)) {
 foreach ($f in ($installed | Get-ChildItem -Recurse -Include *.md, *.json -File)) {
     $text = Get-Content -LiteralPath $f.FullName -Raw
     if ([string]::IsNullOrEmpty($text)) { continue }
-    # Validate each match locally: a file may carry one correct GitHub URL AND a bare mention of
-    # the same path. Check what immediately precedes THIS occurrence, not the file as a whole.
-    $prefix = 'github.com/mohamedsamy911/dga-kit/blob/master/'
+    # Validate each match locally. Only a canonical GitHub blob URL or a raw.githubusercontent
+    # URL exempts an occurrence; exempting anything preceded by "/" would wave through a dead
+    # /harvest/... path. Fenced code blocks are stripped first - a shell command is not a link.
+    $text = ($text -split "`n" | ForEach-Object -Begin { $fence = $false } -Process {
+        if ($_ -match '^```') { $fence = -not $fence } elseif (-not $fence) { $_ }
+    }) -join "`n"
+    $okUrl = '(?:https://github\.com/mohamedsamy911/dga-kit/blob/[A-Za-z0-9._-]+/|https://raw\.githubusercontent\.com/mohamedsamy911/dga-kit/[A-Za-z0-9._-]+/)$'
     foreach ($m in [regex]::Matches($text, '(?:harvest|evals)/[A-Za-z0-9_./-]+|COVERAGE\.md|README\.md|AGENTS\.md')) {
-        $start = $m.Index - $prefix.Length
-        if ($start -ge 0 -and $text.Substring($start, $prefix.Length) -eq $prefix) { continue }
+        if ($text.Substring(0, $m.Index) -match $okUrl) { continue }
         Write-Host "UNSHIPPED $($f.FullName) -> $($m.Value) (not installed; use a full GitHub URL)" -ForegroundColor Yellow
         $bad++
     }

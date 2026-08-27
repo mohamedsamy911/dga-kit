@@ -1,0 +1,8 @@
+# Python bytecode from running the eval scripts
+__pycache__/
+*.py[cod]
+
+# Editor / OS noise
+.DS_Store
+Thumbs.db
+*.swp

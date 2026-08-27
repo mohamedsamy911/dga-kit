@@ -102,6 +102,54 @@ Do not assume the extraction is complete coverage:
   **On a re-harvest, diff the dark rule too.** If DGA ever corrects the selector, dark goes live
   across every Platforms Code platform on the same day and this kit's guidance changes with it.
 
+## After any re-capture: prove the quotes still hold
+
+A re-harvest rewrites the
+[captures in the repo](https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw). Any
+blockquote in a skill that closely reproduces one of those captured passages is measured against
+it, so a page whose wording changed surfaces as **drift** rather than sitting unnoticed in a
+reference file.
+
+> That is narrower than "every DGA quote is checked". A quote whose source page was never
+> captured has nothing to measure against, and the tool cannot tell it apart from the kit's own
+> commentary. Those land in **UNVERIFIABLE**.
+
+Run from a clone of the dga-kit repo — this tool is not installed with the skill:
+
+```bash
+python3 evals/check-quote-fidelity.py --ci
+```
+
+Three things fail the run:
+
+- **DRIFT** — a reference paragraph reproduces a capture but no longer matches it. Either DGA
+  changed the wording (update the reference, and record it in `dga-version.md`) or the reference
+  drifted on its own (fix the reference). Never edit the capture to make the check pass.
+- **STITCHED** — one blockquote joining passages DGA publishes in different places. Every
+  fragment is captured, but no single passage holds them all, so the quote invents the join.
+  Split it, and cite each passage where it belongs.
+- **MALFORMED FENCES** — a `<!-- dga -->` in a capture without its matching `<!-- /dga -->`.
+  The passage inside is lost from the corpus, so fix the fence before trusting any result.
+
+And two that do not:
+
+- **UNVERIFIABLE** — no capture covers that quote's source page. This is the gap list, not a
+  defect.
+- **Outside the fences** — blockquotes in a capture that are this repo's commentary rather than
+  DGA's words. The intended state; only worth a look if one of them is actually DGA's wording.
+
+> ⚠️ The percentage it prints is **blockquote coverage**, not evidence coverage. Its denominator
+> is every blockquote in `skills/`, and most of those are the kit's own commentary — so the share
+> of genuine *DGA quotes* that are evidenced is higher than the number shown, by an amount nothing
+> currently measures. Do not quote it as "the kit is N% evidenced". A true evidence-coverage
+> figure needs DGA quotes marked in `skills/` with the same `<!-- dga -->` fence the captures
+> use — `TODO`.
+
+> 🚩 The check found two real defects on its first run, both in captures written the same day:
+> one truncated a DGA sentence a reference then quoted in full, the other kept one sentence of a
+> three-sentence FAQ answer. Both meant a skill was citing DGA text this repo could not evidence.
+> Expect it to find more as coverage rises.
+
 ## Cadence
 
 Quarterly, plus whenever `/updates/change-log` shows a release.

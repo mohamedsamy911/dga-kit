@@ -76,6 +76,32 @@ duplicates another's rules, because rules live once in `dga-design-system/refere
 | `evals/dga-design-review/` | 11 | Detection vs restraint on design review |
 | `evals/dga-ui-adapter/` | 12 | Detection, restraint, and **library confusion** — advice for the wrong library, or a component it does not have |
 
+## Guarding against our own drift
+
+The monitoring in `dga-tokens-sync` watches **DGA** for changes. `evals/check-quote-fidelity.py`
+watches **us** — it compares every DGA quote in `skills/` against the captured page text in
+`harvest/raw/`, and fails on a paragraph that reproduces a capture without matching it.
+
+That is the direction this repo has actually gone wrong: `-2%` shipped as invalid CSS, the
+template count asserted as 19 when the harvest held 17, and a launch-gate quote that dropped
+DGA's word *"typically"*. None of those would be caught by re-checking design.dga.gov.sa.
+
+```bash
+python3 evals/check-quote-fidelity.py --ci
+```
+
+It reports **blockquote coverage**: how many blockquote paragraphs in `skills/` could be matched
+to a captured DGA passage. The figure is deliberately not repeated here — it moves whenever a
+blockquote is added anywhere in `skills/`, and a copy of it in this file went stale within an hour
+of being written. Run the command for the current number.
+
+Read it for what it is. The denominator counts *every* blockquote, and most of those are the
+kit's own commentary rather than DGA quotes, so the true share of *DGA quotes* that are evidenced
+is higher — by an amount nothing currently measures. A real evidence-coverage figure needs DGA
+quotes marked in `skills/` with the same `<!-- dga -->` fence the captures use — `TODO`.
+
+Raising the numerator means capturing more pages, never editing a reference to match.
+
 `evals/validate-fixtures.py` checks every value the cases assert against `tokens.json`. Run it
 after any re-harvest: an eval asserting a stale value teaches the skill a false rule, which is
 worse than having no eval.

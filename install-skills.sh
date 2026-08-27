@@ -158,9 +158,27 @@ done < <(for n in "${SKILLS[@]}"; do [[ -d "$DEST/$n" ]] && echo "$DEST/$n"; don
 while IFS= read -r line; do
   f="${line%:*}"; ref="${line##*:}"
   # Count, do not just test: a file may carry one correct GitHub URL AND a bare mention of the
-  # same path. Any occurrence not preceded by the URL prefix is a dead reference once installed.
-  total=$(grep -oF "$ref" "$f" | wc -l)
-  linked=$(grep -oF "github.com/mohamedsamy911/dga-kit/blob/master/$ref" "$f" | wc -l)
+  # same path. Only two forms are exempt - a canonical GitHub blob URL and a raw.githubusercontent
+  # URL. Exempting anything merely preceded by "/" would wave through a dead /harvest/... path.
+  #
+  # Shell commands in fenced code blocks are not references, so the fences are stripped first;
+  # a maintainer running `python3 evals/...` from a clone is not a broken link.
+  #
+  # `|| x=0` is load-bearing: this script runs under `set -euo pipefail`, and a grep that matches
+  # nothing exits 1, which pipefail propagates through `| wc -l` and set -e turns into a silent
+  # death mid-verify. That is exactly what happened when this check was first written.
+  body=$(awk '/^```/{fence=!fence; next} !fence' "$f")
+  total=$(printf '%s\n' "$body" | grep -oF "$ref" | wc -l) || total=0
+  linked=0
+  # $ref lands inside an ERE, so its dots would match any character: a malformed URL like
+  # ".../blob/master/COVERAGEXmd" would then exempt a genuinely dead COVERAGE.md reference.
+  # Refs are drawn from [A-Za-z0-9_./-]+, so "." is the only ERE metacharacter they can contain.
+  ref_re=${ref//./\\.}
+  for pre in "https://github.com/mohamedsamy911/dga-kit/blob/" \
+             "https://raw.githubusercontent.com/mohamedsamy911/dga-kit/"; do
+    n=$(printf '%s\n' "$body" | grep -oE "${pre//./\\.}[A-Za-z0-9._-]+/$ref_re" | wc -l) || n=0
+    linked=$((linked + n))
+  done
   bare=$((total - linked))
   [[ $bare -le 0 ]] && continue
   echo "UNSHIPPED $f -> $ref x$bare (not installed; use a full GitHub URL)"; bad=$((bad+1))

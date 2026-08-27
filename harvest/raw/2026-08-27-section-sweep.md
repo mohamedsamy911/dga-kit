@@ -45,6 +45,7 @@ The full route table comes from:
 
 ## `/guidelines/templates/rating-section`
 
+<!-- dga -->
 > Rating Section
 >
 > The Rating Section Component is a crucial interface element that allows users to provide
@@ -64,6 +65,7 @@ The full route table comes from:
 > **Mobile Version** — Rating Section - Mobile Version: In the mobile version, the buttons will be
 > placed below the text to ensure a better user experience and a smoother layout for smaller
 > screens.
+<!-- /dga -->
 
 ---
 
@@ -71,9 +73,11 @@ The full route table comes from:
 
 The page the kit recorded as an unreachable off-site download. It is a full published page.
 
+<!-- dga -->
 > The assessment criteria of Platforms Code is designed to ensure that all users, from designers
 > and developers to project managers overseeing government digital projects, have a clear
 > understanding of the expectations and standards set forth by this comprehensive design system.
+<!-- /dga -->
 
 **Purpose:** Ensure Compliance · Maintain Quality · Facilitate Improvement
 **Importance:** Consistency · Scalability · Accountability
@@ -82,6 +86,7 @@ Assurance Specialists
 
 ### Assessment categories
 
+<!-- dga -->
 > **Accessibility** — Ensuring digital products are accessible by evaluating adherence to the Web
 > Content Accessibility Guidelines (WCAG) for users with disabilities, ensuring compatibility with
 > assistive technologies.
@@ -96,11 +101,13 @@ Assurance Specialists
 >
 > **Usability** — Focuses on optimizing user interfaces for ease and efficiency by assessing
 > clarity, intuitiveness, logical flow, load times, and task completion.
+<!-- /dga -->
 
 ### Compliance levels
 
 **Essential — Mandatory Compliance**
 
+<!-- dga -->
 > **Design System Compliance** — Ensure the Unified Design System (Platforms Code) version 1.0 is
 > correctly implemented.
 >
@@ -113,9 +120,11 @@ Assurance Specialists
 > **Mobile Usability** — Ensure the application/website is fully usable on mobile devices,
 > considering factors such as touch interactions, viewport sizing, and navigational access on
 > smaller screens.
+<!-- /dga -->
 
 **Recommended**
 
+<!-- dga -->
 > **Design Consistency and Standards Compliance** — Ensure the use of approved icons, adherence to
 > custom icon guidelines, and consistent visual design elements. Implement components according to
 > the Unified Design System
@@ -131,17 +140,34 @@ Assurance Specialists
 > **Usability and Accessibility** — Ensure effective search functionality and accessible help
 > resources. Evaluate user feedback mechanisms, privacy notice visibility, and consistent error
 > handling across the platform.
+<!-- /dga -->
 
-A third level, **Optional**, is named in the page's FAQ but has no criteria listed:
+A third level, **Optional**, is named in the page's FAQ but has no criteria listed. The FAQ
+question is *"How are mandatory, recommended, and optional criteria distinguished?"* and this is
+the whole answer:
 
+<!-- dga -->
+> Mandatory criteria are non-negotiable and must be met for the project to proceed. These often
+> relate to legal, security, and core functionality requirements.
+>
+> Recommended criteria are not essential for project approval but are advised to enhance quality,
+> user experience, or future scalability. Meeting these can differentiate the project positively.
+>
 > Optional criteria are additional enhancements that could provide a competitive advantage or
 > long-term benefits but are not critical for the current phase of the project.
+<!-- /dga -->
+
+> ⚠️ **Extended 2026-08-27.** This capture originally kept only the Optional sentence, while
+> `assessment-criteria.md` quoted all three levels — so two thirds of that quote had no evidence
+> here. Second finding from `evals/check-quote-fidelity.py`.
 
 ### Submission
 
+<!-- dga -->
 > Complete the Assessment Checklist including project details, expected compliance levels, and any
 > particular comments. […] Assessment should be submitted **at least two weeks before** the desired
 > review date to allow sufficient time for thorough assessment.
+<!-- /dga -->
 
 ### Review timeline
 
@@ -173,9 +199,21 @@ Scored 1–100, reported as a 1–10 grade:
 
 ### Consequence of failure
 
+DGA states this only in the page's FAQ, answering *"What happens if a project fails to meet
+mandatory criteria?"* — there is no section of the page with this heading. The heading here is
+this capture's, not DGA's.
+
+<!-- dga -->
 > If a project fails to meet mandatory criteria, it typically **cannot proceed to deployment**. The
 > project team must address the deficiencies identified during the review process and resubmit the
-> project for another review.
+> project for another review. Critical failures might require significant rethinking of project
+> scope, design, or even objectives.
+<!-- /dga -->
+
+> ⚠️ **Corrected 2026-08-27.** This capture originally stopped after "another review", dropping
+> the third sentence — while `assessment-criteria.md` quoted all three. A reference file was
+> therefore citing DGA text that this repo could not evidence. Found by
+> `evals/check-quote-fidelity.py` on its first run.
 
 The checklist itself is a download (`Download Checklist`) and is **still not obtained** — the page
 describes it; the file is separate.
@@ -186,6 +224,7 @@ describes it; the file is separate.
 
 The palette rationale. This is the source that explains *why* gold is in the system.
 
+<!-- dga -->
 > **Colors** — The green flag, the Saudi besht, and the fragrant lavender fields.
 >
 > […] The primary color in the Platforms code is the green color derived from the Saudi Arabian
@@ -195,7 +234,9 @@ The palette rationale. This is the source that explains *why* gold is in the sys
 > The **secondary colors are black and gold**, reflecting classic elegance and beauty, derived from
 > the **Saudi Besht**, which represents prestige and dignity. Another secondary color is **purple**,
 > reflecting the colors of lavender fields that adorn the Kingdom's deserts in the spring season.
+<!-- /dga -->
 
+<!-- dga -->
 > **Fonts** — The IBM Plex Sans font has been chosen as the unified font for all platforms in the
 > Kingdom of Saudi Arabia. […]
 > - Supports 100 global languages.
@@ -203,24 +244,30 @@ The palette rationale. This is the source that explains *why* gold is in the sys
 > - Compatible with Android, Microsoft, and Apple operating systems.
 > - Extensive studies and tests have been conducted to ensure it provides a smooth and easy reading
 >   experience.
+<!-- /dga -->
 
 On the goal:
 
+<!-- dga -->
 > Consistency in design also ensures that users feel comfortable and familiar when navigating
 > between different digital government platforms and services […]
 >
 > **Enhancing Trust** · **Ease of Recognition** — Users can identify a particular service as
 > government-affiliated just by looking at its design · **Effective Communication**
+<!-- /dga -->
 
 ---
 
 ## `/thoughts/atomic-design`
 
+<!-- dga -->
 > We adopt an atomic design methodology to ensure organization and sustainability in the
 > development of user interfaces.
+<!-- /dga -->
 
 The five levels, verbatim:
 
+<!-- dga -->
 > **Atoms** — the basic building blocks of matter, such as buttons, input fields, labels, and other
 > elements that cannot be broken down any further without losing their functionality.
 >
@@ -235,6 +282,7 @@ The five levels, verbatim:
 >
 > **Pages** — specific instances of templates. They include real content and data, providing a
 > tangible example of the final user interface.
+<!-- /dga -->
 
 Benefits named: Consistency · Scalability · Collaboration · Maintainability · Flexibility.
 
@@ -242,11 +290,14 @@ Benefits named: Consistency · Scalability · Collaboration · Maintainability �
 
 ## `/thoughts/responsive-design`
 
+<!-- dga -->
 > Responsive design is particularly crucial for government websites, which must serve diverse
 > audiences with different devices and accessibility needs.
+<!-- /dga -->
 
 **For designers**
 
+<!-- dga -->
 > **Scalable Typograph[y]** — Use relative units, like 16px (1em, 1rem) for font sizes to maintain
 > readability across different devices.
 >
@@ -258,9 +309,11 @@ Benefits named: Consistency · Scalability · Collaboration · Maintainability �
 >
 > **Touchscreen Navigation** — Consider the use of touch gestures and ensure that interactive
 > elements are appropriately sized and spaced for touch inputs on mobile devices.
+<!-- /dga -->
 
 **For developers**
 
+<!-- dga -->
 > **Mobile-First Approach** — Start by designing for the smallest screens and progressively enhance
 > the design for larger screens.
 >
@@ -269,6 +322,7 @@ Benefits named: Consistency · Scalability · Collaboration · Maintainability �
 >
 > **Container Queries** — Consider using container queries (when they become widely supported) to
 > style elements based on the size of their parent container, rather than the viewport size.
+<!-- /dga -->
 
 > ⚠️ The 12/8-column figures are given as an example (`e.g.`), not as a fixed DGA grid. Cite them
 > as DGA's stated example, not as a mandated column count. DGA names **no mobile column count** on
@@ -280,12 +334,16 @@ Benefits named: Consistency · Scalability · Collaboration · Maintainability �
 
 Confirms the Mobile UI Kit component list that `mobile.md` had assembled indirectly.
 
+<!-- dga -->
 > Begin your journey with our extensive Mobile UI Kit in Platforms Code, meticulously crafted for
 > mobile interfaces. Similar to its web counterpart, this kit comes packed with additional
 > components optimized for mobile views.
+<!-- /dga -->
 
+<!-- dga -->
 > **Tailored Experience** — Mobile Navigation Bar · Tap Bar · Top Bar · Splash Screen · Mobile
 > Modal · Date Picker
+<!-- /dga -->
 
 That is the whole page. There are **no specs** for these six — the page is a Figma download
 landing page, so the Figma-only gap stands.
@@ -294,7 +352,9 @@ landing page, so the Figma-only gap stands.
 
 ## `/contributing`
 
+<!-- dga -->
 > Platforms Code flourishes with contributions from designers and developers like you.
+<!-- /dga -->
 
 **Should I contribute?** Relevance · Broad Impact · Minor Enhancements (bug resolutions, new icons)
 · Major Additions (new components need thorough evaluation).
@@ -320,6 +380,7 @@ Types: Design Contributions · Code Contributions · Documentation.
 Support routes: Documentation · Community (**soon**) · Contributions. Plus 15 FAQs. The ones that
 carry facts not stated elsewhere:
 
+<!-- dga -->
 > **What are the main components of the Platforms Code design system?** — a Designer UI Kit,
 > Developer Component Library, Documentation Website, and now, a Mobile Design Library.
 >
@@ -332,6 +393,7 @@ carry facts not stated elsewhere:
 >
 > **Where can I find additional support?** — through our support channels, such as **beem
 > community**, or designated contacts within the organization.
+<!-- /dga -->
 
 > ⚠️ Several answers are written for an internal audience ("our organization", "internal
 > communication platforms") and describe things that are not live (Storybook, community). Treat
@@ -341,8 +403,10 @@ carry facts not stated elsewhere:
 
 ## `/about-platforms-code`
 
+<!-- dga -->
 > Platforms Code, an **open-source** design system **funded by DGA**, streamlines digital projects
 > by combining code, design tools, and guidelines in a community-driven approach.
+<!-- /dga -->
 
 Published counters — **these contradict the rest of the site** and must not be cited as component
 counts:
@@ -361,8 +425,10 @@ counts:
 
 ## `/updates/roadmap`
 
+<!-- dga -->
 > A core principle of the design system is 'continuous improvement', thus constant development is
 > expected to enhance the system.
+<!-- /dga -->
 
 | Date | Item | Status |
 |---|---|---|
@@ -388,21 +454,28 @@ therefore captured 1.0.3, not a bare "1.0".
 Each entry is its own route: `/updates/change-log/version-history-1-0-3` etc.
 
 ### Version 1.0.3 — 4 Nov 2025
+<!-- dga -->
 > Fixes & Updates:
 > - **Digital Stamp:** Update digital stamp text.
 > - **Templates:** Update digital stamp component.
+<!-- /dga -->
 
 ### Version 1.0.2 — 1 Sep 2025
+<!-- dga -->
 > New Templates:
 > - **National Day 95 Template**
+<!-- /dga -->
 
 ### Version 1.0.1 — 5 May 2025
+<!-- dga -->
 > Fixes & Updates:
 > - **Digital Stamp:** Added Mobile view.
 > - **Slide-out menu:** Update the Menu list item.
 > - **Progress indicator:** Fixed description text alignment.
+<!-- /dga -->
 
 ### Version 1.0.0 — 20 Feb 2025
+<!-- dga -->
 > New Components: Charts · Carousel · Chips · Code Snippet · Digital Stamp · Divider · Floating
 > Button · Filtration · Metric · Number Input · Progress Bar · Quote · Radial Stepper · Skeleton ·
 > Slider · Search Box · Slide-out Menu · Second Level Nav Header
@@ -427,6 +500,7 @@ Each entry is its own route: `/updates/change-log/version-history-1-0-3` etc.
 > - **Digital Signature:** Updated Name to be **Digital Stamp**.
 > - **Pagination:** **Added RTL variant.**
 > - **Search Box:** Fixed the tooltip on focused state.
+<!-- /dga -->
 
 > Two entries bear on the open `TODO(verify)` for DGA's own RTL statements: **Structured List** and
 > **Pagination** each shipped an explicit "RTL variant". That is DGA's own record of an RTL

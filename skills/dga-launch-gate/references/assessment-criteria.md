@@ -97,7 +97,8 @@ project has met an Optional level that DGA has not defined.
 
 ## Submission and timeline
 
-> Assessment should be submitted **at least two weeks before** the desired review date.
+> Assessment should be submitted **at least two weeks before** the desired review date to allow
+> sufficient time for thorough assessment.
 
 The review itself runs about twenty days:
 
@@ -152,6 +153,9 @@ Scored 1–100 and reported as a 1–10 grade:
 > DGA publishes **no passing threshold** and does not say how the four categories are weighted.
 
 ### Consequence of failure — quote it exactly
+
+DGA says this once, in the page's FAQ, answering *"What happens if a project fails to meet
+mandatory criteria?"*. There is no section of the page with this heading.
 
 > If a project fails to meet mandatory criteria, it **typically** cannot proceed to deployment.
 > The project team must address the deficiencies identified during the review process and resubmit

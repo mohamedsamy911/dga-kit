@@ -231,19 +231,23 @@ chk('ui-12: case INPUT never declares the Arabic-first stack', _ARABIC_FIRST not
 # fine in the repo and is a dead end for every installed user. The ../ check below catches path
 # escapes; this catches the repo-root form, which is what the dark-theme work actually used.
 UNSHIPPED = ('harvest/', 'evals/', 'COVERAGE.md', 'README.md', 'AGENTS.md', 'SECURITY.md')
+_OK_URL = re.compile(
+    r'(?:https://github\.com/mohamedsamy911/dga-kit/blob/[A-Za-z0-9._-]+/'
+    r'|https://raw\.githubusercontent\.com/mohamedsamy911/dga-kit/[A-Za-z0-9._-]+/)$')
+# A shell command inside a fenced block is not a reference - a maintainer runs it from a clone.
+_FENCE = re.compile(r'^```.*?^```', re.S | re.M)
 _dangling = []
 for _dir, _, _files in os.walk(os.path.join(ROOT, 'skills')):
     for _f in _files:
         if not _f.endswith(('.md', '.json', '.mjs', '.js', '.css')):
             continue
         _p = os.path.join(_dir, _f)
-        _txt = open(_p, encoding='utf-8').read()
+        _txt = _FENCE.sub('', open(_p, encoding='utf-8').read())
         for _m in re.finditer(r'[`\[(\s]((?:harvest|evals)/[A-Za-z0-9_./-]+|COVERAGE\.md|README\.md|AGENTS\.md|SECURITY\.md)', _txt):
-            # A full GitHub URL is fine - it resolves from anywhere. Check the text immediately
-            # before THIS occurrence, not a window around it: a nearby unrelated URL must not
-            # exempt a bare mention sitting next to it.
-            _pre = 'https://github.com/mohamedsamy911/dga-kit/blob/master/'
-            if _txt[max(0, _m.start() - len(_pre)):_m.start()] == _pre:
+            # Only a canonical GitHub URL exempts an occurrence, checked immediately before
+            # THIS match. Anything looser - "preceded by a slash", "a URL somewhere in the file"
+            # - waves through a dead /harvest/... path or a bare mention beside a good link.
+            if _OK_URL.search(_txt[:_m.start()]):
                 continue
             _dangling.append(os.path.relpath(_p, ROOT).replace('\\', '/') + ' -> ' + _m.group(1).rstrip('.'))
 chk('installed skills reference nothing outside skills/', not _dangling,
