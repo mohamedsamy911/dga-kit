@@ -80,7 +80,15 @@ publishes a text token, `text.secondary` (#dba102), that measures **2.30:1 on wh
 AA at every size, large included. It is a real token, designated for text, so the name invites
 the mistake and reviewers defer to it.
 
-That is the kind of thing this kit exists to catch. Wire the script into CI with `--ci`.
+That is the kind of thing this kit exists to catch. `--ci` exits non-zero; `--theme dark` audits
+DGA's dark theme, which fails differently and worse — see below.
+
+```bash
+python3 harvest/sources.py --check
+```
+
+That asks DGA whether anything has changed since this kit was built. On a quiet week it answers
+in about a second and downloads nothing.
 
 ## The one rule
 
@@ -109,22 +117,72 @@ are still named `PC 1.0 …` — those are chrome and filenames, not the version
 | | |
 |---|---|
 | Harvest — 5 foundations, 50 components, **all 19 templates**, 1,052 tokens | ✅ Complete |
-| 11 skills, written and DGA-grounded | ✅ |
-| 6 agents | ✅ |
-| Contrast checker, self-tested | ✅ |
+| **Assessment Criteria** — the rubric a platform is actually scored against | ✅ Captured |
+| 11 skills, 6 agents | ✅ |
+| Contrast checker, self-tested — light **and dark** | ✅ |
+| **Freshness monitoring** — weekly, review-gated | ✅ See below |
 | **Designer sign-off** | ⚠️ **Outstanding** — values are exact, interpretation unverified |
-| **Figma-only values** (dark theme, responsive radius/spacing, mobile kit) | ❌ Not public. Omitted, not guessed. |
+| **Figma-only values** (responsive radius/spacing, mobile kit specs) | ❌ Not public. Omitted, not guessed. |
+
+**Dark theme: found, and broken upstream.** This kit used to list dark values as Figma-only. They
+are not — DGA ships **402 dark declarations** in its public CSS. But they sit under the selector
+`[data-theme=dark] :root`, which can never match, because `:root` is `<html>` and a descendant
+combinator needs an ancestor it does not have. Verified in the live page: zero elements matched.
+**DGA ships a complete dark theme that cannot turn on.**
+
+The values are carried in `tokens.json` for audit, and deliberately **not** generated into
+`tokens.css` — correcting the selector would activate it for anyone already using
+`data-theme="dark"` (Chakra v3 does, out of the box), and it cannot be made safe from DGA's own
+values: five `*-light` status surfaces have no dark tint anywhere, so white text on them measures
+**1.05:1**. Run `check-contrast.mjs --theme dark` for the full list.
 
 See [COVERAGE.md](COVERAGE.md) for what is and is not covered, and
 [harvest/CAPTURE-LOG.md](harvest/CAPTURE-LOG.md) for the evidence trail.
+
+## Staying current
+
+DGA ships roughly four releases a year, and a compliance kit that quietly goes stale is worse
+than none. Two directions are watched, because they fail differently:
+
+**Is DGA still saying what we recorded?** A weekly GitHub Action diffs the live site against a
+recorded baseline — build hashes, the route table and release list read out of DGA's own JS
+bundle, `text.secondary`, the dark selector, sitemap and robots. It writes
+[harvest/FRESHNESS.md](harvest/FRESHNESS.md) and opens one rolling issue when something needs a
+decision.
+
+**Are we still saying what DGA said?** That is the failure this repo has actually had — invalid
+CSS shipped from a token unit, a template count asserted at 19 when the harvest held 17, and a
+launch-gate quote that dropped DGA's word *"typically"*, turning "typically cannot proceed to
+deployment" into an unconditional block. No amount of watching DGA catches those.
+`evals/check-quote-fidelity.py` compares every DGA quote in `skills/` against the captured page
+text and fails on a quote that reproduces a capture without matching it. It found two real
+defects on its first run.
+
+**Nothing accepts itself.** The sentinel never rewrites its baseline; the deep harvest writes
+nothing without an explicit `--accept`; the Action has `contents: read` and cannot commit. A
+finding stays open until a human updates the guidance. And `evals/test-automation.py` tests the
+monitoring itself against six scenarios — a new version, a changed token, a renamed template, a
+blocked page, a contradiction — because a monitor that has silently stopped working looks exactly
+like a quiet week.
 
 ## Layout
 
 ```
 skills/     the 11 skills; dga-design-system is the source of truth the rest read
 agents/     the 6 agents
-harvest/    raw captures + CAPTURE-LOG.md — the evidence behind every rule
-evals/      23 eval cases across two suites, plus a fixture validator
+harvest/    the evidence behind every rule, and the monitoring that keeps it honest
+              raw/                curated captures, with <!-- dga --> marking DGA's own words
+              CAPTURE-LOG.md      what was captured, from where, when
+              sources.py          the source contract + the Tier A sentinel (--check)
+              source-inventory.json  every watched URL, its owning references, the counts contract
+              deep.py             Tier B: browser-captured page text (--capture / --accept)
+              snapshots/          machine-owned page text, for diffing only
+              FRESHNESS.md        generated: last check, what moved, review pending?
+evals/      23 eval cases across two suites, plus three checkers:
+              validate-fixtures.py     the kit against its own tokens and evidence
+              check-quote-fidelity.py  every DGA quote against what was captured
+              test-automation.py       whether the monitoring detects what it claims to
+.github/    CI on push, and the weekly freshness sentinel
 ```
 
 ## Prior and parallel work

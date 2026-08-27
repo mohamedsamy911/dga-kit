@@ -235,6 +235,20 @@ chk('inventory: harvest/source-inventory.json exists', os.path.exists(_inv_path)
 
 if os.path.exists(_inv_path):
     _inv = json.load(open(_inv_path, encoding='utf-8'))
+    # Structure first. A truncated or overwritten inventory used to surface as a bare KeyError
+    # forty lines further down, which reads like a broken test rather than a broken file - and
+    # this file was overwritten for real during development by a tool writing a fixture to the
+    # production path.
+    _shape = [k for k in ('$meta', 'contracts', 'tierA', 'sources') if k not in _inv]
+    chk('inventory: has its top-level structure', not _shape,
+        f'missing {_shape} - regenerate with: python3 harvest/sources.py --baseline')
+    _no_cat = [s2.get('url', '?') for s2 in _inv['sources'] if 'category' not in s2]
+    chk('inventory: every source declares a category', not _no_cat, str(_no_cat[:5]))
+    _cats = {s2['category'] for s2 in _inv['sources'] if 'category' in s2}
+    chk('inventory: the route-bearing categories are present',
+        {'component', 'template', 'foundation'} <= _cats,
+        f'found {sorted(_cats)} - a fixture may have been written over the real inventory')
+
     _by_cat = {s2['category']: s2 for s2 in _inv['sources'] if 'routes' in s2}
 
     _n_comp = sum(len(v) for v in _by_cat['component']['routes'].values())
@@ -577,6 +591,31 @@ if os.path.exists(_inv_path):
         chk('deep: snapshots are separate from the curated captures',
             not any(f.endswith('.md') for f in os.listdir(_snap)),
             'harvest/raw/ is curated evidence with <!-- dga --> fences; snapshots are not')
+
+    # --- README claims ----------------------------------------------------------
+    # The front page is the most-read and least-tested file in the repo. It carried "dark theme:
+    # not public" for a day after the dark values were found in DGA's own CSS. Pin the numbers.
+    _rm = open(os.path.join(ROOT, 'README.md'), encoding='utf-8').read()
+    chk('readme: does not still call the dark theme Figma-only',
+        'Figma-only values (dark theme' not in _rm and 'dark theme, responsive' not in _rm,
+        'DGA publishes 402 dark declarations - that claim was wrong')
+    chk('readme: the dark declaration count matches the capture',
+        f'**{len(json.load(open(os.path.join(ROOT, "harvest/raw/2026-08-27-dark-theme-roles.json"), encoding="utf-8")))} dark declarations**' in _rm)
+    # Count every mention, not "is the substring present": the README says "11 skills" twice, so
+    # a single stale one hides behind the other.
+    _n_sk = len([d for d in os.listdir(os.path.join(ROOT, 'skills')) if d.startswith('dga-')])
+    _n_ag = len([f for f in os.listdir(os.path.join(ROOT, 'agents')) if f.endswith('.md')])
+    _sk_claims = set(re.findall(r'(\d+) skills', _rm))
+    _ag_claims = set(re.findall(r'(\d+) agents', _rm))
+    chk('readme: every skill count claimed matches what ships',
+        _sk_claims == {str(_n_sk)}, f'README says {sorted(_sk_claims)}, {_n_sk} ship')
+    chk('readme: every agent count claimed matches what ships',
+        _ag_claims == {str(_n_ag)}, f'README says {sorted(_ag_claims)}, {_n_ag} ship')
+    chk('readme: the eval case count is right',
+        f'{sum(len(os.listdir(os.path.join(ROOT, "evals", s2, "cases"))) for s2 in ("dga-design-review", "dga-ui-adapter"))} eval cases' in _rm)
+    chk('readme: every path named in the Layout block exists',
+        all(os.path.exists(os.path.join(ROOT, m)) for m in
+            re.findall(r'^\s{2,}(harvest/[A-Za-z0-9_./-]+|evals/[A-Za-z0-9_.-]+)\s', _rm, re.M)))
 
     chk('automation: the scenario suite exists',
         os.path.exists(os.path.join(ROOT, 'evals', 'test-automation.py')),
