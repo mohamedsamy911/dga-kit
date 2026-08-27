@@ -184,8 +184,24 @@ foreach ($f in ($installed | Get-ChildItem -Recurse -Filter *.md -File)) {
     }
 }
 
+# Repo-root paths die on install too - harvest\, evals\, COVERAGE.md are not copied to
+# ~/.claude. A full GitHub URL is exempt; it resolves from anywhere.
+foreach ($f in ($installed | Get-ChildItem -Recurse -Include *.md, *.json -File)) {
+    $text = Get-Content -LiteralPath $f.FullName -Raw
+    if ([string]::IsNullOrEmpty($text)) { continue }
+    # Validate each match locally: a file may carry one correct GitHub URL AND a bare mention of
+    # the same path. Check what immediately precedes THIS occurrence, not the file as a whole.
+    $prefix = 'github.com/mohamedsamy911/dga-kit/blob/master/'
+    foreach ($m in [regex]::Matches($text, '(?:harvest|evals)/[A-Za-z0-9_./-]+|COVERAGE\.md|README\.md|AGENTS\.md')) {
+        $start = $m.Index - $prefix.Length
+        if ($start -ge 0 -and $text.Substring($start, $prefix.Length) -eq $prefix) { continue }
+        Write-Host "UNSHIPPED $($f.FullName) -> $($m.Value) (not installed; use a full GitHub URL)" -ForegroundColor Yellow
+        $bad++
+    }
+}
+
 Write-Host "`n$ok skill(s), $aok agent(s) installed."
 Write-Host "manifest: $manifest - uninstall removes only what is listed there"
 if ($bad -eq 0) { Write-Host 'cross-references OK' -ForegroundColor Green }
-else { Write-Host "$bad broken cross-reference(s) - report this as a bug" -ForegroundColor Yellow }
+else { Write-Host "$bad unresolvable reference(s) - report this as a bug" -ForegroundColor Yellow }
 Write-Host 'Restart Claude Code, then run /skills to confirm.'

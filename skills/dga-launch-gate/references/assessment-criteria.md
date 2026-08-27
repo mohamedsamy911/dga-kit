@@ -1,7 +1,7 @@
 # DGA Assessment Criteria
 
 **Source:** https://design.dga.gov.sa/AssessmentCriteria · **Retrieved:** 2026-08-27
-**Raw capture:** `harvest/raw/2026-08-27-section-sweep.md` in the dga-kit repo (not shipped with
+**Raw capture:** `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-08-27-section-sweep.md` in the dga-kit repo (not shipped with
 the installed skill)
 
 The rubric a Saudi government platform is **actually scored against** before it may deploy. Every

@@ -390,5 +390,5 @@ Adding to the component-level list, the templates assume RTL as the default read
 
 Together with Quote, Steps and Buttons these are the places DGA speaks to RTL that this harvest
 found. ⚠️ **Do not cite a total** — the count was never enumerated at capture time and is
-`TODO(verify)`; cite the specific page you rely on. See COVERAGE.md, *Disputed and unverified
+`TODO(verify)`; cite the specific page you rely on. See https://github.com/mohamedsamy911/dga-kit/blob/master/COVERAGE.md, *Disputed and unverified
 claims*.

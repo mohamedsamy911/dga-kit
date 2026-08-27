@@ -67,6 +67,59 @@ requiring an explicit contrast check rather than assuming the token is safe.
 and all pass comfortably on dark ones (10.75, 14.79 and 9.09 on `background-black`). Not a
 defect — but the naming does not say so, and nothing stops their misuse. Document the pairing.
 
+## Dark theme — 15 failures, and worse ones
+
+`node ../assets/check-contrast.mjs --theme dark` · values captured 2026-08-27
+
+DGA publishes a complete dark theme (402 declarations) in its CSS bundle. **It cannot currently
+activate** — the selector `[data-theme=dark] :root` never matches, because `:root` is `<html>`
+and has no ancestor. So nothing below ships today. It ships the moment DGA adds one space.
+
+| Role | Dark value | Worst dark surface | Ratio | |
+|---|---|---|---|---|
+| text.default | #ffffff | background.brand-light **#f3fcf6** | **1.05:1** | 🚩 |
+| text.display | #f9fafb | background.brand-light | **1.00:1** | 🚩 |
+| text.primary-paragraph | #f3f4f6 | background.brand-light | **1.05:1** | 🚩 |
+| text.error | #b42318 | background.card #1f2a37 | **2.21:1** | 🚩 |
+| text.error | #b42318 | background.body #111927 | **2.68:1** | 🚩 |
+| text.tertiary | #80519f | background.card | **2.49:1** | 🚩 |
+| text.primary | #1b8354 | background.card | 3.06:1 | large only |
+
+**The `*-light` surfaces are the worst finding in either theme.** DGA's dark block does not remap
+`background.brand-light`, `error-light`, `info-light`, `success-light` or `warning-light`, so they
+keep their near-white light values while `text.default` flips to `#ffffff`. White on `#f3fcf6` is
+**1.05:1** — effectively invisible. Nine of the fifteen dark failures are on those five surfaces.
+
+**`text.error` is the most consequential single role.** An error message is exactly the text a
+user must be able to read, and it fails on every dark surface with no published substitute.
+`notification.text-error` uses `red.300` in dark — that is the nearest thing DGA offers.
+
+### The light finding is not absolute
+
+`text.secondary` (#dba102) fails at 2.30:1 on every **light** surface and **passes at 7.64:1** on
+the dark body. The role is not inherently broken; it is in the wrong theme. State the 2.30:1
+failure as a light-theme finding.
+
+### If you enable dark mode
+
+You are shipping something DGA has not — and something this kit deliberately does not generate.
+`tokens.css` emits no dark rule, because correcting DGA's selector would activate these pairings
+for anyone already using `data-theme="dark"`. You own:
+
+| What | Substitute | Sourced from |
+|---|---|---|
+| `text.error` | **red.300 `#fca19b`** | DGA's own dark `notification.text-error` and `controls.control-text-error` |
+| `text.primary` in body copy | **sa-flag.300 `#88d8ad`** (10.46:1) | DGA's own dark `text.primary-light` |
+| the five `*-light` status surfaces | **nothing published** | every dark variant DGA ships for them — `notification-`, `tag-`, `featuredicons-` — still resolves to the same near-white value |
+
+The first two are citable. **The third is not**, which is why this kit will not generate a dark
+stylesheet: making it safe would mean inventing a DGA value.
+
+Record each substitution in `dga-brand-overlay`. Full evidence:
+`https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-08-27-dark-theme-spike.md` in the dga-kit repo.
+
+---
+
 ## Recommendation
 
 These three findings are exactly what an automated check should catch. Encode this table as a

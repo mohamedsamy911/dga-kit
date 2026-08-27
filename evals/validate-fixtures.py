@@ -6,7 +6,7 @@ Covers both suites: evals/dga-design-review/ and evals/dga-ui-adapter/.
 An eval asserting a wrong value is worse than no eval — it teaches the skill a false rule.
 Run after every token re-harvest:  python3 evals/validate-fixtures.py
 """
-import json, os, sys
+import json, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 t = json.load(open(os.path.join(ROOT, 'skills/dga-design-system/assets/tokens.json'), encoding='utf-8'))
@@ -131,6 +131,46 @@ _quoted = ['5.54', '5.30', '6.31', '5.81', '4.92', '6.60', '8.56', '3.88', '4.75
 _missing = [q for q in _quoted if q not in _c12]
 chk('ui-12: case text quotes the asserted ratios', not _missing, str(_missing))
 
+# --- dark theme -------------------------------------------------------------
+# DGA ships 402 dark declarations under `[data-theme=dark] :root` - a selector that can never
+# match, because :root is <html> and a descendant combinator needs an ancestor it does not have.
+# The values are real and correct; only the selector is broken. These assertions keep three
+# things from quietly regressing: that we carry the dark roles at all, that we emit NO live dark
+# rule (the guard is with the generated-output checks below), and that the dark defects stay
+# visible - text.error, text.primary, and the five un-remapped *-light surfaces.
+_d = t['role'].get('dark')
+chk('dark: tokens.json carries role.dark', bool(_d and _d.get('text') and _d.get('background')))
+
+if _d:
+    chk('dark: every light text role has a dark counterpart',
+        {k for k in t['role']['text'] if not k.startswith('$')} ==
+        {k for k in _d['text'] if not k.startswith('$')})
+    chk('dark: every light background role has a dark counterpart',
+        {k for k in t['role']['background'] if not k.startswith('$')} ==
+        {k for k in _d['background'] if not k.startswith('$')})
+
+    # The five *-light status surfaces are NOT remapped by DGA's dark block, so they keep their
+    # near-white light values while text.default flips to #ffffff. This is the worst pairing in
+    # either theme. Asserting equality pins it as a recorded defect, not an oversight of ours.
+    _carried = ['brand-light', 'error-light', 'info-light', 'success-light', 'warning-light']
+    for _k in _carried:
+        chk(f'dark: background.{_k} is carried at its LIGHT value (DGA does not remap it)',
+            _d['background'][_k] == t['role']['background'][_k],
+            'if this ever differs, DGA fixed it upstream - re-run the spike and update $verify')
+    chk('dark: white text on the un-remapped brand-light surface is ~1.05:1',
+        round(cr(_d['text']['default'], _d['background']['brand-light']), 2) == 1.05)
+
+    chk('dark: text.error fails AA at every size on the dark body',
+        round(cr(_d['text']['error'], _d['background']['body']), 2) == 2.68)
+    chk('dark: text.primary is large-text-only on the dark body',
+        3 <= cr(_d['text']['primary'], _d['background']['body']) < 4.5)
+    # The light-theme headline finding is NOT absolute - record why.
+    chk('dark: text.secondary PASSES on dark, so the 2.30:1 finding is light-theme only',
+        round(cr(_d['text']['secondary'], _d['background']['body']), 2) == 7.64)
+
+    chk('dark: $verify records the unmatchable selector as a source defect',
+        any('[data-theme=dark] :root' in v.get('value', '') for v in _d.get('$verify', [])))
+
 # --- generated output: the % -> em conversion at the boundary ---------------
 # tokens.json keeps DGA's published -2% so a re-harvest diffs clean. CSS letter-spacing does
 # not accept percentages, so nothing generated may contain one. This is the check that makes
@@ -141,6 +181,30 @@ _css_tracking = [l.strip() for l in _css.splitlines() if '-tracking:' in l]
 chk('generated CSS emits em, never %', _css_tracking and all('-0.02em' in l for l in _css_tracking),
     str([l for l in _css_tracking if '-0.02em' not in l]))
 chk('generated CSS has no percentage letter-spacing', not any('%' in l for l in _css_tracking))
+
+# A nested object reaching a token emit point stringifies to "[object Object]" and passes every
+# other check silently. This happened when role.dark was added and the light :root loop swallowed
+# it. Cheap guard, real bug.
+_tw = open(os.path.join(ROOT, 'skills/dga-design-system/assets/tailwind-preset.js'), encoding='utf-8').read()
+chk('generated CSS has no stringified objects', '[object Object]' not in _css)
+chk('generated preset has no stringified objects', '[object Object]' not in _tw)
+
+# The shipped stylesheet must contain NO live dark rule. DGA's dark theme is inert upstream
+# because its selector cannot match, and inert is safe: emitting a corrected selector would
+# activate 1.05:1 pairings for any consumer already using data-theme="dark" (Chakra v3 does).
+# The values stay in tokens.json for audit. See generate-tokens.mjs for the full reasoning.
+_css_rules = [l for l in _css.splitlines() if l and not l.startswith((' ', '\t')) and '{' in l]
+chk('generated CSS ships no live dark rule',
+    not any('data-theme' in l for l in _css_rules),
+    str([l for l in _css_rules if 'data-theme' in l]))
+chk('generated CSS still explains why dark is withheld',
+    'Dark theme is NOT emitted here' in _css)
+chk('generated preset sets no darkMode strategy', 'darkMode:' not in _tw,
+    'shipping no dark colours but flipping the dark: variant is a behaviour change for nothing')
+# P2: light and dark were read on different dates. One date on the banner is wrong for half of it.
+chk('generated CSS banner carries both retrieval dates',
+    'Light values retrieved: ' + t['$meta']['retrieved'] in _css
+    and 'Dark values retrieved:  ' + t['role']['dark']['$source']['retrieved'] in _css)
 chk('tailwind preset emits em, never %', '"letterSpacing": "-0.02em"' in _tw and '"letterSpacing": "-2%"' not in _tw)
 
 # --- fixture must not contradict the guidance it tests -----------------------
@@ -161,6 +225,31 @@ chk('ui-12: case font stack is Latin-first', _LATIN_FIRST in _c12,
 _c12_input = _c12.split('## expect')[0]
 chk('ui-12: case INPUT never declares the Arabic-first stack', _ARABIC_FIRST not in _c12_input)
 
+# --- installed skills must not point at files the installer does not ship -----
+# `install-skills.sh` copies skills/ and agents/ into ~/.claude. Everything else in this repo -
+# harvest/, evals/, COVERAGE.md, README.md - is left behind. A reference to one of those reads
+# fine in the repo and is a dead end for every installed user. The ../ check below catches path
+# escapes; this catches the repo-root form, which is what the dark-theme work actually used.
+UNSHIPPED = ('harvest/', 'evals/', 'COVERAGE.md', 'README.md', 'AGENTS.md', 'SECURITY.md')
+_dangling = []
+for _dir, _, _files in os.walk(os.path.join(ROOT, 'skills')):
+    for _f in _files:
+        if not _f.endswith(('.md', '.json', '.mjs', '.js', '.css')):
+            continue
+        _p = os.path.join(_dir, _f)
+        _txt = open(_p, encoding='utf-8').read()
+        for _m in re.finditer(r'[`\[(\s]((?:harvest|evals)/[A-Za-z0-9_./-]+|COVERAGE\.md|README\.md|AGENTS\.md|SECURITY\.md)', _txt):
+            # A full GitHub URL is fine - it resolves from anywhere. Check the text immediately
+            # before THIS occurrence, not a window around it: a nearby unrelated URL must not
+            # exempt a bare mention sitting next to it.
+            _pre = 'https://github.com/mohamedsamy911/dga-kit/blob/master/'
+            if _txt[max(0, _m.start() - len(_pre)):_m.start()] == _pre:
+                continue
+            _dangling.append(os.path.relpath(_p, ROOT).replace('\\', '/') + ' -> ' + _m.group(1).rstrip('.'))
+chk('installed skills reference nothing outside skills/', not _dangling,
+    'these resolve in the repo and break once installed; use a full GitHub URL: '
+    + str(sorted(set(_dangling))[:8]))
+
 # --- provenance + $verify convention -----------------------------------------
 # A convention nothing checks is a comment style. These are the rules that make
 # $source and $verify load-bearing.
@@ -169,17 +258,37 @@ STATUSES = {
     'likely-corrected-upstream', 'unavailable-upstream', 'dga-silent',
     'gap-in-extraction-method', 'faithful-to-source',
 }
-sections = [k for k, v in t.items() if k != '$meta' and isinstance(v, dict)]
-missing_src = [k for k in sections if '$source' not in t[k]]
+def _sections():
+    """(name, node) for every section carrying its own provenance.
+
+    Walks one level into a section too: role.dark is a section in its own right - separate
+    source, separate read date, separate $verify - and a top-level-only walk silently skipped
+    all of it. A $verify entry nobody validates is exactly the failure mode this file exists
+    to prevent.
+    """
+    for k, v in t.items():
+        if k == '$meta' or not isinstance(v, dict):
+            continue
+        yield k, v
+        for k2, v2 in v.items():
+            if not k2.startswith('$') and isinstance(v2, dict) and '$source' in v2:
+                yield f'{k}.{k2}', v2
+
+sections = [n for n, _ in _sections()]
+_node = dict(_sections())
+# role.dark declares its own $source and $verify. A top-level-only walk skipped both, leaving
+# six $verify entries unvalidated. Pin that the walk reaches it.
+chk('provenance: the walk reaches nested role.dark', 'role.dark' in sections)
+missing_src = [k for k in sections if '$source' not in _node[k]]
 chk('provenance: every section carries $source', not missing_src, str(missing_src))
 
 no_date = [k for k in sections
-           if '$source' in t[k] and not t[k]['$source'].get('retrieved')]
+           if '$source' in _node[k] and not _node[k]['$source'].get('retrieved')]
 chk('provenance: every $source carries a read date', not no_date, str(no_date))
 
 bad_entries, bad_status = [], []
 for k in sections:
-    for e in t[k].get('$verify', []):
+    for e in _node[k].get('$verify', []):
         if not all(f in e for f in ('key', 'issue', 'status', 'action')):
             bad_entries.append(f'{k}:{e.get("key", "?")}')
         if e.get('status') not in STATUSES:
@@ -197,7 +306,7 @@ chk('$verify: vocabulary is documented in $meta.$conventions',
 import os
 xref = os.path.join(ROOT, 'harvest', 'CROSSREF-SECOND-EXTRACTION.md')
 xtext = open(xref, encoding='utf-8').read() if os.path.exists(xref) else ''
-orphan = [e['key'] for k in sections for e in t[k].get('$verify', [])
+orphan = [e['key'] for k in sections for e in _node[k].get('$verify', [])
           if e['status'] == 'disputed' and e['key'].split('.')[-1] not in xtext]
 chk('$verify: every disputed value is written up in the cross-reference', not orphan, str(orphan))
 

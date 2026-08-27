@@ -1,10 +1,14 @@
 // GENERATED FROM tokens.json — DO NOT EDIT BY HAND.
-// Source: https://design.dga.gov.sa/ | Retrieved: 2026-08-26
+// Source: https://design.dga.gov.sa/ | Light values retrieved: 2026-08-26 | dark 2026-08-27, not shipped
 // Regenerate: node generate-tokens.mjs
 //
 // Breakpoints follow DGA: Mobile 0-599 | Tablet 600-959 | Desktop 960-1279 | XL 1280+
 // Use LOGICAL utilities only (ms-/me-/ps-/pe-/start-/end-), never ml-/mr-/left-/right-.
 export default {
+  // No darkMode strategy is set, on purpose. This preset ships no dark colours (see the
+  // dark-theme note in generate-tokens.mjs), and setting darkMode to 'selector' here would
+  // silently switch a consumer's dark: utilities away from the prefers-color-scheme default
+  // they expect - a behaviour change in return for colours we do not provide.
   theme: {
     screens: { sm: '600px', md: '960px', lg: '1280px' },
     extend: {

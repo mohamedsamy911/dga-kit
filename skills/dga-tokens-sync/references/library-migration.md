@@ -52,7 +52,7 @@ transitions and keyboard navigation). The real record is `/updates/change-log`, 
 
 > ⚠️ `/updates/roadmap` dates 1.0.0 to Feb **2024** and the templates release to Sep **2024** —
 > a year earlier than the change log dates the same versions. Cite the change log. Recorded in
-> `COVERAGE.md`.
+> `https://github.com/mohamedsamy911/dga-kit/blob/master/COVERAGE.md`.
 
 Watch `/updates/change-log` and `/updates/roadmap` for releases.
 
@@ -63,5 +63,5 @@ impact over niche cases, minor fixes always welcome, major additions (new compon
 thorough evaluation. Community forums and published contribution guidelines are both marked
 **"soon"**. Contact: DS-DGA@dga.gov.sa.
 
-**Worth doing:** the 11 documentation defects in `harvest/CAPTURE-LOG.md` are exactly the kind of
+**Worth doing:** the 11 documentation defects in `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/CAPTURE-LOG.md` are exactly the kind of
 minor contribution DGA says it wants.

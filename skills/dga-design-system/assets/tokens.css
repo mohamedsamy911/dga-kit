@@ -1,6 +1,8 @@
 /* GENERATED FROM tokens.json — DO NOT EDIT BY HAND.
    Source: https://design.dga.gov.sa/ (Platforms Code, National Design System of Saudi Arabia)
-   Retrieved: 2026-08-26 | Regenerate: node generate-tokens.mjs */
+   Light values retrieved: 2026-08-26
+   Dark values retrieved:  2026-08-27 (held in tokens.json, not emitted here — see below)
+   Regenerate: node generate-tokens.mjs */
 
 :root {
   /* --- colour primitives --- */
@@ -327,5 +329,10 @@
    -0.02em is used. It must never reach Arabic text. */
 :root:lang(ar), [lang="ar"], [dir="rtl"] { letter-spacing: normal !important; }
 
-/* TODO(harvest): dark theme values exist in the PC 1.0 Figma variable collections
-   but are not exposed as CSS variables on the public site. Do not invent them. */
+/* Dark theme is NOT emitted here, on purpose.
+   DGA publishes 402 dark values under `[data-theme=dark] :root` - a selector that can
+   never match, so upstream the theme is inert. Emitting a corrected selector would
+   activate it for anyone already using data-theme="dark" (Chakra v3 does), and it
+   cannot be made safe: five *-light status surfaces have no dark tint anywhere in
+   DGA's output, so white text on them measures 1.05:1.
+   Values: tokens.json role.dark. Audit: node check-contrast.mjs --theme dark. */

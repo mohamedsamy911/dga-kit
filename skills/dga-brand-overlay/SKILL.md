@@ -60,7 +60,7 @@ choice.
 | **Arabic body typeface** | DGA names only the Latin IBM Plex Sans. IBM Plex Sans Arabic is the obvious intent but is not stated — confirm with DS-DGA@dga.gov.sa | `TODO(entity)` |
 | **Locales shipped** | `ar` only, `ar` + `en`, others | `TODO(entity)` |
 | **Motion durations and easings** | DGA publishes none. `prefers-reduced-motion` **is** required in three places | `TODO(entity)` |
-| **Dark theme** | DGA documents dark values but publishes them only in Figma | `TODO(entity)` |
+| **Dark theme** | DGA ships 402 dark role values in its public CSS, but **its selector cannot match**, so dark mode is inert on every Platforms Code platform. An entity enabling dark mode is doing something DGA has not shipped — and must fix `text.error` (2.68:1) and `text.primary` (3.71:1) itself. See `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-08-27-dark-theme-spike.md` | `TODO(entity)` |
 
 Once filled in, these are binding on `dga-rtl-i18n`, `dga-ui-adapter`, `dga-react` and
 `dga-mockup`. Until filled in, those skills must say "the project has not decided" rather than

@@ -8,9 +8,14 @@ import { fileURLToPath } from 'node:url'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const t = JSON.parse(readFileSync(join(here, 'tokens.json'), 'utf8'))
+// Light and dark were harvested on different dates by different methods (light from the live
+// :root, dark from the CSS bundle). One date on the banner would be wrong for half the file.
+const darkRetrieved = t.role?.dark?.$source?.retrieved
 const banner = `/* GENERATED FROM tokens.json — DO NOT EDIT BY HAND.
    Source: ${t.$meta.source} (Platforms Code, National Design System of Saudi Arabia)
-   Retrieved: ${t.$meta.retrieved} | Regenerate: node generate-tokens.mjs */\n`
+   Light values retrieved: ${t.$meta.retrieved}${darkRetrieved ? `
+   Dark values retrieved:  ${darkRetrieved} (held in tokens.json, not emitted here — see below)` : ''}
+   Regenerate: node generate-tokens.mjs */\n`
 
 // $-prefixed keys are annotations ($source, $verify, $note) - never token values.
 // Every loop below must honour this or annotations leak into the generated output.
@@ -36,7 +41,8 @@ for (const [fam, ramp] of Object.entries(t.color)) {
 L.push('')
 L.push('  /* --- semantic roles (reference these, not the primitives) --- */')
 for (const [group, roles] of Object.entries(t.role)) {
-  if (skip(group)) continue
+  // `dark` is a whole theme, not a role group - it gets its own selector below.
+  if (skip(group) || group === 'dark') continue
   L.push(`  /* ${group} */`)
   for (const [role, hex] of Object.entries(roles)) if (!skip(role)) L.push(`  --dga-${group}-${kebab(role)}: ${hex};`)
 }
@@ -74,8 +80,34 @@ L.push('   accept percentages (proposed in css-text-4, never shipped), so the em
 L.push('   -0.02em is used. It must never reach Arabic text. */')
 L.push(':root:lang(ar), [lang="ar"], [dir="rtl"] { letter-spacing: normal !important; }')
 L.push('')
-L.push('/* TODO(harvest): dark theme values exist in the PC 1.0 Figma variable collections')
-L.push('   but are not exposed as CSS variables on the public site. Do not invent them. */')
+// --- dark theme: DELIBERATELY NOT EMITTED ------------------------------------
+// The 402 harvested dark values live in tokens.json under `role.dark` and are audited by
+// `check-contrast.mjs --theme dark`. They are NOT written into this stylesheet, and that is a
+// safety decision, not an oversight:
+//
+//   1. DGA publishes them under `[data-theme=dark] :root`, which can never match (:root is
+//      <html>; a descendant combinator needs an ancestor it does not have). So on a real DGA
+//      platform the dark theme is INERT - and inert is safe.
+//   2. Emitting the corrected selector `:root[data-theme="dark"]` would make it live. Any
+//      consumer already using `data-theme="dark"` - Chakra v3 does, out of the box - would
+//      silently activate it. That turns a harmless upstream bug into a live accessibility
+//      regression in someone else's product.
+//   3. It cannot be made safe from DGA's own values. `text.error` has a cited substitute
+//      (red.300 #fca19b, which DGA itself uses for notification.text-error in dark) and so does
+//      `text.primary` (sa-flag.300 #88d8ad). But the five `*-light` status surfaces have NONE:
+//      every dark variant DGA publishes for them - under notification-, tag- and featuredicons-
+//      - still resolves to the same near-white value. White text on them is 1.05:1. Inventing a
+//      dark tint would break `cite or omit`.
+//
+// So: values retained for audit, stylesheet stays safe. An entity that wants dark mode owns the
+// remediation and records it in dga-brand-overlay. See tokens.json role.dark.$verify.
+L.push('/* Dark theme is NOT emitted here, on purpose.')
+L.push('   DGA publishes 402 dark values under `[data-theme=dark] :root` - a selector that can')
+L.push('   never match, so upstream the theme is inert. Emitting a corrected selector would')
+L.push('   activate it for anyone already using data-theme="dark" (Chakra v3 does), and it')
+L.push('   cannot be made safe: five *-light status surfaces have no dark tint anywhere in')
+L.push('   DGA\'s output, so white text on them measures 1.05:1.')
+L.push('   Values: tokens.json role.dark. Audit: node check-contrast.mjs --theme dark. */')
 writeFileSync(join(here, 'tokens.css'), L.join('\n') + '\n')
 
 /* ---------- Tailwind ---------- */
@@ -86,7 +118,9 @@ for (const [fam, ramp] of Object.entries(t.color)) {
   for (const [step, hex] of Object.entries(ramp)) if (!skip(step)) colors[fam][step] = hex
 }
 for (const [group, roles] of Object.entries(t.role)) {
-  if (skip(group)) continue
+  // Tailwind cannot swap a literal colour by selector; dark ships as CSS custom properties in
+  // tokens.css instead. `darkMode` below points Tailwind at the same attribute.
+  if (skip(group) || group === 'dark') continue
   colors[group] = {}
   for (const [role, hex] of Object.entries(roles)) if (!skip(role)) colors[group][kebab(role)] = hex
 }
@@ -99,12 +133,16 @@ const fontSize = {}
 for (const [n, v] of Object.entries(t.typography.scale)) if (!skip(n)) fontSize[n] = [v.size, { lineHeight: v.lineHeight, ...(v.tracking ? { letterSpacing: em(v.tracking) } : {}) }]
 
 const preset = `// GENERATED FROM tokens.json — DO NOT EDIT BY HAND.
-// Source: ${t.$meta.source} | Retrieved: ${t.$meta.retrieved}
+// Source: ${t.$meta.source} | Light values retrieved: ${t.$meta.retrieved}${darkRetrieved ? ` | dark ${darkRetrieved}, not shipped` : ''}
 // Regenerate: node generate-tokens.mjs
 //
 // Breakpoints follow DGA: Mobile 0-599 | Tablet 600-959 | Desktop 960-1279 | XL 1280+
 // Use LOGICAL utilities only (ms-/me-/ps-/pe-/start-/end-), never ml-/mr-/left-/right-.
 export default {
+  // No darkMode strategy is set, on purpose. This preset ships no dark colours (see the
+  // dark-theme note in generate-tokens.mjs), and setting darkMode to 'selector' here would
+  // silently switch a consumer's dark: utilities away from the prefers-color-scheme default
+  // they expect - a behaviour change in return for colours we do not provide.
   theme: {
     screens: { sm: '600px', md: '960px', lg: '1280px' },
     extend: {

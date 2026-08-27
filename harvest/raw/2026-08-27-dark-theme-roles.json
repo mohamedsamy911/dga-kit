@@ -1,0 +1,1610 @@
+{
+ "--background-white": {
+  "declared": "var(--colors-neutral-950)",
+  "resolves_to": "#0c111b"
+ },
+ "--background-body": {
+  "declared": "var(--colors-neutral-900)",
+  "resolves_to": "#111927"
+ },
+ "--background-menu": {
+  "declared": "var(--colors-neutral-800)",
+  "resolves_to": "#1f2a37"
+ },
+ "--background-card": {
+  "declared": "var(--colors-neutral-800)",
+  "resolves_to": "#1f2a37"
+ },
+ "--background-surface-oncolor": {
+  "declared": "var(--colors-base-white)",
+  "resolves_to": "#ffffff"
+ },
+ "--background-black": {
+  "declared": "var(--colors-base-white)",
+  "resolves_to": "#ffffff"
+ },
+ "--background-neutral-800": {
+  "declared": "var(--colors-neutral-600)",
+  "resolves_to": "#4d5761"
+ },
+ "--background-neutral-400": {
+  "declared": "var(--colors-neutral-400)",
+  "resolves_to": "#9da4ae"
+ },
+ "--background-neutral-300": {
+  "declared": "var(--colors-neutral-500)",
+  "resolves_to": "#6c727e"
+ },
+ "--background-neutral-200": {
+  "declared": "var(--colors-neutral-600)",
+  "resolves_to": "#4d5761"
+ },
+ "--background-neutral-100": {
+  "declared": "var(--colors-neutral-800)",
+  "resolves_to": "#1f2a37"
+ },
+ "--background-neutral-50": {
+  "declared": "var(--colors-neutral-900)",
+  "resolves_to": "#111927"
+ },
+ "--background-neutral-25": {
+  "declared": "var(--colors-neutral-950)",
+  "resolves_to": "#0c111b"
+ },
+ "--background-primary": {
+  "declared": "var(--colors-primary-sa-flag-600-primary)",
+  "resolves_to": "#1b8354"
+ },
+ "--background-primary-400": {
+  "declared": "var(--colors-primary-sa-flag-400)",
+  "resolves_to": "#54c08a"
+ },
+ "--background-primary-200": {
+  "declared": "var(--colors-neutral-700)",
+  "resolves_to": "#384250"
+ },
+ "--background-primary-50": {
+  "declared": "var(--colors-alpha-alpha-green-10)",
+  "resolves_to": "#1b835419"
+ },
+ "--background-primary-25": {
+  "declared": "var(--colors-primary-sa-flag-950)",
+  "resolves_to": "#092a1e"
+ },
+ "--background-secondary": {
+  "declared": "var(--colors-secondary-gold-600-primary)",
+  "resolves_to": "#dba102"
+ },
+ "--background-secondary-50": {
+  "declared": "var(--colors-neutral-800)",
+  "resolves_to": "#1f2a37"
+ },
+ "--background-secondary-25": {
+  "declared": "var(--colors-neutral-900)",
+  "resolves_to": "#111927"
+ },
+ "--background-tertiary": {
+  "declared": "var(--colors-tertiary-lavendar-600)",
+  "resolves_to": "#6d428f"
+ },
+ "--background-tertiary-50": {
+  "declared": "var(--colors-neutral-800)",
+  "resolves_to": "#1f2a37"
+ },
+ "--background-tertiary-25": {
+  "declared": "var(--colors-neutral-900)",
+  "resolves_to": "#111927"
+ },
+ "--background-success": {
+  "declared": "var(--colors-green-600)",
+  "resolves_to": "#069454"
+ },
+ "--background-success-50": {
+  "declared": "var(--colors-neutral-800)",
+  "resolves_to": "#1f2a37"
+ },
+ "--background-success-25": {
+  "declared": "var(--colors-neutral-900)",
+  "resolves_to": "#111927"
+ },
+ "--background-info": {
+  "declared": "var(--colors-blue-600)",
+  "resolves_to": "#156fee"
+ },
+ "--background-info-50": {
+  "declared": "var(--colors-neutral-800)",
+  "resolves_to": "#1f2a37"
+ },
+ "--background-info-25": {
+  "declared": "var(--colors-neutral-900)",
+  "resolves_to": "#111927"
+ },
+ "--background-warning": {
+  "declared": "var(--colors-yellow-600)",
+  "resolves_to": "#dc6803"
+ },
+ "--background-warning-50": {
+  "declared": "var(--colors-neutral-800)",
+  "resolves_to": "#1f2a37"
+ },
+ "--background-warning-25": {
+  "declared": "var(--colors-neutral-900)",
+  "resolves_to": "#111927"
+ },
+ "--background-error": {
+  "declared": "var(--colors-red-600)",
+  "resolves_to": "#d92c20"
+ },
+ "--background-error-50": {
+  "declared": "var(--colors-neutral-800)",
+  "resolves_to": "#1f2a37"
+ },
+ "--background-error-25": {
+  "declared": "var(--colors-neutral-900)",
+  "resolves_to": "#111927"
+ },
+ "--background-sa-flag": {
+  "declared": "var(--colors-primary-sa-flag-600-primary)",
+  "resolves_to": "#1b8354"
+ },
+ "--background-sa-flag-50": {
+  "declared": "var(--colors-neutral-800)",
+  "resolves_to": "#1f2a37"
+ },
+ "--background-sa-flag-25": {
+  "declared": "var(--colors-neutral-900)",
+  "resolves_to": "#111927"
+ },
+ "--background-notification-white": {
+  "declared": "var(--colors-neutral-900)",
+  "resolves_to": "#111927"
+ },
+ "--text-default": {
+  "declared": "var(--colors-base-white)",
+  "resolves_to": "#ffffff"
+ },
+ "--text-primary": {
+  "declared": "var(--colors-primary-sa-flag-600-primary)",
+  "resolves_to": "#1b8354"
+ },
+ "--text-secondary": {
+  "declared": "var(--colors-secondary-gold-600-primary)",
+  "resolves_to": "#dba102"
+ },
+ "--text-tertiary": {
+  "declared": "var(--colors-tertiary-lavendar-500-primary)",
+  "resolves_to": "#80519f"
+ },
+ "--text-primary-sa-flag": {
+  "declared": "var(--colors-primary-sa-flag-100)",
+  "resolves_to": "#dff6e7"
+ },
+ "--text-display": {
+  "declared": "var(--colors-neutral-50)",
+  "resolves_to": "#f9fafb"
+ },
+ "--text-primary-paragraph": {
+  "declared": "var(--colors-neutral-100)",
+  "resolves_to": "#f3f4f6"
+ },
+ "--text-secondary-paragraph": {
+  "declared": "var(--colors-neutral-200)",
+  "resolves_to": "#e5e7eb"
+ },
+ "--text-oncolor-primary": {
+  "declared": "var(--colors-base-white)",
+  "resolves_to": "#ffffff"
+ },
+ "--text-oncolor-secondary": {
+  "declared": "var(--alpha-white-80)",
+  "resolves_to": "#161616cc"
+ },
+ "--text-oncolor-tertiary": {
+  "declared": "var(--alpha-white-70)",
+  "resolves_to": "#161616b2"
+ },
+ "--text-success": {
+  "declared": "var(--colors-green-600)",
+  "resolves_to": "#069454"
+ },
+ "--text-info": {
+  "declared": "var(--colors-blue-600)",
+  "resolves_to": "#156fee"
+ },
+ "--text-warning": {
+  "declared": "var(--colors-yellow-600)",
+  "resolves_to": "#dc6803"
+ },
+ "--text-error": {
+  "declared": "var(--colors-red-700)",
+  "resolves_to": "#b42318"
+ },
+ "--text-primary-light": {
+  "declared": "var(--colors-primary-sa-flag-300)",
+  "resolves_to": "#88d8ad"
+ },
+ "--text-secondary-light": {
+  "declared": "var(--colors-secondary-gold-300)",
+  "resolves_to": "#fae996"
+ },
+ "--text-tertiary-light": {
+  "declared": "var(--colors-tertiary-lavendar-300)",
+  "resolves_to": "#ccadd9"
+ },
+ "--text-default-disabled": {
+  "declared": "var(--colors-neutral-400)",
+  "resolves_to": "#9da4ae"
+ },
+ "--text-default-oncolor-disabled": {
+  "declared": "var(--alpha-black-40)",
+  "resolves_to": "#ffffff66"
+ },
+ "--border-white": {
+  "declared": "var(--colors-base-black)",
+  "resolves_to": "#161616"
+ },
+ "--border-white-40": {
+  "declared": "var(--alpha-white-40)",
+  "resolves_to": "#16161666"
+ },
+ "--button-background-black-default": {
+  "declared": "var(--colors-neutral-950)",
+  "resolves_to": "#0c111b"
+ },
+ "--button-background-black-hovered": {
+  "declared": "var(--colors-neutral-800)",
+  "resolves_to": "#1f2a37"
+ },
+ "--button-background-black-pressed": {
+  "declared": "var(--colors-neutral-600)",
+  "resolves_to": "#4d5761"
+ },
+ "--button-background-black-selected": {
+  "declared": "var(--colors-neutral-700)",
+  "resolves_to": "#384250"
+ },
+ "--button-background-black-focused": {
+  "declared": "var(--colors-neutral-950)",
+  "resolves_to": "#0c111b"
+ },
+ "--button-background-primary-default": {
+  "declared": "var( --colors-primary-sa-flag-600-primary )",
+  "resolves_to": "var( --colors-primary-sa-flag-600-primary )"
+ },
+ "--button-background-primary-hovered": {
+  "declared": "var(--colors-primary-sa-flag-700)",
+  "resolves_to": "#166a45"
+ },
+ "--button-background-primary-pressed": {
+  "declared": "var(--colors-primary-sa-flag-900)",
+  "resolves_to": "#104631"
+ },
+ "--button-background-primary-selected": {
+  "declared": "var(--colors-primary-sa-flag-800)",
+  "resolves_to": "#14573a"
+ },
+ "--button-background-primary-focused": {
+  "declared": "var( --colors-primary-sa-flag-600-primary )",
+  "resolves_to": "var( --colors-primary-sa-flag-600-primary )"
+ },
+ "--button-background-neutral-default": {
+  "declared": "var(--colors-neutral-800)",
+  "resolves_to": "#1f2a37"
+ },
+ "--button-background-neutral-hovered": {
+  "declared": "var(--colors-neutral-700)",
+  "resolves_to": "#384250"
+ },
+ "--button-background-neutral-pressed": {
+  "declared": "var(--colors-neutral-600)",
+  "resolves_to": "#4d5761"
+ },
+ "--button-background-neutral-selected": {
+  "declared": "var(--colors-neutral-700)",
+  "resolves_to": "#384250"
+ },
+ "--button-background-neutral-focused": {
+  "declared": "var(--colors-neutral-800)",
+  "resolves_to": "#1f2a37"
+ },
+ "--button-background-danger-primary-default": {
+  "declared": "var(--colors-red-600)",
+  "resolves_to": "#d92c20"
+ },
+ "--button-background-danger-primary-hovered": {
+  "declared": "var(--colors-red-700)",
+  "resolves_to": "#b42318"
+ },
+ "--button-background-danger-primary-pressed": {
+  "declared": "var(--colors-red-900)",
+  "resolves_to": "#7a2619"
+ },
+ "--button-background-danger-primary-selected": {
+  "declared": "var(--colors-red-800)",
+  "resolves_to": "#912018"
+ },
+ "--button-background-danger-primary-focused": {
+  "declared": "var(--colors-red-600)",
+  "resolves_to": "#d92c20"
+ },
+ "--button-label-danger-primary-default-oncolor": {
+  "declared": "var(--colors-red-200)",
+  "resolves_to": "#fecdca"
+ },
+ "--button-label-danger-primary-hovered-oncolor": {
+  "declared": "var(--colors-red-300)",
+  "resolves_to": "#fca19b"
+ },
+ "--button-label-danger-primary-pressed-oncolor": {
+  "declared": "var(--colors-red-400)",
+  "resolves_to": "#f97066"
+ },
+ "--button-background-danger-secondary-default": {
+  "declared": "var(--colors-red-50)",
+  "resolves_to": "#fef3f2"
+ },
+ "--button-background-danger-secondary-hovered": {
+  "declared": "var(--colors-red-100)",
+  "resolves_to": "#fee4e2"
+ },
+ "--button-background-danger-secondary-pressed": {
+  "declared": "var(--colors-red-200)",
+  "resolves_to": "#fecdca"
+ },
+ "--button-background-danger-secondary-selected": {
+  "declared": "var(--colors-red-50)",
+  "resolves_to": "#fef3f2"
+ },
+ "--button-background-danger-secondary-focused": {
+  "declared": "var(--colors-red-50)",
+  "resolves_to": "#fef3f2"
+ },
+ "--button-background-oncolor-default": {
+  "declared": "var(--colors-base-black)",
+  "resolves_to": "#161616"
+ },
+ "--button-background-oncolor-hovered": {
+  "declared": "var(--alpha-white-80)",
+  "resolves_to": "#161616cc"
+ },
+ "--button-background-oncolor-pressed": {
+  "declared": "var(--alpha-white-60)",
+  "resolves_to": "#16161699"
+ },
+ "--button-background-oncolor-selected": {
+  "declared": "var(--alpha-white-70)",
+  "resolves_to": "#161616b2"
+ },
+ "--button-background-oncolor-focused": {
+  "declared": "var(--alpha-white-100)",
+  "resolves_to": "#161616"
+ },
+ "--button-background-transparent-default": {
+  "declared": "var(--alpha-white-0)",
+  "resolves_to": "#16161619"
+ },
+ "--button-background-transparent-hovered": {
+  "declared": "var(--alpha-white-20)",
+  "resolves_to": "#16161633"
+ },
+ "--button-background-transparent-pressed": {
+  "declared": "var(--alpha-white-40)",
+  "resolves_to": "#16161666"
+ },
+ "--button-background-transparent-selected": {
+  "declared": "var(--alpha-white-30)",
+  "resolves_to": "#1616164c"
+ },
+ "--button-background-transparent-focused": {
+  "declared": "var(--alpha-white-0)",
+  "resolves_to": "#16161619"
+ },
+ "--button-background-disabled-on-color": {
+  "declared": "var(--alpha-white-20)",
+  "resolves_to": "#16161633"
+ },
+ "--button-label-transparent-hovered-on-color": {
+  "declared": "var( --colors-primary-sa-flag-400 )",
+  "resolves_to": "var( --colors-primary-sa-flag-400 )"
+ },
+ "--border-black": {
+  "declared": "var(--colors-base-white)",
+  "resolves_to": "#ffffff"
+ },
+ "--border-primary": {
+  "declared": "var(--colors-primary-sa-flag-600-primary)",
+  "resolves_to": "#1b8354"
+ },
+ "--border-primary-light": {
+  "declared": "var(--colors-green-200)",
+  "resolves_to": "#abefc6"
+ },
+ "--border-secondary": {
+  "declared": "var(--colors-secondary-gold-600-primary)",
+  "resolves_to": "#dba102"
+ },
+ "--border-secondary-light": {
+  "declared": "var(--colors-secondary-gold-200)",
+  "resolves_to": "#fcf3bd"
+ },
+ "--border-tertiary": {
+  "declared": "var(--colors-tertiary-lavendar-500-primary)",
+  "resolves_to": "#80519f"
+ },
+ "--border-tertiary-light": {
+  "declared": "var(--colors-tertiary-lavendar-200)",
+  "resolves_to": "#e1cce8"
+ },
+ "--border-neutral-primary": {
+  "declared": "var(--colors-neutral-500)",
+  "resolves_to": "#6c727e"
+ },
+ "--border-neutral-secondary": {
+  "declared": "var(--colors-neutral-700)",
+  "resolves_to": "#384250"
+ },
+ "--border-neutral-tertiary": {
+  "declared": "var(--colors-neutral-800)",
+  "resolves_to": "#1f2a37"
+ },
+ "--border-background-white": {
+  "declared": "var(--colors-neutral-600)",
+  "resolves_to": "#4d5761"
+ },
+ "--border-background-neutral": {
+  "declared": "var(--colors-neutral-600)",
+  "resolves_to": "#4d5761"
+ },
+ "--border-transparent-10": {
+  "declared": "var(--alpha-white-10)",
+  "resolves_to": "#16161619"
+ },
+ "--border-oncolor-transparent-30": {
+  "declared": "var(--colors-alpha-alpha-white-30)",
+  "resolves_to": "#ffffff4c"
+ },
+ "--border-success": {
+  "declared": "var(--colors-green-500)",
+  "resolves_to": "#17b169"
+ },
+ "--button-label-transparent-pressed-on-color": {
+  "declared": "var( --colors-primary-sa-flag-300 )",
+  "resolves_to": "var( --colors-primary-sa-flag-300 )"
+ },
+ "--border-success-light": {
+  "declared": "var(--colors-green-200)",
+  "resolves_to": "#abefc6"
+ },
+ "--border-info": {
+  "declared": "var(--colors-blue-700)",
+  "resolves_to": "#175cd3"
+ },
+ "--button-label-transparent-selected-on-color": {
+  "declared": "var( --colors-primary-sa-flag-400 )",
+  "resolves_to": "var( --colors-primary-sa-flag-400 )"
+ },
+ "--border-info-light": {
+  "declared": "var(--colors-blue-200)",
+  "resolves_to": "#b2ddff"
+ },
+ "--button-icon-transparent-hovered-on-color": {
+  "declared": "var(--colors-primary-sa-flag-400)",
+  "resolves_to": "#54c08a"
+ },
+ "--border-warning": {
+  "declared": "var(--colors-yellow-700)",
+  "resolves_to": "#b54707"
+ },
+ "--border-warning-light": {
+  "declared": "var(--colors-yellow-200)",
+  "resolves_to": "#fedf89"
+ },
+ "--border-error": {
+  "declared": "var(--colors-red-700)",
+  "resolves_to": "#b42318"
+ },
+ "--button-icon-transparent-pressed-on-color": {
+  "declared": "var(--colors-primary-sa-flag-300)",
+  "resolves_to": "#88d8ad"
+ },
+ "--border-error-light": {
+  "declared": "var(--colors-red-200)",
+  "resolves_to": "#fecdca"
+ },
+ "--button-icon-transparent-selected-on-color": {
+  "declared": "var( --colors-primary-sa-flag-400 )",
+  "resolves_to": "var( --colors-primary-sa-flag-400 )"
+ },
+ "--border-disabled": {
+  "declared": "var(--colors-neutral-400)",
+  "resolves_to": "#9da4ae"
+ },
+ "--link-primary": {
+  "declared": "var(--colors-primary-sa-flag-600-primary)",
+  "resolves_to": "#1b8354"
+ },
+ "--link-primary-hovered": {
+  "declared": "var(--colors-primary-sa-flag-400)",
+  "resolves_to": "#54c08a"
+ },
+ "--link-primary-pressed": {
+  "declared": "var(--colors-primary-sa-flag-300)",
+  "resolves_to": "#88d8ad"
+ },
+ "--link-primary-focused": {
+  "declared": "var(--colors-primary-sa-flag-600-primary)",
+  "resolves_to": "#1b8354"
+ },
+ "--link-primary-visited": {
+  "declared": "var(--colors-primary-sa-flag-800)",
+  "resolves_to": "#14573a"
+ },
+ "--link-icon-primary-hovered": {
+  "declared": "var(--colors-primary-sa-flag-400)",
+  "resolves_to": "#54c08a"
+ },
+ "--link-icon-primary-pressed": {
+  "declared": "var(--colors-primary-sa-flag-300)",
+  "resolves_to": "#88d8ad"
+ },
+ "--link-icon-primary-focused": {
+  "declared": "var(--colors-primary-sa-flag-600-primary)",
+  "resolves_to": "#1b8354"
+ },
+ "--link-icon-primary-visited": {
+  "declared": "var(--colors-primary-sa-flag-800)",
+  "resolves_to": "#14573a"
+ },
+ "--link-secondary": {
+  "declared": "var(--colors-secondary-gold-600-primary)",
+  "resolves_to": "#dba102"
+ },
+ "--link-secondary-hovered": {
+  "declared": "var(--colors-secondary-gold-400)",
+  "resolves_to": "#f7d54d"
+ },
+ "--link-secondary-pressed": {
+  "declared": "var(--colors-secondary-gold-300)",
+  "resolves_to": "#fae996"
+ },
+ "--link-secondary-focused": {
+  "declared": "var(--colors-secondary-gold-600-primary)",
+  "resolves_to": "#dba102"
+ },
+ "--link-secondary-visited": {
+  "declared": "var(--colors-secondary-gold-900)",
+  "resolves_to": "#6e3c00"
+ },
+ "--link-tertiary": {
+  "declared": "var(--colors-tertiary-lavendar-500-primary)",
+  "resolves_to": "#80519f"
+ },
+ "--link-tertiary-hovered": {
+  "declared": "var(--colors-tertiary-lavendar-400)",
+  "resolves_to": "#a57bba"
+ },
+ "--link-tertiary-pressed": {
+  "declared": "var(--colors-tertiary-lavendar-300)",
+  "resolves_to": "#ccadd9"
+ },
+ "--link-tertiary-focused": {
+  "declared": "var(--colors-tertiary-lavendar-500-primary)",
+  "resolves_to": "#80519f"
+ },
+ "--link-tertiary-visited": {
+  "declared": "var(--colors-tertiary-lavendar-800)",
+  "resolves_to": "#3d1d5e"
+ },
+ "--link-neutral": {
+  "declared": "var(--colors-neutral-200)",
+  "resolves_to": "#e5e7eb"
+ },
+ "--link-neutral-hovered": {
+  "declared": "var(--colors-neutral-400)",
+  "resolves_to": "#9da4ae"
+ },
+ "--link-icon-neutral-hovered": {
+  "declared": "var(--colors-neutral-400)",
+  "resolves_to": "#9da4ae"
+ },
+ "--link-neutral-pressed": {
+  "declared": "var(--colors-neutral-500)",
+  "resolves_to": "#6c727e"
+ },
+ "--link-icon-neutral-pressed": {
+  "declared": "var(--colors-neutral-500)",
+  "resolves_to": "#6c727e"
+ },
+ "--link-neutral-focused": {
+  "declared": "var(--colors-neutral-200)",
+  "resolves_to": "#e5e7eb"
+ },
+ "--link-icon-neutral-focused": {
+  "declared": "var(--colors-neutral-200)",
+  "resolves_to": "#e5e7eb"
+ },
+ "--link-neutral-visited": {
+  "declared": "var(--colors-neutral-300)",
+  "resolves_to": "#d2d6db"
+ },
+ "--link-icon-neutral-visited": {
+  "declared": "var(--colors-neutral-300)",
+  "resolves_to": "#d2d6db"
+ },
+ "--link-danger": {
+  "declared": "var(--colors-red-600)",
+  "resolves_to": "#d92c20"
+ },
+ "--link-danger-hovered": {
+  "declared": "var(--colors-red-700)",
+  "resolves_to": "#b42318"
+ },
+ "--link-icon-danger-hovered": {
+  "declared": "var(--colors-red-700)",
+  "resolves_to": "#b42318"
+ },
+ "--link-danger-pressed": {
+  "declared": "var(--colors-red-900)",
+  "resolves_to": "#7a2619"
+ },
+ "--link-icon-danger-pressed": {
+  "declared": "var(--colors-red-900)",
+  "resolves_to": "#7a2619"
+ },
+ "--link-danger-focused": {
+  "declared": "var(--colors-red-600)",
+  "resolves_to": "#d92c20"
+ },
+ "--link-icon-danger-focused": {
+  "declared": "var(--colors-red-600)",
+  "resolves_to": "#d92c20"
+ },
+ "--link-danger-visited": {
+  "declared": "var(--colors-red-800)",
+  "resolves_to": "#912018"
+ },
+ "--link-icon-danger-visited": {
+  "declared": "var(--colors-red-800)",
+  "resolves_to": "#912018"
+ },
+ "--link-oncolor": {
+  "declared": "var(--colors-base-white)",
+  "resolves_to": "#ffffff"
+ },
+ "--link-oncolor-hovered": {
+  "declared": "var(--colors-alpha-alpha-white-80)",
+  "resolves_to": "#ffffffcc"
+ },
+ "--link-icon-oncolor-hovered": {
+  "declared": "var(--alpha-white-80)",
+  "resolves_to": "#161616cc"
+ },
+ "--link-oncolor-pressed": {
+  "declared": "var(--colors-alpha-alpha-white-60)",
+  "resolves_to": "#ffffff99"
+ },
+ "--link-icon-oncolor-pressed": {
+  "declared": "var(--alpha-white-60)",
+  "resolves_to": "#16161699"
+ },
+ "--link-oncolor-focused": {
+  "declared": "var(--colors-base-white)",
+  "resolves_to": "#ffffff"
+ },
+ "--link-link-oncolor-focused": {
+  "declared": "var(--colors-base-white)",
+  "resolves_to": "#ffffff"
+ },
+ "--link-oncolor-visited": {
+  "declared": "var(--colors-alpha-alpha-white-90)",
+  "resolves_to": "#ffffffe5"
+ },
+ "--link-icon-oncolor-visited": {
+  "declared": "var(--alpha-white-90)",
+  "resolves_to": "#161616e5"
+ },
+ "--link-oncolor-disabled": {
+  "declared": "var(--colors-alpha-alpha-white-30)",
+  "resolves_to": "#ffffff4c"
+ },
+ "--link-icon-oncolor-disabled": {
+  "declared": "var(--alpha-white-30)",
+  "resolves_to": "#1616164c"
+ },
+ "--icon-oncolor": {
+  "declared": "var(--colors-base-white)",
+  "resolves_to": "#ffffff"
+ },
+ "--tag-background-neutral": {
+  "declared": "var(--colors-primary-sa-flag-600-primary)",
+  "resolves_to": "#1b8354"
+ },
+ "--tag-background-neutral-light": {
+  "declared": "var(--colors-neutral-800)",
+  "resolves_to": "#1f2a37"
+ },
+ "--tag-background-on-color": {
+  "declared": "var(--colors-alpha-alpha-white-20)",
+  "resolves_to": "#ffffff33"
+ },
+ "--tag-text-neutral": {
+  "declared": "var(--colors-neutral-100)",
+  "resolves_to": "#f3f4f6"
+ },
+ "--tag-text-success": {
+  "declared": "var(--colors-green-800)",
+  "resolves_to": "#085d3a"
+ },
+ "--tag-text-info": {
+  "declared": "var(--colors-blue-800)",
+  "resolves_to": "#1849a9"
+ },
+ "--tag-text-warning": {
+  "declared": "var(--colors-yellow-800)",
+  "resolves_to": "#93370c"
+ },
+ "--tag-text-error": {
+  "declared": "var(--colors-red-800)",
+  "resolves_to": "#912018"
+ },
+ "--tag-icon-neutral": {
+  "declared": "var(--colors-neutral-100)",
+  "resolves_to": "#f3f4f6"
+ },
+ "--tag-icon-success": {
+  "declared": "var(--colors-green-800)",
+  "resolves_to": "#085d3a"
+ },
+ "--tag-icon-info": {
+  "declared": "var(--colors-blue-800)",
+  "resolves_to": "#1849a9"
+ },
+ "--tag-icon-warning": {
+  "declared": "var(--colors-yellow-800)",
+  "resolves_to": "#93370c"
+ },
+ "--tag-icon-error": {
+  "declared": "var(--colors-red-800)",
+  "resolves_to": "#912018"
+ },
+ "--tag-background-success": {
+  "declared": "var(--colors-green-700)",
+  "resolves_to": "#067647"
+ },
+ "--tag-background-success-light": {
+  "declared": "var(--colors-green-50)",
+  "resolves_to": "#ecfdf3"
+ },
+ "--tag-background-info": {
+  "declared": "var(--colors-blue-600)",
+  "resolves_to": "#156fee"
+ },
+ "--tag-background-info-light": {
+  "declared": "var(--colors-blue-50)",
+  "resolves_to": "#eff8ff"
+ },
+ "--tag-background-warning": {
+  "declared": "var(--colors-yellow-700)",
+  "resolves_to": "#b54707"
+ },
+ "--tag-background-warning-light": {
+  "declared": "var(--colors-yellow-50)",
+  "resolves_to": "#fffaeb"
+ },
+ "--tag-background-error": {
+  "declared": "var(--colors-red-600)",
+  "resolves_to": "#d92c20"
+ },
+ "--tag-background-error-light": {
+  "declared": "var(--colors-red-50)",
+  "resolves_to": "#fef3f2"
+ },
+ "--tag-border-neutral": {
+  "declared": "var(--colors-neutral-300)",
+  "resolves_to": "#d2d6db"
+ },
+ "--tag-border-neutral-light": {
+  "declared": "var(--colors-neutral-800)",
+  "resolves_to": "#1f2a37"
+ },
+ "--tag-border-on-color": {
+  "declared": "var(--colors-alpha-alpha-white-60)",
+  "resolves_to": "#ffffff99"
+ },
+ "--tag-border-success": {
+  "declared": "var(--colors-green-700)",
+  "resolves_to": "#067647"
+ },
+ "--tag-border-success-light": {
+  "declared": "var(--colors-green-200)",
+  "resolves_to": "#abefc6"
+ },
+ "--tag-border-info": {
+  "declared": "var(--colors-blue-700)",
+  "resolves_to": "#175cd3"
+ },
+ "--tag-border-info-light": {
+  "declared": "var(--colors-blue-200)",
+  "resolves_to": "#b2ddff"
+ },
+ "--tag-border-warning": {
+  "declared": "var(--colors-red-700)",
+  "resolves_to": "#b42318"
+ },
+ "--tag-border-warning-light": {
+  "declared": "var(--colors-yellow-200)",
+  "resolves_to": "#fedf89"
+ },
+ "--tag-border-error": {
+  "declared": "var(--colors-red-700)",
+  "resolves_to": "#b42318"
+ },
+ "--tag-border-error-light": {
+  "declared": "var(--colors-red-200)",
+  "resolves_to": "#fecdca"
+ },
+ "--tag-dot": {
+  "declared": "var(--colors-alpha-alpha-white-60)",
+  "resolves_to": "#ffffff99"
+ },
+ "--form-text-form-title": {
+  "declared": "var(--text-default)",
+  "resolves_to": "#ffffff"
+ },
+ "--controls-control-primary": {
+  "declared": "var(--alpha-white-0)",
+  "resolves_to": "#16161619"
+ },
+ "--table-cell-border": {
+  "declared": "var(--colors-neutral-600)",
+  "resolves_to": "#4d5761"
+ },
+ "--table-cell-border-inverse": {
+  "declared": "var(--border-black)",
+  "resolves_to": "#ffffff"
+ },
+ "--table-text-head": {
+  "declared": "var(--colors-neutral-300)",
+  "resolves_to": "#d2d6db"
+ },
+ "--table-text-body": {
+  "declared": "var(--text-default)",
+  "resolves_to": "#ffffff"
+ },
+ "--table-background-disabled": {
+  "declared": "var(--background-disabled)",
+  "resolves_to": "#384250"
+ },
+ "--table-background-hover-selected": {
+  "declared": "var(--colors-neutral-900)",
+  "resolves_to": "#111927"
+ },
+ "--table-background-header": {
+  "declared": "var(--colors-neutral-900)",
+  "resolves_to": "#111927"
+ },
+ "--table-background-row": {
+  "declared": "var(--colors-neutral-900)",
+  "resolves_to": "#111927"
+ },
+ "--controls-control-primary-checked": {
+  "declared": "var(--colors-primary-sa-flag-600-primary)",
+  "resolves_to": "#1b8354"
+ },
+ "--controls-control-primary-hovered": {
+  "declared": "var(--colors-primary-sa-flag-300)",
+  "resolves_to": "#88d8ad"
+ },
+ "--controls-control-primary-pressed": {
+  "declared": "var(--colors-primary-sa-flag-400)",
+  "resolves_to": "#54c08a"
+ },
+ "--controls-control-primary-focused": {
+  "declared": "var(--colors-primary-sa-flag-600-primary)",
+  "resolves_to": "#1b8354"
+ },
+ "--controls-control-neutral-checked": {
+  "declared": "var(--colors-neutral-600)",
+  "resolves_to": "#4d5761"
+ },
+ "--controls-control-neutral-hovered": {
+  "declared": "var(--colors-neutral-400)",
+  "resolves_to": "#9da4ae"
+ },
+ "--controls-control-neutral-pressed": {
+  "declared": "var(--colors-neutral-400)",
+  "resolves_to": "#9da4ae"
+ },
+ "--controls-control-neutral-focused": {
+  "declared": "var(--colors-neutral-600)",
+  "resolves_to": "#4d5761"
+ },
+ "--controls-control-primary--readonly": {
+  "declared": "var(--alpha-white-0)",
+  "resolves_to": "#16161619"
+ },
+ "--controls-control-pressed": {
+  "declared": "var(--colors-neutral-600)",
+  "resolves_to": "#4d5761"
+ },
+ "--controls-control-ripple-effect": {
+  "declared": "var(--colors-neutral-950)",
+  "resolves_to": "#0c111b"
+ },
+ "--controls-control-border": {
+  "declared": "var(--colors-neutral-400)",
+  "resolves_to": "#9da4ae"
+ },
+ "--form-text-form-paragraph": {
+  "declared": "var(--text-secondary-paragraph)",
+  "resolves_to": "#e5e7eb"
+ },
+ "--form-field-text-label": {
+  "declared": "var(--text-default)",
+  "resolves_to": "#ffffff"
+ },
+ "--form-field-text-placeholder": {
+  "declared": "var(--text-secondary-paragraph)",
+  "resolves_to": "#e5e7eb"
+ },
+ "--form-field-text-hovered": {
+  "declared": "var(--text-default)",
+  "resolves_to": "#ffffff"
+ },
+ "--stepper-button-completed": {
+  "declared": "var(--colors-green-600)",
+  "resolves_to": "#069454"
+ },
+ "--tooltip-background-light": {
+  "declared": "var(--colors-neutral-800)",
+  "resolves_to": "#1f2a37"
+ },
+ "--tooltip-text-heading-light": {
+  "declared": "var(--text-display)",
+  "resolves_to": "#f9fafb"
+ },
+ "--tooltip-text-paragraph-light": {
+  "declared": "var(--text-primary-paragraph)",
+  "resolves_to": "#f3f4f6"
+ },
+ "--tooltip-background-dark": {
+  "declared": "var(--colors-base-white)",
+  "resolves_to": "#ffffff"
+ },
+ "--tooltip-text-heading-dark": {
+  "declared": "var(--colors-neutral-800)",
+  "resolves_to": "#1f2a37"
+ },
+ "--tooltip-text-paragraph-dark": {
+  "declared": "var(--colors-neutral-700)",
+  "resolves_to": "#384250"
+ },
+ "--alpha-white-0": {
+  "declared": "var(--colors-alpha-alpha-black-10)",
+  "resolves_to": "#16161619"
+ },
+ "--alpha-white-10": {
+  "declared": "var(--colors-alpha-alpha-black-10)",
+  "resolves_to": "#16161619"
+ },
+ "--alpha-white-20": {
+  "declared": "var(--colors-alpha-alpha-black-20)",
+  "resolves_to": "#16161633"
+ },
+ "--alpha-white-30": {
+  "declared": "var(--colors-alpha-alpha-black-30)",
+  "resolves_to": "#1616164c"
+ },
+ "--alpha-white-40": {
+  "declared": "var(--colors-alpha-alpha-black-40)",
+  "resolves_to": "#16161666"
+ },
+ "--alpha-white-50": {
+  "declared": "var(--colors-alpha-alpha-black-50)",
+  "resolves_to": "#1616167f"
+ },
+ "--alpha-white-60": {
+  "declared": "var(--colors-alpha-alpha-black-60)",
+  "resolves_to": "#16161699"
+ },
+ "--alpha-white-70": {
+  "declared": "var(--colors-alpha-alpha-black-70)",
+  "resolves_to": "#161616b2"
+ },
+ "--alpha-white-80": {
+  "declared": "var(--colors-alpha-alpha-black-80)",
+  "resolves_to": "#161616cc"
+ },
+ "--alpha-white-90": {
+  "declared": "var(--colors-alpha-alpha-black-90)",
+  "resolves_to": "#161616e5"
+ },
+ "--alpha-white-100": {
+  "declared": "var(--colors-alpha-alpha-black-100)",
+  "resolves_to": "#161616"
+ },
+ "--alpha-black-0": {
+  "declared": "var(--colors-alpha-alpha-white-10)",
+  "resolves_to": "#ffffff19"
+ },
+ "--alpha-black-10": {
+  "declared": "var(--colors-alpha-alpha-white-10)",
+  "resolves_to": "#ffffff19"
+ },
+ "--alpha-black-20": {
+  "declared": "var(--colors-alpha-alpha-white-20)",
+  "resolves_to": "#ffffff33"
+ },
+ "--alpha-black-30": {
+  "declared": "var(--colors-alpha-alpha-white-30)",
+  "resolves_to": "#ffffff4c"
+ },
+ "--alpha-black-40": {
+  "declared": "var(--colors-alpha-alpha-white-40)",
+  "resolves_to": "#ffffff66"
+ },
+ "--alpha-black-50": {
+  "declared": "var(--colors-alpha-alpha-white-50)",
+  "resolves_to": "#ffffff7f"
+ },
+ "--alpha-black-60": {
+  "declared": "var(--colors-alpha-alpha-white-60)",
+  "resolves_to": "#ffffff99"
+ },
+ "--alpha-black-70": {
+  "declared": "var(--colors-alpha-alpha-white-70)",
+  "resolves_to": "#ffffffb2"
+ },
+ "--alpha-black-80": {
+  "declared": "var(--colors-alpha-alpha-white-80)",
+  "resolves_to": "#ffffffcc"
+ },
+ "--alpha-black-90": {
+  "declared": "var(--colors-alpha-alpha-white-90)",
+  "resolves_to": "#ffffffe5"
+ },
+ "--alpha-black-100": {
+  "declared": "var(--colors-alpha-alpha-white-100)",
+  "resolves_to": "#ffffff"
+ },
+ "--background-disabled": {
+  "declared": "var(--colors-neutral-700)",
+  "resolves_to": "#384250"
+ },
+ "--background-disabled-primary": {
+  "declared": "var(--colors-primary-sa-flag-700)",
+  "resolves_to": "#166a45"
+ },
+ "--background-inverse-disabled": {
+  "declared": "var(--colors-neutral-700)",
+  "resolves_to": "#384250"
+ },
+ "--stepper-button-completed-hovered": {
+  "declared": "var(--colors-primary-sa-flag-700)",
+  "resolves_to": "#166a45"
+ },
+ "--stepper-button-current": {
+  "declared": "var(--colors-green-600)",
+  "resolves_to": "#069454"
+ },
+ "--stepper-button-current-hovered": {
+  "declared": "var(--colors-primary-sa-flag-700)",
+  "resolves_to": "#166a45"
+ },
+ "--stepper-button-upcomming": {
+  "declared": "var(--colors-neutral-600)",
+  "resolves_to": "#4d5761"
+ },
+ "--stepper-button-upcomming-hovered": {
+  "declared": "var(--colors-neutral-600)",
+  "resolves_to": "#4d5761"
+ },
+ "--stepper-button-background": {
+  "declared": "var(--colors-base-white)",
+  "resolves_to": "#ffffff"
+ },
+ "--stepper-text-primary": {
+  "declared": "var(--text-default)",
+  "resolves_to": "#ffffff"
+ },
+ "--stepper-text-secondary": {
+  "declared": "var(--text-primary-paragraph)",
+  "resolves_to": "#f3f4f6"
+ },
+ "--stepper-text-tertiary": {
+  "declared": "var(--text-secondary-paragraph)",
+  "resolves_to": "#e5e7eb"
+ },
+ "--stepper-line-completed": {
+  "declared": "var(--colors-primary-sa-flag-600-primary)",
+  "resolves_to": "#1b8354"
+ },
+ "--stepper-line-completed-hovered": {
+  "declared": "var(--colors-primary-sa-flag-700)",
+  "resolves_to": "#166a45"
+ },
+ "--stepper-line-current": {
+  "declared": "var(--colors-neutral-700)",
+  "resolves_to": "#384250"
+ },
+ "--stepper-line-upcomming": {
+  "declared": "var(--colors-neutral-700)",
+  "resolves_to": "#384250"
+ },
+ "--stepper-line-upcomming-hovered": {
+  "declared": "var(--colors-neutral-700)",
+  "resolves_to": "#384250"
+ },
+ "--form-field-text-focused": {
+  "declared": "var(--text-primary-paragraph)",
+  "resolves_to": "#f3f4f6"
+ },
+ "--form-field-text-pressed": {
+  "declared": "var(--text-primary-paragraph)",
+  "resolves_to": "#f3f4f6"
+ },
+ "--form-field-text-filled": {
+  "declared": "var(--text-default)",
+  "resolves_to": "#ffffff"
+ },
+ "--form-field-text-readonly": {
+  "declared": "var(--text-default)",
+  "resolves_to": "#ffffff"
+ },
+ "--form-field-text-helper": {
+  "declared": "var(--text-secondary-paragraph)",
+  "resolves_to": "#e5e7eb"
+ },
+ "--form-field-background-default": {
+  "declared": "var(--colors-neutral-800)",
+  "resolves_to": "#1f2a37"
+ },
+ "--form-field-background-lighter": {
+  "declared": "var(--colors-neutral-600)",
+  "resolves_to": "#4d5761"
+ },
+ "--form-field-background-darker": {
+  "declared": "var(--colors-neutral-800)",
+  "resolves_to": "#1f2a37"
+ },
+ "--form-field-background-pressed": {
+  "declared": "#4d5761",
+  "resolves_to": "#4d5761"
+ },
+ "--form-field-border-default": {
+  "declared": "var(--colors-neutral-500)",
+  "resolves_to": "#6c727e"
+ },
+ "--form-field-border-hovered": {
+  "declared": "var(--colors-neutral-200)",
+  "resolves_to": "#e5e7eb"
+ },
+ "--form-field-border-pressed": {
+  "declared": "var(--colors-neutral-25)",
+  "resolves_to": "#fcfcfd"
+ },
+ "--form-field-border-error": {
+  "declared": "var(--border-error)",
+  "resolves_to": "#b42318"
+ },
+ "--form-option-background-hover": {
+  "declared": "var(--colors-neutral-500)",
+  "resolves_to": "#6c727e"
+ },
+ "--form-option-background-pressed": {
+  "declared": "var(--colors-neutral-700)",
+  "resolves_to": "#384250"
+ },
+ "--form-datecell-background-default": {
+  "declared": "var(--colors-primary-sa-flag-600-primary)",
+  "resolves_to": "#1b8354"
+ },
+ "--form-datecell-background-hovered": {
+  "declared": "var(--colors-primary-sa-flag-700)",
+  "resolves_to": "#166a45"
+ },
+ "--icon-default": {
+  "declared": "var(--colors-base-white)",
+  "resolves_to": "#ffffff"
+ },
+ "--form-datecell-background-pressed": {
+  "declared": "var(--colors-primary-sa-flag-900)",
+  "resolves_to": "#104631"
+ },
+ "--form-datecell-background-focused": {
+  "declared": "var(--colors-primary-sa-flag-600-primary)",
+  "resolves_to": "#1b8354"
+ },
+ "--form-datecell-today-background-default": {
+  "declared": "var(--alpha-white-0)",
+  "resolves_to": "#16161619"
+ },
+ "--form-datecell-today-background-hovered": {
+  "declared": "var(--colors-neutral-700)",
+  "resolves_to": "#384250"
+ },
+ "--form-datecell-today-background-pressed": {
+  "declared": "var(--colors-neutral-600)",
+  "resolves_to": "#4d5761"
+ },
+ "--icon-default-500": {
+  "declared": "var(--colors-neutral-200)",
+  "resolves_to": "#e5e7eb"
+ },
+ "--form-datecell-today-background-focused": {
+  "declared": "var(--alpha-white-0)",
+  "resolves_to": "#16161619"
+ },
+ "--form-datecell-background-disabled": {
+  "declared": "#ffffff",
+  "resolves_to": "#ffffff"
+ },
+ "--form-datecell-background-600": {
+  "declared": "var(--colors-primary-sa-flag-600-primary)",
+  "resolves_to": "#1b8354"
+ },
+ "--form-datecell-background-300": {
+  "declared": "var(--colors-primary-sa-flag-300)",
+  "resolves_to": "#88d8ad"
+ },
+ "--form-datecell-background-200": {
+  "declared": "var(--colors-primary-sa-flag-400)",
+  "resolves_to": "#54c08a"
+ },
+ "--form-datecell-background-100": {
+  "declared": "var(--colors-primary-sa-flag-300)",
+  "resolves_to": "#88d8ad"
+ },
+ "--controls-control-icon-hovered": {
+  "declared": "var(--colors-primary-sa-flag-800)",
+  "resolves_to": "#14573a"
+ },
+ "--alpha-primary-10": {
+  "declared": "#166a4519",
+  "resolves_to": "#166a4519"
+ },
+ "--icon-default-400": {
+  "declared": "var(--colors-neutral-500)",
+  "resolves_to": "#6c727e"
+ },
+ "--icon-primary": {
+  "declared": "var(--colors-primary-sa-flag-600-primary)",
+  "resolves_to": "#1b8354"
+ },
+ "--alpha-primary-20": {
+  "declared": "#166a4533",
+  "resolves_to": "#166a4533"
+ },
+ "--icon-primary-light": {
+  "declared": "var(--colors-primary-sa-flag-50)",
+  "resolves_to": "#f3fcf6"
+ },
+ "--alpha-warning-10": {
+  "declared": "#fec84b19",
+  "resolves_to": "#fec84b19"
+ },
+ "--icon-primary-400": {
+  "declared": "var(--colors-primary-sa-flag-400)",
+  "resolves_to": "#54c08a"
+ },
+ "--alpha-warning-20": {
+  "declared": "#fec84b33",
+  "resolves_to": "#fec84b33"
+ },
+ "--alpha-error-10": {
+  "declared": "#b4231819",
+  "resolves_to": "#b4231819"
+ },
+ "--alpha-error-20": {
+  "declared": "#b4231833",
+  "resolves_to": "#b4231833"
+ },
+ "--alpha-info-10": {
+  "declared": "#156fee19",
+  "resolves_to": "#156fee19"
+ },
+ "--alpha-info-20": {
+  "declared": "#156fee33",
+  "resolves_to": "#156fee33"
+ },
+ "--alpha-success-10": {
+  "declared": "#06945419",
+  "resolves_to": "#06945419"
+ },
+ "--alpha-success-20": {
+  "declared": "#06945433",
+  "resolves_to": "#06945433"
+ },
+ "--icon-neutral": {
+  "declared": "var(--colors-neutral-500)",
+  "resolves_to": "#6c727e"
+ },
+ "--icon-neutral-light": {
+  "declared": "var(--colors-neutral-950)",
+  "resolves_to": "#0c111b"
+ },
+ "--icon-secondary": {
+  "declared": "var(--colors-secondary-gold-600-primary)",
+  "resolves_to": "#dba102"
+ },
+ "--icon-secondary-light": {
+  "declared": "var(--colors-secondary-gold-50)",
+  "resolves_to": "#fffef2"
+ },
+ "--icon-tertiary": {
+  "declared": "var(--colors-tertiary-lavendar-600)",
+  "resolves_to": "#6d428f"
+ },
+ "--icon-tertiary-light": {
+  "declared": "var(--colors-tertiary-lavendar-50)",
+  "resolves_to": "#f9f5fa"
+ },
+ "--icon-success": {
+  "declared": "var(--colors-green-600)",
+  "resolves_to": "#069454"
+ },
+ "--icon-success-light": {
+  "declared": "var(--colors-green-50)",
+  "resolves_to": "#ecfdf3"
+ },
+ "--icon-info": {
+  "declared": "var(--colors-blue-700)",
+  "resolves_to": "#175cd3"
+ },
+ "--icon-info-light": {
+  "declared": "var(--colors-blue-50)",
+  "resolves_to": "#eff8ff"
+ },
+ "--icon-warning": {
+  "declared": "var(--colors-yellow-700)",
+  "resolves_to": "#b54707"
+ },
+ "--icon-warning-light": {
+  "declared": "var(--colors-yellow-50)",
+  "resolves_to": "#fffaeb"
+ },
+ "--icon-error": {
+  "declared": "var(--colors-red-700)",
+  "resolves_to": "#b42318"
+ },
+ "--icon-error-light": {
+  "declared": "var(--colors-red-50)",
+  "resolves_to": "#fef3f2"
+ },
+ "--icon-default-disabled": {
+  "declared": "var(--colors-base-white)",
+  "resolves_to": "#ffffff"
+ },
+ "--icon-default-oncolor-disabled": {
+  "declared": "var(--colors-base-white)",
+  "resolves_to": "#ffffff"
+ },
+ "--control-disabled": {
+  "declared": "var(--colors-alpha-alpha-white-30)",
+  "resolves_to": "#ffffff4c"
+ },
+ "--featuredicons-icon-oncolor": {
+  "declared": "var(--colors-base-white)",
+  "resolves_to": "#ffffff"
+ },
+ "--featuredicons-icon-success": {
+  "declared": "var(--colors-green-600)",
+  "resolves_to": "#069454"
+ },
+ "--featuredicons-icon-default": {
+  "declared": "var(--colors-base-white)",
+  "resolves_to": "#ffffff"
+ },
+ "--featuredicons-icon-error": {
+  "declared": "var(--colors-red-700)",
+  "resolves_to": "#b42318"
+ },
+ "--featuredicons-icon-secondary": {
+  "declared": "var(--colors-secondary-gold-600-primary)",
+  "resolves_to": "#dba102"
+ },
+ "--featuredicons-icon-default-500": {
+  "declared": "var(--colors-neutral-200)",
+  "resolves_to": "#e5e7eb"
+ },
+ "--featuredicons-background-error-light": {
+  "declared": "var(--colors-red-50)",
+  "resolves_to": "#fef3f2"
+ },
+ "--featuredicons-background-info-light": {
+  "declared": "var(--colors-blue-50)",
+  "resolves_to": "#eff8ff"
+ },
+ "--featuredicons-background-warning-light": {
+  "declared": "var(--colors-yellow-50)",
+  "resolves_to": "#fffaeb"
+ },
+ "--featuredicons-background-success-light": {
+  "declared": "var(--colors-green-50)",
+  "resolves_to": "#ecfdf3"
+ },
+ "--featuredicons-background-brand-light": {
+  "declared": "var(--colors-primary-sa-flag-50)",
+  "resolves_to": "#f3fcf6"
+ },
+ "--featuredicons-background-default-light": {
+  "declared": "var(--colors-neutral-50)",
+  "resolves_to": "#f9fafb"
+ },
+ "--featuredicons-icon-default-400": {
+  "declared": "var(--colors-neutral-500)",
+  "resolves_to": "#6c727e"
+ },
+ "--featuredicons-icon-primary": {
+  "declared": "var(--colors-primary-sa-flag-600-primary)",
+  "resolves_to": "#1b8354"
+ },
+ "--featuredicons-icon-primary-light": {
+  "declared": "var(--colors-primary-sa-flag-50)",
+  "resolves_to": "#f3fcf6"
+ },
+ "--featuredicons-icon-primary-400": {
+  "declared": "var(--colors-primary-sa-flag-400)",
+  "resolves_to": "#54c08a"
+ },
+ "--featuredicons-icon-neutral": {
+  "declared": "var(--colors-neutral-500)",
+  "resolves_to": "#6c727e"
+ },
+ "--featuredicons-icon-neutral-light": {
+  "declared": "var(--colors-neutral-950)",
+  "resolves_to": "#0c111b"
+ },
+ "--featuredicons-icon-secondary-light": {
+  "declared": "var(--colors-secondary-gold-50)",
+  "resolves_to": "#fffef2"
+ },
+ "--featuredicons-icon-tertiary": {
+  "declared": "var(--colors-tertiary-lavendar-600)",
+  "resolves_to": "#6d428f"
+ },
+ "--featuredicons-icon-tertiary-light": {
+  "declared": "var(--colors-tertiary-lavendar-50)",
+  "resolves_to": "#f9f5fa"
+ },
+ "--featuredicons-icon-success-light": {
+  "declared": "var(--colors-green-50)",
+  "resolves_to": "#ecfdf3"
+ },
+ "--featuredicons-icon-info": {
+  "declared": "var(--colors-blue-700)",
+  "resolves_to": "#175cd3"
+ },
+ "--featuredicons-icon-info-light": {
+  "declared": "var(--colors-blue-50)",
+  "resolves_to": "#eff8ff"
+ },
+ "--featuredicons-icon-warning": {
+  "declared": "var(--colors-yellow-700)",
+  "resolves_to": "#b54707"
+ },
+ "--featuredicons-bg-icon-warning-light": {
+  "declared": "var(--alpha-warning-10)",
+  "resolves_to": "#fec84b19"
+ },
+ "--featuredicons-bg-icon-error-light": {
+  "declared": "var(--alpha-error-10)",
+  "resolves_to": "#b4231819"
+ },
+ "--featuredicons-bg-icon-brand-light": {
+  "declared": "var(--alpha-primary-10)",
+  "resolves_to": "#166a4519"
+ },
+ "--featuredicons-bg-icon-info-light": {
+  "declared": "var(--alpha-info-10)",
+  "resolves_to": "#156fee19"
+ },
+ "--featuredicons-bg-icon-success-light": {
+  "declared": "var(--alpha-success-10)",
+  "resolves_to": "#06945419"
+ },
+ "--controls-control-icon-pressed": {
+  "declared": "var(--colors-primary-sa-flag-800)",
+  "resolves_to": "#14573a"
+ },
+ "--controls-control-icon-disabled": {
+  "declared": "var(--colors-neutral-400)",
+  "resolves_to": "#9da4ae"
+ },
+ "--notification-background-error-light": {
+  "declared": "var(--colors-red-50)",
+  "resolves_to": "#fef3f2"
+ },
+ "--notification-background-info-light": {
+  "declared": "var(--colors-blue-50)",
+  "resolves_to": "#eff8ff"
+ },
+ "--notification-background-warning-light": {
+  "declared": "var(--colors-yellow-50)",
+  "resolves_to": "#fffaeb"
+ },
+ "--notification-background-success-light": {
+  "declared": "var(--colors-green-50)",
+  "resolves_to": "#ecfdf3"
+ },
+ "--notification-background-brand-light": {
+  "declared": "var(--colors-primary-sa-flag-50)",
+  "resolves_to": "#f3fcf6"
+ },
+ "--notification-background-default-light": {
+  "declared": "var(--colors-neutral-50)",
+  "resolves_to": "#f9fafb"
+ },
+ "--notification-background-default-50": {
+  "declared": "var(--alpha-white-10)",
+  "resolves_to": "#16161619"
+ },
+ "--notification-background-success-50": {
+  "declared": "var(--alpha-success-20)",
+  "resolves_to": "#06945433"
+ },
+ "--notification-background-warning-50": {
+  "declared": "var(--alpha-warning-20)",
+  "resolves_to": "#fec84b33"
+ },
+ "--notification-background-error-50": {
+  "declared": "var(--alpha-error-20)",
+  "resolves_to": "#b4231833"
+ },
+ "--notification-background-brand-50": {
+  "declared": "var(--alpha-primary-20)",
+  "resolves_to": "#166a4533"
+ },
+ "--notification-background-info-50": {
+  "declared": "var(--alpha-info-20)",
+  "resolves_to": "#156fee33"
+ },
+ "--notification-background-default-25": {
+  "declared": "var(--alpha-white-0)",
+  "resolves_to": "#16161619"
+ },
+ "--notification-background-success-25": {
+  "declared": "var(--alpha-primary-10)",
+  "resolves_to": "#166a4519"
+ },
+ "--notification-background-warning-25": {
+  "declared": "var(--alpha-warning-10)",
+  "resolves_to": "#fec84b19"
+ },
+ "--notification-background-error-25": {
+  "declared": "var(--alpha-error-10)",
+  "resolves_to": "#b4231819"
+ },
+ "--notification-background-brand-25": {
+  "declared": "var(--alpha-primary-10)",
+  "resolves_to": "#166a4519"
+ },
+ "--notification-background-info-25": {
+  "declared": "var(--alpha-info-10)",
+  "resolves_to": "#156fee19"
+ },
+ "--notification-text-success": {
+  "declared": "var(--colors-green-300)",
+  "resolves_to": "#75dfa6"
+ },
+ "--notification-text-error": {
+  "declared": "var(--colors-red-300)",
+  "resolves_to": "#fca19b"
+ },
+ "--notification-text-info": {
+  "declared": "var(--colors-blue-300)",
+  "resolves_to": "#84caff"
+ },
+ "--notification-text-warning": {
+  "declared": "var(--colors-yellow-300)",
+  "resolves_to": "#fec84b"
+ },
+ "--notification-text-brand": {
+  "declared": "var(--colors-primary-sa-flag-300)",
+  "resolves_to": "#88d8ad"
+ },
+ "--controls-control-text-error": {
+  "declared": "var(--colors-red-300)",
+  "resolves_to": "#fca19b"
+ }
+}

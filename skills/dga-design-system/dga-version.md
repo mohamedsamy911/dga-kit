@@ -11,7 +11,7 @@ changelog.
 | **Does the harvest predate it?** | No. The 2026-08-26 extraction postdates 1.0.3 by nine months, so token values are current. |
 | **Harvested on** | 2026-08-26 |
 | **Method** | Live DOM extraction of CSS custom properties — values verbatim, not transcribed |
-| **Corroborated by** | An independent extraction dated 2026-06-21 — 48/51 shared colour steps identical. See `harvest/CROSSREF-SECOND-EXTRACTION.md` in the dga-kit repository (not shipped with the installed skill) |
+| **Corroborated by** | An independent extraction dated 2026-06-21 — 48/51 shared colour steps identical. See `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/CROSSREF-SECOND-EXTRACTION.md` in the dga-kit repository (not shipped with the installed skill) |
 | **Verified by** | — *(designer sign-off gate — still outstanding)* |
 
 ## History

@@ -198,7 +198,7 @@ DGA's framing, which is worth quoting when responsiveness is treated as a nice-t
 
 Both are DGA's. **Cite the Layout and spacing page** — it is the foundation page, it is specific,
 and the Thoughts page marks its own figures as an example (`e.g.`) rather than a rule. Do not
-present 8 columns as a DGA requirement. Recorded in `COVERAGE.md`.
+present 8 columns as a DGA requirement. Recorded in `https://github.com/mohamedsamy911/dga-kit/blob/master/COVERAGE.md`.
 
 DGA names **no mobile column count** on either page.
 
@@ -277,10 +277,35 @@ spacing and radius scales. Never reference these directly in component code.
 
 Two consequences worth planning around:
 
-1. **Dark theme is a first-class part of the system.** DGA's own example: `control-primary-hovered`
-   resolves to `Primary-SA-Flag/800` in light and `Primary-SA-Flag/300` in dark;
-   `control-primary-pressed` to `/900` and `/400`. Build components theme-aware from the start —
-   retrofitting is far more expensive.
+1. **Dark theme is a first-class part of the system — and it is broken.** DGA's own example:
+   `control-primary-hovered` resolves to `Primary-SA-Flag/800` in light and `/300` in dark.
+   Build components theme-aware from the start; retrofitting is far more expensive.
+
+   **The values are public.** All **402** dark role declarations ship in the site's CSS bundle
+   and are captured in `../assets/tokens.json` under `role.dark` — 390 of them remaps of
+   primitives already in the light palette, so dark is a *role remap layer*, not a second palette.
+
+   > 🚩 **DGA's dark theme cannot activate.** It is published under `[data-theme=dark] :root`,
+   > a selector that can never match: `:root` is `<html>`, and a descendant combinator requires
+   > an ancestor it does not have. Verified in the live page — 0 elements matched, no computed
+   > value changed, and the bundle contains no `prefers-color-scheme` rule and no `.dark` class.
+   > The corrected form is `:root[data-theme="dark"]`. Report the defect to DS-DGA@dga.gov.sa.
+
+   > 🚩 **This kit does not ship a dark stylesheet either, and that is deliberate.** Upstream the
+   > theme is inert, and inert is safe. Emitting the corrected selector would activate it for any
+   > consumer already using `data-theme="dark"` — Chakra v3 does, out of the box — turning a
+   > harmless upstream bug into a live accessibility regression in someone else's product. It
+   > also cannot be made safe from DGA's own values: `text.error` and `text.primary` have cited
+   > substitutes, but the five `*-light` status surfaces have **none** — every dark variant DGA
+   > publishes for them, under `notification-`, `tag-` and `featuredicons-`, still resolves to the
+   > same near-white value. Inventing a dark tint would break cite-or-omit.
+
+   > ⚠️ **Enabling dark is not a free win.** Five `*-light` status surfaces are not remapped, so
+   > white text lands on a near-white background at **1.05:1**; `text.error` (#b42318) is
+   > **2.68:1** on the dark body, failing at every size; `text.primary` drops to **3.71:1**,
+   > large text only. Meanwhile `text.secondary` — the light theme's failure — *passes* at
+   > **7.64:1**. Run `node ../assets/check-contrast.mjs --theme dark` and read
+   > `tokens.json role.dark.$verify` before shipping dark mode.
 2. **Radius and spacing are responsive tokens, not fixed values.** The same semantic token
    resolves differently on desktop, tablet and mobile. A React implementation that treats
    `radius-md` as a constant will be wrong on two of three breakpoints. `TODO(harvest)` — the

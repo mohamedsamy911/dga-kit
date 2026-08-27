@@ -37,7 +37,7 @@ prefixes: `colors` (479) · `link` · `background` · `button` · `tag` · `form
    `node ../dga-design-system/assets/generate-tokens.mjs`
 5. **Re-run the contrast check** — `node ../dga-design-system/assets/check-contrast.mjs`. A
    changed colour can silently break a pairing that previously passed. Update
-   `CONTRAST-AUDIT.md` from its output, and re-run `evals/validate-fixtures.py` — an eval
+   `CONTRAST-AUDIT.md` from its output, and re-run `https://github.com/mohamedsamy911/dga-kit/blob/master/evals/validate-fixtures.py` — an eval
    asserting an old value teaches the skill a false rule.
 6. **Update the provenance.** Every section of `tokens.json` carries a `$source` with the page
    it is documented on and the date it was read. Re-stamp `retrieved` on whatever you actually
@@ -53,7 +53,7 @@ prefixes: `colors` (479) · `link` · `background` · `button` · `tag` · `form
      "action": "what a consumer should do until it is settled" }
    ```
 
-   `status` must come from the vocabulary in `$meta.$conventions`, and `evals/validate-fixtures.py`
+   `status` must come from the vocabulary in `$meta.$conventions`, and `https://github.com/mohamedsamy911/dga-kit/blob/master/evals/validate-fixtures.py`
    fails the build if it does not. **Anything marked `disputed` must also be written up in
    `harvest/`** — that is checked too.
 
@@ -69,8 +69,38 @@ Do not assume the extraction is complete coverage:
 - **Responsive radius and spacing.** DGA's semantic tokens resolve differently on desktop,
   tablet and mobile. Those values live only in the **PC 1.0 Foundations Figma** variable
   collections. `TODO(harvest)`
-- **Dark theme values.** Documented as existing for every semantic colour, but not exposed as
-  CSS variables on the public site.
+- ~~**Dark theme values.**~~ **Found 2026-08-27.** All **402** are in the public CSS bundle in a
+  single `[data-theme=dark] :root` rule — 390 are `var(--colors-*)` remaps of primitives already
+  captured, 12 are literals. Extracted to `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-08-27-dark-theme-roles.json`; the
+  spike write-up is `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-08-27-dark-theme-spike.md`.
+
+  > 🚩 **DGA's selector cannot match.** `[data-theme=dark] :root` requires `:root` (`<html>`) to
+  > have an ancestor, which it never has. Verified in the live page: 0 elements matched with the
+  > attribute on `<html>` or on `<body>`. The correct form is `:root[data-theme="dark"]`. DGA
+  > ships a complete dark theme that cannot turn on — report to DS-DGA@dga.gov.sa.
+
+  > ⚠️ Dark is **not** a free win. `text.error` (#b42318) measures **2.68:1** on the dark body and
+  > fails AA on every dark surface; `text.primary` drops to **3.71:1**, large-text only. Meanwhile
+  > `text.secondary` — this kit's headline light-theme failure — **passes at 7.64:1** in dark.
+  > Run `node ../dga-design-system/assets/check-contrast.mjs --theme dark` for the full list —
+  > 15 failures, against 5 in light.
+
+  **Wired in 2026-08-27, for audit only.** `tokens.json` carries `role.dark` (20 text + 47
+  background roles) and `check-contrast.mjs --theme dark` audits it.
+
+  > 🚩 **`tokens.css` deliberately ships no dark rule, and the Tailwind preset sets no
+  > `darkMode` strategy.** Upstream the theme is inert because the selector cannot match, and
+  > inert is safe. Emitting a corrected selector would activate 1.05:1 pairings for any consumer
+  > already using `data-theme="dark"`. The reasoning is in `generate-tokens.mjs`; the guard is
+  > `generated CSS ships no live dark rule` in the eval suite. **Do not "helpfully" turn it on
+  > during a re-harvest.**
+
+  The other 340 dark declarations — link, button, tag, form, border, icon, notification,
+  controls, stepper, table, tooltip, featuredicons — are uncaptured, as are their light
+  counterparts. Same scope decision, recorded in `role.dark.$comment`.
+
+  **On a re-harvest, diff the dark rule too.** If DGA ever corrects the selector, dark goes live
+  across every Platforms Code platform on the same day and this kit's guidance changes with it.
 
 ## Cadence
 

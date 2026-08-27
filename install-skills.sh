@@ -152,8 +152,24 @@ done < <(for n in "${SKILLS[@]}"; do [[ -d "$DEST/$n" ]] && echo "$DEST/$n"; don
          | xargs -r grep -rHoE '\.\./[A-Za-z0-9_./-]+\.(md|json|css|mjs|js|ts)' --include='*.md' \
          | sort -u)
 
+# Repo-root paths are the other way a reference dies on install. harvest/, evals/, COVERAGE.md
+# and friends are NOT copied to ~/.claude, so a skill naming one reads fine in the repo and is a
+# dead end for every installed user. Full GitHub URLs are exempt - they resolve from anywhere.
+while IFS= read -r line; do
+  f="${line%:*}"; ref="${line##*:}"
+  # Count, do not just test: a file may carry one correct GitHub URL AND a bare mention of the
+  # same path. Any occurrence not preceded by the URL prefix is a dead reference once installed.
+  total=$(grep -oF "$ref" "$f" | wc -l)
+  linked=$(grep -oF "github.com/mohamedsamy911/dga-kit/blob/master/$ref" "$f" | wc -l)
+  bare=$((total - linked))
+  [[ $bare -le 0 ]] && continue
+  echo "UNSHIPPED $f -> $ref x$bare (not installed; use a full GitHub URL)"; bad=$((bad+1))
+done < <(for n in "${SKILLS[@]}"; do [[ -d "$DEST/$n" ]] && echo "$DEST/$n"; done \
+         | xargs -r grep -rHoE '(harvest|evals)/[A-Za-z0-9_./-]+|COVERAGE\.md|README\.md|AGENTS\.md' --include='*.md' --include='*.json' \
+         | sort -u)
+
 echo
 echo "$ok skill(s), $aok agent(s) installed.${VERSION:+ dga-kit $VERSION}"
 echo "manifest: $MANIFEST - uninstall removes only what is listed there"
-[[ $bad -eq 0 ]] && echo "cross-references OK" || echo "$bad broken cross-reference(s) - report this as a bug"
+[[ $bad -eq 0 ]] && echo "cross-references OK" || echo "$bad unresolvable reference(s) - report this as a bug"
 echo "Restart Claude Code, then run /skills to confirm."

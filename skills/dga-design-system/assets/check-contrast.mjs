@@ -2,9 +2,10 @@
 /**
  * WCAG 2.1 contrast check over DGA's own semantic token pairings.
  *
- *   node check-contrast.mjs            # report every text role x light background
- *   node check-contrast.mjs --ci       # exit 1 if any pairing fails AA
- *   node check-contrast.mjs --json     # machine-readable
+ *   node check-contrast.mjs               # both themes, every text role x surface
+ *   node check-contrast.mjs --theme dark  # one theme only (light | dark)
+ *   node check-contrast.mjs --ci          # exit 1 if any pairing fails AA, either theme
+ *   node check-contrast.mjs --json        # machine-readable
  *
  * Reads tokens.json, so it stays correct across a re-harvest. This is the check behind
  * references/CONTRAST-AUDIT.md and rule 2 of dga-ui-adapter — DGA publishes a text role that
@@ -19,6 +20,15 @@
  *     Run it as a committed artefact (--json); gate your build on a grep over your own source.
  *   • The -light / oncolor-* / *disabled* roles are marked `expected` below: they are
  *     dark-surface tokens, NOT failures, and are excluded from the verdict on purpose.
+ *   • That exclusion is LIGHT-ONLY for the -light roles. On the dark theme they are the
+ *     intended roles, so a failure there is real and must reach the verdict.
+ *
+ * DARK THEME - read this before acting on the dark numbers:
+ *   DGA publishes 402 dark declarations under `[data-theme=dark] :root`, a selector that can
+ *   never match (:root is <html>; a descendant combinator needs an ancestor it does not
+ *   have). So today no DGA platform renders dark at all. These pairings describe what WOULD
+ *   ship if the selector were corrected - and three are worse than anything in light.
+ *   See tokens.json role.dark.$verify.
  *
  * Thresholds: AA normal 4.5, AA large 3.0 (>=18.66px bold or >=24px regular).
  */
@@ -63,33 +73,47 @@ const round = (n) => Math.round(n * 100) / 100
 // are paired with the oncolor-* text roles instead.
 const SURFACES = ['white', 'body', 'card', 'menu', 'brand-light']
 
-const results = []
-for (const [role, fg] of Object.entries(t.role.text)) {
-  if (role.startsWith('$')) continue
-  for (const surface of SURFACES) {
-    const bg = t.role.background[surface]
-    if (!bg) continue
-    const r = round(ratio(fg, bg))
-    results.push({
-      text: `text.${role}`, fg,
-      background: `background.${surface}`, bg,
-      ratio: r,
-      aaNormal: r >= 4.5,
-      aaLarge: r >= 3,
-      // A dark-surface token failing on a light surface is expected, not a defect.
-      expected: role.endsWith('-light') || role.startsWith('oncolor') || role.includes('disabled'),
-    })
+/** Audit one theme's text roles against that same theme's surfaces. */
+function audit(theme) {
+  const roles = theme === 'dark' ? t.role.dark : t.role
+  const out = []
+  for (const [role, fg] of Object.entries(roles.text)) {
+    if (role.startsWith('$')) continue
+    for (const surface of SURFACES) {
+      const bg = roles.background[surface]
+      if (!bg) continue
+      const r = round(ratio(fg, bg))
+      out.push({
+        theme,
+        text: `text.${role}`, fg,
+        background: `background.${surface}`, bg,
+        ratio: r,
+        aaNormal: r >= 4.5,
+        aaLarge: r >= 3,
+        // A dark-surface token failing on a LIGHT surface is expected, not a defect. On dark it
+        // is the intended role, so the same failure is real and must reach the verdict.
+        expected: (theme === 'light' && role.endsWith('-light')) ||
+                  role.startsWith('oncolor') || role.includes('disabled'),
+      })
+    }
   }
+  return out
 }
 
+const themeArg = process.argv[process.argv.indexOf('--theme') + 1]
+const THEMES = process.argv.includes('--theme') && ['light', 'dark'].includes(themeArg)
+  ? [themeArg] : ['light', 'dark']
+
+const results = THEMES.flatMap(audit)
 const fails = results.filter((x) => !x.aaLarge && !x.expected)
 const largeOnly = results.filter((x) => x.aaLarge && !x.aaNormal && !x.expected)
 const marginal = results.filter((x) => x.aaNormal && x.ratio < 5 && !x.expected)
+const byTheme = (arr, th) => arr.filter((x) => x.theme === th)
 
 if (process.argv.includes('--json')) {
   console.log(JSON.stringify({ results, fails, largeOnly, marginal }, null, 2))
 } else {
-  const line = (x) => `  ${x.text.padEnd(28)} ${x.fg.padEnd(10)} on ${x.background.padEnd(24)} ${String(x.ratio).padStart(6)}:1`
+  const line = (x) => `  ${THEMES.length > 1 ? x.theme.padEnd(6) : ''}${x.text.padEnd(28)} ${x.fg.padEnd(10)} on ${x.background.padEnd(24)} ${String(x.ratio).padStart(6)}:1`
   console.log(`DGA contrast check - ${t.$meta.systemName}`)
   console.log(`source ${t.$meta.source} retrieved ${t.$meta.retrieved}\n`)
 
@@ -102,14 +126,23 @@ if (process.argv.includes('--json')) {
   console.log(`\nMARGINAL - passes AA by <0.5. Any opacity breaks these (${marginal.length})`)
   marginal.length ? marginal.forEach((x) => console.log(line(x))) : console.log('  none')
 
-  console.log(`\n${results.length} pairings checked. ${results.filter((x) => x.expected).length} dark-surface/oncolor/disabled roles excluded from the verdict.`)
+  console.log(`\n${results.length} pairings checked across ${THEMES.join(' + ')}. ${results.filter((x) => x.expected).length} oncolor/disabled/light-on-light roles excluded from the verdict.`)
   console.log(`Those are dark-surface tokens, NOT failures - do not delete them from a theme.`)
-  if (fails.length) {
-    const roles = [...new Set(fails.map((x) => x.text))]
+
+  const lightFails = byTheme(fails, 'light')
+  if (lightFails.length) {
+    const roles = [...new Set(lightFails.map((x) => x.text))]
     const one = roles.length === 1
-    console.log(`\n${one ? 'This is a real DGA token' : 'These are real DGA tokens'} designated for text: ${roles.join(', ')}.`)
+    console.log(`\nLIGHT - ${one ? 'this is a real DGA token' : 'these are real DGA tokens'} designated for text: ${roles.join(', ')}.`)
     console.log(`Do not use ${one ? 'it' : 'them'} on a light surface at any size. secondary-gold.800`)
     console.log(`(#945c01) is the first gold step that clears AA on white.`)
+  }
+  if (byTheme(fails, 'dark').length) {
+    console.log(`\nDARK - the dark theme cannot activate today: DGA ships [data-theme=dark] :root,`)
+    console.log(`which never matches. If that selector is corrected, the failures above ship.`)
+    console.log(`Worst first: the five *-light status surfaces are NOT remapped by dark, so white`)
+    console.log(`text lands on a near-white background at ~1.05:1. text.error (#b42318) is`)
+    console.log(`unreadable on every dark surface. Read tokens.json role.dark.$verify first.`)
   }
 }
 
@@ -127,5 +160,17 @@ if (process.argv.includes('--test')) {
   assert(round(ratio('#ffffffcc', '#ffffff')) === 1, 'alpha is composited, not ignored')
   assert(parseHex('#fff').join() === '255,255,255', 'shorthand hex expands')
   assert(fails.every((x) => !x.expected), 'expected-fail roles never reach the verdict')
+  // --- dark theme regressions this file exists to keep visible ---
+  const d = t.role.dark
+  assert(d && d.text && d.background, 'tokens.json carries role.dark')
+  assert(round(ratio(d.text.secondary, d.background.body)) === 7.64,
+    'the gold that fails on light passes at 7.64:1 on dark - the light finding is not absolute')
+  assert(round(ratio(d.text.error, d.background.body)) === 2.68,
+    'dark text.error is 2.68:1 on the dark body - fails AA at every size')
+  assert(round(ratio(d.text.default, d.background['brand-light'])) < 1.1,
+    'dark does not remap the *-light surfaces, so white text on them is ~1.05:1')
+  assert(d.background['brand-light'] === t.role.background['brand-light'],
+    'background.brand-light is carried at its LIGHT value - that is the defect, not a typo')
+  assert(byTheme(fails, 'dark').length > 0, 'the dark pass reaches the verdict')
   console.log('self-check passed')
 }

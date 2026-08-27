@@ -64,7 +64,7 @@ spacing, radius, shadow, width, container, and per-component role tokens.
 > sections inside** the e-Participation and About the Entity templates, and they are documented as
 > such in `patterns.md`. The list also omitted `content-page` (which was captured) and
 > `rating-section` (which was not). Actual coverage on 2026-08-26 was **17 of 19**, not 19. Found
-> by extracting the site's own route table; raw evidence in `harvest/raw/2026-08-27-section-sweep.md`.
+> by extracting the site's own route table; raw evidence in `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-08-27-section-sweep.md`.
 
 
 ## Gaps — looked for, not found on the site

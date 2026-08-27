@@ -98,7 +98,8 @@ Stated plainly so no skill implies coverage it lacks.
 | **Digital Experience Maturity Indicator** | same | same |
 | **Assessment Criteria *checklist file*** | The scoring page is captured (`harvest/raw/2026-08-27-section-sweep.md`); the downloadable checklist is a separate file | `Download Checklist` on `/AssessmentCriteria` |
 | **Responsive radius & spacing values** | Per-breakpoint tokens can't be resolved; treating them as constants is wrong on two of three breakpoints | PC 1.0 Foundations Figma variable collections |
-| **Dark theme values** | Documented as existing, not exposed in CSS | Same Figma files |
+| ~~**Dark theme values**~~ | **Closed 2026-08-27** — all **402** are in the public CSS bundle; the 67 text/background roles are in `tokens.json` as `role.dark` and audited by `check-contrast.mjs --theme dark`. 🚩 DGA's selector `[data-theme=dark] :root` can never match, so its dark theme is inert. **We do not ship it either** — see the row below | Remaining 340 non-role declarations are uncaptured in **both** themes — see `role.dark.$comment` |
+| **Dark theme, shippable** | `tokens.css` deliberately emits **no** dark rule. Correcting DGA's selector would activate 1.05:1 pairings for anyone already using `data-theme="dark"`, and the five `*-light` status surfaces have no dark tint anywhere in DGA's output — so it cannot be made safe without inventing values | An entity that wants dark mode owns the remediation and records it in `dga-brand-overlay` |
 | **Mobile UI Kit** (6 components) | Names confirmed from `/designing-for-mobile` 2026-08-27; **no specs** — that page is a Figma download landing page | Figma-only |
 | **Arabic-language version of the site** | Arabic terminology for `content.md`. The toggle is reachable and renders; only the terminology harvest is outstanding | The `العربية` toggle |
 | **Storybook** | Component demos | Marked "soon" by DGA — not available yet |
