@@ -370,6 +370,58 @@ if os.path.exists(_inv_path):
         'an exemption with no reason is an unmonitored dependency waiting to happen: '
         + str(_no_reason))
 
+    # --- the sentinel's own baselines ------------------------------------------
+    # A critical fact recorded as null is not a watched fact - it is a watch that silently
+    # stopped. This happened for real: text.secondary is declared as var(--colors-secondary-
+    # gold-600-primary), so an extractor matching only a literal hex returned None and the
+    # kit's headline token quietly went unmonitored.
+    _facts_css = (_inv['tierA'].get('stylesheet') or {}).get('facts') or {}
+    chk('sentinel: the stylesheet facts were extracted at all', bool(_facts_css))
+    _null = sorted(k for k, v in _facts_css.items() if v is None)
+    chk('sentinel: no critical fact is null', not _null,
+        'a null fact is a watch that stopped, not a fact: ' + str(_null))
+    chk('sentinel: text.secondary resolves through its var() reference',
+        _facts_css.get('text.secondary.resolved') == t['role']['text']['secondary'],
+        f"css says {_facts_css.get('text.secondary.resolved')!r}, "
+        f"tokens.json says {t['role']['text']['secondary']!r}")
+    chk('sentinel: the dark selector is still the unmatchable one',
+        _facts_css.get('darkSelectorUnmatchable') is True
+        and _facts_css.get('darkSelectorFixed') is False,
+        'if DGA fixed it, role.dark stops being audit-only and the guidance changes - see '
+        'harvest/FRESHNESS.md')
+
+    # The route table read out of the SPA bundle is what makes the counts curl-checkable. If it
+    # ever comes back empty the contract check silently passes on nothing.
+    _bundle = _inv['tierA'].get('bundle') or {}
+    chk('sentinel: the route table was read from the bundle', bool(_bundle.get('counts')))
+    for _g in ('components', 'templates', 'foundations', 'thoughts'):
+        chk(f'sentinel: live {_g} count matches the contract',
+            _bundle.get('counts', {}).get(_g) == _inv['contracts'][_g],
+            f"bundle {_bundle.get('counts', {}).get(_g)} vs contract {_inv['contracts'][_g]}")
+    chk('sentinel: the release list matches the published version',
+        _inv['$meta']['publishedVersion'] in (_bundle.get('routes', {}).get('releases') or []),
+        str(_bundle.get('routes', {}).get('releases')))
+
+    # Version ordering is a string compare in every language that has ever got it wrong. Pin it
+    # here rather than discovering it from a FRESHNESS.md that confidently names 1.0.9 as latest.
+    sys.path.insert(0, os.path.join(ROOT, 'harvest'))
+    try:
+        import sources as _srcmod
+        _vk = _srcmod.version_key
+        chk('sentinel: 1.0.10 sorts above 1.0.9, not below', _vk('1.0.10') > _vk('1.0.9'))
+        chk('sentinel: max() over releases is numeric',
+            max(['1.0.9', '1.0.10', '1.0.2'], key=_vk) == '1.0.10')
+        chk('sentinel: a non-numeric segment does not raise', _vk('1.1.0-beta') == (1, 1, 0))
+        chk('sentinel: the stored release list is in numeric order',
+            (_bundle.get('routes', {}).get('releases') or [])
+            == sorted(_bundle.get('routes', {}).get('releases') or [], key=_vk))
+    finally:
+        sys.path.pop(0)
+
+    _fresh = os.path.join(ROOT, 'harvest/FRESHNESS.md')
+    chk('sentinel: harvest/FRESHNESS.md exists', os.path.exists(_fresh),
+        'run: python3 harvest/sources.py --check')
+
     # The watch list calls this critical, so it has to be checked against the file it protects.
     # A silent change from 4 to 3 would mis-state a go/no-go gate.
     _ac = open(os.path.join(ROOT, 'skills/dga-launch-gate/references/assessment-criteria.md'),

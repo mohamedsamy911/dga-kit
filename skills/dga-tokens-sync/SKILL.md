@@ -150,6 +150,40 @@ And two that do not:
 > three-sentence FAQ answer. Both meant a skill was citing DGA text this repo could not evidence.
 > Expect it to find more as coverage rises.
 
+## Is a re-harvest even needed? Ask the sentinel first
+
+```bash
+python3 harvest/sources.py --check
+```
+
+Run from a clone. It diffs the live site against the recorded baseline and writes
+[the freshness report](https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/FRESHNESS.md). **Exit 0 means nothing shipped** — the Vite build hashes on DGA's CSS and
+JS assets are unchanged, so there is no deploy and a re-harvest would produce an identical result.
+That check costs about a second and no bandwidth; the 19 MB bundles are only pulled when something
+actually changed.
+
+Exit 1 means review pending. What it can tell you without a browser:
+
+- **DGA deployed** — build hash moved
+- **A new release** — a new `version-history-*` route appeared. This is the definitive signal
+- **Routes added, removed or renamed**, and any count breaking the 50/19/5/6 contract
+- **`text.secondary` recoloured** — resolved through its `var()` reference
+- 🚩 **The dark selector fixed** — if `[data-theme=dark] :root` becomes `:root[data-theme=dark]`,
+  DGA's dark theme activates on every Platforms Code platform at once. `tokens.json role.dark`
+  stops being audit-only and `check-contrast.mjs --theme dark` becomes a live finding, not a
+  hypothetical one. Treat it as the highest-priority change on this list
+
+> The sentinel **never** updates the baseline. A finding stays reported until you accept it,
+> after the guidance has been updated — that ordering is the review gate: nothing rewrites a rule
+> because a page moved.
+
+```bash
+python3 harvest/sources.py --baseline
+```
+
+> It cannot see page **prose** — every route returns the same SPA shell, so a wording change with
+> no rebuild is invisible. That is what the quarterly browser harvest below is for.
+
 ## Cadence
 
 Quarterly, plus whenever `/updates/change-log` shows a release.

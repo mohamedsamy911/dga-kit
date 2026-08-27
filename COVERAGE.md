@@ -141,6 +141,46 @@ because their dependants genuinely differ. Files derived from those references �
 mappings, the RTL rules — are deliberately **not** listed: rules live once in
 `dga-design-system/references/`, so the chain runs through the owning reference, not around it.
 
+## Freshness — the Tier A sentinel
+
+```bash
+python3 harvest/sources.py --check
+```
+
+Diffs the live site against the baselines in `source-inventory.json` and writes
+[harvest/FRESHNESS.md](harvest/FRESHNESS.md). **It never updates the baseline** — a detected
+change stays reported until a human accepts it with `--baseline`. The automation reports; it does
+not decide.
+
+### It is cheaper and sees more than the plan assumed
+
+The SPA bundle is a static asset, and it **contains the route table** — all 50 component slugs,
+19 templates, 5 foundations, 6 Thoughts, plus one route per published release. So the counts
+contract and *"has DGA released?"* are answerable by `curl` after all. Only page **prose** needs
+a browser.
+
+The bundles are ~19 MB, too heavy to pull for nothing, so `--check` fetches the 4 KB shell first
+and reads the Vite build hashes out of it. Unchanged hashes mean DGA has not deployed and there is
+nothing a deep read could find, so it stops there — **about a second**. A deploy triggers the full
+read, about five.
+
+| What it detects | How |
+|---|---|
+| DGA deployed | Vite build hash on the CSS or JS asset |
+| A new release | a new `version-history-*` route in the bundle |
+| A route added, removed or renamed | route-set diff against the baseline |
+| A count breaking the contract | live count vs `contracts` |
+| `text.secondary` recoloured | resolved through its `var()` reference, both levels recorded |
+| **The dark selector being fixed** | the highest-impact single change DGA could make |
+| sitemap or robots edited | content hash, checked even on the cheap path |
+
+### What it cannot see
+
+Page prose. Every route returns the same shell, so a wording change with no rebuild is invisible
+to Tier A — that is what the quarterly browser harvest is for. Route removal is read from the
+bundle, so it also needs a deploy to surface. Both limits are printed in `FRESHNESS.md` rather
+than left for someone to discover.
+
 ## Guarding against our own drift
 
 The monitoring in `dga-tokens-sync` watches **DGA** for changes. `evals/check-quote-fidelity.py`

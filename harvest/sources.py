@@ -6,6 +6,7 @@ which reference file owns it, and what a change to it would invalidate. This scr
 file and refreshes the baselines a `curl` can actually establish.
 
     python3 harvest/sources.py --baseline    # fetch and rewrite source-inventory.json
+    python3 harvest/sources.py --check       # sentinel: diff live vs baseline, write FRESHNESS.md
     python3 harvest/sources.py               # print the inventory summary, fetch nothing
 
 WHAT THE SITE ALLOWS US TO MONITOR - measured, not assumed
@@ -28,11 +29,27 @@ everything here, and each was verified against the live site on 2026-08-27:
    It is a lower-bound signal - if it grows, something happened - and must never be used as the
    route count.
 
+4. The JS bundle is a static asset too, and it CONTAINS THE ROUTE TABLE - all 50 component
+   slugs, all 19 template slugs, the 5 foundations, the 6 Thoughts articles, and one route per
+   published release (`version-history-1-0-3`). So the route contract and "has DGA released?"
+   are answerable by curl after all. Only page PROSE needs a browser.
+
+   That is a better split than the plan assumed, and it is why `--check` can verify the counts.
+   Thoughts routes are stored without a leading slash (`"thoughts/atomic-design"`); the
+   extractor allows for that, and would silently under-count if it did not.
+
 So monitoring splits in two, and the `tier` field on every source says which applies:
 
-    tier A  - reachable by curl. Asset hash, sitemap, robots. Cheap, run often.
-    tier B  - needs a headless browser driving client-side navigation. Page text, the nav route
-              enumeration, the 50/19 counts. Expensive, run on a Tier A signal or quarterly.
+    tier A  - reachable by curl: asset hashes, sitemap, robots, the ROUTE TABLE and the
+              release list out of the JS bundle, and the critical token facts out of the CSS.
+              Cheap, run often.
+    tier B  - needs a headless browser driving client-side navigation: the readable text of a
+              page. Expensive, run on a Tier A signal or quarterly.
+
+COST. The bundles are ~19 MB together, too heavy to pull weekly for nothing. `--check` therefore
+fetches the 4 KB shell first and reads the Vite build hashes out of it. If they match the
+baseline, DGA has not deployed and there is nothing a deep read could find, so it stops. The
+bundles are only downloaded when something actually shipped.
 
 A Tier B source therefore has `contentHash: null` until a deep harvest fills it. That is honest
 missing data, not a gap to paper over with a hash of the shell.
@@ -110,11 +127,31 @@ def tier_a_baselines():
             'url': BASE + css_path, 'status': status, 'bytes': len(css), 'sha256': sha(css),
             'buildHash': css_path.split('index-')[-1].split('.css')[0],
             'customProperties': len(set(re.findall(rb'(--[^\s:{};]+)\s*:', css))),
+            'facts': facts_from_css(css),
             'note': 'THE tripwire. The filename carries Vite\'s build hash, so it changes on '
                     'every DGA deploy. This file also holds the whole token surface, including '
                     'the 402 dark-theme declarations under the unmatchable [data-theme=dark] '
                     ':root selector.',
         }
+
+    m = re.search(rb'src="(/assets/[^"]+\.js)"', shell)
+    if m:
+        js_path = m.group(1).decode()
+        status, js = fetch(BASE + js_path)
+        r = routes_from_js(js)
+        out['bundle'] = {
+            'url': BASE + js_path, 'status': status, 'bytes': len(js), 'sha256': sha(js),
+            'buildHash': js_path.split('index-')[-1].split('.js')[0],
+            'routes': r,
+            'counts': {k: len(v) for k, v in r.items()},
+            'note': 'The SPA bundle carries the route table and one route per release. This is '
+                    'what makes the 50/19 contract and "has DGA released?" answerable without a '
+                    'browser. Only page prose still needs one.',
+        }
+
+    if 'stylesheet' in out:
+        # re-read the stylesheet we already fetched above for the critical token facts
+        pass
 
     status, sm = fetch(BASE + '/sitemap.xml')
     urls = [u.replace(BASE, '') or '/' for u in re.findall(r'<loc>(.*?)</loc>', sm.decode('utf-8'))]
@@ -139,6 +176,76 @@ def tier_a_baselines():
                 'scaffold default yourdomain.com; recorded as a DGA defect, not a typo here.',
     }
     return out
+
+
+# Routes live in the JS bundle as quoted strings. Thoughts entries omit the leading slash, so
+# it is optional here - requiring it silently returned zero Thoughts routes on the first attempt.
+ROUTE_IN_JS = re.compile(rb'["\'`](/?(?:guidelines|thoughts|updates)/[A-Za-z0-9_./-]+)["\'`]')
+VERSION_ROUTE = re.compile(rb'version-history-([0-9-]+)')
+
+
+def version_key(v):
+    """Order dotted versions numerically.
+
+    A string compare puts '1.0.9' above '1.0.10', so the sentinel would report the wrong latest
+    version from DGA's tenth patch onward - and would do it quietly, in the row a reader trusts
+    most. At roughly four releases a year that is about two years away, which is exactly long
+    enough for nobody to remember why it broke.
+
+    Defensive about non-numeric segments: DGA has only shipped x.y.z, but a '1.1.0-beta' would
+    make a bare int() raise and take the whole check down on the run that mattered.
+    """
+    out = []
+    for seg in str(v).split('.'):
+        m = re.match(r'(\d+)', seg.strip())
+        out.append(int(m.group(1)) if m else 0)
+    return tuple(out)
+
+
+def routes_from_js(js):
+    """The published route table, straight out of the SPA bundle."""
+    found = {('/' + m.decode().lstrip('/')) for m in ROUTE_IN_JS.findall(js)}
+    def group(prefix, depth):
+        return sorted(r for r in found if r.startswith(prefix) and r.count('/') >= depth)
+    return {
+        'components': group('/guidelines/components/', 4),
+        'templates': group('/guidelines/templates/', 3),
+        'foundations': group('/guidelines/foundations/', 3),
+        'thoughts': group('/thoughts/', 2),
+        'releases': sorted({m.decode().replace('-', '.') for m in VERSION_ROUTE.findall(js)},
+                           key=version_key),
+    }
+
+
+def _declared(css, name):
+    m = re.search(rb'--' + name.encode() + rb':\s*([^;}]+)', css)
+    return m.group(1).decode().strip() if m else None
+
+
+def _resolve(css, value, depth=0):
+    """Follow one var() reference to the literal behind it.
+
+    DGA declares its semantic roles as references - `--text-secondary:var(--colors-secondary-
+    gold-600-primary)` - so matching only a literal hex returns None and the fact silently stops
+    being watched. Both levels are recorded: the role can be repointed at a different primitive,
+    or the primitive itself can be recoloured, and either is a change worth a human deciding on.
+    """
+    if not value or depth > 4:
+        return value
+    m = re.fullmatch(r'var\(\s*--([^,)\s]+)\s*\)', value)
+    return _resolve(css, _declared(css, m.group(1)), depth + 1) if m else value
+
+
+def facts_from_css(css):
+    """The critical token facts a plain GET can settle."""
+    ts = _declared(css, 'text-secondary')
+    return {
+        'text.secondary.declared': ts,
+        'text.secondary.resolved': _resolve(css, ts),
+        'darkSelectorUnmatchable': b'[data-theme=dark] :root' in css,
+        'darkSelectorFixed': b':root[data-theme=dark]' in css or b':root[data-theme="dark"]' in css,
+        'customProperties': len(set(re.findall(rb'(--[^\s:{};]+)\s*:', css))),
+    }
 
 
 def sources():
@@ -311,7 +418,205 @@ def summarise(doc):
           f"GET can meaningfully hash")
 
 
+def check():
+    """Tier A sentinel. Diffs the live site against the recorded baseline.
+
+    Never writes the baseline: a detected change stays reported until a human accepts it with
+    --baseline. That is the review gate - the automation reports, it does not decide.
+    """
+    if not os.path.exists(OUT):
+        print('No inventory. Run: python3 harvest/sources.py --baseline')
+        return 2
+    inv = json.load(io.open(OUT, encoding='utf-8'))
+    base = inv['tierA']
+    findings, notes = [], []
+    # Everything this run actually saw. The report renders THIS, not the baseline - a report that
+    # prints baseline values under the heading "observed" contradicts its own findings, and does
+    # so precisely on the deploy you are reading it for.
+    obs = {'checkedAt': datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%MZ'),
+           'deepRead': False, 'cssHash': None, 'jsHash': None,
+           'counts': None, 'releases': None, 'facts': None}
+
+    status, shell = fetch(BASE + '/')
+    obs['shellSha256'] = sha(shell)
+    obs['shellStatus'] = status
+    css_m = re.search(rb'href="(/assets/[^"]+\.css)"', shell)
+    js_m = re.search(rb'src="(/assets/[^"]+\.js)"', shell)
+    obs['cssHash'] = css_m.group(1).decode().split('index-')[-1].split('.css')[0] if css_m else None
+    obs['jsHash'] = js_m.group(1).decode().split('index-')[-1].split('.js')[0] if js_m else None
+
+    old_css = base.get('stylesheet', {}).get('buildHash')
+    old_js = base.get('bundle', {}).get('buildHash')
+    deployed = (obs['cssHash'] != old_css) or (obs['jsHash'] != old_js)
+
+    # A rebuild that renames the assets, or changes how the shell links them, leaves these
+    # unmatched. Dereferencing them here would crash BEFORE the report is written - losing the
+    # findings on the one run that mattered. Treat it as review-pending and skip the deep read.
+    missing = [n for n, m in (('stylesheet', css_m), ('bundle', js_m)) if m is None]
+    if missing:
+        findings.append(('SHELL MARKUP CHANGED - could not locate ' + ' and '.join(missing),
+                         f'The shell no longer matches the /assets/index-<hash>.(css|js) pattern '
+                         f'this sentinel reads. shell HTTP {status}, sha256 '
+                         f'{obs["shellSha256"][:16]}..., {len(shell)} bytes. Deep read skipped: '
+                         f'update the asset pattern in harvest/sources.py, then re-run.'))
+
+    # Cheap regardless - a few KB.
+    _, sm = fetch(BASE + '/sitemap.xml')
+    if sha(sm) != base['sitemap']['sha256']:
+        live = {u.replace(BASE, '') or '/' for u in
+                re.findall(r'<loc>(.*?)</loc>', sm.decode('utf-8'))}
+        was = set(base['sitemap']['urls'])
+        findings.append(('sitemap changed',
+                         f'+{sorted(live - was)} -{sorted(was - live)}'))
+    _, rb = fetch(BASE + '/robots.txt')
+    if sha(rb) != base['robots']['sha256']:
+        findings.append(('robots.txt changed', rb.decode('utf-8').strip()))
+
+    if missing:
+        notes.append('Deep read skipped - the shell asset pattern did not match, so there was '
+                     'nothing safe to fetch. Route counts and token facts were NOT observed '
+                     'this run; the table below says so rather than reprinting the baseline.')
+    elif not deployed and '--deep' not in sys.argv:
+        notes.append(f'No deploy: build hashes unchanged (css {old_css}, js {old_js}). '
+                     f'The 19 MB bundles were not downloaded - nothing a deep read could find '
+                     f'has changed. Use --deep to force.')
+    else:
+        if deployed:
+            findings.append(('DGA DEPLOYED',
+                             f'css {old_css} -> {obs["cssHash"]}, '
+                             f'js {old_js} -> {obs["jsHash"]}'))
+        _, css = fetch(BASE + css_m.group(1).decode())
+        _, js = fetch(BASE + js_m.group(1).decode())
+        obs['deepRead'] = True
+
+        live_routes = routes_from_js(js)
+        obs['counts'] = {k: len(v) for k, v in live_routes.items()}
+        obs['releases'] = live_routes['releases']
+        for group, expected in (('components', inv['contracts']['components']),
+                                ('templates', inv['contracts']['templates']),
+                                ('foundations', inv['contracts']['foundations']),
+                                ('thoughts', inv['contracts']['thoughts'])):
+            got = live_routes[group]
+            if len(got) != expected:
+                findings.append((f'{group} count broke the contract',
+                                 f'{len(got)} live vs {expected} contracted'))
+            was = set(base.get('bundle', {}).get('routes', {}).get(group, []))
+            if was and set(got) != was:
+                findings.append((f'{group} routes changed',
+                                 f'+{sorted(set(got) - was)} -{sorted(was - set(got))}'))
+
+        was_rel = set(base.get('bundle', {}).get('routes', {}).get('releases', []))
+        new_rel = sorted(set(live_routes['releases']) - was_rel, key=version_key)
+        if new_rel:
+            findings.append(('NEW RELEASE published', ', '.join(new_rel)))
+
+        live_facts = facts_from_css(css)
+        obs['facts'] = live_facts
+        for k, was_v in (base.get('stylesheet', {}).get('facts') or {}).items():
+            if live_facts.get(k) != was_v:
+                findings.append((f'critical fact changed: {k}', f'{was_v!r} -> {live_facts[k]!r}'))
+
+    write_freshness(inv, obs, findings, notes)
+    print('DGA freshness check  ' + obs['checkedAt'])
+    for n in notes:
+        print('  note   ' + n)
+    if findings:
+        print(f'\n  {len(findings)} finding(s) - REVIEW PENDING:')
+        for title, detail in findings:
+            print(f'    {title}\n      {detail}')
+        print('\n  Nothing was updated. Read harvest/FRESHNESS.md, decide, then accept with')
+        print('  python3 harvest/sources.py --baseline')
+        return 1
+    print('  no change against the recorded baseline')
+    return 0
+
+
+def write_freshness(inv, obs, findings, notes):
+    """Render what THIS RUN observed, with the baseline alongside for comparison.
+
+    Everything labelled "observed" comes from `obs`. Where a run did not look - the cheap path
+    skips the bundles - the row says so instead of reprinting the baseline under a live heading.
+    """
+    ta = inv['tierA']
+
+    def cmp_hash(live, was):
+        if live is None:
+            return '`—` **not found**'
+        return f'`{live}`' if live == was else f'`{live}` ⚠️ **was** `{was}`'
+
+    ver = max(obs['releases'], key=version_key) if obs.get('releases') else None
+    ver_row = (f'**{ver}** (observed in the bundle this run)' if ver else
+               f'{inv["$meta"]["publishedVersion"]} — *baseline value; releases not read this run*')
+
+    L = [
+        '# Freshness',
+        '',
+        'Generated by `python3 harvest/sources.py --check`. Do not edit by hand.',
+        '',
+        '| | |', '|---|---|',
+        f'| Last sentinel check | **{obs["checkedAt"]}** |',
+        f'| Baseline recorded | {inv["$meta"]["generated"]} |',
+        f'| DGA version | {ver_row} |',
+        f'| CSS build | {cmp_hash(obs["cssHash"], ta.get("stylesheet", {}).get("buildHash"))} |',
+        f'| JS build | {cmp_hash(obs["jsHash"], ta.get("bundle", {}).get("buildHash"))} |',
+        f'| Deep read this run | {"yes" if obs["deepRead"] else "no"} |',
+        f'| Review pending | {"**YES**" if findings else "no"} |',
+        '',
+        '## Route counts',
+        '',
+    ]
+    if obs['counts']:
+        L += ['| Group | Observed | Contract | |', '|---|---|---|---|']
+        for g in ('components', 'templates', 'foundations', 'thoughts'):
+            live = obs['counts'].get(g, '—')
+            want = inv['contracts'].get(g, '—')
+            L.append(f'| {g} | **{live}** | {want} | {"✅" if live == want else "🚩"} |')
+        L += ['', '> Counts come from the route table inside the SPA bundle, not from '
+              '`sitemap.xml`,', '> which is stale and is a lower-bound signal only.', '']
+    else:
+        L += ['**Not observed this run.** The bundles were not downloaded, so no live count was',
+              'taken. Last recorded values, from the baseline of '
+              f'{inv["$meta"]["generated"]}:', '',
+              '| Group | Baseline | Contract |', '|---|---|---|']
+        b = (ta.get('bundle') or {}).get('counts') or {}
+        for g in ('components', 'templates', 'foundations', 'thoughts'):
+            L.append(f'| {g} | {b.get(g, "—")} | {inv["contracts"].get(g, "—")} |')
+        L += ['', '> These are **not** live readings. Run `--deep` to force one.', '']
+
+    if findings:
+        L += ['## Findings — a human must decide', '']
+        for title, detail in findings:
+            L += [f'### {title}', '', f'```', detail, '```', '']
+        L += ['Nothing in this repo was changed. Accept the new state with',
+              '`python3 harvest/sources.py --baseline` once the guidance has been updated.', '']
+    else:
+        L += ['## Findings', '', 'None. The live site matches the recorded baseline.', '']
+
+    for n in notes:
+        L += [f'> {n}', '']
+
+    L += ['## Known evidence gaps',
+          '',
+          'Carried from `COVERAGE.md`; the sentinel does not measure these.',
+          '',
+          '- The Assessment Criteria **checklist file** (the rubric page is captured, the file is not)',
+          '- Digital Transformation and Digital Experience Maturity indicators (published off-site)',
+          '- PC 1.0 Figma files — responsive radius and spacing resolve per breakpoint there only',
+          '- The Arabic-language terminology harvest',
+          '',
+          '## What this check cannot see',
+          '',
+          '- **Page prose.** Every route returns the same SPA shell, so readable text needs a',
+          '  browser. A wording change with no rebuild is invisible here.',
+          '- **A page removed without a rebuild.** Route removal is detected from the bundle, so',
+          '  it needs a deploy to surface.',
+          '']
+    io.open(os.path.join(ROOT, 'harvest', 'FRESHNESS.md'), 'w', encoding='utf-8').write('\n'.join(L))
+
+
 if __name__ == '__main__':
+    if '--check' in sys.argv:
+        sys.exit(check())
     if '--baseline' in sys.argv:
         summarise(build())
         print(f'\nwrote {os.path.relpath(OUT, ROOT)}')
