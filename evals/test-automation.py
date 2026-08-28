@@ -368,6 +368,64 @@ chk('6. the roadmap vs change-log date contradiction is still recorded',
     'roadmap' in _cov.lower() and 'change-log' in _cov.lower()
     and 'Feb 2024' in _cov and '2025' in _cov, '')
 
+# --- a BROKEN monitor must not look like a finding ---------------------------
+# The distinction the weekly workflow runs on: exit 1 means "DGA moved, review it" and keeps the
+# job green while opening an issue; exit 2 means "the sentinel could not complete". Python exits
+# 1 on ANY unhandled exception, so before check_main() a DNS failure, a read timeout, a 500 or
+# malformed JSON all surfaced as exit 1 - a broken monitor filing a normal review issue, weekly,
+# looking healthy. Mocked here because the real failure only happens when the network is down.
+import urllib.error  # noqa: E402
+
+_real_fetch = sources.fetch
+_FRESH_PATH = os.path.join(ROOT, 'harvest', 'FRESHNESS.md')
+_fresh_before = (io.open(_FRESH_PATH, encoding='utf-8').read()
+                 if os.path.exists(_FRESH_PATH) else None)
+
+for _label, _exc in (
+        ('a read timeout', TimeoutError('simulated timeout')),
+        ('a DNS failure', urllib.error.URLError('simulated name resolution failure')),
+        ('an HTTP 500', urllib.error.HTTPError('u', 500, 'Server Error', {}, None)),
+        ('a dropped connection', ConnectionResetError('simulated reset')),
+        ('malformed JSON from DGA', ValueError('Expecting value: line 1 column 1')),
+        ('a shape change in the response', KeyError('stylesheet')),
+        ('a maintenance page', sources.NotTheSite('shell returned HTTP 503, not 200'))):
+    sources.fetch = lambda *_a, _e=_exc, **_k: (_ for _ in ()).throw(_e)
+    try:
+        _rc = sources.check_main()
+    except BaseException as _boom:                      # noqa: BLE001 - escaping IS the bug
+        _rc = f'raised {type(_boom).__name__}'
+    chk(f'ops: {_label} exits 2, not 1', _rc == 2,
+        f'got {_rc!r} - exit 1 tells the workflow a human should review a DGA change, when in '
+        f'fact nothing was compared at all')
+sources.fetch = _real_fetch
+
+chk('ops: a failed run writes no freshness report',
+    (io.open(_FRESH_PATH, encoding='utf-8').read()
+     if os.path.exists(_FRESH_PATH) else None) == _fresh_before,
+    'a sentinel that could not read DGA must not overwrite the last good report')
+
+# Non-vacuous by construction: the same wrapper must still pass a real finding through as 1 and a
+# clean run as 0, or "always return 2" would satisfy every check above.
+_saved_check = sources.check
+sources.check = lambda: 1
+chk('ops: a genuine finding still exits 1', sources.check_main() == 1,
+    'findings must stay distinguishable from breakage')
+sources.check = lambda: 0
+chk('ops: a quiet week still exits 0', sources.check_main() == 0)
+sources.check = _saved_check
+
+# And the workflow must actually act on the distinction.
+_wf = io.open(os.path.join(ROOT, '.github/workflows/dga-freshness.yml'), encoding='utf-8').read()
+chk('ops: the workflow fails the job on exit > 1', '-gt 1' in _wf,
+    'the exit codes are meaningless unless the workflow branches on them')
+
+# Testing check_main() proves the wrapper works, not that anything calls it. Break-testing found
+# exactly that hole: swapping the entry point back to bare check() failed nothing. Pin the call
+# site, which is the single line that undoes all of the above.
+chk('ops: the --check entry point goes through check_main()',
+    'sys.exit(check_main())' in _SRC and 'sys.exit(check())' not in _SRC,
+    'the wrapper is bypassed; an unhandled exception would exit 1 again')
+
 # --- the review gate holds across all of it ----------------------------------
 chk('gate: compare() writes nothing',
     'def compare(' in _SRC

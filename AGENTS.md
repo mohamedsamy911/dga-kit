@@ -29,6 +29,12 @@ node skills/dga-design-system/assets/generate-tokens.mjs          # then `git di
 bash -n install-skills.sh
 ```
 
+**The freshness sentinel's exit codes are a contract.** `harvest/sources.py --check` returns
+`0` no change, `1` a finding a human must review, `2` the sentinel could not complete. The weekly
+workflow keeps the job green on `1` and fails it on `>1`. Python exits `1` on any unhandled
+exception, so every new failure path must be routed through `check_main()` and return `2` — a
+broken monitor that reports `1` files a review issue weekly while knowing nothing.
+
 **Before a release, also run Codex's own plugin validator.** It ships with a Codex installation,
 so CI cannot rely on it — CI reports SKIPPED when absent rather than passing quietly. Three
 documents claim this repo passes it, which makes it a claim someone has to actually check:

@@ -60,6 +60,7 @@ import json
 import os
 import re
 import sys
+import urllib.error
 import urllib.request
 from datetime import date, timezone, datetime
 
@@ -740,9 +741,44 @@ def write_freshness(inv, obs, findings, notes):
     io.open(os.path.join(ROOT, 'harvest', 'FRESHNESS.md'), 'w', encoding='utf-8').write('\n'.join(L))
 
 
+def check_main():
+    """`--check`, with operational failures separated from findings.
+
+    THE DISTINCTION THE WORKFLOW DEPENDS ON:
+      0  nothing changed
+      1  a finding - DGA moved, a human must review. The job stays green; an issue is opened.
+      2  the sentinel itself could not complete.
+
+    Python exits 1 on any unhandled exception, so before this wrapper a DNS failure, a read
+    timeout, a 500, or malformed JSON all surfaced as exit 1 - indistinguishable from "DGA
+    changed". The weekly job would go green and open an issue claiming a review was pending,
+    while the monitor was simply broken. A monitor that cannot report its own failure is the
+    thing this repo has spent five rounds guarding against.
+    """
+    try:
+        return check()
+    except NotTheSite as exc:
+        print(f'\nSENTINEL FAILED: {exc}', file=sys.stderr)
+        print('This is an operational failure, NOT a finding. Nothing was compared.',
+              file=sys.stderr)
+        return 2
+    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, OSError) as exc:
+        print(f'\nSENTINEL FAILED: could not reach {BASE} - {type(exc).__name__}: {exc}',
+              file=sys.stderr)
+        print('Network or transport failure. No comparison was made, so nothing is known about '
+              'whether DGA changed.', file=sys.stderr)
+        return 2
+    except (ValueError, KeyError, TypeError) as exc:
+        # Malformed JSON, a missing baseline key, a shape change in what DGA served.
+        print(f'\nSENTINEL FAILED: {type(exc).__name__}: {exc}', file=sys.stderr)
+        print('The sentinel could not parse what it fetched or read. Not a finding.',
+              file=sys.stderr)
+        return 2
+
+
 if __name__ == '__main__':
     if '--check' in sys.argv:
-        sys.exit(check())
+        sys.exit(check_main())
     if '--baseline' in sys.argv:
         summarise(build())
         print(f'\nwrote {os.path.relpath(OUT, ROOT)}')

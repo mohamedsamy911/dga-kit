@@ -11,9 +11,12 @@ patch means corrections. Nothing here is a DGA release — see
 `skills/dga-design-system/dga-version.md` for the Platforms Code version this kit is pinned to
 (currently **PC 1.0.3**, released 4 Nov 2025).
 
-## Unreleased
+## 0.7.0 — 2026-08-28
 
-Everything below is on `master` and not yet tagged.
+The first release since 0.6.0, covering 14 commits. It is a **minor** bump under the policy above:
+new coverage (the Assessment Criteria, freshness monitoring, a verified Codex install path) landed
+alongside corrections. Several corrections retract claims 0.6.0 shipped — read *Corrected* first
+if you installed that version.
 
 ### Corrected — read these first
 
