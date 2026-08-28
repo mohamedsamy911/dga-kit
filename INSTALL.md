@@ -106,10 +106,16 @@ directory containing `.codex-plugin/` — not from the manifest file itself. So 
 > loading, because Claude Code discovers `skills/` and `agents/` by convention from the plugin
 > root. `evals/validate-fixtures.py` now pins all three so the "fix" cannot land by accident.
 
-⚠️ **Still unverified:** whether Codex loads `agents/` at all, and what `interface.capabilities`
-values it recognises. This manifest declares `["Skills"]` and no `agents` key, because no
-published example demonstrates either — and inventing a schema is the same error as inventing a
-DGA rule. If you have Codex plugin documentation that settles it,
+⚠️ **One thing remains unverified: `interface.capabilities`.** This manifest declares
+`["Skills"]`. Codex's validator accepts any array of non-empty strings, but no local enumeration
+says what it *does* with a given label — the published sample uses `["Interactive", "Write"]` and
+ponytail uses `["Instructions", "Lifecycle hooks"]`, so `"Skills"` is **unattested**, not wrong.
+
+Everything about `agents/` **is** now settled — see [above](#what-codex-does-not-install-the-6-agents).
+Codex reads a *skill's* `agents/openai.yaml` for UI metadata, and does **not** install
+repository-root Markdown agent definitions. Do not read the paragraph above as leaving that open.
+
+If you have documentation that settles `capabilities`,
 [open an issue](https://github.com/mohamedsamy911/dga-kit/issues); that is a genuinely useful
 contribution.
 

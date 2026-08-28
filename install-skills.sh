@@ -201,5 +201,14 @@ done < <(scan_dirs grep -rHoE '(harvest|evals)/[A-Za-z0-9_./-]+|COVERAGE\.md|REA
 echo
 echo "$ok skill(s), $aok agent(s) installed.${VERSION:+ dga-kit $VERSION}"
 echo "manifest: $MANIFEST - uninstall removes only what is listed there"
-[[ $bad -eq 0 ]] && echo "cross-references OK" || echo "$bad unresolvable reference(s) - report this as a bug"
 echo "Restart Claude Code, then run /skills to confirm."
+
+# Exit non-zero when the installed tree has dangling references. It used to print the warning and
+# exit 0, so only a caller grepping the log could tell - a person installing by hand, or any
+# automation checking the exit status, read a broken layout as success.
+if [[ $bad -eq 0 ]]; then
+  echo "cross-references OK"
+else
+  echo "$bad unresolvable reference(s) - report this as a bug"
+  exit 1
+fi

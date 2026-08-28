@@ -33,6 +33,11 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Install PyYAML
+        # Needed by the openai.yaml checks in validate-fixtures.py. Those checks FAIL rather than
+        # skip when it is absent, so this step is load-bearing, not convenience.
+        run: python -m pip install --quiet pyyaml
+
       - name: Fixtures match the harvested tokens
         run: python evals/validate-fixtures.py
 

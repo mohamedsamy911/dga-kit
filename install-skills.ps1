@@ -214,6 +214,14 @@ foreach ($f in ($installed | Get-ChildItem -Recurse -Include *.md, *.json -File)
 
 Write-Host "`n$ok skill(s), $aok agent(s) installed."
 Write-Host "manifest: $manifest - uninstall removes only what is listed there"
-if ($bad -eq 0) { Write-Host 'cross-references OK' -ForegroundColor Green }
-else { Write-Host "$bad unresolvable reference(s) - report this as a bug" -ForegroundColor Yellow }
 Write-Host 'Restart Claude Code, then run /skills to confirm.'
+
+# Exit non-zero on dangling references - see the matching note in install-skills.sh. Printing a
+# warning and exiting 0 let a person installing by hand, or any automation checking the exit
+# status, read a broken layout as a successful install.
+if ($bad -eq 0) {
+    Write-Host 'cross-references OK' -ForegroundColor Green
+} else {
+    Write-Host "$bad unresolvable reference(s) - report this as a bug" -ForegroundColor Yellow
+    exit 1
+}

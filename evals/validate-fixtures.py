@@ -8,6 +8,15 @@ Run after every token re-harvest:  python3 evals/validate-fixtures.py
 """
 import json, os, re, sys
 
+# PyYAML is not in the standard library, and the openai.yaml checks below genuinely need a parser
+# - regex-scraping them is what made an earlier version of that guard vacuous. A missing parser
+# therefore has to FAIL loudly rather than skip: a check that quietly does not run is the exact
+# failure mode this file exists to prevent. `pip install pyyaml`.
+try:
+    import yaml
+except ImportError:                                   # noqa: BLE001 - reported as a check below
+    yaml = None
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 t = json.load(open(os.path.join(ROOT, 'skills/dga-design-system/assets/tokens.json'), encoding='utf-8'))
 
@@ -681,12 +690,14 @@ if os.path.exists(_inv_path):
     # plausible if you assume paths resolve from the manifest file. They do not: they resolve
     # from the PLUGIN ROOT, the directory containing .claude-plugin/ or .codex-plugin/.
     #
-    # LIMITATION, stated so these are not read as more than they are: these checks are
-    # STRUCTURAL. They prove the manifests keep the shape that a known-good dual-target plugin
-    # uses; they do NOT prove Claude Code loads this plugin, and they cannot prove Codex accepts
-    # or discovers it at all - no published Codex plugin specification exists to test against, and
-    # inventing one to assert against would be the same error as inventing a DGA rule. The Codex
-    # path stays unverified, and INSTALL.md says so in the same words.
+    # SCOPE, stated so these are not read as more than they are: the checks in THIS block are
+    # STRUCTURAL. They prove the manifests keep the shape a known-good dual-target plugin uses;
+    # they do not by themselves prove Claude Code loads the plugin.
+    #
+    # The Codex half is no longer merely structural, and this comment used to say it was: Codex
+    # publishes its contract locally in the plugin-creator system skill shipped with its CLI, and
+    # the `codex:` checks further down run against it. This repo's manifest passes Codex's own
+    # scripts/validate_plugin.py.
     #
     # Evidence, re-fetched 2026-08-28 from tag v4.9.0 (the current release; this comment
     # previously cited 4.8.4, the locally installed copy, which had fallen a minor behind).
@@ -751,12 +762,19 @@ if os.path.exists(_inv_path):
     chk('codex: the marketplace ref matches this repository default branch',
         _src.get('ref') == 'master' and _head.endswith('/master'),
         f"marketplace ref {_src.get('ref')!r} vs HEAD {_head!r}")
-    chk('codex: policy and category are present on the plugin entry',
-        set(_cx['plugins'][0]['policy']) >= {'installation', 'authentication'}
-        and _cx['plugins'][0]['policy']['installation'] in
-            ('NOT_AVAILABLE', 'AVAILABLE', 'INSTALLED_BY_DEFAULT')
-        and _cx['plugins'][0].get('category'),
-        'the spec requires policy.installation, policy.authentication and category')
+    # Both policy values are validated against their enumerations. An earlier version checked
+    # `installation` and merely asserted `authentication` was PRESENT, so setting it to "INVALID"
+    # passed - the check named a field it never validated.
+    _pol = _cx['plugins'][0].get('policy', {})
+    _pol_bad = []
+    if _pol.get('installation') not in ('NOT_AVAILABLE', 'AVAILABLE', 'INSTALLED_BY_DEFAULT'):
+        _pol_bad.append(f"installation={_pol.get('installation')!r}")
+    if _pol.get('authentication') not in ('ON_INSTALL', 'ON_USE'):
+        _pol_bad.append(f"authentication={_pol.get('authentication')!r}")
+    if not _cx['plugins'][0].get('category'):
+        _pol_bad.append('category missing')
+    chk('codex: policy values are inside their documented enumerations', not _pol_bad,
+        str(_pol_bad))
     # Every field Codex's validate_plugin.py requires. Pinned so a manifest edit cannot quietly
     # drop one and break installation for every Codex user.
     _req_iface = ('displayName', 'shortDescription', 'longDescription', 'developerName',
@@ -783,6 +801,10 @@ if os.path.exists(_inv_path):
     # invocation policy - NOT an agent definition, and NOT the repo-root agents/ directory. This
     # kit's docs conflated those two, so both halves are pinned: the files must exist and be
     # valid, and INSTALL.md must keep the distinction.
+    chk('codex: a YAML parser is available to validate openai.yaml',
+        yaml is not None,
+        'pip install pyyaml - without it the openai.yaml checks cannot run, and a check that '
+        'does not run must not report success')
     _sk_dir = os.path.join(ROOT, 'skills')
     _skills = sorted(d for d in os.listdir(_sk_dir) if os.path.isdir(os.path.join(_sk_dir, d)))
     _missing_yaml, _bad_yaml = [], []
@@ -791,20 +813,44 @@ if os.path.exists(_inv_path):
         if not os.path.isfile(_y):
             _missing_yaml.append(_sk)
             continue
-        _txt = open(_y, encoding='utf-8').read()
+        # PARSED, not regex-matched. The first version of this check scraped values with
+        # regexes, so a file could satisfy every pattern and still be invalid YAML - appending a
+        # bare ':' to an otherwise-good file passed this check while PyYAML rejected the file
+        # outright. Codex reads these with a YAML parser, so this must too.
+        if yaml is None:
+            break
+        try:
+            _doc = yaml.safe_load(open(_y, encoding='utf-8'))
+        except yaml.YAMLError as _exc:
+            _bad_yaml.append(f'{_sk}: not valid YAML - {str(_exc).splitlines()[0]}')
+            continue
+        if not isinstance(_doc, dict):
+            _bad_yaml.append(f'{_sk}: openai.yaml must be a mapping, got {type(_doc).__name__}')
+            continue
+        _iface = _doc.get('interface')
+        if not isinstance(_iface, dict):
+            _bad_yaml.append(f'{_sk}: missing an `interface` mapping')
+            continue
+        _short, _prompt = _iface.get('short_description'), _iface.get('default_prompt')
         # short_description is capped at 25-64 chars by openai_yaml.md; default_prompt must name
         # the skill as $skill-name or the starter prompt invokes nothing.
-        _m = re.search(r'short_description:\s*"([^"]*)"', _txt)
-        _p = re.search(r'default_prompt:\s*"([^"]*)"', _txt)
-        if not _m or not (25 <= len(_m.group(1)) <= 64):
+        if not isinstance(_short, str) or not (25 <= len(_short) <= 64):
             _bad_yaml.append(f'{_sk}: short_description '
-                             f'{len(_m.group(1)) if _m else "missing"} chars, must be 25-64')
-        if not _p or ('$' + _sk) not in _p.group(1):
+                             f'{len(_short) if isinstance(_short, str) else "missing"} chars, '
+                             f'must be 25-64')
+        if not isinstance(_iface.get('display_name'), str) or not _iface['display_name'].strip():
+            _bad_yaml.append(f'{_sk}: display_name must be a non-empty string')
+        if not isinstance(_prompt, str) or ('$' + _sk) not in _prompt:
             _bad_yaml.append(f'{_sk}: default_prompt must mention ${_sk}')
+        _pol2 = _doc.get('policy') or {}
+        if not isinstance(_pol2, dict) or not isinstance(
+                _pol2.get('allow_implicit_invocation', True), bool):
+            _bad_yaml.append(f'{_sk}: policy.allow_implicit_invocation must be a boolean')
         # Naming an icon path that does not exist is a broken reference in the Codex UI.
-        for _icon in re.findall(r'icon_(?:small|large):\s*"([^"]*)"', _txt):
-            if not os.path.isfile(os.path.join(_sk_dir, _sk, _icon.lstrip('./'))):
-                _bad_yaml.append(f'{_sk}: icon {_icon} does not exist')
+        for _k in ('icon_small', 'icon_large'):
+            _icon = _iface.get(_k)
+            if _icon and not os.path.isfile(os.path.join(_sk_dir, _sk, str(_icon).lstrip('./'))):
+                _bad_yaml.append(f'{_sk}: {_k} {_icon} does not exist')
     chk('codex: every skill ships agents/openai.yaml', not _missing_yaml, str(_missing_yaml))
     chk('codex: every openai.yaml meets the documented constraints', not _bad_yaml,
         str(_bad_yaml))
@@ -989,13 +1035,32 @@ chk('npm: the doc separates DGA\'s instruction from npm-derived facts',
 # silently unless something compares it.
 _agents_md = open(os.path.join(ROOT, 'AGENTS.md'), encoding='utf-8').read()
 _ci_yml = open(os.path.join(ROOT, '.github/workflows/ci.yml'), encoding='utf-8').read()
-_GATES = ('evals/validate-fixtures.py', 'evals/test-automation.py',
-          'evals/check-quote-fidelity.py', 'check-contrast.mjs --test',
-          'generate-tokens.mjs', 'install-skills.sh')
-_missing_doc = [g for g in _GATES if g not in _agents_md]
-_missing_ci = [g for g in _GATES if g not in _ci_yml]
-chk('gates: AGENTS.md lists every gate CI runs', not _missing_doc, str(_missing_doc))
-chk('gates: CI runs every gate AGENTS.md lists', not _missing_ci, str(_missing_ci))
+# DERIVED from ci.yml, not hardcoded. A fixed tuple only proves that the six commands someone
+# once wrote down appear in both files - adding a SEVENTH gate to CI and forgetting to document
+# it passed both assertions, because neither side was ever asked what CI actually runs. So read
+# the gate commands out of the workflow and require each one in AGENTS.md.
+_ci_gates = set()
+for _line in _ci_yml.split(chr(10)):
+    # Repo-relative paths only. A bare `*.mjs` also matched `preset.mjs` and
+    # `tailwind.config.mjs`, which the Tailwind smoke test writes into its own scratch directory -
+    # workflow scratch files are not gates, and demanding they be documented is noise.
+    _tok = _re.search(r'(evals/[A-Za-z0-9_.-]+\.py'
+                      r'|skills/[A-Za-z0-9_./-]+\.mjs'
+                      r'|install-skills\.sh)', _line)
+    if not _tok or _re.match(r'\s*#', _line):
+        continue
+    _frag = _tok.group(1)
+    if _frag.endswith('.mjs'):
+        _frag = _frag.rsplit('/', 1)[-1]      # AGENTS.md names these by basename
+    if '--test' in _line:
+        _frag += ' --test'
+    _ci_gates.add(_frag)
+chk('gates: the workflow actually declares gate commands', len(_ci_gates) >= 5,
+    f'derived {sorted(_ci_gates)} - if this list is short the pattern stopped matching and every '
+    f'assertion below it became vacuous')
+_missing_doc = sorted(g for g in _ci_gates if g not in _agents_md)
+chk('gates: AGENTS.md documents every gate CI runs', not _missing_doc,
+    str(_missing_doc) + ' - CI runs these; a contributor reading AGENTS.md would not know')
 
 _ps1 = open(os.path.join(ROOT, 'install-skills.ps1'), encoding='utf-8').read()
 _ps1_code = chr(10).join(l for l in _ps1.split(chr(10)) if not l.lstrip().startswith('#'))
