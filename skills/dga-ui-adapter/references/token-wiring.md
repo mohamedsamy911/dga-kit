@@ -342,7 +342,10 @@ you wrote.
 # Extend BANNED as you rule tokens out; keep the reason beside each one.
 set -uo pipefail
 BANNED='--dga-text-secondary|text-secondary|#dba102'   # 2.30:1 on white, fails at every size
-HITS=$(grep -rnE "$BANNED" src/ --include='*.ts' --include='*.tsx' \
+# `-e` is REQUIRED, not style: the pattern starts with `--`, so without it grep reads the pattern
+# as an option, prints "unknown option", and `|| true` swallows the error - the gate then passes
+# on every input, forever. Verified by running it.
+HITS=$(grep -rnE -e "$BANNED" src/ --include='*.ts' --include='*.tsx' \
         --include='*.css' --include='*.scss' 2>/dev/null || true)
 if [[ -n "$HITS" ]]; then
   echo "$HITS"
@@ -356,8 +359,19 @@ echo "DGA contrast gate: clean"
 `# dga-contrast-ok: <reason>` on the line and filter it:
 
 ```bash
-HITS=$(grep -rnE "$BANNED" src/ ... | grep -v 'dga-contrast-ok' || true)
+HITS=$(grep -rnE -e "$BANNED" src/ --include='*.ts' --include='*.tsx' \
+        --include='*.css' --include='*.scss' 2>/dev/null \
+        | grep -v 'dga-contrast-ok' || true)
 ```
+
+That is the same line as above with one extra filter — the `--include` flags are repeated in full
+rather than elided, so it can be pasted as-is. Keep the two in sync: an ellipsis here is how the
+two invocations quietly stop matching.
+
+> Both snippets above were **run against a fixture** before being published here: a file using
+> `#dba102` is caught, and a line carrying `# dga-contrast-ok:` is not. An earlier draft omitted
+> `-e` and therefore matched nothing at all while still exiting 0 — a gate that cannot fail is
+> worse than no gate, in your pipeline exactly as in this repo's.
 
 Requiring a reason on the same line keeps the exception reviewable in the diff, which a separate
 allowlist file does not.
