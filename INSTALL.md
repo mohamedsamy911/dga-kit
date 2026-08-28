@@ -73,13 +73,11 @@ so it is a Codex feature that may run, not an install path this kit controls. If
 agents under Codex, convert them by hand into `~/.codex/agents/*.toml`
 (`name`, `description`, `developer_instructions`).
 
-### Still unverified
+### `interface.capabilities`
 
-`interface.capabilities` is `["Skills"]`. The field is schema-valid — the validator accepts any
-array of non-empty strings — but no local enumeration says what Codex does with a given label.
-The published sample uses `["Interactive", "Write"]` and ponytail uses
-`["Instructions", "Lifecycle hooks"]`, so `"Skills"` is **unattested**, not wrong. If you have
-documentation that settles it, [open an issue](https://github.com/mohamedsamy911/dga-kit/issues).
+Settled below, under its own heading: the field is presentation metadata with no published
+vocabulary, and this manifest declares `["Instructions"]` by convention. It is **not** a
+permission or component-loading gate.
 
 ### The manual route
 
@@ -106,16 +104,27 @@ directory containing `.codex-plugin/` — not from the manifest file itself. So 
 > loading, because Claude Code discovers `skills/` and `agents/` by convention from the plugin
 > root. `evals/validate-fixtures.py` now pins all three so the "fix" cannot land by accident.
 
-⚠️ **One thing remains unverified: `interface.capabilities`.** This manifest declares
-`["Skills"]`. Codex's validator accepts any array of non-empty strings, but no local enumeration
-says what it *does* with a given label — the published sample uses `["Interactive", "Write"]` and
-ponytail uses `["Instructions", "Lifecycle hooks"]`, so `"Skills"` is **unattested**, not wrong.
+### `interface.capabilities` — settled as far as it can be
 
-Everything about `agents/` **is** now settled — see [above](#what-codex-does-not-install-the-6-agents).
-Codex reads a *skill's* `agents/openai.yaml` for UI metadata, and does **not** install
-repository-root Markdown agent definitions. Do not read the paragraph above as leaving that open.
+**It is presentation metadata, not a permission or loading gate.** That much is established:
+Codex's own specification calls `interface` an *"Interface/UX metadata block for plugin
+presentation"*, component loading is declared separately through the top-level `skills`, `hooks`,
+`mcpServers` and `apps` fields, and nothing in the installed CLI dispatches on these labels.
 
-If you have documentation that settles `capabilities`,
+**There is no published vocabulary.** Codex's validator accepts any array of non-empty strings;
+its scaffold generates an empty array. No enumeration exists in the specification, the validator,
+the runtime, or the official OpenAI documentation searched on 2026-08-28.
+
+So this manifest declares `["Instructions"]` **by convention, not by specification**. dga-kit
+ships skills and nothing else, and `"Instructions"` is the label the installed ponytail plugin
+uses for exactly that component — reserving `"Lifecycle hooks"` for its separate hooks component.
+Every OpenAI-authored plugin instead draws from `{Interactive, Read, Write}`, which describes
+connector-style plugins rather than instruction packages.
+
+An earlier version declared `["Skills"]`, a label that appears in no specification, no OpenAI
+plugin, and no third-party plugin on the machine this was tested on.
+
+If you have documentation that establishes a real vocabulary,
 [open an issue](https://github.com/mohamedsamy911/dga-kit/issues); that is a genuinely useful
 contribution.
 

@@ -842,10 +842,28 @@ if os.path.exists(_inv_path):
             _bad_yaml.append(f'{_sk}: display_name must be a non-empty string')
         if not isinstance(_prompt, str) or ('$' + _sk) not in _prompt:
             _bad_yaml.append(f'{_sk}: default_prompt must mention ${_sk}')
-        _pol2 = _doc.get('policy') or {}
-        if not isinstance(_pol2, dict) or not isinstance(
-                _pol2.get('allow_implicit_invocation', True), bool):
+        # EXPLICIT, not defaulted. Every one of these files says the value is "pinned rather
+        # than inherited", so accepting its absence made the guard contradict the thing it
+        # guards - deleting the whole policy block passed.
+        _pol2 = _doc.get('policy')
+        if not isinstance(_pol2, dict) or 'allow_implicit_invocation' not in _pol2:
+            _bad_yaml.append(f'{_sk}: policy.allow_implicit_invocation must be stated, not '
+                             f'left to the default the comment says it is pinning')
+        elif not isinstance(_pol2['allow_implicit_invocation'], bool):
             _bad_yaml.append(f'{_sk}: policy.allow_implicit_invocation must be a boolean')
+        # Unknown keys. Codex's own validator rejects them, so a file could pass here and fail
+        # there - this check claimed a parity it did not have. Sets mirror validate_plugin.py.
+        _ROOT_OK = {'interface', 'policy', 'dependencies'}
+        _IFACE_OK = {'display_name', 'short_description', 'icon_small', 'icon_large',
+                     'brand_color', 'default_prompt'}
+        for _k in sorted(set(_doc) - _ROOT_OK):
+            _bad_yaml.append(f'{_sk}: unknown top-level key {_k!r} - Codex rejects it')
+        for _k in sorted(set(_iface) - _IFACE_OK):
+            _bad_yaml.append(f'{_sk}: unknown interface key {_k!r} - Codex rejects it')
+        # brand_color must be #RRGGBB, as Codex's HEX_COLOR_RE requires.
+        _bc = _iface.get('brand_color')
+        if _bc is not None and not _re.fullmatch(r'#[0-9A-Fa-f]{6}', str(_bc)):
+            _bad_yaml.append(f'{_sk}: brand_color {_bc!r} must be #RRGGBB')
         # Naming an icon path that does not exist is a broken reference in the Codex UI.
         for _k in ('icon_small', 'icon_large'):
             _icon = _iface.get(_k)
@@ -1035,32 +1053,59 @@ chk('npm: the doc separates DGA\'s instruction from npm-derived facts',
 # silently unless something compares it.
 _agents_md = open(os.path.join(ROOT, 'AGENTS.md'), encoding='utf-8').read()
 _ci_yml = open(os.path.join(ROOT, '.github/workflows/ci.yml'), encoding='utf-8').read()
-# DERIVED from ci.yml, not hardcoded. A fixed tuple only proves that the six commands someone
-# once wrote down appear in both files - adding a SEVENTH gate to CI and forgetting to document
-# it passed both assertions, because neither side was ever asked what CI actually runs. So read
-# the gate commands out of the workflow and require each one in AGENTS.md.
+# DERIVED from ci.yml, and compared in BOTH directions. Two earlier versions were vacuous: a
+# hardcoded tuple only proved that six remembered commands appeared in both files, and the
+# replacement recognised only three command shapes, so `run: npm test` was invisible - and it
+# dropped the reverse check entirely, so a gate deleted from CI while still documented passed.
+#
+# Now: every `run:` line in the workflow that looks like a check is extracted, and each must be
+# documented; and every gate AGENTS.md documents must still appear in the workflow.
+_RUN_RE = _re.compile(r'^\s*(?:- )?run:\s*(.+)$', _re.M)
+_SKIP = ('actions/', 'pip install', 'npm init', 'npm i ', 'npm install', 'mkdir', 'cp ', 'printf',
+         'export ', 'git diff', 'grep ', 'test ', 'echo ', 'npx tailwindcss', 'if ', 'foreach',
+         'New-Item', 'Write-Output', '$', 'bash install-skills.sh')
 _ci_gates = set()
+for _m in _RUN_RE.finditer(_ci_yml):
+    for _cmd in _m.group(1).split(chr(10)):
+        _cmd = _cmd.strip()
+        if not _cmd or _cmd.startswith('#') or _cmd.startswith('|'):
+            continue
+        if any(_cmd.startswith(_p) for _p in _SKIP):
+            continue
+        if _re.match(r'(python|node|bash|npm|npx|pwsh)\s', _cmd):
+            _ci_gates.add(' '.join(_cmd.split()))
+# Multi-line `run: |` blocks put the commands on following lines, so sweep those too.
 for _line in _ci_yml.split(chr(10)):
-    # Repo-relative paths only. A bare `*.mjs` also matched `preset.mjs` and
-    # `tailwind.config.mjs`, which the Tailwind smoke test writes into its own scratch directory -
-    # workflow scratch files are not gates, and demanding they be documented is noise.
-    _tok = _re.search(r'(evals/[A-Za-z0-9_.-]+\.py'
-                      r'|skills/[A-Za-z0-9_./-]+\.mjs'
-                      r'|install-skills\.sh)', _line)
-    if not _tok or _re.match(r'\s*#', _line):
-        continue
-    _frag = _tok.group(1)
-    if _frag.endswith('.mjs'):
-        _frag = _frag.rsplit('/', 1)[-1]      # AGENTS.md names these by basename
-    if '--test' in _line:
-        _frag += ' --test'
-    _ci_gates.add(_frag)
+    _line = _line.strip()
+    if _re.match(r'(python|node|bash)\s+(evals/|skills/|-n install-skills)', _line):
+        _ci_gates.add(' '.join(_line.split()))
+_ci_gates = {g for g in _ci_gates if not any(g.startswith(p) for p in _SKIP)}
 chk('gates: the workflow actually declares gate commands', len(_ci_gates) >= 5,
-    f'derived {sorted(_ci_gates)} - if this list is short the pattern stopped matching and every '
-    f'assertion below it became vacuous')
-_missing_doc = sorted(g for g in _ci_gates if g not in _agents_md)
+    f'derived {sorted(_ci_gates)} - a short list means the pattern stopped matching and every '
+    f'assertion below it went vacuous')
+
+def _gate_key(cmd):
+    """The identifying fragment of a gate command, for comparing workflow against docs."""
+    _t = _re.search(r'(evals/[A-Za-z0-9_.-]+\.py|[A-Za-z0-9_.-]+\.mjs|install-skills\.sh)', cmd)
+    if not _t:
+        return None
+    _f = _t.group(1)
+    if _f.endswith('.mjs'):
+        _f = _f.rsplit('/', 1)[-1]
+    return _f + (' --test' if '--test' in cmd else '')
+
+_ci_keys = {k for k in (_gate_key(g) for g in _ci_gates) if k}
+_missing_doc = sorted(k for k in _ci_keys if k not in _agents_md)
 chk('gates: AGENTS.md documents every gate CI runs', not _missing_doc,
     str(_missing_doc) + ' - CI runs these; a contributor reading AGENTS.md would not know')
+
+# The reverse: a gate removed from CI but still documented is a contributor running a check the
+# pipeline no longer enforces, which is how a gate silently stops being a gate.
+_doc_block = _agents_md.split('## Before you commit', 1)[-1].split('##', 1)[0]
+_doc_keys = {k for k in (_gate_key(l) for l in _doc_block.split(chr(10))) if k}
+_missing_ci = sorted(k for k in _doc_keys if k not in _ci_keys)
+chk('gates: CI still runs every gate AGENTS.md documents', not _missing_ci,
+    str(_missing_ci) + ' - documented as a gate but absent from the workflow')
 
 _ps1 = open(os.path.join(ROOT, 'install-skills.ps1'), encoding='utf-8').read()
 _ps1_code = chr(10).join(l for l in _ps1.split(chr(10)) if not l.lstrip().startswith('#'))
