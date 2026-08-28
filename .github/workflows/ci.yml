@@ -58,6 +58,25 @@ jobs:
           git diff --exit-code -- skills/dga-design-system/assets/tokens.css \
                                   skills/dga-design-system/assets/tailwind-preset.js
 
+      - name: Codex's own plugin validator
+        # The repo claims (README, INSTALL, CHANGELOG) that it passes Codex's validator. That
+        # claim was unguarded: our fixtures emulate the schema, and an emulation stays green when
+        # the real contract moves. The validator ships inside a Codex installation, which a
+        # runner does not have - so this locates it and reports plainly when it is absent rather
+        # than passing in silence. Locally it runs for real.
+        run: |
+          V=$(find "$HOME/.codex/skills/.system/plugin-creator/scripts" -name validate_plugin.py \
+                2>/dev/null | head -1 || true)
+          if [ -z "$V" ]; then
+            echo "SKIPPED: no Codex installation on this runner, so the official validator"
+            echo "could not run. The fixtures' emulation of the schema still ran."
+            echo "Run it locally before releasing:"
+            echo "  python ~/.codex/skills/.system/plugin-creator/scripts/validate_plugin.py ."
+            exit 0
+          fi
+          python -m pip install --quiet pyyaml
+          python "$V" .
+
       - name: Installer syntax
         run: bash -n install-skills.sh
 

@@ -69,15 +69,34 @@ reads *"Migrate subagents from `~/.claude/agents` to `~/.codex/agents`"*, and
 tested, five of this kit's six agents had been converted to TOML that way. **Five of six is the
 point:** `dga-frontend-architect` was missing, and no local log or specification explains what
 performed the conversion. It also reads from `~/.claude/agents`, not from the installed plugin —
-so it is a Codex feature that may run, not an install path this kit controls. If you need the
-agents under Codex, convert them by hand into `~/.codex/agents/*.toml`
-(`name`, `description`, `developer_instructions`).
+so it is a Codex feature that may run, not an install path this kit controls. **Converting an agent by hand.** Codex agents are TOML in `~/.codex/agents/`. Each of this kit's
+agents is Markdown with YAML front matter (`name`, `description`) and a Markdown body. The mapping
+is direct — front matter `name` and `description` become TOML keys, and the entire Markdown body
+becomes `developer_instructions`:
+
+```toml
+# ~/.codex/agents/dga-designer.toml
+name = "dga-designer"
+description = "Principal-level product designer for Saudi government platforms. Arabic-first."
+developer_instructions = """
+<the whole Markdown body of agents/dga-designer.md, verbatim>
+"""
+```
+
+Verify it was picked up with:
+
+```bash
+codex agents
+```
+
+⚠️ This is a **manual workaround, not a supported path**. The shape above is copied from files
+Codex itself produced on the machine this was tested on; no published specification for the agent
+TOML format was found, so treat the field set as observed rather than documented.
 
 ### `interface.capabilities`
 
-Settled below, under its own heading: the field is presentation metadata with no published
-vocabulary, and this manifest declares `["Instructions"]` by convention. It is **not** a
-permission or component-loading gate.
+See [its own section below](#interfacecapabilities--settled-as-far-as-it-can-be) — kept in one
+place so the two copies cannot drift apart.
 
 ### The manual route
 

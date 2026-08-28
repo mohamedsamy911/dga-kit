@@ -291,9 +291,15 @@ silently replaces the one typeface DGA actually specifies.
 ⚠️ **`letterSpacings` carry `-0.02em` on `display-2xl` … `display-md`** (design spec says −2%;
 CSS `letter-spacing` does not accept percentages). Never let that reach Arabic.
 
-## Contrast — one real failure, three misreadings
+## Contrast — one real failure in light, three misreadings
 
-**Exactly one DGA text token fails AA outright:**
+⚠️ **Light theme only.** Everything in this section describes
+`check-contrast.mjs --theme light`, which reports **5 failing pairings from 1 token**. The
+**default** invocation audits both themes and reports **20** (5 light + 15 dark) — DGA's dark
+theme is published but unactivatable, and fails far worse. See
+`../../dga-design-system/references/CONTRAST-AUDIT.md`, which is canonical for the numbers.
+
+**In the light theme, exactly one DGA text token fails AA outright:**
 
 | Token | on `background.white` | Verdict |
 |---|---|---|
@@ -314,10 +320,50 @@ while keeping a dark slot leaves you with nothing legitimate to put in it. Scope
 surfaces; do not remove them.
 
 `check-contrast.mjs` already encodes this: it marks `-light`, `oncolor-*` and `*disabled*` roles
-as expected-on-dark and excludes them from its verdict. Its FAIL list is `text.secondary` alone.
+as expected-on-dark and excludes them from its verdict — **in the light theme**. On dark those
+roles are the intended ones, so the exclusion does not apply and their failures are real.
+
+So `--theme light` fails on `text.secondary` alone. The default run does not: it adds 15 dark
+failures on top.
 
 Also worth knowing: `text.primary` (#1b8354) clears AA by **0.05** on `background.body`
 (4.55:1). It passes, but any opacity applied to green text there breaks it.
+
+### The build gate you were told to write
+
+Every document here says "gate your build on a grep over your own source" and none of them said
+what that grep is. Here it is, copyable. `check-contrast.mjs --ci` cannot serve as the gate —
+it audits DGA's table, never your code, so it fails permanently and tells you nothing about what
+you wrote.
+
+```bash
+#!/usr/bin/env bash
+# Fails the build if the project uses a DGA token that cannot pass AA as text.
+# Extend BANNED as you rule tokens out; keep the reason beside each one.
+set -uo pipefail
+BANNED='--dga-text-secondary|text-secondary|#dba102'   # 2.30:1 on white, fails at every size
+HITS=$(grep -rnE "$BANNED" src/ --include='*.ts' --include='*.tsx' \
+        --include='*.css' --include='*.scss' 2>/dev/null || true)
+if [[ -n "$HITS" ]]; then
+  echo "$HITS"
+  echo "DGA contrast gate: a banned token is used as text. See token-wiring.md."
+  exit 1
+fi
+echo "DGA contrast gate: clean"
+```
+
+**Suppressing a line you have justified.** There is no allowlist file; add
+`# dga-contrast-ok: <reason>` on the line and filter it:
+
+```bash
+HITS=$(grep -rnE "$BANNED" src/ ... | grep -v 'dga-contrast-ok' || true)
+```
+
+Requiring a reason on the same line keeps the exception reviewable in the diff, which a separate
+allowlist file does not.
+
+**What this gate does not catch:** composed pairings — your `fg` on your `muted`, hover states,
+text over a brand fill. Nothing in this kit scores those, because they exist only in your theme.
 
 Full table: `../../dga-design-system/references/CONTRAST-AUDIT.md`. Read
 `../SKILL.md` -> *What the contrast checker does and does not do* before gating a build on it.

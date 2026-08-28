@@ -29,6 +29,14 @@ node skills/dga-design-system/assets/generate-tokens.mjs          # then `git di
 bash -n install-skills.sh
 ```
 
+**Before a release, also run Codex's own plugin validator.** It ships with a Codex installation,
+so CI cannot rely on it — CI reports SKIPPED when absent rather than passing quietly. Three
+documents claim this repo passes it, which makes it a claim someone has to actually check:
+
+```bash
+python ~/.codex/skills/.system/plugin-creator/scripts/validate_plugin.py .
+```
+
 This list must match `.github/workflows/ci.yml`. It drifted once — the file named two gates while
 CI ran six — so a contributor running "the gates" was checking a third of what the pipeline
 checked. `validate-fixtures.py` enforces the match.

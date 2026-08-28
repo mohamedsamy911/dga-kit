@@ -6,7 +6,7 @@ Covers both suites: evals/dga-design-review/ and evals/dga-ui-adapter/.
 An eval asserting a wrong value is worse than no eval — it teaches the skill a false rule.
 Run after every token re-harvest:  python3 evals/validate-fixtures.py
 """
-import json, os, re, sys
+import json, os, re, subprocess, sys
 
 # PyYAML is not in the standard library, and the openai.yaml checks below genuinely need a parser
 # - regex-scraping them is what made an earlier version of that guard vacuous. A missing parser
@@ -994,6 +994,103 @@ chk('docs: every "N of M blockquotes" matches the actual count', not _stale_coun
     str(_stale_counts))
 chk('docs: the blockquote total is non-trivial', _qf_total > 50,
     f'computed {_qf_total} - the walk is probably broken, which would make the check vacuous')
+
+# --- the installers must ship exactly what the repo contains -----------------
+# The invariant nothing checked: both installers hardcode their allowlists, so a skill added to
+# skills/ is simply not installed. Proven by adding one - the ONLY failure was a hardcoded "11",
+# which a maintainer fixes by typing "12", and the installer stays silently broken. That is the
+# worst shape of gap: the symptom check points somewhere else, so acting on it makes the real
+# defect permanent. Both installers, both directions, and against each other.
+_disk_skills = sorted(d for d in os.listdir(os.path.join(ROOT, 'skills'))
+                      if os.path.isdir(os.path.join(ROOT, 'skills', d)))
+_disk_agents = sorted(f[:-3] for f in os.listdir(os.path.join(ROOT, 'agents'))
+                      if f.endswith('.md'))
+_sh_txt = open(os.path.join(ROOT, 'install-skills.sh'), encoding='utf-8').read()
+_ps_txt = open(os.path.join(ROOT, 'install-skills.ps1'), encoding='utf-8').read()
+
+
+def _names(txt, pattern):
+    _m = _re.search(pattern, txt, _re.S)
+    return sorted(set(_re.findall(r'dga-[a-z0-9-]+', _m.group(1)))) if _m else []
+
+
+_sh_sk = _names(_sh_txt, r'SKILLS=\((.*?)\)')
+_sh_ag = _names(_sh_txt, r'AGENTS=\((.*?)\)')
+_ps_sk = _names(_ps_txt, r'\$skills \s*=\s*@\((.*?)\)'.replace(' ', ''))
+_ps_ag = _names(_ps_txt, r'\$agents \s*=\s*@\((.*?)\)'.replace(' ', ''))
+chk('installer: bash SKILLS list equals the skills on disk', _sh_sk == _disk_skills,
+    f'missing {sorted(set(_disk_skills) - set(_sh_sk))} / extra '
+    f'{sorted(set(_sh_sk) - set(_disk_skills))} - an unlisted skill is silently not installed')
+chk('installer: bash AGENTS list equals the agents on disk', _sh_ag == _disk_agents,
+    f'missing {sorted(set(_disk_agents) - set(_sh_ag))} / extra '
+    f'{sorted(set(_sh_ag) - set(_disk_agents))}')
+chk('installer: powershell skills list equals the skills on disk', _ps_sk == _disk_skills,
+    f'missing {sorted(set(_disk_skills) - set(_ps_sk))} / extra '
+    f'{sorted(set(_ps_sk) - set(_disk_skills))}')
+chk('installer: powershell agents list equals the agents on disk', _ps_ag == _disk_agents,
+    f'missing {sorted(set(_disk_agents) - set(_ps_ag))} / extra '
+    f'{sorted(set(_ps_ag) - set(_disk_agents))}')
+chk('installer: the two installers agree with each other',
+    _sh_sk == _ps_sk and _sh_ag == _ps_ag,
+    'bash and powershell would install different sets')
+# Non-vacuous by construction: the lists must be non-trivial, or every comparison above is
+# comparing two empty lists and passing.
+chk('installer: the parsed lists are non-empty',
+    len(_sh_sk) >= 5 and len(_ps_sk) >= 5 and len(_sh_ag) >= 3 and len(_ps_ag) >= 3,
+    f'parsed sh={len(_sh_sk)}/{len(_sh_ag)} ps1={len(_ps_sk)}/{len(_ps_ag)} - if these are 0 the '
+    f'array patterns stopped matching and the checks above became vacuous')
+
+# --- documented contrast totals must come from the checker -------------------
+# The invariant nothing checked: token-wiring.md said "exactly one DGA text token fails AA" and
+# "its FAIL list is text.secondary alone", both true only of --theme light, while the default
+# reports 20. Nothing compared a documented total to the tool that produces it.
+_node_json = None
+try:
+    _proc = subprocess.run(
+        ['node', os.path.join(ROOT, 'skills/dga-design-system/assets/check-contrast.mjs'),
+         '--json'],
+        capture_output=True, text=True, timeout=120)
+    if _proc.returncode == 0:
+        _node_json = json.loads(_proc.stdout)
+except (OSError, ValueError, subprocess.SubprocessError):
+    _node_json = None
+chk('contrast: the checker can be read for its totals', _node_json is not None,
+    'node is required to derive the documented contrast numbers; without it this check and the '
+    'one below cannot run, and a check that cannot run must not report success')
+if _node_json is not None:
+    # `fails` is already the filtered list; rows carry theme/ratio/aaNormal, not a verdict
+    # string. Filtering on a 'verdict' key that does not exist yielded zero - which the
+    # non-trivial check below caught, which is exactly why it is there.
+    _fails = [r for r in _node_json.get('fails', []) if isinstance(r, dict)]
+    _light = len([r for r in _fails if r.get('theme') == 'light'])
+    _dark = len([r for r in _fails if r.get('theme') == 'dark'])
+    _totals = {'light': _light, 'dark': _dark, 'both': len(_fails)}
+    chk('contrast: the derived totals are non-trivial', _totals['both'] > 0,
+        f'{_totals} - zero failures means the JSON shape changed and both checks went vacuous')
+    # Any document stating "reports N failures" must state the real N.
+    # Matches "reports 20 failures", "reports **5** failing pairings", "reports **20**".
+    _TOTAL_RE = _re.compile(r'reports?\s+\*{0,2}(\d+)\*{0,2}\s*'
+                            r'(?:failing pairings|failures)')
+    # A pattern that matches nothing makes the loop below vacuous - pin it against the real
+    # sentences it is written for.
+    chk('contrast: the total-matching pattern actually matches',
+        bool(_TOTAL_RE.search('reports **5 failing pairings** from 1 token'))
+        and bool(_TOTAL_RE.search('and reports 20 failures'))
+        and bool(_TOTAL_RE.search('reports **20** failures')),
+        'the documented-totals check cannot fire')
+    _bad_totals = []
+    for _rel in ('README.md', 'INSTALL.md', 'COVERAGE.md',
+                 'skills/dga-ui-adapter/references/token-wiring.md',
+                 'skills/dga-design-system/references/CONTRAST-AUDIT.md'):
+        _fp = os.path.join(ROOT, _rel)
+        if not os.path.isfile(_fp):
+            continue
+        _t = ' '.join(open(_fp, encoding='utf-8').read().split())
+        for _m2 in _re.finditer(_TOTAL_RE, _t):
+            if int(_m2.group(1)) not in _totals.values():
+                _bad_totals.append(f'{_rel}: "{_m2.group(0)}" but real totals are {_totals}')
+    chk('contrast: documented failure totals match the checker', not _bad_totals,
+        str(_bad_totals))
 
 # --- npm package facts must match their recorded evidence --------------------
 # These are NOT DGA facts, and that was the defect: the version table, "175 components" and
