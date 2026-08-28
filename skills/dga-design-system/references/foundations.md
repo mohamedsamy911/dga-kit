@@ -165,8 +165,10 @@ Report these to DS-DGA@dga.gov.sa.
 
 DGA's framing, which is worth quoting when responsiveness is treated as a nice-to-have:
 
+<!-- dga -->
 > Responsive design is particularly crucial for **government websites**, which must serve diverse
 > audiences with different devices and accessibility needs.
+<!-- /dga -->
 
 **Stated for developers**
 
@@ -185,8 +187,14 @@ DGA's framing, which is worth quoting when responsiveness is treated as a nice-t
   legibility on small and large screens
 - **Fluid grids** that adjust to screen size
 - **Touchscreen navigation** — interactive elements *"appropriately sized and spaced for touch
-  inputs"*. DGA gives no pixel figure here; the 44×44px target comes from WCAG 2.1 AA 2.5.5. Cite
-  WCAG for the number, not DGA
+  inputs"*. No pixel figure **on this page** — but DGA states **44×44px** on
+  `/guidelines/foundations/layout-and-spacing` (see *Accessibility rules DGA states here*, above),
+  so cite **DGA** for the number.
+  ⚠️ Do **not** attribute it to WCAG 2.1 AA. WCAG 2.1's target-size criterion, **2.5.5, is Level
+  AAA** — not AA. (The AA criterion, 2.5.8 Target Size (Minimum), at 24×24px, arrived in WCAG
+  **2.2**.) An earlier version of this line called 2.5.5 "AA", which contradicted
+  `../../dga-ui-adapter/SKILL.md`, where the kit already had it right. DGA's own 44px rule is
+  stricter than either, so citing it loses nothing.
 - **Content hierarchy** — essential information prominent and reachable on small screens
 
 ### ⚠️ DGA contradicts itself on the tablet grid
@@ -342,8 +350,10 @@ go-live — *is* published on the site and is captured in
 
 **Source:** /thoughts/atomic-design · retrieved 2026-08-27
 
+<!-- dga -->
 > We adopt an atomic design methodology to ensure organization and sustainability in the
 > development of user interfaces.
+<!-- /dga -->
 
 This matters because it is **DGA's own vocabulary**, not a generic methodology reference. When an
 architect or a handoff names a layer, use these five words — they are the terms a DGA reviewer

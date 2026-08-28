@@ -37,8 +37,20 @@ or Angular kit, plain CSS, or DGA's own React package.
 /plugin install dga-kit@dga-kit
 ```
 
-Then restart Claude Code. Prefer per-project or global copies without the plugin system? See
-[INSTALL.md](INSTALL.md).
+Then restart Claude Code.
+
+**OpenAI Codex** installs the **11 skills** (not the agents — Codex's plugin contract has no
+`agents` field):
+
+```bash
+codex plugin marketplace add mohamedsamy911/dga-kit
+```
+
+```bash
+codex plugin add dga-kit@dga-kit
+```
+
+Prefer per-project or global copies without the plugin system? See [INSTALL.md](INSTALL.md).
 
 ## What you get
 
@@ -75,13 +87,17 @@ Then restart Claude Code. Prefer per-project or global copies without the plugin
 node skills/dga-design-system/assets/check-contrast.mjs
 ```
 
-That runs WCAG contrast over DGA's own token pairings. It reports five failures — because DGA
-publishes a text token, `text.secondary` (#dba102), that measures **2.30:1 on white** and fails
-AA at every size, large included. It is a real token, designated for text, so the name invites
-the mistake and reviewers defer to it.
+That runs WCAG contrast over DGA's own token pairings, **both themes**, and reports **20
+failures** — 5 in light, 15 in dark. Add `--theme light` for the light-only run.
 
-That is the kind of thing this kit exists to catch. `--ci` exits non-zero; `--theme dark` audits
-DGA's dark theme, which fails differently and worse — see below.
+The five light ones all come from a single token: `text.secondary` (#dba102) measures **2.30:1 on
+white** and fails AA at every size, large included. It is a real token, designated for text, so
+the name invites the mistake and reviewers defer to it.
+
+That is the kind of thing this kit exists to catch. ⚠️ **`--ci` cannot go green on stock DGA
+tokens** — `text.secondary` fails permanently, and no change to *your* code alters that, because
+the script only ever reads DGA's table. Run it as a committed artefact (`--json`) and gate your
+build on a grep over your own source. The 15 dark failures are worse and are covered below.
 
 ```bash
 python3 harvest/sources.py --check
@@ -121,6 +137,7 @@ are still named `PC 1.0 …` — those are chrome and filenames, not the version
 | 11 skills, 6 agents | ✅ |
 | Contrast checker, self-tested — light **and dark** | ✅ |
 | **Freshness monitoring** — weekly, review-gated | ✅ See below |
+| **Codex install path** | ✅ Verified 2026-08-28 — skills only; passes Codex's own `validate_plugin.py` |
 | **Designer sign-off** | ⚠️ **Outstanding** — values are exact, interpretation unverified |
 | **Figma-only values** (responsive radius/spacing, mobile kit specs) | ❌ Not public. Omitted, not guessed. |
 
@@ -154,9 +171,12 @@ decision.
 CSS shipped from a token unit, a template count asserted at 19 when the harvest held 17, and a
 launch-gate quote that dropped DGA's word *"typically"*, turning "typically cannot proceed to
 deployment" into an unconditional block. No amount of watching DGA catches those.
-`evals/check-quote-fidelity.py` compares every DGA quote in `skills/` against the captured page
-text and fails on a quote that reproduces a capture without matching it. It found two real
-defects on its first run.
+`evals/check-quote-fidelity.py` compares the DGA quotes it *can* — those whose source page has
+been captured — against that captured text, and fails on a quote that reproduces a capture
+without matching it. It found two real defects on its first run. Be clear about its reach: only
+**2 DGA pages are captured**, so 7 of 87 blockquotes are checkable and the other 80 are
+**unverifiable, not verified**. A quote fenced as DGA's own words with no capture behind it fails
+the run.
 
 **Nothing accepts itself.** The sentinel never rewrites its baseline; the deep harvest writes
 nothing without an explicit `--accept`; the Action has `contents: read` and cannot commit. A
@@ -180,7 +200,7 @@ harvest/    the evidence behind every rule, and the monitoring that keeps it hon
               FRESHNESS.md        generated: last check, what moved, review pending?
 evals/      23 eval cases across two suites, plus three checkers:
               validate-fixtures.py     the kit against its own tokens and evidence
-              check-quote-fidelity.py  every DGA quote against what was captured
+              check-quote-fidelity.py  the DGA quotes a capture covers (7 of 87 today)
               test-automation.py       whether the monitoring detects what it claims to
 .github/    CI on push, and the weekly freshness sentinel
 ```

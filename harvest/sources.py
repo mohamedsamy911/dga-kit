@@ -107,11 +107,59 @@ def sha(b):
     return hashlib.sha256(b).hexdigest()
 
 
+class NotTheSite(Exception):
+    """The response was served, but it is not the site this sentinel knows how to read."""
+
+
+def asset_problem(kind, status, body):
+    """Why this response is not the asset it claims to be - or None if it is.
+
+    A valid shell says NOTHING about the assets. The shell can be served from a CDN edge or a
+    stale cache while a proxy answers the two asset requests with a login page, and every one of
+    those responses is a 200. That combination is the dangerous one: the build hash is read out of
+    the SHELL markup, so a poisoned baseline records a real-looking hash beside zero tokens and
+    zero routes - and from then on every --check compares that emptiness against itself and reports
+    a quiet week. Guarding the shell alone, which is what an earlier version of this file did,
+    misses it entirely.
+
+    Deliberately structural, not exact: "is this a stylesheet at all", not "does it have 1,209
+    properties". A real DGA change to the counts must reach compare() as a reported finding, not
+    be swallowed here as a refusal to look.
+    """
+    if status != 200:
+        return f'{kind} returned HTTP {status}'
+    head = body[:400].lstrip().lower()
+    if head.startswith(b'<!doctype html') or head.startswith(b'<html'):
+        return f'{kind} responded with an HTML page - a proxy, login or maintenance response'
+    if not body.strip():
+        return f'{kind} responded with an empty body'
+    if kind == 'stylesheet':
+        n = len(set(re.findall(rb'(--[^\s:{};]+)\s*:', body)))
+        if n < 100:
+            return (f'stylesheet declares {n} custom properties; DGA publishes over a thousand, '
+                    f'so this is not the token surface')
+    else:
+        r = routes_from_js(body)
+        empty = [g for g in ('components', 'templates', 'foundations') if not r[g]]
+        if empty:
+            return 'bundle carries no ' + ', '.join(empty) + ' routes - no route table to read'
+    return None
+
+
 def tier_a_baselines():
-    """Everything a plain HTTP GET can establish. Nothing here needs a browser."""
+    """Everything a plain HTTP GET can establish. Nothing here needs a browser.
+
+    REFUSES to record a baseline with no tripwires. A maintenance page, a captive proxy or a
+    corporate interstitial answers 200 with real HTML and no /assets/index-<hash> links. Writing
+    that as the baseline is the worst possible outcome: buildHash becomes None on both sides, so
+    every later --check compares nothing against nothing and reports a quiet week forever. The
+    sentinel would look healthy precisely because it had been blinded.
+    """
     out = {}
 
     status, shell = fetch(BASE + '/')
+    if status != 200:
+        raise NotTheSite(f'shell returned HTTP {status}, not 200')
     out['shell'] = {
         'url': BASE + '/', 'status': status, 'bytes': len(shell), 'sha256': sha(shell),
         'note': 'The SPA shell. Served for EVERY route, valid or not - see the module docstring. '
@@ -120,34 +168,53 @@ def tier_a_baselines():
     }
 
     m = re.search(rb'href="(/assets/[^"]+\.css)"', shell)
-    if m:
-        css_path = m.group(1).decode()
-        status, css = fetch(BASE + css_path)
-        out['stylesheet'] = {
-            'url': BASE + css_path, 'status': status, 'bytes': len(css), 'sha256': sha(css),
-            'buildHash': css_path.split('index-')[-1].split('.css')[0],
-            'customProperties': len(set(re.findall(rb'(--[^\s:{};]+)\s*:', css))),
-            'facts': facts_from_css(css),
-            'note': 'THE tripwire. The filename carries Vite\'s build hash, so it changes on '
-                    'every DGA deploy. This file also holds the whole token surface, including '
-                    'the 402 dark-theme declarations under the unmatchable [data-theme=dark] '
-                    ':root selector.',
-        }
+    if not m:
+        raise NotTheSite(
+            f'no /assets/index-<hash>.css link in the shell ({len(shell)} bytes, HTTP {status}). '
+            f'Either DGA changed the markup - update the pattern - or this is a maintenance or '
+            f'proxy page. Refusing to write a baseline with no build-hash tripwire.')
+    css_path = m.group(1).decode()
+    status, css = fetch(BASE + css_path)
+    bad = asset_problem('stylesheet', status, css)
+    if bad:
+        raise NotTheSite(
+            bad + f' ({BASE + css_path}, {len(css)} bytes). The shell was valid, so this is most '
+            f'likely a proxy or maintenance response for the asset alone. Refusing to write a '
+            f'baseline whose token facts are empty - it would read as a quiet week forever.')
+    out['stylesheet'] = {
+        'url': BASE + css_path, 'status': status, 'bytes': len(css), 'sha256': sha(css),
+        'buildHash': css_path.split('index-')[-1].split('.css')[0],
+        'customProperties': len(set(re.findall(rb'(--[^\s:{};]+)\s*:', css))),
+        'facts': facts_from_css(css),
+        'note': 'THE tripwire. The filename carries Vite\'s build hash, so it changes on '
+                'every DGA deploy. This file also holds the whole token surface, including '
+                'the 402 dark-theme declarations under the unmatchable [data-theme=dark] '
+                ':root selector.',
+    }
 
     m = re.search(rb'src="(/assets/[^"]+\.js)"', shell)
-    if m:
-        js_path = m.group(1).decode()
-        status, js = fetch(BASE + js_path)
-        r = routes_from_js(js)
-        out['bundle'] = {
-            'url': BASE + js_path, 'status': status, 'bytes': len(js), 'sha256': sha(js),
-            'buildHash': js_path.split('index-')[-1].split('.js')[0],
-            'routes': r,
-            'counts': {k: len(v) for k, v in r.items()},
-            'note': 'The SPA bundle carries the route table and one route per release. This is '
-                    'what makes the 50/19 contract and "has DGA released?" answerable without a '
-                    'browser. Only page prose still needs one.',
-        }
+    if not m:
+        raise NotTheSite(
+            'no /assets/index-<hash>.js link in the shell. Refusing to write a baseline with no '
+            'route table - the 50/19/5/6 contract would be unverifiable.')
+    js_path = m.group(1).decode()
+    status, js = fetch(BASE + js_path)
+    bad = asset_problem('bundle', status, js)
+    if bad:
+        raise NotTheSite(
+            bad + f' ({BASE + js_path}, {len(js)} bytes). The shell was valid, so this is most '
+            f'likely a proxy or maintenance response for the asset alone. Refusing to write a '
+            f'baseline with no route table - the 50/19/5/6 contract would be unverifiable.')
+    r = routes_from_js(js)
+    out['bundle'] = {
+        'url': BASE + js_path, 'status': status, 'bytes': len(js), 'sha256': sha(js),
+        'buildHash': js_path.split('index-')[-1].split('.js')[0],
+        'routes': r,
+        'counts': {k: len(v) for k, v in r.items()},
+        'note': 'The SPA bundle carries the route table and one route per release. This is '
+                'what makes the 50/19 contract and "has DGA released?" answerable without a '
+                'browser. Only page prose still needs one.',
+    }
 
     if 'stylesheet' in out:
         # re-read the stylesheet we already fetched above for the critical token facts
@@ -328,6 +395,30 @@ def sources():
     return out
 
 
+def _carry_accepted(fresh):
+    """Preserve Tier-B hashes that a human already accepted.
+
+    sources() rebuilds every entry with contentHash=None. Letting that land discards the one
+    thing in this file the automation is not allowed to decide: deep.py writes a Tier-B hash only
+    behind --accept, after a maintainer has read the diffs. Regenerating it as null throws that
+    review away silently, and every accepted page reads NEW on the next deep harvest - which then
+    blocks acceptance, so the damage is loud but the review is gone either way.
+
+    Tier A is deliberately NOT carried: it is refetched on every --baseline by design.
+    """
+    if not os.path.exists(OUT):
+        return fresh
+    old = {s['url']: s for s in json.load(io.open(OUT, encoding='utf-8')).get('sources', [])}
+    for s in fresh:
+        prev = old.get(s['url'])
+        if s['tier'] != 'B' or not prev:
+            continue
+        for k in ('contentHash', 'hashMethod', 'capturedAt', 'memberCount', 'verified'):
+            if prev.get(k) is not None:
+                s[k] = prev[k]
+    return fresh
+
+
 def build():
     print('fetching Tier A baselines...')
     tier_a = tier_a_baselines()
@@ -390,7 +481,7 @@ def build():
                        'check-contrast.mjs and rule 2 of dga-ui-adapter all change.'},
         ],
         'tierA': tier_a,
-        'sources': sources(),
+        'sources': _carry_accepted(sources()),
     }
     with io.open(OUT, 'w', encoding='utf-8') as f:
         json.dump(doc, f, indent=2, ensure_ascii=False)
@@ -526,15 +617,29 @@ def check():
             findings.append(('DGA DEPLOYED',
                              f'css {old_css} -> {obs["cssHash"]}, '
                              f'js {old_js} -> {obs["jsHash"]}'))
-        _, css = fetch(BASE + css_m.group(1).decode())
-        _, js = fetch(BASE + js_m.group(1).decode())
-        obs['deepRead'] = True
-
-        live_routes = routes_from_js(js)
-        obs['routes'] = live_routes
-        obs['counts'] = {k: len(v) for k, v in live_routes.items()}
-        obs['releases'] = live_routes['releases']
-        obs['facts'] = facts_from_css(css)
+        css_status, css = fetch(BASE + css_m.group(1).decode())
+        js_status, js = fetch(BASE + js_m.group(1).decode())
+        # Here a bad asset is a FINDING, not an exception. check() must always write its report -
+        # raising would lose the findings on the one run that mattered, the same reasoning as the
+        # SHELL MARKUP CHANGED branch above. Nothing observed is claimed from an asset that
+        # failed: obs keeps its None, and the report says so rather than reprinting the baseline.
+        bad = [p for p in (asset_problem('stylesheet', css_status, css),
+                           asset_problem('bundle', js_status, js)) if p]
+        if bad:
+            findings.append(('ASSET RESPONSE NOT USABLE - deep read abandoned',
+                             '; '.join(bad) + '. The shell was valid and the build hashes were '
+                             'read from it, so this is most likely a proxy or maintenance '
+                             'response for the assets alone. Route counts and token facts were '
+                             'NOT observed this run.'))
+            notes.append('Deep read abandoned - an asset response was not the asset. Nothing '
+                         'below is claimed as observed for routes or token facts.')
+        else:
+            obs['deepRead'] = True
+            live_routes = routes_from_js(js)
+            obs['routes'] = live_routes
+            obs['counts'] = {k: len(v) for k, v in live_routes.items()}
+            obs['releases'] = live_routes['releases']
+            obs['facts'] = facts_from_css(css)
 
     findings += compare(base, obs, inv['contracts'])
     write_freshness(inv, obs, findings, notes)

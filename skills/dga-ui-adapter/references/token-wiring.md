@@ -9,8 +9,18 @@ generated files in `../../dga-design-system/assets/`:
 | `tokens.css` | `--dga-color-*`, `--dga-text-*`, `--dga-background-*`, `--dga-space-*`, `--dga-radius-*` on `:root` |
 | `tailwind-preset.js` | A Tailwind v3 preset — `screens` plus `extend.{colors,spacing,borderRadius,...}` |
 
-Regenerate all three after a re-harvest: `node ../../dga-design-system/assets/generate-tokens.mjs`.
-Never hand-edit the outputs.
+⚠️ **Only two of those three are generated.** `tokens.json` is the **harvest** — values verbatim
+from design.dga.gov.sa — and it is the INPUT. `tokens.css` and `tailwind-preset.js` are derived
+from it. After a re-harvest, regenerate the two outputs:
+
+```bash
+node ../../dga-design-system/assets/generate-tokens.mjs
+```
+
+Never hand-edit `tokens.css` or `tailwind-preset.js` — the next contributor who regenerates will
+silently revert you. And never "correct" a value in `tokens.json` because it looks wrong: it
+records what DGA published, defects included. Suspect values go in its `$verify` block. Both
+invariants are stated in [the contributor contract](https://github.com/mohamedsamy911/dga-kit/blob/master/AGENTS.md).
 
 **Getting them into your project.** dga-kit is a Claude Code plugin, not an npm package, so the
 files are not in `node_modules`. Copy the one you need into your repo and commit it — it is a
@@ -195,7 +205,8 @@ a visitor whose OS is in dark mode gets the `.dark` class applied **whether or n
 toggle**. Chakra's built-ins flip dark underneath DGA roles that stay light, and you ship the
 half-dark theme you were trying to avoid, triggered by an OS setting nobody chose in your app.
 
-Since DGA publishes no dark values (Figma-only), pin it until they are in hand:
+DGA's own dark values cannot rescue you here — they are published but unactivatable, and five
+status surfaces in them measure 1.05:1 (see `../SKILL.md`, *Honest limits*). Pin it:
 
 ```tsx
 <ColorModeProvider forcedTheme="light" />   // or defaultTheme="light" enableSystem={false}

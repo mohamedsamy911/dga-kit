@@ -39,7 +39,10 @@ canvas mechanics; this one supplies the DGA constraints.
 - **Feedback section** — "Was this page useful?" with Yes/No and reason options
 - Footer with **Accessibility Tools** and **both** last-modified dates
 - The **Digital Stamp**, on any public government page
-- Language toggle (direct button for ar/en)
+- Language toggle (direct button) — **only if the platform ships two languages.** DGA's rule is
+  conditional: *given* Arabic and English, use a direct toggle rather than a dropdown. It does not
+  require every platform to be bilingual, so a single-language platform is not out of compliance
+  for lacking one.
 
 ## Definition of done
 

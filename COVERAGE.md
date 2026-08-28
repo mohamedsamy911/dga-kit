@@ -55,7 +55,7 @@ duplicates another's rules, because rules live once in `dga-design-system/refere
 
 | Project uses | Use | Because |
 |---|---|---|
-| `platformscode-new-react` | `dga-react` | DGA's own 175 components are available as the reference implementation. The skill is the gap layer over them. |
+| `platformscode-new-react` | `dga-react` | DGA's own **123** components are available as the reference implementation. The skill is the gap layer over them. |
 | **Anything else** — Tailwind, MUI, Chakra, shadcn/Radix, Ant, Bootstrap, Vue/Angular kits, plain CSS | `dga-ui-adapter` | None of DGA's components are available, so every spec must be re-expressed and *"does this match DGA"* becomes a judgement rather than a diff. |
 
 ## Agents
@@ -316,7 +316,8 @@ name it, and nothing else.
 ## Guarding against our own drift
 
 The monitoring in `dga-tokens-sync` watches **DGA** for changes. `evals/check-quote-fidelity.py`
-watches **us** — it compares every DGA quote in `skills/` against the captured page text in
+watches **us** — it compares the DGA quotes a capture actually covers (7 of 87 blockquotes
+today; the rest are *unverifiable*, not verified) against the captured page text in
 `harvest/raw/`, and fails on a paragraph that reproduces a capture without matching it.
 
 That is the direction this repo has actually gone wrong: `-2%` shipped as invalid CSS, the

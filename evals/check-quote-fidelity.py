@@ -43,9 +43,17 @@ A paragraph that is *clearly derived from* a capture but not identical to it is 
 SCOPE - state it plainly rather than implying more:
   * It can only check quotes whose source page has a raw capture. Most of the 2026-08-26 harvest
     has none, so those quotes are UNVERIFIABLE and the report counts them.
-  * The coverage figure is BLOCKQUOTE coverage, not evidence coverage: its denominator is every
-    blockquote in skills/, and most of those are the kit's own commentary. Reading it as "the
-    kit is 8% evidenced" understates the truth. Marking DGA quotes in skills/ - the same fence
+  * TWO figures are reported, and they answer different questions.
+      - BLOCKQUOTE coverage: denominator is every blockquote in skills/, most of which are the
+        kit's own commentary. Reading it as "the kit is 8% evidenced" understates the truth.
+      - DGA-MARKED coverage: denominator is the blockquotes fenced as DGA's own words. That is a
+        claim of authorship, so a marked quote with no capture behind it is a real finding - and
+        the one this file most wants to surface, and it FAILS --ci. A fenced quote with no
+        capture behind it is an uncited DGA claim, which is the one thing this kit may never
+        ship. Fix it by capturing the page, or by rewriting the passage as the kit's own words
+        and dropping the fence - never by unmarking text that still reads as DGA's wording.
+    The marks were bootstrapped from quotes already proven verbatim, so the second figure reads
+    100% until someone marks a quote on judgement. Marking DGA quotes in skills/ - the same fence
     the captures use - would make a real evidence-coverage figure possible. TODO.
   * It cannot tell a correct quote from a correctly-transcribed quote of a page that has since
     changed. That is the sentinel's job, not this one's.
@@ -168,6 +176,29 @@ def load_corpus():
     return files, blocks, strays, malformed
 
 
+def marked_lines(path):
+    """Line numbers inside <!-- dga --> ... <!-- /dga --> fences in a SKILL file.
+
+    The captures use these fences to say "these are DGA's words". Until now skills/ did not, so
+    the coverage figure had to use every blockquote as its denominator - and most blockquotes in
+    skills/ are the kit's own commentary. That made 8% look like "8% of the kit is evidenced",
+    which understates the truth by an amount nothing could measure. A marked quote is a CLAIM of
+    DGA authorship, and it is checkable.
+    """
+    inside, out = False, set()
+    for i, line in enumerate(io.open(path, encoding='utf-8').read().split('\n'), 1):
+        st = line.strip()
+        if st == FENCE_OPEN:
+            inside = True
+            continue
+        if st == FENCE_CLOSE:
+            inside = False
+            continue
+        if inside:
+            out.add(i)
+    return out
+
+
 def blockquotes(path):
     """(line, paragraph) for each run of consecutive `>` lines."""
     buf, start = [], None
@@ -195,16 +226,19 @@ def main():
         print('Wrap captured DGA text in <!-- dga --> ... <!-- /dga --> so it can be cited.')
         return 1 if '--ci' in sys.argv else 0
 
-    verified, drift, stitched, unverifiable = [], [], [], []
+    verified, drift, stitched, unverifiable, marked = [], [], [], [], []
     for d, _, fs in os.walk(os.path.join(ROOT, 'skills')):
         for fn in sorted(fs):
             if not fn.endswith('.md'):
                 continue
             p = os.path.join(d, fn)
             rel = os.path.relpath(p, ROOT).replace('\\', '/')
+            _marked = marked_lines(p)
             for line, q in blockquotes(p):
                 if len(q) < MIN_LEN:
                     continue
+                if line in _marked:
+                    marked.append((rel, line))
                 frags = [f.strip() for f in ELISION.split(q) if len(f.strip()) >= MIN_FRAGMENT]
                 # Every fragment must come from ONE captured block. Checking against the whole
                 # corpus would accept a quote stitched together from two unrelated DGA passages.
@@ -287,7 +321,41 @@ def main():
                   'every blockquote, and most of them are the kit\'s own commentary rather than DGA\n'
                   'quotes - so the true share of DGA quotes that are evidenced is higher than this,\n'
                   'by an amount nothing here measures. A real evidence-coverage figure needs DGA\n'
-                  'quotes marked in skills/ the way they are marked in captures. TODO.\n')
+                  'quotes marked in skills/ the way they are marked in captures.\n')
+
+    # The honest figure: of the blockquotes that CLAIM to be DGA's words, how many are backed by
+    # a capture. Denominator is a claim of authorship, not a count of paragraphs.
+    _mk = {(r, l) for r, l in marked}
+    _mk_ok = len([1 for r, l, _q, _h in verified if (r, l) in _mk])
+    out.write(f'\nDGA-marked quotes: {len(_mk)} blockquote(s) in skills/ are fenced as DGA\'s '
+              f'own words.\n')
+    if _mk:
+        out.write(f'  {_mk_ok}/{len(_mk)} ({_mk_ok * 100 // len(_mk)}%) are verified verbatim '
+                  f'against a capture.\n')
+        if _mk_ok == len(_mk):
+            out.write('  ⚠ That 100% is TAUTOLOGICAL while the marked set is exactly the proven\n'
+                      '  set. The fences were bootstrapped from quotes this checker had already\n'
+                      '  matched, so nothing marked COULD be unbacked. The number starts meaning\n'
+                      '  something the moment a maintainer marks a quote on their own judgement:\n'
+                      '  if no capture backs it, it is listed here as an unsubstantiated claim of\n'
+                      '  DGA authorship. Mark quotes as you write them; do not wait for a capture.\n')
+        _unbacked = sorted(_mk - {(r, l) for r, l, _q, _h in verified})
+        if _unbacked:
+            out.write(f'  {len(_unbacked)} marked quote(s) have NO capture behind them - a claim '
+                      f'of DGA authorship\n  this repo cannot substantiate. That is the violation '
+                      f'this whole kit exists to\n  prevent, so it FAILS --ci. Two honest '
+                      f'remedies, and one that is not:\n'
+                      f'    1. capture the page, so the quote is backed;\n'
+                      f'    2. rewrite the passage as the KIT\'s words, not DGA\'s, and drop the '
+                      f'fence.\n'
+                      f'  Removing the fence while leaving the text presented as DGA\'s wording is '
+                      f'NOT a fix -\n  it hides the same claim from the only check that looks for '
+                      f'it.\n')
+            for r, l in _unbacked[:15]:
+                out.write(f'    {r}:{l}\n')
+    else:
+        out.write('  Nothing is fenced yet. Wrap a DGA quote in <!-- dga --> ... <!-- /dga --> to\n'
+                  '  put it in this denominator.\n')
     out.write('Raising the numerator means capturing more raw pages, never editing a reference.\n')
 
     if '--verbose' in sys.argv:
@@ -305,7 +373,16 @@ def main():
 
     # Only drift fails. An unfenced blockquote is commentary by design; a genuinely mis-filed
     # DGA passage shows up as falling coverage, which is visible rather than silent.
-    if '--ci' in sys.argv and (drift or stitched or malformed):
+    # `unbacked` joins the fatal set on review. The earlier reasoning for excluding it was that
+    # the fix is a capture run rather than an edit, so failing the build would pressure someone
+    # into deleting the mark instead of capturing the page. That is a real risk, but it does not
+    # survive the kit's own rule: a blockquote fenced as DGA's own words with nothing behind it IS
+    # an uncited DGA claim, which is exactly what cite-or-omit forbids. The pressure argument also
+    # cuts both ways - unmarking hides the claim rather than removing it, so tolerating it bought
+    # nothing. The message above names the two honest remedies instead.
+    _unbacked_fatal = [(r, l) for r, l in marked
+                       if (r, l) not in {(r2, l2) for r2, l2, _q, _h in verified}]
+    if '--ci' in sys.argv and (drift or stitched or malformed or _unbacked_fatal):
         return 1
     return 0
 

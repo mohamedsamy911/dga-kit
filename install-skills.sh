@@ -142,14 +142,27 @@ done
 
 # Skills reference each other as siblings (../dga-design-system/...), so the flat layout
 # is required. Verify every relative link resolves where it landed. One grep pass - a
+# Run a command over the installed skill directories, or not at all when none exist.
+#
+# This replaced `... | xargs -r`. `-r` (do not run on empty input) is a GNU extension: BSD xargs
+# on macOS rejects it outright, so on the platform this script advertises support for, both
+# cross-reference checks died with a usage error - and `set -euo pipefail` turned that into a
+# silent skip rather than a visible failure. Passing the paths as arguments removes the need for
+# either flag.
+scan_dirs() {
+  local cmd=("$@") dirs=() n
+  for n in "${SKILLS[@]}"; do [[ -d "$DEST/$n" ]] && dirs+=("$DEST/$n"); done
+  (( ${#dirs[@]} )) || return 0
+  "${cmd[@]}" "${dirs[@]}"
+}
+
 # per-file loop is painfully slow on Windows/Git Bash.
 bad=0
 while IFS= read -r line; do
   # split on the LAST colon - a Windows path can carry a drive-letter colon of its own
   f="${line%:*}"; ref="${line##*:}"
   [[ -e "${f%/*}/$ref" ]] || { echo "BROKEN    $f -> $ref"; bad=$((bad+1)); }
-done < <(for n in "${SKILLS[@]}"; do [[ -d "$DEST/$n" ]] && echo "$DEST/$n"; done \
-         | xargs -r grep -rHoE '\.\./[A-Za-z0-9_./-]+\.(md|json|css|mjs|js|ts)' --include='*.md' \
+done < <(scan_dirs grep -rHoE '\.\./[A-Za-z0-9_./-]+\.(md|json|css|mjs|js|ts)' --include='*.md' \
          | sort -u)
 
 # Repo-root paths are the other way a reference dies on install. harvest/, evals/, COVERAGE.md
@@ -182,8 +195,7 @@ while IFS= read -r line; do
   bare=$((total - linked))
   [[ $bare -le 0 ]] && continue
   echo "UNSHIPPED $f -> $ref x$bare (not installed; use a full GitHub URL)"; bad=$((bad+1))
-done < <(for n in "${SKILLS[@]}"; do [[ -d "$DEST/$n" ]] && echo "$DEST/$n"; done \
-         | xargs -r grep -rHoE '(harvest|evals)/[A-Za-z0-9_./-]+|COVERAGE\.md|README\.md|AGENTS\.md' --include='*.md' --include='*.json' \
+done < <(scan_dirs grep -rHoE '(harvest|evals)/[A-Za-z0-9_./-]+|COVERAGE\.md|README\.md|AGENTS\.md|CHANGELOG\.md' --include='*.md' --include='*.json' \
          | sort -u)
 
 echo

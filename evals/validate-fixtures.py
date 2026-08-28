@@ -171,6 +171,90 @@ if _d:
     chk('dark: $verify records the unmatchable selector as a source defect',
         any('[data-theme=dark] :root' in v.get('value', '') for v in _d.get('$verify', [])))
 
+# The dark-theme finding has to be corrected EVERYWHERE, not just where someone looked. The
+# claim "DGA publishes dark values only in Figma" was true when this kit was written and is false
+# now - 402 declarations sit in the public CSS. It was corrected in README, three SKILL.md files
+# and token-wiring.md, and then found surviving twice more: in tokens.json's own $meta.$note, and
+# in an eval case that GRADED the false claim as the right answer. Grep is not a review process;
+# this is.
+#
+# Scoped to SENTENCES, not lines, and that is the whole difficulty. A line-scoped version of this
+# check passed both real defects: the JSON note keeps its correction on the same physical line (so
+# the exemption swallowed the claim beside it), and the eval case wrapped one sentence across two
+# lines (so neither line held both halves). Sentences are the unit the claim is actually made in.
+_DARK_WORD = re.compile(r'\bdark\b', re.I)
+_FIGMA_ONLY = re.compile(
+    r'figma[- ]only|only in the[^.]{0,60}figma|figma variable collection'
+    r'|not in the public css', re.I)
+# A sentence that NAMES the old claim in order to correct it is the opposite of the defect - but
+# only when the correction is in THAT sentence. A disclaimer one sentence later does not license
+# a false statement here.
+_CORRECTION = re.compile(r'used to|no longer|was wrong|NOT among them|not figma-only'
+                         r'|now false|is false', re.I)
+
+
+def _blocks(text):
+    """Lines, with WRAPPED continuations rejoined - and nothing else joined.
+
+    An earlier version flattened every newline to a space. That merged independent markdown table
+    rows into one pseudo-sentence, so a row about responsive radius sitting near a row mentioning
+    dark read as a single false claim. Only an indented continuation belongs to the line above,
+    and never into a table row.
+    """
+    out = []
+    for line in text.split('\n'):
+        cont = (out and line[:1].isspace() and line.strip()
+                and not out[-1].lstrip().startswith('|'))
+        if cont:
+            out[-1] += ' ' + line.strip()
+        else:
+            out.append(line)
+    return out
+
+
+def _sentences(text):
+    """Sentences, the unit a claim is actually made in. Em dashes end one; table pipes do not."""
+    for b in _blocks(text):
+        for s in re.split(r'(?<=[.:;!?])\s+|\s\u2014\s|\s--\s', b):
+            if s.strip():
+                yield s
+
+
+def _stale_dark(text):
+    return [s for s in _sentences(text)
+            if _DARK_WORD.search(s) and _FIGMA_ONLY.search(s) and not _CORRECTION.search(s)]
+
+
+_stale = []
+_scan = [os.path.join(ROOT, f) for f in ('README.md', 'COVERAGE.md')]
+for _base in ('skills', 'evals'):
+    for _dir, _, _files in os.walk(os.path.join(ROOT, _base)):
+        _scan += [os.path.join(_dir, f) for f in _files
+                  if f.endswith(('.md', '.json', '.mjs', '.css'))]
+for _fp in _scan:
+    for _s in _stale_dark(open(_fp, encoding='utf-8').read()):
+        _stale.append(os.path.relpath(_fp, ROOT).replace(os.sep, '/') + ': ' + _s.strip()[:90])
+chk('dark: no shipped file still calls the dark values Figma-only', not _stale,
+    str(_stale) + ' - DGA publishes them in the public CSS; unactivatable, not absent')
+
+# Vacuous until proven otherwise, and it HAS been vacuous once: pin both real sentences verbatim,
+# in both word orders, plus the corrected forms that must NOT trip it.
+chk('dark: the stale-claim detector catches both sentences it was written for',
+    _stale_dark('Known-incomplete areas are the PC 1.0 Figma-only values (dark theme, responsive '
+                'radius/spacing, mobile kit), not the foundation pages.')
+    and _stale_dark('states that DGA documents a dark variant for every semantic colour but '
+                    'publishes the values \n  only in the PC 1.0 Foundations Figma variable '
+                    'collections \u2014 they are not in the public CSS')
+    # the real corrected sentence: the Figma-only list survives, dark is no longer in it
+    and not _stale_dark('Known-incomplete areas are the PC 1.0 Figma-only values (responsive radius/spacing, mobile kit), not the foundation pages.')
+    and not _stale_dark('This kit used to list dark values as Figma-only.')
+    and not _stale_dark('DGA publishes 402 dark declarations in its public CSS.')
+    # the COVERAGE.md table that a newline-flattening version wrongly flagged
+    and not _stale_dark('| **Dark theme values** | carried under role.dark | public CSS |\n'
+                        '| **Responsive radius & spacing** | wrong on two of three breakpoints '
+                        '| PC 1.0 Foundations Figma variable collections |'),
+    'the detector would pass a file that still carries the old claim')
+
 # --- generated output: the % -> em conversion at the boundary ---------------
 # tokens.json keeps DGA's published -2% so a re-harvest diffs clean. CSS letter-spacing does
 # not accept percentages, so nothing generated may contain one. This is the check that makes
@@ -592,6 +676,114 @@ if os.path.exists(_inv_path):
             not any(f.endswith('.md') for f in os.listdir(_snap)),
             'harvest/raw/ is curated evidence with <!-- dga --> fences; snapshots are not')
 
+    # --- plugin manifests: resist plausible "fixes" ------------------------------
+    # An external review recommended three changes here that would each BREAK loading. They are
+    # plausible if you assume paths resolve from the manifest file. They do not: they resolve
+    # from the PLUGIN ROOT, the directory containing .claude-plugin/ or .codex-plugin/.
+    #
+    # LIMITATION, stated so these are not read as more than they are: these checks are
+    # STRUCTURAL. They prove the manifests keep the shape that a known-good dual-target plugin
+    # uses; they do NOT prove Claude Code loads this plugin, and they cannot prove Codex accepts
+    # or discovers it at all - no published Codex plugin specification exists to test against, and
+    # inventing one to assert against would be the same error as inventing a DGA rule. The Codex
+    # path stays unverified, and INSTALL.md says so in the same words.
+    #
+    # Evidence, re-fetched 2026-08-28 from tag v4.9.0 (the current release; this comment
+    # previously cited 4.8.4, the locally installed copy, which had fallen a minor behind).
+    # ponytail is a published, working, dual-target plugin. Its
+    # .claude-plugin/marketplace.json uses "source": "./"; its .claude-plugin/plugin.json
+    # declares NO skills or agents key; its .codex-plugin/plugin.json declares "skills":
+    # "./skills/" while its skills live at the repo root, not inside .codex-plugin/. No plugin
+    # installed on this machine - Anthropic's own included - declares skills/agents/commands in
+    # plugin.json. Discovery is by convention from the plugin root.
+    _mk = json.load(open(os.path.join(ROOT, '.claude-plugin/marketplace.json'), encoding='utf-8'))
+    chk('manifest: marketplace source stays "./" (the plugin root, not .claude-plugin/)',
+        _mk['plugins'][0]['source'] == './',
+        'pointing this at .claude-plugin/ loses skills/ and agents/, which are a level up')
+
+    _cp = json.load(open(os.path.join(ROOT, '.claude-plugin/plugin.json'), encoding='utf-8'))
+    chk('manifest: claude plugin.json declares no skills/agents mapping',
+        not ({'skills', 'agents', 'commands'} & set(_cp)),
+        'these are auto-discovered from the plugin root; no installed plugin declares them')
+
+    _xp = json.load(open(os.path.join(ROOT, '.codex-plugin/plugin.json'), encoding='utf-8'))
+    chk('manifest: codex skills path is root-relative, not manifest-relative',
+        _xp.get('skills') == './skills/',
+        '"../skills/" would escape the repo - ponytail uses "./skills/" with skills at root')
+
+    # Every manifest that carries a description must carry the caveat with it. The three drifted:
+    # marketplace.json and the codex manifest said "Unofficial ... Not affiliated with or endorsed
+    # by DGA", while plugin.json said "compliance" flat. plugin.json is the one a user reads in
+    # the install prompt, so it was the worst place to drop it.
+    _descs = []
+    for _mf, _label in ((_cp, '.claude-plugin/plugin.json'),
+                        (_xp, '.codex-plugin/plugin.json'),
+                        (_mk, '.claude-plugin/marketplace.json')):
+        _descs += [(_label, _mf['description'])] if 'description' in _mf else []
+        _descs += [(_label, _p['description']) for _p in _mf.get('plugins', [])
+                   if 'description' in _p]
+    _uncaveated = [_l for _l, _d in _descs if 'unofficial' not in _d.lower()]
+    chk('manifest: every description says unofficial', not _uncaveated, str(_uncaveated))
+    _no_disclaimer = [_l for _l, _d in _descs
+                      if 'not a dga certification' not in _d.lower()
+                      and 'not affiliated' not in _d.lower()]
+    chk('manifest: every description disclaims endorsement', not _no_disclaimer,
+        str(_no_disclaimer))
+
+    # --- the Codex install path, established 2026-08-28 -----------------------
+    # `codex plugin add` installs from a MARKETPLACE, never from a bare plugin manifest, so
+    # .codex-plugin/plugin.json alone was not installable. Codex documents this in the
+    # plugin-creator system skill that ships with its CLI
+    # (~/.codex/skills/.system/plugin-creator/references/plugin-json-spec.md, "Repo/team plugin:
+    # <repo-root>/.agents/plugins/marketplace.json"), and ponytail - installed and working as a
+    # Codex git marketplace - ships exactly this file. The repo's manifest passes Codex's own
+    # scripts/validate_plugin.py.
+    _cx = json.load(open(os.path.join(ROOT, '.agents/plugins/marketplace.json'), encoding='utf-8'))
+    chk('codex: the marketplace catalogue exists and names this plugin',
+        _cx['name'] == 'dga-kit' and _cx['plugins'][0]['name'] == _xp['name'],
+        'codex plugin add dga-kit@dga-kit resolves <plugin>@<marketplace>')
+    _src = _cx['plugins'][0]['source']
+    chk('codex: the marketplace source is a url pointing at this repository',
+        _src['source'] == 'url' and _src['url'].endswith('mohamedsamy911/dga-kit.git'), str(_src))
+    # A ref that is not the real default branch fetches nothing. ponytail uses "main"; this repo
+    # is "master", and copying ponytail's file verbatim would have shipped a dead marketplace.
+    _head = open(os.path.join(ROOT, '.git', 'HEAD'), encoding='utf-8').read().strip()
+    chk('codex: the marketplace ref matches this repository default branch',
+        _src.get('ref') == 'master' and _head.endswith('/master'),
+        f"marketplace ref {_src.get('ref')!r} vs HEAD {_head!r}")
+    chk('codex: policy and category are present on the plugin entry',
+        set(_cx['plugins'][0]['policy']) >= {'installation', 'authentication'}
+        and _cx['plugins'][0]['policy']['installation'] in
+            ('NOT_AVAILABLE', 'AVAILABLE', 'INSTALLED_BY_DEFAULT')
+        and _cx['plugins'][0].get('category'),
+        'the spec requires policy.installation, policy.authentication and category')
+    # Every field Codex's validate_plugin.py requires. Pinned so a manifest edit cannot quietly
+    # drop one and break installation for every Codex user.
+    _req_iface = ('displayName', 'shortDescription', 'longDescription', 'developerName',
+                  'category', 'capabilities')
+    _missing_iface = [k for k in _req_iface if not _xp.get('interface', {}).get(k)]
+    chk('codex: the manifest carries every interface field the validator requires',
+        not _missing_iface and (_xp['interface'].get('defaultPrompt')
+                                or _xp['interface'].get('default_prompt')),
+        str(_missing_iface) + ' (validate_plugin.py rejects a manifest missing any of these)')
+    chk('codex: the manifest declares no agents key',
+        'agents' not in _xp,
+        "Codex's plugin contract has no agents field and validate_plugin.py rejects unknown keys")
+    # The docs must not re-assert the claim this evidence overturned, nor promise the agents.
+    _install_md = open(os.path.join(ROOT, 'INSTALL.md'), encoding='utf-8').read()
+    chk('codex: INSTALL.md no longer claims there is no verified Codex path',
+        'no verified Codex install path' not in _install_md)
+    chk('codex: INSTALL.md still says the agents are not installed by Codex',
+        'no `agents` field' in _install_md,
+        'Codex installs the skills only - promising the agents would be a false claim')
+
+    # Whatever the manifests claim must actually be there.
+    chk('manifest: the skills directory the codex manifest names exists',
+        os.path.isdir(os.path.join(ROOT, _xp['skills'].strip('./') or 'skills')))
+    for _m, _label in ((_cp, 'claude'), (_xp, 'codex')):
+        chk(f'manifest: {_label} version matches the other', _m['version'] == _cp['version'],
+            f"claude {_cp['version']} vs codex {_xp['version']}")
+
     # --- README claims ----------------------------------------------------------
     # The front page is the most-read and least-tested file in the repo. It carried "dark theme:
     # not public" for a day after the dark values were found in DGA's own CSS. Pin the numbers.
@@ -645,7 +837,8 @@ if os.path.exists(_inv_path):
 # harvest/, evals/, COVERAGE.md, README.md - is left behind. A reference to one of those reads
 # fine in the repo and is a dead end for every installed user. The ../ check below catches path
 # escapes; this catches the repo-root form, which is what the dark-theme work actually used.
-UNSHIPPED = ('harvest/', 'evals/', 'COVERAGE.md', 'README.md', 'AGENTS.md', 'SECURITY.md')
+UNSHIPPED = ('harvest/', 'evals/', 'COVERAGE.md', 'README.md', 'AGENTS.md', 'SECURITY.md',
+             'CHANGELOG.md')
 _OK_URL = re.compile(
     r'(?:https://github\.com/mohamedsamy911/dga-kit/blob/[A-Za-z0-9._-]+/'
     r'|https://raw\.githubusercontent\.com/mohamedsamy911/dga-kit/[A-Za-z0-9._-]+/)$')
@@ -658,13 +851,129 @@ for _dir, _, _files in os.walk(os.path.join(ROOT, 'skills')):
             continue
         _p = os.path.join(_dir, _f)
         _txt = _FENCE.sub('', open(_p, encoding='utf-8').read())
-        for _m in re.finditer(r'[`\[(\s]((?:harvest|evals)/[A-Za-z0-9_./-]+|COVERAGE\.md|README\.md|AGENTS\.md|SECURITY\.md)', _txt):
+        for _m in re.finditer(r'[`\[(\s]((?:harvest|evals)/[A-Za-z0-9_./-]+|COVERAGE\.md|README\.md|AGENTS\.md|SECURITY\.md|CHANGELOG\.md)', _txt):
             # Only a canonical GitHub URL exempts an occurrence, checked immediately before
             # THIS match. Anything looser - "preceded by a slash", "a URL somewhere in the file"
             # - waves through a dead /harvest/... path or a bare mention beside a good link.
             if _OK_URL.search(_txt[:_m.start()]):
                 continue
             _dangling.append(os.path.relpath(_p, ROOT).replace('\\', '/') + ' -> ' + _m.group(1).rstrip('.'))
+_sh = open(os.path.join(ROOT, 'install-skills.sh'), encoding='utf-8').read()
+# Comment lines are exempt: the replacement is DOCUMENTED in a comment naming `xargs -r`, and a
+# whole-file substring check flagged that explanation as the defect it was explaining.
+_sh_code = '\n'.join(l for l in _sh.split('\n') if not l.lstrip().startswith('#'))
+# --- quote-coverage figures in the docs must be the REAL ones ----------------
+# README, COVERAGE and CHANGELOG each quote "N of M blockquotes". Those went stale the moment
+# anyone added a blockquote anywhere in skills/ - which is exactly what happened: three documents
+# said 7 of 84 while the checker reported 7 of 87. Hand-syncing a number across three files is a
+# process that fails silently, so compute the real figure and compare.
+sys.path.insert(0, os.path.join(ROOT, 'evals'))
+import importlib.util as _ilu
+_spec = _ilu.spec_from_file_location(
+    'qf', os.path.join(ROOT, 'evals', 'check-quote-fidelity.py'))
+_qf = _ilu.module_from_spec(_spec)
+_spec.loader.exec_module(_qf)          # importable by design: no module-level side effects
+_qf_total = sum(1 for _d, _, _fs in os.walk(os.path.join(ROOT, 'skills'))
+                for _f in _fs if _f.endswith('.md')
+                for _ln, _q in _qf.blockquotes(os.path.join(_d, _f))
+                if len(_q) >= _qf.MIN_LEN)
+_stale_counts = []
+for _rel in ('README.md', 'COVERAGE.md', 'CHANGELOG.md'):
+    _txt = open(os.path.join(ROOT, _rel), encoding='utf-8').read()
+    for _m in re.finditer(r'(\d+) of (\d+) blockquotes?', _txt):
+        if int(_m.group(2)) != _qf_total:
+            _stale_counts.append(f'{_rel}: "{_m.group(0)}" but the real total is {_qf_total}')
+chk('docs: every "N of M blockquotes" matches the actual count', not _stale_counts,
+    str(_stale_counts))
+chk('docs: the blockquote total is non-trivial', _qf_total > 50,
+    f'computed {_qf_total} - the walk is probably broken, which would make the check vacuous')
+
+# --- npm package facts must match their recorded evidence --------------------
+# These are NOT DGA facts, and that was the defect: the version table, "175 components" and
+# "48 components carry [dir=rtl]" sat under a DGA /developing citation, implying DGA published
+# them. DGA publishes none of it. Two of the numbers were also simply wrong - the package ships
+# 123 components, and 48 is @platformscode/core's VERSION count, conflated with a component
+# count. Both are corrected against harvest/raw/2026-08-28-npm-packages.md, and pinned here so a
+# future edit cannot drift the doc away from its evidence offline.
+_pkg_doc = open(os.path.join(ROOT, 'skills/dga-react/references/official-packages.md'),
+                encoding='utf-8').read()
+# WHOLE-KIT scan. The first version of this guard read only official-packages.md - the file I
+# happened to edit - and passed while COVERAGE.md and dga-react/SKILL.md both still published
+# "175 components". A guard scoped to the file you corrected certifies your edit, not the repo.
+_kit_docs = {}
+for _base in ('skills', 'agents'):
+    for _d, _, _fs in os.walk(os.path.join(ROOT, _base)):
+        for _f in _fs:
+            if _f.endswith('.md'):
+                _p2 = os.path.join(_d, _f)
+                _kit_docs[os.path.relpath(_p2, ROOT).replace(os.sep, '/')] = \
+                    open(_p2, encoding='utf-8').read()
+for _rel in ('README.md', 'COVERAGE.md', 'INSTALL.md', 'CHANGELOG.md'):
+    _kit_docs[_rel] = open(os.path.join(ROOT, _rel), encoding='utf-8').read()
+_pkg_ev = open(os.path.join(ROOT, 'harvest/raw/2026-08-28-npm-packages.md'),
+               encoding='utf-8').read()
+chk('npm: the package evidence capture exists', bool(_pkg_ev))
+for _n, _what in (('123', 'component count'), ('19', 'RTL component count'),
+                  ('0.0.52', 'core version'), ('0.1.45', 'react wrapper version')):
+    chk(f'npm: doc and evidence agree on the {_what} ({_n})',
+        _n in _pkg_doc and _n in _pkg_ev)
+# The two wrong numbers must not come back as live claims. They survive only inside the
+# correction notes that explain them, which is why this looks for the claim, not the digits.
+for _bad, _why in (('175 component', 'unsupported by any source'),
+                   ('175 Stencil', 'unsupported by any source'),
+                   ('48 components carry', 'a version count, not a component count')):
+    _live = []
+    for _rel, _txt in sorted(_kit_docs.items()):
+        _live += [f'{_rel}: {ln.strip()[:70]}' for ln in _txt.split(chr(10))
+                  if _bad in ln and 'previously' not in ln.lower() and 'Corrected' not in ln]
+    chk(f'npm: "{_bad}" is not asserted anywhere in the kit ({_why})', not _live, str(_live))
+# "RTL is handled" full stop was true of neither the package nor the docs: 19 of 123 components
+# carry [dir=rtl]. An installed skill said it flatly, which is the sentence someone plans an
+# Arabic-first build around.
+_rtl_flat = []
+for _rel, _txt in sorted(_kit_docs.items()):
+    _rtl_flat += [f'{_rel}: {ln.strip()[:70]}' for ln in _txt.split(chr(10))
+                  if 'RTL is handled' in ln and 'partial' not in ln.lower()]
+chk('npm: no doc claims RTL is handled without qualifying it', not _rtl_flat, str(_rtl_flat))
+chk('npm: the doc separates DGA\'s instruction from npm-derived facts',
+    'must not be conflated' in _pkg_doc and 'registry' in _pkg_doc.lower(),
+    'the numbers must not sit under the /developing citation alone')
+
+# --- AGENTS.md must list the gates CI actually runs --------------------------
+# It drifted: AGENTS.md named two gates while ci.yml ran six, so a contributor doing "the gates
+# before committing" was checking a third of what the pipeline checked - and finding out in CI.
+# The list is documentation of a contract, which makes it exactly the kind of thing that rots
+# silently unless something compares it.
+_agents_md = open(os.path.join(ROOT, 'AGENTS.md'), encoding='utf-8').read()
+_ci_yml = open(os.path.join(ROOT, '.github/workflows/ci.yml'), encoding='utf-8').read()
+_GATES = ('evals/validate-fixtures.py', 'evals/test-automation.py',
+          'evals/check-quote-fidelity.py', 'check-contrast.mjs --test',
+          'generate-tokens.mjs', 'install-skills.sh')
+_missing_doc = [g for g in _GATES if g not in _agents_md]
+_missing_ci = [g for g in _GATES if g not in _ci_yml]
+chk('gates: AGENTS.md lists every gate CI runs', not _missing_doc, str(_missing_doc))
+chk('gates: CI runs every gate AGENTS.md lists', not _missing_ci, str(_missing_ci))
+
+_ps1 = open(os.path.join(ROOT, 'install-skills.ps1'), encoding='utf-8').read()
+_ps1_code = chr(10).join(l for l in _ps1.split(chr(10)) if not l.lstrip().startswith('#'))
+# PowerShell's $HOME is ReadOnly+AllScope: a test harness cannot redirect it by assignment, and
+# $env:USERPROFILE does not feed it. So while the installer derived its paths from $HOME directly,
+# there was NO way to exercise it without writing into the real profile - which is why it had
+# never been run by CI at all. -ClaudeHome makes the destination an input. Both halves are pinned:
+# the parameter must exist, and no path may be built from $HOME behind its back.
+chk('installer: install-skills.ps1 takes -ClaudeHome', '$ClaudeHome = $HOME' in _ps1_code,
+    'without it the script cannot be tested anywhere but the real profile')
+_home_joins = [l.strip() for l in _ps1_code.split(chr(10))
+               if 'Join-Path $HOME' in l]
+chk('installer: no path is built from $HOME behind the parameter', not _home_joins,
+    str(_home_joins) + ' - these ignore -ClaudeHome, so a test would write to the real profile')
+
+chk('installer: no GNU-only xargs -r', 'xargs -r' not in _sh_code,
+    'BSD xargs on macOS rejects -r, and set -euo pipefail turns that into a silent skip - on the '
+    'platform install-skills.sh advertises support for')
+chk('installer: the scan_dirs helper that replaced it exists',
+    'scan_dirs()' in _sh and 'scan_dirs grep' in _sh)
+
 chk('installed skills reference nothing outside skills/', not _dangling,
     'these resolve in the repo and break once installed; use a full GitHub URL: '
     + str(sorted(set(_dangling))[:8]))
@@ -674,7 +983,8 @@ chk('installed skills reference nothing outside skills/', not _dangling,
 # $source and $verify load-bearing.
 STATUSES = {
     'disputed', 'confirmed-defect-in-source', 'confirmed-naming-hazard', 'confirmed-hazard',
-    'likely-corrected-upstream', 'unavailable-upstream', 'dga-silent',
+    'likely-corrected-upstream', 'unavailable-upstream', 'published-but-unactivatable',
+    'dga-silent',
     'gap-in-extraction-method', 'faithful-to-source',
 }
 def _sections():

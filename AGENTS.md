@@ -21,12 +21,26 @@ of 2026-08-27 — and never round a partial harvest up.
 ## Before you commit
 
 ```bash
-python evals/validate-fixtures.py                              # must print "All fixtures valid"
-node skills/dga-design-system/assets/check-contrast.mjs --test  # must print "self-check passed"
+python evals/validate-fixtures.py                # "All fixtures valid against tokens.json"
+python evals/test-automation.py                  # "All automation scenarios detected correctly"
+python evals/check-quote-fidelity.py --ci        # must exit 0
+node skills/dga-design-system/assets/check-contrast.mjs --test   # "self-check passed"
+node skills/dga-design-system/assets/generate-tokens.mjs          # then `git diff` must be empty
+bash -n install-skills.sh
 ```
+
+This list must match `.github/workflows/ci.yml`. It drifted once — the file named two gates while
+CI ran six — so a contributor running "the gates" was checking a third of what the pipeline
+checked. `validate-fixtures.py` enforces the match.
 
 `validate-fixtures.py` is the guard for everything below. If it fails, the change is wrong — do
 not "fix" the assertion to make it pass without first proving the assertion was the error.
+
+**A guard that cannot fail is worse than no guard.** Every check added here has been *break-tested*:
+the thing it guards is deliberately broken, and the check must fail — and fail on that alone. This
+repo has shipped three checks that passed while verifying nothing (a `grep | wc -l` under
+`set -euo pipefail`, a vacuous status-vocabulary assertion, and a stale-claim detector that matched
+no real sentence). Prove the new check fails before trusting it to pass.
 
 ## Invariants that are easy to break
 

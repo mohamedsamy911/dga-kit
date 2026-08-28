@@ -24,17 +24,31 @@ and every other skill then reads.
 These are compliance requirements, not style preferences. An entity brand guideline that
 contradicts one of these loses.
 
+**Every line below is cited**, because this section is the one most likely to be quoted at a
+stakeholder who wants to override it — and an uncited "DGA requires this" is worth nothing in that
+argument. Each links to the reference that holds DGA's own wording, its source URL and its
+retrieval date. If you cannot follow a claim here back to a quote there, do not assert it.
+
 - **Header and footer structure, colours and fonts.** DGA repeats on every template page:
   *"adhere strictly to the original structure and style. Do not alter the colors or fonts."*
-- **The Digital Stamp** and its verification content
-- **Typography** — IBM Plex Sans. Saudi Font only on occasion templates, headings only, with a
-  Ministry of Culture licence
+  → `../dga-design-system/references/brand.md` (nav-header detachment) and
+  `../dga-design-system/references/patterns.md`
+- **The Digital Stamp** and its verification content →
+  `../dga-design-system/references/components.md`, *Digital stamp*
+- **Typography** — IBM Plex Sans, *"the unified font for all platforms in the Kingdom of Saudi
+  Arabia"*. Saudi Font only on occasion templates, headings only, with a Ministry of Culture
+  licence → `../dga-design-system/references/brand.md`, *Typeface identity*
 - **The required page furniture** — feedback section, both last-modified dates, skip link,
-  Accessibility Tools in the footer
-- **Component anatomy and the six states**
+  Accessibility Tools in the footer → `../dga-design-system/references/patterns.md` (the two
+  last-modified dates) and `references/components.md` (*"Accessibility Tools" is part of DGA's
+  required footer anatomy*)
+- **Component anatomy and the six interaction states** —
+  `../dga-design-system/references/components.md`. ⚠️ Six is the general rule; **inputs use
+  five** (no Selected state). Do not report a five-state input as non-compliant.
 - **The colour roles themselves.** An entity may supply brand colours; it may not repoint
   `text.default` at one that fails contrast. Run
-  `../dga-design-system/assets/check-contrast.mjs` against any override before adopting it.
+  `../dga-design-system/assets/check-contrast.mjs` against any override before adopting it. →
+  `../dga-design-system/references/foundations.md` and `assets/tokens.json`
 
 ## What the entity supplies
 

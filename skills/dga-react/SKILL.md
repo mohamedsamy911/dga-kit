@@ -22,10 +22,16 @@ DGA ships an official one. Read `references/official-packages.md` before writing
 npm install platformscode-new-react@latest
 ```
 
-175 Stencil-based components including the UI shell (`dga-header`, `dga-nav-header`,
+**123** Stencil-based components including the UI shell (`dga-header`, `dga-nav-header`,
 `dga-footer`, `dga-drawer`, `dga-table-of-content`), the full form set, `dga-data-table`,
 `dga-file-upload`, `dga-digital-signature`. **Icons are bundled** — DGA states no separate
-install is needed. **RTL is handled** via `[dir=rtl]`.
+install is needed.
+
+⚠️ **RTL is handled only partially.** **19 of the 123** components carry `[dir=rtl]` styling —
+not the whole set. Test RTL per component rather than assuming the library covers it; the list is
+in `references/official-packages.md`. These counts come from the published package, **not** from
+any DGA page — method and evidence in
+[the npm package capture](https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-08-28-npm-packages.md).
 
 **This skill's job is the gap layer**: what the official package doesn't give you, plus
 enforcing DGA's rules in the code you write around it.

@@ -118,8 +118,13 @@ for (const [fam, ramp] of Object.entries(t.color)) {
   for (const [step, hex] of Object.entries(ramp)) if (!skip(step)) colors[fam][step] = hex
 }
 for (const [group, roles] of Object.entries(t.role)) {
-  // Tailwind cannot swap a literal colour by selector; dark ships as CSS custom properties in
-  // tokens.css instead. `darkMode` below points Tailwind at the same attribute.
+  // The dark group is excluded from BOTH generated outputs, deliberately - see the dark-theme
+  // block below. It is NOT emitted to tokens.css, and no `darkMode` strategy is set here.
+  //
+  // This comment used to claim the opposite ("dark ships as CSS custom properties in tokens.css
+  // instead; `darkMode` below points Tailwind at the same attribute"), which described neither
+  // output and read as an instruction to wire dark up. Acting on it would activate DGA's
+  // unactivatable dark theme, including five status surfaces that measure 1.05:1.
   if (skip(group) || group === 'dark') continue
   colors[group] = {}
   for (const [role, hex] of Object.entries(roles)) if (!skip(role)) colors[group][kebab(role)] = hex

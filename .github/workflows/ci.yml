@@ -1,8 +1,15 @@
-# The offline checks, on every push and pull request.
+# The pre-merge checks, on every push and pull request.
 #
-# None of these touch the network: they compare this repo against itself. That is deliberate -
-# the failure mode this kit actually has is the guidance drifting from the evidence on disk, not
-# DGA moving. The network-facing sentinel is a separate, scheduled workflow (dga-freshness.yml).
+# The GATES are offline: they compare this repo against itself. That is deliberate - the failure
+# mode this kit actually has is the guidance drifting from the evidence on disk, not DGA moving.
+# The DGA-facing sentinel is a separate, scheduled workflow (dga-freshness.yml), and nothing here
+# contacts design.dga.gov.sa.
+#
+# TWO steps do use the network, and neither talks to DGA:
+#   * "Tailwind preset actually builds" installs tailwindcss from npm.
+#   * the installer matrix runs actions/checkout.
+# An earlier version of this header claimed "none of these touch the network" while the Tailwind
+# step ran `npm i`. If you add a networked step, amend this list rather than the claim.
 name: CI
 
 on:
@@ -18,11 +25,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: '3.12'
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: '20'
 
@@ -57,6 +64,24 @@ jobs:
             python -c "import json,sys;json.load(open(sys.argv[1],encoding='utf-8'))" "$f"
           done
 
+      - name: Tailwind preset actually builds
+        # The preset is generated, and until now nothing ran it through Tailwind. A preset that
+        # emits a malformed value fails here, not in a consumer's project. Uses the real compiler
+        # against a fixture, and asserts a DGA token reaches the output CSS.
+        run: |
+          mkdir -p "$RUNNER_TEMP/tw" && cd "$RUNNER_TEMP/tw"
+          npm init -y >/dev/null
+          # Pinned exactly: a floating ^3 makes this smoke test non-reproducible, and a
+          # Tailwind patch release would then look like a preset regression.
+          npm i -D tailwindcss@3.4.17 >/dev/null 2>&1
+          cp "$GITHUB_WORKSPACE/skills/dga-design-system/assets/tailwind-preset.js" preset.mjs
+          printf 'import p from "./preset.mjs";\nexport default {presets:[p],content:["./in.html"]};\n' > tailwind.config.mjs
+          printf '<div class="text-display-md bg-white"></div>\n' > in.html
+          printf '@tailwind base;@tailwind components;@tailwind utilities;\n' > in.css
+          npx tailwindcss -c tailwind.config.mjs -i in.css -o out.css --minify
+          grep -q '44px' out.css || { echo 'preset built but emitted no DGA line-height'; exit 1; }
+          echo 'tailwind preset compiles and emits DGA values'
+
       - name: Installed layout resolves
         # Installs into a scratch HOME so the cross-reference and unshipped-reference checks run
         # against a real installed tree, not the repo layout.
@@ -65,3 +90,72 @@ jobs:
           mkdir -p "$HOME"
           bash install-skills.sh | tee install.log
           grep -q 'cross-references OK' install.log
+
+  # install-skills.sh advertises macOS, and install-skills.ps1 is the documented Windows route.
+  # Neither had ever run on the platform it targets. The `xargs -r` bug this repo just fixed was
+  # exactly that gap: GNU-only, so it broke on macOS while every Linux run stayed green.
+  installers:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            shell: bash
+          - os: ubuntu-latest
+            shell: bash
+          - os: windows-latest
+            shell: pwsh
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Bash installer, into a scratch HOME
+        if: matrix.shell == 'bash'
+        run: |
+          export HOME="$RUNNER_TEMP/fakehome"
+          mkdir -p "$HOME"
+          bash install-skills.sh | tee install.log
+          grep -q 'cross-references OK' install.log
+          test -f "$HOME/.claude/skills/dga-design-system/SKILL.md"
+          test -f "$HOME/.claude/agents/dga-designer.md"
+
+      - name: PowerShell installer, into a scratch -ClaudeHome
+        if: matrix.shell == 'pwsh'
+        shell: pwsh
+        run: |
+          # $HOME is ReadOnly+AllScope in PowerShell and CANNOT be assigned, and
+          # $env:USERPROFILE does not feed it. An earlier version of this step tried both and
+          # died before reaching the installer. -ClaudeHome makes the destination an input.
+          $scratch = Join-Path $env:RUNNER_TEMP 'fakehome'
+          New-Item -ItemType Directory -Force $scratch | Out-Null
+          $realPath = Join-Path $HOME '.claude/skills/dga-design-system'
+          $realBefore = Test-Path $realPath
+          ./install-skills.ps1 -ClaudeHome $scratch
+          foreach ($f in @('skills/dga-design-system/SKILL.md', 'agents/dga-designer.md')) {
+            if (-not (Test-Path (Join-Path $scratch ".claude/$f"))) { throw "$f did not install" }
+          }
+          # Leak check, phrased as a DELTA. Asserting the real profile is simply empty fails on
+          # any machine that already has dga-kit installed - a maintainer's laptop, not just CI.
+          if (-not $realBefore -and (Test-Path $realPath)) {
+            throw 'the installer wrote into the real profile despite -ClaudeHome'
+          }
+          # ...and it removes only what it installed.
+          New-Item -ItemType File -Force (Join-Path $scratch '.claude/skills/NOT-OURS.md') | Out-Null
+          ./install-skills.ps1 -ClaudeHome $scratch -Uninstall
+          if (-not (Test-Path (Join-Path $scratch '.claude/skills/NOT-OURS.md'))) {
+            throw 'uninstall deleted a file it did not install'
+          }
+          if (Test-Path (Join-Path $scratch '.claude/skills/dga-design-system')) {
+            throw 'uninstall left its own skill behind'
+          }
+          Write-Output 'powershell installer installs and uninstalls cleanly'
+
+      - name: Uninstall removes only what it installed
+        if: matrix.shell == 'bash'
+        run: |
+          export HOME="$RUNNER_TEMP/fakehome"
+          touch "$HOME/.claude/skills/NOT-OURS.md"
+          bash install-skills.sh --uninstall || true
+          test -f "$HOME/.claude/skills/NOT-OURS.md" || { echo 'uninstall ate a file it did not install'; exit 1; }
+          test ! -d "$HOME/.claude/skills/dga-design-system" || { echo 'uninstall left its own skill behind'; exit 1; }

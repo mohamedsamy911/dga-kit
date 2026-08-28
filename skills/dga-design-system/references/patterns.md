@@ -314,8 +314,10 @@ different questions of different things:
 
 DGA's own wording:
 
+<!-- dga -->
 > The most important element in the evaluation section is the question, "How would you rate this
 > service?" accompanied by a star rating component.
+<!-- /dga -->
 
 - The star control is the **Rating** component (`/guidelines/components/feedback/rating`) - do not
   substitute a numeric or thumbs control

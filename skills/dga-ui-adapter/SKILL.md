@@ -174,10 +174,12 @@ invisible to this script.
 
 ## Honest limits
 
-- **No dark theme values.** DGA documents a dark variant for every semantic colour but publishes
-  the values only in the PC 1.0 Figma variable collections. Omitted rather than invented — but
-  build components theme-aware from day one, with the dark slot ready and empty. Retrofitting
-  costs far more.
+- **No usable dark theme.** DGA does publish one — 402 declarations in its public CSS — but under
+  `[data-theme=dark] :root`, which can never match. It is complete and unreachable. The values are
+  held in `../dga-design-system/assets/tokens.json` under `role.dark` for audit, and deliberately
+  never generated into `tokens.css`. Do not wire them in: five `*-light` status surfaces have no
+  dark tint at all, so white text on them measures **1.05:1**. Build components theme-aware from
+  day one with the dark slot ready and empty — retrofitting costs far more.
 - **No responsive radius or spacing.** DGA's *semantic* radius and spacing resolve differently on
   Desktop, Tablet and Mobile. The public CSS exposes one value each, so treating them as
   constants is wrong on two of three breakpoints. Figma-only.

@@ -54,7 +54,9 @@ DGA token — see `../dga-design-system/references/CONTRAST-AUDIT.md`.
 
 ## Where DGA is silent — name the fallback
 
-`prefers-reduced-motion` (no motion guidance exists at all) · Arabic screen-reader behaviour ·
+**Motion durations and easings** (none published — but `prefers-reduced-motion` support **is**
+required, on the Filtration, Loading and Skeleton pages, so cite it as a DGA rule rather than a
+WCAG fallback) · Arabic screen-reader behaviour ·
 focus order under RTL · testable cognitive criteria · the accessibility-statement page. For
 each, fall back to WCAG 2.1 AA and **say so in the report** rather than implying a DGA rule.
 

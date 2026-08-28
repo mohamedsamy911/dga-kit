@@ -3,7 +3,18 @@
 **This changes the build plan.** DGA ships an official, actively-maintained component library.
 Do not write DGA components from scratch, and do not use the community `dga-ui-react` package.
 
-**Source:** https://design.dga.gov.sa/developing · retrieved 2026-08-26
+**Sources — two, and they must not be conflated:**
+- **DGA's instruction to install these packages:** https://design.dga.gov.sa/developing ·
+  retrieved 2026-08-26. This is what DGA publishes.
+- **Everything numeric below** — versions, publish dates, release counts, component counts, the
+  RTL count — comes from the **npm registry and the package tarball**, not from any DGA page ·
+  verified 2026-08-28 against `@platformscode/core@0.0.52`
+  (`registry.npmjs.org`, and `dist/types/components.d.ts` inside the tarball).
+
+> ⚠️ An earlier version of this file carried these numbers under the `/developing` citation alone,
+> which implied DGA had published them. It had not. Two of them were also **wrong** — see the
+> corrections below. Package facts change without a DGA release, so re-verify against npm rather
+> than trusting this table; the freshness sentinel does not watch npm.
 
 > To integrate Platforms Code UI React into your project… `npm install platformscode-new-react@latest`
 > — /developing
@@ -13,7 +24,7 @@ Do not write DGA components from scratch, and do not use the community `dga-ui-r
 | Package | Version | What it is |
 |---|---|---|
 | `platformscode-new-react` | 0.1.45 (2026-08-23) | Official React wrappers — **this is the one to install** |
-| `@platformscode/core` | 0.0.52 | The underlying Stencil web-component library, 175 components |
+| `@platformscode/core` | 0.0.52 (2026-08-23) | The underlying Stencil web-component library, **123** components |
 | `@platformscode/react` | 0.1.17 | Older/parallel React binding — confirm with DGA which is current |
 | `platformscode-react` | 0.1.0 | Appears abandoned at 0.1.0 |
 
@@ -24,8 +35,13 @@ Published three days before this harvest — actively maintained.
 
 ## What you get for free
 
-**175 components**, including the UI-shell pieces a government service needs and that most
-third-party kits lack: `dga-header`, `dga-nav-header` (with sub-menu columns and links),
+**123 components** — counted from `dist/types/components.d.ts` in the published tarball, which
+declares 123 distinct `dga-*` tags and 123 matching `HTMLDga*Element` interfaces (the two agree).
+
+> ⚠️ **Corrected 2026-08-28.** This file previously said **175**, a figure that appears in no DGA
+> capture, nowhere else in this kit, and nowhere in the package. Nothing supported it.
+
+They include the UI-shell pieces a government service needs and that most third-party kits lack: `dga-header`, `dga-nav-header` (with sub-menu columns and links),
 `dga-second-nav-header`, `dga-footer`, `dga-drawer`, `dga-slideout-menu`, `dga-table-of-content`.
 
 Plus `dga-data-table`, `dga-datepicker`, `dga-file-upload`, `dga-digital-signature`,
@@ -35,9 +51,17 @@ and the full form set.
 **Icons are bundled.** DGA states the Platforms Code icon set is "included by default in all
 DGA packages… with no separate installation required."
 
-**RTL is handled.** 48 components carry `[dir=rtl]` styling — the standard attribute-driven
-approach, e.g. pagination arrows are transformed under `[dir=rtl]`. Set `dir="rtl"` on `<html>`
-server-side and the library follows.
+**RTL is handled, but partially.** **19** components carry `[dir=rtl]` styling in
+`dist/collection/components` — accordion, breadcrumbs, datepicker, dropdown, header, icon,
+inline-alert, link, menu, notification, notification-toast, pagination, progress-indicator,
+progress-indicator-v3, quote, structured-list, switch, tabs, textarea. The approach is the
+standard attribute-driven one, e.g. pagination arrows are transformed under `[dir=rtl]`. Set
+`dir="rtl"` on `<html>` server-side and the library follows.
+
+> ⚠️ **Corrected 2026-08-28.** This file previously said **48**. That is the number of *published
+> versions* of `@platformscode/core`, not a count of components — the two were conflated. 19 of
+> 123 components carrying explicit RTL styling is a materially different picture, and it means
+> **you must test RTL yourself** rather than assuming the library covers it.
 
 ## ⚠️ What you do NOT get — verified gaps
 
@@ -62,7 +86,8 @@ entirely the consuming app's job. `dga-rtl-i18n` covers this.
 
 ### 3 · Versioning is pre-1.0
 
-`@platformscode/core` at `0.0.52`, React wrappers at `0.1.45`, across 143 published versions.
+`@platformscode/core` at `0.0.52` (48 published versions), React wrappers
+`platformscode-new-react` at `0.1.45` (143 published versions), both last published 2026-08-23.
 Pin exact versions and read the changelog before every bump — pre-1.0 semver gives you no
 breaking-change guarantee.
 

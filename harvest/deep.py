@@ -115,28 +115,71 @@ def digest(text):
     return hashlib.sha256(normalise(text).encode('utf-8')).hexdigest()
 
 
+# Anything that is not plainly a filename character. A capture file is UNTRUSTED input: it can be
+# hand-written, or produced by a driver on a machine this repo does not control, and its keys land
+# in a path. Replacing only '/' is a POSIX assumption - on Windows the backslash is equally a
+# separator, so a key like "/x\..\..\evil" walked straight out of snapshots/. Drive-letter
+# colons and NUL do the same job.
+_UNSAFE = re.compile(r'[^A-Za-z0-9_.-]')
+
+
 def slug_for(route):
-    return route.strip('/').replace('/', '__') or 'root'
+    """A snapshot filename that cannot be anything but a filename.
+
+    Containment is asserted again at the write site - this function is the fence, process() is
+    the check that the fence held.
+    """
+    return _UNSAFE.sub('_', route.strip('/').replace('/', '__'))[:150] or 'root'
+
+
+def snapshot_path(route):
+    """slug_for + the containment check. Raises rather than writing outside SNAPS."""
+    path = os.path.abspath(os.path.join(SNAPS, slug_for(route) + '.txt'))
+    root = os.path.abspath(SNAPS)
+    if path != root and os.path.commonpath([path, root]) != root:
+        raise ValueError('route escapes harvest/snapshots/: ' + repr(route))
+    return path
 
 
 def load_inventory():
     return json.load(io.open(INV, encoding='utf-8'))
 
 
+def _expand(s, bundle):
+    """The concrete routes one source entry covers: itself, or a {group} pattern's members."""
+    if '{' not in s['url']:
+        return [s['url']]
+    for group in ('components', 'templates', 'foundations', 'thoughts'):
+        if s['url'].startswith('/guidelines/' + group) or s['url'].startswith('/' + group):
+            return list(bundle.get(group, []))
+    return []
+
+
 def tier_b_routes(inv):
     """Concrete routes to visit - group patterns expanded from the bundle's route table."""
-    out, bundle = [], (inv['tierA'].get('bundle') or {}).get('routes') or {}
+    bundle = ((inv.get('tierA') or {}).get('bundle') or {}).get('routes') or {}
+    out = []
     for s in inv['sources']:
-        if s['tier'] != 'B':
-            continue
-        if '{' not in s['url']:
-            out.append(s['url'])
-            continue
-        for group in ('components', 'templates', 'foundations', 'thoughts'):
-            if s['url'].startswith('/guidelines/' + group) or s['url'].startswith('/' + group):
-                out += bundle.get(group, [])
-                break
+        if s['tier'] == 'B':
+            out += _expand(s, bundle)
     return sorted(set(out))
+
+
+def unwrap(route, cap):
+    """A capture is either the page text, or EXTRACT_JS's own `{path, text}` result.
+
+    Prefer the second. The router bounces deep links to `/` and a mistimed click lands on the
+    previous page, so text alone cannot say which page it came from - and the SPA is happy to
+    hand you a different route's prose under the name you asked for. When the capture carries
+    `path`, it is checked; a plain string is trusted, because a hand capture has no path to give.
+    """
+    if not isinstance(cap, dict):
+        return cap, None
+    got = (cap.get('path') or '').rstrip('/') or '/'
+    want = route.rstrip('/') or '/'
+    if got != want:
+        return None, 'the browser was on ' + got + ', not ' + want
+    return cap.get('text'), None
 
 
 def process(captures, inv, accept=False, expected=None):
@@ -156,12 +199,20 @@ def process(captures, inv, accept=False, expected=None):
             results.append({'route': route, 'status': 'MISSING',
                             'note': 'the driver never reported this route'})
             continue
+        text, wrong = unwrap(route, text)
+        if wrong:
+            results.append({'route': route, 'status': 'WRONG_PAGE', 'note': wrong})
+            continue
         if not isinstance(text, str) or not text.strip():
             results.append({'route': route, 'status': 'EMPTY', 'note': 'driver returned no text'})
             continue
         norm = normalise(text)
         h = hashlib.sha256(norm.encode('utf-8')).hexdigest()
-        path = os.path.join(SNAPS, slug_for(route) + '.txt')
+        try:
+            path = snapshot_path(route)
+        except ValueError as exc:                     # noqa: PERF203 - one route, keep going
+            results.append({'route': route, 'status': 'UNSAFE_ROUTE', 'note': str(exc)})
+            continue
         was = io.open(path, encoding='utf-8').read() if os.path.exists(path) else None
         if was is None:
             status, diff = 'NEW', ''
@@ -178,17 +229,22 @@ def process(captures, inv, accept=False, expected=None):
 
     # NEW counts as pending: a page with no baseline has never been reviewed, so accepting it
     # silently at exit 0 would let a whole first harvest through unread.
-    pending = [r for r in results if r['status'] in ('CHANGED', 'NEW', 'EMPTY', 'MISSING')]
+    pending = [r for r in results
+               if r['status'] in ('CHANGED', 'NEW', 'EMPTY', 'MISSING', 'WRONG_PAGE',
+                                  'UNSAFE_ROUTE')]
     # A harvest with holes in it cannot be accepted at all - accepting the pages that DID come
     # back would record a partial run as the new baseline, and the missing ones would then look
     # unchanged forever. All or nothing.
-    blocking = [r for r in results if r['status'] in ('EMPTY', 'MISSING')]
+    blocking = [r for r in results
+                if r['status'] in ('EMPTY', 'MISSING', 'WRONG_PAGE', 'UNSAFE_ROUTE')]
 
     if accept and not blocking:
         os.makedirs(SNAPS, exist_ok=True)
         for path, norm in pending_writes:
             io.open(path, 'w', encoding='utf-8').write(norm)
-        _record(inv, results, now)
+        for url, got, want in _record(inv, results, now):
+            print('  SKIPPED  ' + url + ': ' + str(got) + ' of ' + str(want) + ' members '
+                  'captured. Group hash left at its last complete value.')
     return results, pending, blocking
 
 
@@ -198,29 +254,36 @@ def _record(inv, results, now):
     hashMethod is what makes a tier-B hash meaningful: the SPA shell is byte-identical for every
     route, so a hash without browser provenance can only be the shell and would go green forever.
     evals/validate-fixtures.py enforces that.
+
+    A GROUP entry is all-or-nothing. Hashing the members that happened to come back would store
+    a digest of one template page as the whole templates group, and every future run comparing
+    against it would read green while eighteen pages went unwatched. A partial group is skipped
+    and named, so the entry keeps its last complete hash.
     """
     by_route = {r['route']: r for r in results if r.get('sha256')}
+    bundle = ((inv.get('tierA') or {}).get('bundle') or {}).get('routes') or {}
+    skipped = []
     for s in inv['sources']:
         if s['tier'] != 'B':
             continue
-        if s['url'] in by_route:
-            hit = [by_route[s['url']]]
-        else:
-            prefix = s['url'].split('{', 1)[0].rstrip('/') if '{' in s['url'] else None
-            hit = [r for rt, r in by_route.items()
-                   if prefix and rt.startswith(prefix + '/')] if prefix else []
-        if not hit:
+        members = _expand(s, bundle)
+        have = [by_route[m] for m in members if m in by_route]
+        if not have:
             continue
-        if len(hit) == 1 and hit[0]['route'] == s['url']:
-            s['contentHash'] = hit[0]['sha256']
+        if len(have) != len(members):
+            skipped.append((s['url'], len(have), len(members)))
+            continue
+        if len(members) == 1 and members[0] == s['url']:
+            s['contentHash'] = have[0]['sha256']
         else:
             # A group entry hashes the set, so any member changing moves it.
-            joined = ''.join(h['sha256'] for h in sorted(hit, key=lambda x: x['route']))
+            joined = ''.join(h['sha256'] for h in sorted(have, key=lambda x: x['route']))
             s['contentHash'] = hashlib.sha256(joined.encode()).hexdigest()
-            s['memberCount'] = len(hit)
+            s['memberCount'] = len(have)
         s['hashMethod'] = 'browser-innertext'
         s['capturedAt'] = now
     json.dump(inv, io.open(INV, 'w', encoding='utf-8'), indent=2, ensure_ascii=False)
+    return skipped
 
 
 def report(results, pending, blocking, accepted):
@@ -230,8 +293,11 @@ def report(results, pending, blocking, accepted):
         counts[r['status']] = counts.get(r['status'], 0) + 1
     print('  ' + ' · '.join(f'{v} {k}' for k, v in sorted(counts.items())))
     for r in results:
-        if r['status'] in ('CHANGED', 'EMPTY', 'NEW', 'MISSING'):
+        if r['status'] in ('CHANGED', 'EMPTY', 'NEW', 'MISSING', 'WRONG_PAGE',
+                           'UNSAFE_ROUTE'):
             print(f'\n  {r["status"]}  {r["route"]}')
+            if r.get('note'):
+                print('    ' + r['note'])
             if r.get('diff'):
                 for line in r['diff'].splitlines()[:20]:
                     print('    ' + line)
@@ -279,7 +345,9 @@ def drive_playwright(routes):
             try:
                 res = page.evaluate(EXTRACT_JS.replace('{{PATH}}', route))
                 if res and res.get('text'):
-                    out[route] = res['text']
+                    # The whole dict, not res['text'] - process() checks res['path'] against the
+                    # route. Dropping it here is how a bounced click gets filed as the right page.
+                    out[route] = res
                 else:
                     print(f'  FAILED {route}: {res.get("error") if res else "no result"}',
                           file=sys.stderr)

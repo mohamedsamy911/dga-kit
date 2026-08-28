@@ -37,10 +37,12 @@ this kit checks. A slow platform loses marks in a category no design audit will 
 
 DGA publishes three levels and defines them in the page's FAQ:
 
+<!-- dga -->
 > **Mandatory** criteria are non-negotiable and must be met for the project to proceed. […]
 > **Recommended** criteria are not essential for project approval but are advised to enhance
 > quality, user experience, or future scalability. […] **Optional** criteria are additional
 > enhancements […] but are not critical for the current phase of the project.
+<!-- /dga -->
 
 ### Mandatory compliance
 
@@ -97,8 +99,10 @@ project has met an Optional level that DGA has not defined.
 
 ## Submission and timeline
 
+<!-- dga -->
 > Assessment should be submitted **at least two weeks before** the desired review date to allow
 > sufficient time for thorough assessment.
+<!-- /dga -->
 
 The review itself runs about twenty days:
 
@@ -157,10 +161,12 @@ Scored 1–100 and reported as a 1–10 grade:
 DGA says this once, in the page's FAQ, answering *"What happens if a project fails to meet
 mandatory criteria?"*. There is no section of the page with this heading.
 
+<!-- dga -->
 > If a project fails to meet mandatory criteria, it **typically** cannot proceed to deployment.
 > The project team must address the deficiencies identified during the review process and resubmit
 > the project for another review. Critical failures might require significant rethinking of project
 > scope, design, or even objectives.
+<!-- /dga -->
 
 > 🚩 **Keep the word "typically".** DGA describes the normal outcome, not an absolute rule, and it
 > names no exception process — so nobody outside DGA can say when the exception applies. Dropping

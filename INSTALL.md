@@ -17,14 +17,89 @@ uninstall cleanly with `/plugin uninstall dga-kit`.
 
 ## 1b · With OpenAI Codex
 
+```bash
+codex plugin marketplace add mohamedsamy911/dga-kit
+```
+
+```bash
+codex plugin add dga-kit@dga-kit
+```
+
+That installs the **11 skills**. It does not install the agents — see below.
+
+**How this was established.** Codex publishes its own plugin contract locally, in the
+`plugin-creator` system skill that ships with the CLI
+(`~/.codex/skills/.system/plugin-creator/`). The manifest lives at `.codex-plugin/plugin.json`,
+and the repository's copy **passes Codex's own validator**:
+
+```
+$ python ~/.codex/skills/.system/plugin-creator/scripts/validate_plugin.py .
+Plugin validation passed
+```
+
+The catalogue Codex installs *from* is `.agents/plugins/marketplace.json` at the repository root —
+`codex plugin add` installs from a configured marketplace, never from a bare plugin manifest. This
+kit ships one, with a `url` source pointing back at this repository on `master`. The same shape is
+used by [ponytail](https://github.com/DietrichGebert/ponytail), which is installed and working as a
+Codex git marketplace.
+
+> ⚠️ **`"skills": "./skills/"` resolves from the plugin root — do not change it to `"../skills/"`.**
+> Confirmed four ways: Codex's spec, its `validate_plugin.py` (which requires the normalised value
+> `skills`), its scaffold generator, and ponytail's installed manifest. An external review once
+> recommended `"../skills/"`; it would resolve outside the repository and fail validation.
+> `evals/validate-fixtures.py` pins it.
+
+### What Codex does NOT install: the 6 agents
+
+Codex's plugin contract has **no `agents` field** — `validate_plugin.py` rejects one as unknown,
+and nothing discovers `<plugin-root>/agents/`. Codex's own custom agents are TOML under
+`~/.codex/agents/`, not Markdown.
+
+Codex can import Claude Code agents (`external-agent-import-sync-enabled` in `config.toml`), and
+on the machine where this was tested five of this kit's six agents had been converted to TOML that
+way. **Five of six is the point:** `dga-frontend-architect` was missing, and no local log or
+specification explains what performed the conversion. That is a Codex feature that happened, not
+an install path this kit can promise you. If you need the agents under Codex, convert them by hand.
+
+### Still unverified
+
+`interface.capabilities` is `["Skills"]`. The field is schema-valid — the validator accepts any
+array of non-empty strings — but no local enumeration says what Codex does with a given label.
+The published sample uses `["Interactive", "Write"]` and ponytail uses
+`["Instructions", "Lifecycle hooks"]`, so `"Skills"` is **unattested**, not wrong. If you have
+documentation that settles it, [open an issue](https://github.com/mohamedsamy911/dga-kit/issues).
+
+### The manual route
+
+§2 and §3 below are **Claude Code layouts** — `install-skills.sh` and `install-skills.ps1` write to
+`~/.claude/skills` and `~/.claude/agents`, and §2 is `.claude/` inside your project. Codex does not
+read those directories. The skills themselves are plain Markdown with YAML front matter and no
+Claude-specific syntax, so you can copy `skills/` anywhere a tool will read it.
+
 The repository also ships `.codex-plugin/plugin.json` alongside the Claude manifest, and an
 [AGENTS.md](AGENTS.md) at the root. `AGENTS.md` is read by Codex and other agentic tools when
 working **in this repository** — it carries the contributor contract (what may not be hand-edited,
 what must be re-run before committing), not DGA guidance.
 
-⚠️ The `.codex-plugin/plugin.json` schema has not been verified against a published Codex plugin
-specification. If Codex rejects it, that manifest is the thing to correct — the skills themselves
-are plain Markdown and work regardless of how they are loaded.
+**What the manifest looks like, and why.** Paths in it resolve from the **plugin root** — the
+directory containing `.codex-plugin/` — not from the manifest file itself. So `"skills":
+"./skills/"` points at `<repo>/skills/`, which is where they are. This matches
+[ponytail](https://github.com/DietrichGebert/ponytail), a published dual-target plugin whose
+`.codex-plugin/plugin.json` uses the same `"./skills/"` form with its skills at the repo root.
+
+> ⚠️ **Rewriting that to `"../skills/"` breaks it** — it would resolve outside the repository.
+> An external review recommended exactly that change, reasoning that the path is relative to the
+> manifest. It is not. The same review recommended adding `skills`/`agents` keys to
+> `.claude-plugin/plugin.json` and changing the marketplace `source`; both would also break
+> loading, because Claude Code discovers `skills/` and `agents/` by convention from the plugin
+> root. `evals/validate-fixtures.py` now pins all three so the "fix" cannot land by accident.
+
+⚠️ **Still unverified:** whether Codex loads `agents/` at all, and what `interface.capabilities`
+values it recognises. This manifest declares `["Skills"]` and no `agents` key, because no
+published example demonstrates either — and inventing a schema is the same error as inventing a
+DGA rule. If you have Codex plugin documentation that settles it,
+[open an issue](https://github.com/mohamedsamy911/dga-kit/issues); that is a genuinely useful
+contribution.
 
 ## 2 · Per-project — versioned with your code
 
@@ -107,8 +182,14 @@ Ask Claude *"what DGA skills do I have?"*, or run the one piece of the kit that 
 node skills/dga-design-system/assets/check-contrast.mjs --test
 ```
 
-That runs the contrast checker's self-check. `node ... check-contrast.mjs` on its own prints the
-DGA token pairings that fail WCAG AA; add `--ci` to make it exit non-zero, and put it in your
+That runs the contrast checker's self-check — the maths against known values — and is the one
+thing here safe to gate a build on. `node ... check-contrast.mjs` on its own prints the DGA token
+pairings that fail WCAG AA (20: 5 light, 15 dark).
+
+> ⚠️ **Do not put `--ci` in your pipeline as a gate.** It exits non-zero on stock DGA tokens and
+> always will: `text.secondary` fails AA on DGA's own backgrounds, and the script never reads your
+> source, so nothing you write can turn it green. A gate that can only ever be red gets muted, and
+> then it is not a gate. Commit `--json` output as an artefact and diff it; gate on a grep over your
 pipeline.
 
 ## Caveats

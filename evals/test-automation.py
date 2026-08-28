@@ -173,6 +173,179 @@ chk('5. a page the driver never reported is MISSING',
     sorted(r['status'] for r in res) == ['MISSING', 'MISSING'], str(res))
 chk('5. a failed harvest cannot be accepted', len(blocking) == 2, str(blocking))
 
+# A page the browser reported from a DIFFERENT route is worse than a blocked one: the text is
+# real, so it hashes and diffs cleanly, just under the wrong name. The SPA bounces deep links to
+# `/`, so this is the failure most likely to actually happen.
+res, pending, blocking = deep.process(
+    {'/guidelines/templates/home-page': {'path': '/', 'text': 'plausible looking prose'}},
+    {'sources': []})
+chk('5. text captured from the wrong route is WRONG_PAGE, not a clean hash',
+    res[0]['status'] == 'WRONG_PAGE' and 'sha256' not in res[0], str(res))
+chk('5. a wrong-page capture blocks acceptance', len(blocking) == 1, str(blocking))
+res, _, _ = deep.process(
+    {'/guidelines/templates/home-page':
+     {'path': '/guidelines/templates/home-page/', 'text': 'prose'}},
+    {'sources': []})
+chk('5. a trailing slash is not a wrong page', res[0]['status'] != 'WRONG_PAGE', str(res))
+
+# A group source hashed from SOME of its members reads green forever while the rest go unwatched.
+_inv = {'sources': [{'tier': 'B', 'url': '/guidelines/templates/{slug}'}],
+        'tierA': {'bundle': {'routes': {'templates': ['/guidelines/templates/home-page',
+                                                      '/guidelines/templates/hajj-template']}}}}
+_seen = [{'route': '/guidelines/templates/home-page', 'sha256': 'a' * 64}]
+# _record WRITES the inventory. Point it at a scratch file: a fixture that overwrote
+# source-inventory.json is a mistake this repo has already made once.
+_real_inv, deep.INV = deep.INV, os.path.join(tempfile.mkdtemp(), 'inv.json')
+_skipped = deep._record(_inv, _seen, '2026-08-28')
+chk('5. a partly-captured group is skipped, not hashed',
+    'contentHash' not in _inv['sources'][0] and len(_skipped) == 1, str(_inv['sources'][0]))
+_seen.append({'route': '/guidelines/templates/hajj-template', 'sha256': 'b' * 64})
+_skipped = deep._record(_inv, _seen, '2026-08-28')
+chk('5. a complete group is hashed with every member counted',
+    _inv['sources'][0].get('memberCount') == 2 and not _skipped, str(_inv['sources'][0]))
+deep.INV = _real_inv
+chk('5. the real inventory was never touched by the fixture',
+    io.open(deep.INV, encoding='utf-8').read().count('"tier"') > 1, 'INV redirect leaked')
+
+_SRC = io.open(os.path.join(ROOT, 'harvest', 'sources.py'), encoding='utf-8').read()
+
+# A capture file is untrusted input - hand-written, or from a driver on a machine this repo does
+# not control - and its keys become paths. A '/'-only replacement is a POSIX assumption: on
+# Windows the backslash separates too, so these walked out of harvest/snapshots/.
+for _evil in (r'/x\..\..\evil', '/a/../../../etc/passwd',
+              '/C:/Windows/system32/x', r'/x\\server\share'):
+    _slug = deep.slug_for(_evil)
+    chk('5. ' + repr(_evil) + ' cannot escape the snapshot directory',
+        '/' not in _slug and '\\' not in _slug and os.sep not in _slug
+        and os.path.dirname(deep.snapshot_path(_evil)) == os.path.abspath(deep.SNAPS),
+        _slug)
+chk('5. an ordinary route still gets a readable slug',
+    deep.slug_for('/guidelines/templates/home-page') == 'guidelines__templates__home-page',
+    deep.slug_for('/guidelines/templates/home-page'))
+
+# --- --baseline must not discard accepted Tier-B review state -----------------
+# deep.py writes a Tier-B hash only behind --accept, after a human read the diffs. sources()
+# rebuilds every entry with contentHash=None, so a --baseline run silently threw that away.
+_fresh = [{'url': '/a', 'tier': 'B', 'contentHash': None, 'verified': None},
+          {'url': '/gone', 'tier': 'B', 'contentHash': None, 'verified': None},
+          {'url': '/t', 'tier': 'A', 'contentHash': None, 'verified': None}]
+_prev = {'sources': [
+    {'url': '/a', 'tier': 'B', 'contentHash': 'a' * 64, 'hashMethod': 'browser-innertext',
+     'capturedAt': '2026-08-28', 'memberCount': 3, 'verified': True},
+    {'url': '/t', 'tier': 'A', 'contentHash': 'ffff', 'verified': True}]}
+_tmp = os.path.join(tempfile.mkdtemp(), 'inv.json')
+json.dump(_prev, io.open(_tmp, 'w', encoding='utf-8'))
+_real_out, sources.OUT = sources.OUT, _tmp
+_carried = sources._carry_accepted(json.loads(json.dumps(_fresh)))
+sources.OUT = _real_out
+_by = {s['url']: s for s in _carried}
+chk('B. --baseline keeps an accepted tier-B hash',
+    _by['/a']['contentHash'] == 'a' * 64 and _by['/a']['memberCount'] == 3
+    and _by['/a']['hashMethod'] == 'browser-innertext', str(_by['/a']))
+chk('B. a tier-B source with no prior acceptance stays null',
+    _by['/gone']['contentHash'] is None, str(_by['/gone']))
+chk('B. tier A is refetched, never carried',
+    _by['/t']['contentHash'] is None, 'tier A must come from the live fetch, not the old file')
+# Testing _carry_accepted() in isolation proves the function works, not that anything calls it -
+# and break-testing showed exactly that hole: removing the call from build() failed nothing. Pin
+# the call site, which is the part that can be dropped by accident.
+chk('B. build() actually routes sources() through _carry_accepted',
+    '_carry_accepted(sources())' in _SRC,
+    'the carry-forward is unreachable; --baseline would still wipe accepted tier-B hashes')
+
+# --- a 200 maintenance/proxy page must not become a baseline ------------------
+# The failure this prevents is the quiet one: with no /assets/index-<hash> links, buildHash is
+# None on both sides forever after, so every later --check compares nothing and reports a quiet
+# week. The sentinel looks healthy precisely because it was blinded.
+_saved = sources.fetch
+for _label, _body, _status in (
+        ('a maintenance page', b'<html><body>We are back soon</body></html>', 200),
+        ('a captive proxy', b'<html><head><title>Sign in</title></head></html>', 200)):
+    sources.fetch = lambda url, timeout=45, _b=_body, _s=_status: (_s, _b)
+    try:
+        sources.tier_a_baselines()
+        _refused = False
+    except sources.NotTheSite:
+        _refused = True
+    except Exception:                                  # noqa: BLE001 - any other error is a bug
+        _refused = False
+    chk('C. ' + _label + ' answering 200 is refused as a baseline', _refused,
+        'a baseline with no build-hash tripwire reports a quiet week forever')
+# The nastier shape: a VALID shell - real markup, real /assets/index-<hash> links, so the build
+# hashes read out fine - in front of a proxy that answers the two asset requests with a login
+# page. Every response is a 200. Guarding only the shell (which an earlier version did) let this
+# write a baseline carrying real-looking build hashes beside zero tokens and zero routes, and
+# every later --check then compared that emptiness against itself and reported a quiet week.
+_GOOD_SHELL = (b'<!doctype html><html><head>'
+               b'<link rel="stylesheet" href="/assets/index-abc123.css">'
+               b'<script type="module" src="/assets/index-def456.js"></script>'
+               b'</head><body><div id="root"></div></body></html>')
+_GOOD_CSS = b':root{' + b''.join(b'--tok-%d:#000;' % i for i in range(300)) + b'}'
+_GOOD_JS = (b'"/guidelines/components/actions/buttons","/guidelines/templates/home-page",'
+            b'"/guidelines/foundations/color-system","/thoughts/atomic-design"')
+_PROXY = b'<!DOCTYPE html><html><head><title>Sign in</title></head><body>SSO</body></html>'
+
+
+def _serve(css_body, css_status, js_body, js_status):
+    def _f(url, timeout=45):
+        if url.endswith('.css'):
+            return css_status, css_body
+        if url.endswith('.js'):
+            return js_status, js_body
+        if url.endswith('.xml'):
+            return 200, b'<urlset><loc>https://design.dga.gov.sa/</loc></urlset>'
+        if url.endswith('robots.txt'):
+            return 200, b'Allow: /'
+        return 200, _GOOD_SHELL
+    return _f
+
+
+_saved = sources.fetch
+for _label, _args in (
+        ('a proxy login page for the stylesheet', (_PROXY, 200, _GOOD_JS, 200)),
+        ('a proxy login page for the JS bundle', (_GOOD_CSS, 200, _PROXY, 200)),
+        ('a 503 on the stylesheet', (b'nope', 503, _GOOD_JS, 200)),
+        ('a 503 on the JS bundle', (_GOOD_CSS, 200, b'nope', 503)),
+        # The status check is only load-bearing when the BODY would otherwise pass: a CDN serving
+        # stale-but-valid content under a 5xx. With a junk body the content check catches it first,
+        # so deleting the status check failed nothing - which is what break-testing showed.
+        ('a 503 carrying an otherwise-valid stylesheet', (_GOOD_CSS, 503, _GOOD_JS, 200)),
+        ('a 503 carrying an otherwise-valid JS bundle', (_GOOD_CSS, 200, _GOOD_JS, 503)),
+        ('a 403 carrying an otherwise-valid stylesheet', (_GOOD_CSS, 403, _GOOD_JS, 200)),
+        ('an empty stylesheet', (b'   ', 200, _GOOD_JS, 200)),
+        ('a stylesheet with almost no custom properties',
+         (b':root{--only-one:#fff;}', 200, _GOOD_JS, 200)),
+        ('a JS bundle with no route table', (_GOOD_CSS, 200, b'console.log(1)', 200))):
+    sources.fetch = _serve(*_args)
+    try:
+        sources.tier_a_baselines()
+        _refused = False
+    except sources.NotTheSite:
+        _refused = True
+    except Exception:                                  # noqa: BLE001 - anything else is a bug
+        _refused = False
+    chk('C. a valid shell with ' + _label + ' is refused as a baseline', _refused,
+        'the build hash would be recorded beside empty facts, and read as a quiet week forever')
+
+# ...and the same fixture with HEALTHY assets must still be accepted, or the guard is just a
+# refusal to work.
+sources.fetch = _serve(_GOOD_CSS, 200, _GOOD_JS, 200)
+try:
+    _ok = sources.tier_a_baselines()
+    _built = bool(_ok.get('stylesheet') and _ok.get('bundle'))
+except Exception as _exc:                              # noqa: BLE001
+    _built, _ok = False, str(_exc)
+chk('C. a valid shell with healthy assets still builds a baseline', _built, str(_ok)[:200])
+
+sources.fetch = lambda url, timeout=45: (503, b'<html>maintenance</html>')
+try:
+    sources.tier_a_baselines()
+    _refused = False
+except sources.NotTheSite:
+    _refused = True
+sources.fetch = _saved
+chk('C. a non-200 shell is refused as a baseline', _refused)
+
 # --- 6. a contradiction is reported, never resolved ---------------------------
 # (a) live vs contract. The sentinel must report the disagreement and NOT adopt the live number:
 #     a monitor that rewrites its own contract has stopped being a contract.
@@ -196,10 +369,9 @@ chk('6. the roadmap vs change-log date contradiction is still recorded',
     and 'Feb 2024' in _cov and '2025' in _cov, '')
 
 # --- the review gate holds across all of it ----------------------------------
-_src = io.open(os.path.join(ROOT, 'harvest', 'sources.py'), encoding='utf-8').read()
 chk('gate: compare() writes nothing',
-    'def compare(' in _src
-    and 'json.dump' not in _src.split('def compare(')[1].split('def check(')[0],
+    'def compare(' in _SRC
+    and 'json.dump' not in _SRC.split('def compare(')[1].split('def check(')[0],
     'the comparison must not be able to accept its own finding')
 
 print()

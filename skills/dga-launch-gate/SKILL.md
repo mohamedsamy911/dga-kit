@@ -77,8 +77,25 @@ The entity is scored against these; adopting Platforms Code feeds both:
 - [ ] **Digital Experience Maturity Indicator**
 - [ ] DGA's own **Assessment Criteria** — `/AssessmentCriteria`, captured 2026-08-27
 
-> `TODO(harvest)` — the **two indicators** are published **outside** design.dga.gov.sa. This skill
-> is not complete until they are captured. Say so rather than implying full coverage.
+> `TODO(harvest)` — the **two indicators** are published **outside** design.dga.gov.sa and have
+> NOT been captured. This skill is not complete until they are.
+>
+> ## The verdict is INCOMPLETE, not PASS
+>
+> While the two indicators are uncaptured, **this skill may not issue a PASS.** The permitted
+> overall verdicts are:
+>
+> | Verdict | When |
+> |---|---|
+> | **FAIL** | any checked item fails. A failure found against a partial rubric is still a real failure. |
+> | **INCOMPLETE** | everything checked passes, but the two Measurement Indicators were not scored because the kit does not hold them. |
+>
+> **PASS is unavailable.** It would assert that the platform meets DGA's requirements, and this
+> skill cannot see two of the regimes it is scored against — so a PASS would be an unearned
+> go-live approval carrying this kit's name. Report INCOMPLETE, name the two missing inputs, and
+> say plainly that clearing them requires the entity's own reading of the indicators. A green
+> artefact that quietly excludes part of the rubric is worse than no artefact: it gets forwarded
+> to people who will not read this paragraph.
 
 **The Assessment Criteria are published.** Full rubric in `references/assessment-criteria.md` —
 read it before any go-live call. In short:

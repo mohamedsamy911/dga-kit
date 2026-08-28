@@ -3,6 +3,7 @@
   project. Only needed if you are NOT installing via the plugin marketplace - see INSTALL.md.
 
     powershell -ExecutionPolicy Bypass -File .\install-skills.ps1
+    powershell -ExecutionPolicy Bypass -File .\install-skills.ps1 -ClaudeHome D:\scratch
     powershell -ExecutionPolicy Bypass -File .\install-skills.ps1 -Force
     powershell -ExecutionPolicy Bypass -File .\install-skills.ps1 -Uninstall
     powershell -ExecutionPolicy Bypass -File .\install-skills.ps1 -CleanLegacy
@@ -18,14 +19,22 @@
   2 is what makes a corrupted manifest harmless. Nothing is ever removed by name alone, and a
   path the manifest does not claim is treated as YOURS and left untouched.
 #>
-param([switch]$Uninstall, [switch]$Force, [switch]$CleanLegacy)
+# -ClaudeHome exists so this script can be TESTED. It defaults to $HOME and you should not pass
+# it by hand. PowerShell's $HOME is ReadOnly+AllScope, so a test harness cannot redirect the
+# install by assigning it, and $env:USERPROFILE does not feed $HOME either - which meant CI had no
+# way to run this script without writing into the real profile. A parameter is the honest fix: the
+# destination becomes an input instead of an ambient fact.
+param([switch]$Uninstall, [switch]$Force, [switch]$CleanLegacy,
+      [string]$ClaudeHome = $HOME)
+
+if ([string]::IsNullOrWhiteSpace($ClaudeHome)) { throw '-ClaudeHome cannot be empty' }
 
 $ErrorActionPreference = 'Stop'
 $src      = Join-Path $PSScriptRoot 'skills'
-$dest     = Join-Path $HOME '.claude\skills'
+$dest     = Join-Path $ClaudeHome '.claude\skills'
 $asrc     = Join-Path $PSScriptRoot 'agents'
-$adest    = Join-Path $HOME '.claude\agents'
-$manifest = Join-Path $HOME '.claude\.dga-kit-manifest'
+$adest    = Join-Path $ClaudeHome '.claude\agents'
+$manifest = Join-Path $ClaudeHome '.claude\.dga-kit-manifest'
 
 $skills = @('dga-design-system','dga-design-review','dga-react','dga-ui-adapter','dga-rtl-i18n',
             'dga-handoff','dga-mockup','dga-a11y','dga-launch-gate','dga-tokens-sync',

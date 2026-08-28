@@ -18,8 +18,11 @@ with Arabic poured into it is the single most common failure and it never fully 
 
 ## What DGA actually says about RTL
 
-The harvest is complete, and the answer is: **very little.** DGA speaks to RTL in exactly six
-places across 50 component pages and 19 templates. These are your citable rules:
+The harvest is complete, and the answer is: **very little.** Across 50 component pages and 19
+templates, these are the statements the harvest found. ⚠️ **Cite them, never a count** — the
+total has not been verified against the live site, and the repo carries it as
+`TODO(verify)` in [the coverage record](https://github.com/mohamedsamy911/dga-kit/blob/master/COVERAGE.md). Item 6 is library code, not guidance, which is exactly the kind of conflation a
+number hides.
 
 1. **Quote** — the only dedicated RTL accessibility section: *"Support for Right-to-Left (RTL)
    Languages — use the `dir="rtl"` attribute or apply appropriate CSS styling to ensure the text

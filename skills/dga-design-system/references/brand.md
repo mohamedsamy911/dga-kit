@@ -61,8 +61,10 @@ surface.
 
 `/thoughts/consistency-and-unified-identity` · retrieved 2026-08-27
 
+<!-- dga -->
 > The IBM Plex Sans font has been chosen as the unified font for **all platforms in the Kingdom of
 > Saudi Arabia**.
+<!-- /dga -->
 
 DGA's four stated reasons:
 

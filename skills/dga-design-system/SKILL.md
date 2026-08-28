@@ -16,9 +16,15 @@ reads from here rather than carrying its own copy of the rules.
 >
 > **Known gaps, stated so no answer implies coverage it lacks:** the Digital Transformation and
 > Digital Experience Maturity indicators (published outside design.dga.gov.sa); the responsive
-> radius/spacing and dark-theme values (PC 1.0 Figma variable collections only); the six
-> mobile-only component specs; the Assessment Criteria **checklist file** (the rubric page itself
-> is captured — see `../dga-launch-gate/references/assessment-criteria.md`).
+> radius/spacing values (PC 1.0 Figma variable collections only); the six mobile-only component
+> specs; the Assessment Criteria **checklist file** (the rubric page itself is captured — see
+> `../dga-launch-gate/references/assessment-criteria.md`).
+>
+> **Dark theme: published, and unusable.** Not Figma-only, as this kit used to say. DGA ships
+> **402 dark declarations** in its public CSS — under `[data-theme=dark] :root`, a selector that
+> can never match. Carried in `assets/tokens.json` under `role.dark` for **audit only**, and
+> deliberately not generated into `tokens.css`. Never hand a caller these values as a working
+> dark theme: five `*-light` status surfaces have no dark tint anywhere, measuring **1.05:1**.
 >
 > **Version:** the published system is **PC 1.0.3**, released 4 Nov 2025. The 2026-08-26 token
 > harvest postdates it. See `dga-version.md`.

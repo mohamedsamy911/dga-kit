@@ -134,6 +134,9 @@ Ordered by compliance risk, not effort. This is the same list whatever your libr
 4. **Navigation Header** + **Second Nav Header**
 5. **Skip link**, if your library has none
 6. **Table of Contents**
-7. **Hijri date wrapper** around the date picker
+7. **Hijri date wrapper** around the date picker — ⚠️ **not a DGA requirement.** DGA states no
+   calendar policy at all, and its own demos are Gregorian (see `../../dga-rtl-i18n/SKILL.md`).
+   This sits on a compliance-ordered list, so read it as: *if your project decided on Hijri*,
+   nothing ships it for you. Do not report its absence as a DGA finding.
 8. **Filtration** composite
 9. Mobile shell components, once the Figma kit is in hand
