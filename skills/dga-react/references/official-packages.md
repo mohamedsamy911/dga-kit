@@ -16,8 +16,34 @@ Do not write DGA components from scratch, and do not use the community `dga-ui-r
 > corrections below. Package facts change without a DGA release, so re-verify against npm rather
 > than trusting this table; the freshness sentinel does not watch npm.
 
-> To integrate Platforms Code UI React into your project… `npm install platformscode-new-react@latest`
-> — /developing
+<!-- dga -->
+> To integrate Platforms Code UI React into your project, you can use your preferred package
+> manager. Follow the instructions below to add it as a dependency:
+<!-- /dga -->
+
+DGA gives npm and yarn. Either is fine; the packages are identical.
+
+```bash
+npm install platformscode-new-react@latest
+```
+
+```bash
+yarn add platformscode-new-react@latest
+```
+
+<!-- dga -->
+> This will install the latest version of Platforms Code UI React, allowing you to utilize our
+> robust library of React components in your applications.
+<!-- /dga -->
+
+Source: <https://design.dga.gov.sa/developing>, captured 2026-08-28 —
+[the raw capture](https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-08-28-developing.md).
+
+> ⚠️ An earlier version of this file rendered the instruction as
+> *"To integrate Platforms Code UI React into your project… `npm install …`"*, splicing the
+> opening of one sentence onto a command that appears further down the page. Both halves are
+> DGA's, but DGA never wrote that sentence. An ellipsis is not a licence to join text DGA
+> separated.
 
 ## What ships
 

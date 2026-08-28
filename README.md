@@ -174,7 +174,7 @@ deployment" into an unconditional block. No amount of watching DGA catches those
 `evals/check-quote-fidelity.py` compares the DGA quotes it *can* — those whose source page has
 been captured — against that captured text, and fails on a quote that reproduces a capture
 without matching it. It found two real defects on its first run. Be clear about its reach: only
-**2 DGA pages are captured**, so 7 of 88 blockquotes are checkable and the other 81 are
+**2 DGA pages are captured**, so 14 of 92 blockquotes are checkable and the other 78 are
 **unverifiable, not verified**. A quote fenced as DGA's own words with no capture behind it fails
 the run.
 
@@ -200,7 +200,7 @@ harvest/    the evidence behind every rule, and the monitoring that keeps it hon
               FRESHNESS.md        generated: last check, what moved, review pending?
 evals/      23 eval cases across two suites, plus three checkers:
               validate-fixtures.py     the kit against its own tokens and evidence
-              check-quote-fidelity.py  the DGA quotes a capture covers (7 of 88 today)
+              check-quote-fidelity.py  the DGA quotes a capture covers (14 of 92 today)
               test-automation.py       whether the monitoring detects what it claims to
 .github/    CI on push, and the weekly freshness sentinel
 ```

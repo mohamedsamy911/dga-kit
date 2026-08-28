@@ -169,6 +169,23 @@ the whole answer:
 > review date to allow sufficient time for thorough assessment.
 <!-- /dga -->
 
+### Checklist and pre-submission guidance
+
+<!-- dga -->
+> Download the checklist and use it at each project stage, not just at the end. Mark the
+> "Compliance Status" and add comments if needed. Include the checklist with your project
+> submission.
+>
+> The checklist is updated regularly. While it's for self-evaluation, a formal review will ensure
+> your project meets all criteria.
+>
+> Before submitting your project, have someone else review the checklist to ensure all criteria
+> are met.
+>
+> Prepare documentation showing how each criterion was met, including references, screenshots,
+> and code snippets. This is crucial for formal reviews or audits.
+<!-- /dga -->
+
 ### Review timeline
 
 | Days | Stage | Contents |

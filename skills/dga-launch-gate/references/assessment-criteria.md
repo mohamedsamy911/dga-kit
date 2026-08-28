@@ -38,10 +38,15 @@ this kit checks. A slow platform loses marks in a category no design audit will 
 DGA publishes three levels and defines them in the page's FAQ:
 
 <!-- dga -->
-> **Mandatory** criteria are non-negotiable and must be met for the project to proceed. […]
+> **Mandatory** criteria are non-negotiable and must be met for the project to proceed. These
+> often relate to legal, security, and core functionality requirements.
+
 > **Recommended** criteria are not essential for project approval but are advised to enhance
-> quality, user experience, or future scalability. […] **Optional** criteria are additional
-> enhancements […] but are not critical for the current phase of the project.
+> quality, user experience, or future scalability. Meeting these can differentiate the project
+> positively.
+
+> **Optional** criteria are additional enhancements that could provide a competitive advantage or
+> long-term benefits but are not critical for the current phase of the project.
 <!-- /dga -->
 
 ### Mandatory compliance
@@ -133,7 +138,8 @@ DGA's own advice on preparing it:
 > Download the checklist and use it **at each project stage, not just at the end**. […] The
 > checklist is updated regularly.
 
-> Before submitting your project, have **someone else** review the checklist.
+> Before submitting your project, have **someone else** review the checklist to ensure all
+> criteria are met.
 
 ---
 

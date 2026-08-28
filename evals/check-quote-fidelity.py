@@ -227,6 +227,7 @@ def main():
         return 1 if '--ci' in sys.argv else 0
 
     verified, drift, stitched, unverifiable, marked = [], [], [], [], []
+    elided = []
     for d, _, fs in os.walk(os.path.join(ROOT, 'skills')):
         for fn in sorted(fs):
             if not fn.endswith('.md'):
@@ -242,10 +243,33 @@ def main():
                 frags = [f.strip() for f in ELISION.split(q) if len(f.strip()) >= MIN_FRAGMENT]
                 # Every fragment must come from ONE captured block. Checking against the whole
                 # corpus would accept a quote stitched together from two unrelated DGA passages.
+                # An ELIDED quote (one containing an ellipsis) is not verbatim, even when every
+                # fragment sits in the same captured passage. The old rule accepted exactly that:
+                #   "To integrate Platforms Code UI React into your project… npm install …"
+                # spliced the opening of one sentence onto a command from further down the page,
+                # and would have reported VERIFIED VERBATIM. It escaped only because the quote
+                # wrapped the command in backticks the capture lacks. Elision is legitimate
+                # quoting; claiming it is verbatim is not. Fragments must also appear IN ORDER,
+                # or the ellipsis is concealing a reordering of what DGA wrote.
+                def _in_order(body, parts):
+                    at = -1
+                    for part in parts:
+                        nxt = body.find(part, at + 1)
+                        if nxt <= at:
+                            return False
+                        at = nxt + len(part) - 1
+                    return True
+
                 hit = next((src for src, body in blocks
-                            if frags and all(f in body for f in frags)), None)
+                            if frags and all(f in body for f in frags)
+                            and _in_order(body, frags)), None)
                 if hit:
-                    verified.append((rel, line, q, hit))
+                    (elided if len(frags) > 1 else verified).append((rel, line, q, hit))
+                    continue
+                _scrambled = next((src for src, body in blocks
+                                   if frags and all(f in body for f in frags)), None)
+                if _scrambled:
+                    stitched.append((rel, line, q, [_scrambled]))
                     continue
                 # Every fragment is captured, but no ONE passage holds them all: the quote joins
                 # things DGA said in different places into a single blockquote. Report it as its
@@ -310,9 +334,20 @@ def main():
             for src in srcs:
                 out.write(f'    drawn from: {src}\n')
 
-    checked = len(verified) + len(drift) + len(stitched)
+    # Coverage asks whether every blockquote has source evidence. An ellided quote has evidence
+    # but is intentionally not counted as verbatim, so include it here while reporting it
+    # separately above.
+    checked = len(verified) + len(elided) + len(drift) + len(stitched)
     total = checked + len(unverifiable)
     out.write(f'\nVERIFIED verbatim against a capture: {len(verified)}\n')
+    if elided:
+        out.write(f"VERIFIED but ELIDED - DGA's fragments, in order, joined by an "
+                  f'ellipsis: {len(elided)}\n')
+        out.write('  Legitimate quoting, but NOT verbatim: DGA did not write these as one\n'
+                  '  sentence. Check each reads fairly rather than implying a claim DGA\n'
+                  '  made only in pieces.\n')
+        for _er, _el, _eq, _esrc in elided:
+            out.write(f'    {_er}:{_el}  <- {_esrc}\n')
     out.write(f'UNVERIFIABLE - no capture covers the source page: {len(unverifiable)}\n')
     if total:
         out.write(f'\nBlockquote coverage: {checked}/{total} blockquote paragraphs in skills/ '
@@ -326,12 +361,16 @@ def main():
     # The honest figure: of the blockquotes that CLAIM to be DGA's words, how many are backed by
     # a capture. Denominator is a claim of authorship, not a count of paragraphs.
     _mk = {(r, l) for r, l in marked}
-    _mk_ok = len([1 for r, l, _q, _h in verified if (r, l) in _mk])
+    _backed = {(r, l) for r, l, _q, _h in verified} | {(r, l) for r, l, _q, _h in elided}
+    _mk_ok = len(_mk & _backed)
     out.write(f'\nDGA-marked quotes: {len(_mk)} blockquote(s) in skills/ are fenced as DGA\'s '
               f'own words.\n')
     if _mk:
-        out.write(f'  {_mk_ok}/{len(_mk)} ({_mk_ok * 100 // len(_mk)}%) are verified verbatim '
-                  f'against a capture.\n')
+        _mk_verb = len(_mk & {(r, l) for r, l, _q, _h in verified})
+        _mk_elid = _mk_ok - _mk_verb
+        out.write(f'  {_mk_ok}/{len(_mk)} ({_mk_ok * 100 // len(_mk)}%) are backed by a capture'
+                  + (f' ({_mk_verb} verbatim, {_mk_elid} elided).\n' if _mk_elid
+                     else ', all verbatim.\n'))
         if _mk_ok == len(_mk):
             out.write('  ⚠ That 100% is TAUTOLOGICAL while the marked set is exactly the proven\n'
                       '  set. The fences were bootstrapped from quotes this checker had already\n'
@@ -339,7 +378,7 @@ def main():
                       '  something the moment a maintainer marks a quote on their own judgement:\n'
                       '  if no capture backs it, it is listed here as an unsubstantiated claim of\n'
                       '  DGA authorship. Mark quotes as you write them; do not wait for a capture.\n')
-        _unbacked = sorted(_mk - {(r, l) for r, l, _q, _h in verified})
+        _unbacked = sorted(_mk - _backed)
         if _unbacked:
             out.write(f'  {len(_unbacked)} marked quote(s) have NO capture behind them - a claim '
                       f'of DGA authorship\n  this repo cannot substantiate. That is the violation '

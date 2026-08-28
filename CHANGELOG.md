@@ -103,7 +103,7 @@ if you installed that version.
   has no `agents` field. Converting them to Codex's TOML agent format is unstarted.
 - **`interface.capabilities` is `["Skills"]`, unattested.** Schema-valid, but no local
   enumeration says what Codex does with a given capability label.
-- **Quote coverage**: only 2 DGA pages are captured, so 81 of 88 blockquotes cannot be checked
+- **Quote coverage**: only 2 DGA pages are captured, so 78 of 92 blockquotes cannot be checked
   against a source. Raising this needs a capture run, never an edit to a reference.
 
 ## 0.6.0
