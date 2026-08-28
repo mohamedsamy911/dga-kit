@@ -774,8 +774,51 @@ if os.path.exists(_inv_path):
     chk('codex: INSTALL.md no longer claims there is no verified Codex path',
         'no verified Codex install path' not in _install_md)
     chk('codex: INSTALL.md still says the agents are not installed by Codex',
-        'no `agents` field' in _install_md,
+        'no top-level `agents` field' in ' '.join(_install_md.split()),
         'Codex installs the skills only - promising the agents would be a false claim')
+
+    # --- per-skill Codex UI metadata -----------------------------------------
+    # `<skill>/agents/openai.yaml` is read by Codex's own validator at
+    # `skill_root / "agents" / "openai.yaml"` (validate_plugin.py:464). It is UI metadata and
+    # invocation policy - NOT an agent definition, and NOT the repo-root agents/ directory. This
+    # kit's docs conflated those two, so both halves are pinned: the files must exist and be
+    # valid, and INSTALL.md must keep the distinction.
+    _sk_dir = os.path.join(ROOT, 'skills')
+    _skills = sorted(d for d in os.listdir(_sk_dir) if os.path.isdir(os.path.join(_sk_dir, d)))
+    _missing_yaml, _bad_yaml = [], []
+    for _sk in _skills:
+        _y = os.path.join(_sk_dir, _sk, 'agents', 'openai.yaml')
+        if not os.path.isfile(_y):
+            _missing_yaml.append(_sk)
+            continue
+        _txt = open(_y, encoding='utf-8').read()
+        # short_description is capped at 25-64 chars by openai_yaml.md; default_prompt must name
+        # the skill as $skill-name or the starter prompt invokes nothing.
+        _m = re.search(r'short_description:\s*"([^"]*)"', _txt)
+        _p = re.search(r'default_prompt:\s*"([^"]*)"', _txt)
+        if not _m or not (25 <= len(_m.group(1)) <= 64):
+            _bad_yaml.append(f'{_sk}: short_description '
+                             f'{len(_m.group(1)) if _m else "missing"} chars, must be 25-64')
+        if not _p or ('$' + _sk) not in _p.group(1):
+            _bad_yaml.append(f'{_sk}: default_prompt must mention ${_sk}')
+        # Naming an icon path that does not exist is a broken reference in the Codex UI.
+        for _icon in re.findall(r'icon_(?:small|large):\s*"([^"]*)"', _txt):
+            if not os.path.isfile(os.path.join(_sk_dir, _sk, _icon.lstrip('./'))):
+                _bad_yaml.append(f'{_sk}: icon {_icon} does not exist')
+    chk('codex: every skill ships agents/openai.yaml', not _missing_yaml, str(_missing_yaml))
+    chk('codex: every openai.yaml meets the documented constraints', not _bad_yaml,
+        str(_bad_yaml))
+    chk('codex: openai.yaml is present for all 11 skills', len(_skills) == 11, str(len(_skills)))
+
+    # The distinction the docs got wrong: skill-level agents/openai.yaml (metadata, read) vs a
+    # repo-root agents/ directory (agent definitions, NOT installed by Codex).
+    # Whitespace-collapsed: these phrases wrap across lines in the rendered paragraph, and
+    # matching raw text made the check fail on re-wrapping rather than on meaning.
+    _inst = open(os.path.join(ROOT, 'INSTALL.md'), encoding='utf-8').read()
+    _inst_flat = ' '.join(_inst.split())
+    chk('codex: INSTALL.md keeps the two meanings of agents/ apart',
+        'agents/openai.yaml' in _inst_flat and 'no top-level `agents` field' in _inst_flat,
+        'the page must not imply Codex has no agents/ concept - it has one, for skill metadata')
 
     # Whatever the manifests claim must actually be there.
     chk('manifest: the skills directory the codex manifest names exists',

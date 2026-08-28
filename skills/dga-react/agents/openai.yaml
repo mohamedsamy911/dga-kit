@@ -1,0 +1,11 @@
+interface:
+  display_name: "DGA React"
+  short_description: "Build on DGA's official React component library"
+  brand_color: "#1B8354"
+  default_prompt: "Use $dga-react to build this view on the official Platforms Code library."
+
+policy:
+  # Codex defaults this to true. Pinned rather than inherited: these are compliance
+  # skills, and the failure mode of a changed default is that they silently stop
+  # loading - a team then ships believing it was checked.
+  allow_implicit_invocation: true

@@ -1,0 +1,11 @@
+interface:
+  display_name: "DGA Brand Overlay"
+  short_description: "Layer an entity brand over the DGA baseline"
+  brand_color: "#1B8354"
+  default_prompt: "Use $dga-brand-overlay to record our entity brand on top of Platforms Code."
+
+policy:
+  # Codex defaults this to true. Pinned rather than inherited: these are compliance
+  # skills, and the failure mode of a changed default is that they silently stop
+  # loading - a team then ships believing it was checked.
+  allow_implicit_invocation: true

@@ -1,0 +1,11 @@
+interface:
+  display_name: "DGA RTL and Arabic"
+  short_description: "Arabic-first RTL layout and localisation"
+  brand_color: "#1B8354"
+  default_prompt: "Use $dga-rtl-i18n to make this interface work correctly in Arabic."
+
+policy:
+  # Codex defaults this to true. Pinned rather than inherited: these are compliance
+  # skills, and the failure mode of a changed default is that they silently stop
+  # loading - a team then ships believing it was checked.
+  allow_implicit_invocation: true

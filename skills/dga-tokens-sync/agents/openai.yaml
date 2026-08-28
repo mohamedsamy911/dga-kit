@@ -1,0 +1,11 @@
+interface:
+  display_name: "DGA Token Sync"
+  short_description: "Re-harvest DGA tokens and diff the changes"
+  brand_color: "#1B8354"
+  default_prompt: "Use $dga-tokens-sync to check whether DGA has changed its design tokens."
+
+policy:
+  # Codex defaults this to true. Pinned rather than inherited: these are compliance
+  # skills, and the failure mode of a changed default is that they silently stop
+  # loading - a team then ships believing it was checked.
+  allow_implicit_invocation: true

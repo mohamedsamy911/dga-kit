@@ -51,15 +51,27 @@ Codex git marketplace.
 
 ### What Codex does NOT install: the 6 agents
 
-Codex's plugin contract has **no `agents` field** — `validate_plugin.py` rejects one as unknown,
-and nothing discovers `<plugin-root>/agents/`. Codex's own custom agents are TOML under
-`~/.codex/agents/`, not Markdown.
+`codex plugin add` installs this kit's **11 skills**. It does **not** register the six Markdown
+files in the repository-root `agents/` directory as Codex agents: Codex's plugin manifest has no
+top-level `agents` field — `validate_plugin.py` rejects unknown keys — and this kit declares only
+`"skills": "./skills/"`.
 
-Codex can import Claude Code agents (`external-agent-import-sync-enabled` in `config.toml`), and
-on the machine where this was tested five of this kit's six agents had been converted to TOML that
-way. **Five of six is the point:** `dga-frontend-architect` was missing, and no local log or
-specification explains what performed the conversion. That is a Codex feature that happened, not
-an install path this kit can promise you. If you need the agents under Codex, convert them by hand.
+> ⚠️ **Do not read that as "Codex has no `agents/` concept."** It does, and this kit uses it —
+> just for something else. A *skill* may carry `agents/openai.yaml`, which Codex's own validator
+> reads at `skill_root / "agents" / "openai.yaml"`, for **UI metadata and invocation policy**:
+> display name, description, brand colour, starter prompt. All 11 skills here ship one. That is a
+> different thing from a repository-root `agents/` folder holding agent definitions, and an
+> earlier version of this page conflated the two.
+
+**Why the agents cannot be promised.** Codex can import Claude Code agents — its own selector
+reads *"Migrate subagents from `~/.claude/agents` to `~/.codex/agents`"*, and
+`external-agent-import-sync-enabled` appears in `config.toml`. On the machine where this was
+tested, five of this kit's six agents had been converted to TOML that way. **Five of six is the
+point:** `dga-frontend-architect` was missing, and no local log or specification explains what
+performed the conversion. It also reads from `~/.claude/agents`, not from the installed plugin —
+so it is a Codex feature that may run, not an install path this kit controls. If you need the
+agents under Codex, convert them by hand into `~/.codex/agents/*.toml`
+(`name`, `description`, `developer_instructions`).
 
 ### Still unverified
 

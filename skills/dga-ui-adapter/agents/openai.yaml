@@ -1,0 +1,11 @@
+interface:
+  display_name: "DGA UI Adapter"
+  short_description: "Apply DGA rules on any UI library"
+  brand_color: "#1B8354"
+  default_prompt: "Use $dga-ui-adapter to apply DGA rules to our existing component library."
+
+policy:
+  # Codex defaults this to true. Pinned rather than inherited: these are compliance
+  # skills, and the failure mode of a changed default is that they silently stop
+  # loading - a team then ships believing it was checked.
+  allow_implicit_invocation: true
