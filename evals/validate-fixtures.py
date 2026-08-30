@@ -1423,48 +1423,98 @@ chk('prose: every line sizing running text states the paragraph max-width', not 
 
 # --- the reconciliation figures ------------------------------------------------
 # The gap between what DGA declares and what tokens.json carries was described for two releases
-# as "aliases resolving to values already carried". harvest/reconcile-tokens.py disproved that:
-# 516 declarations resolve to values this kit does not hold. Those numbers are now quoted in six
-# documents, which makes them exactly the kind of restated figure that rots - so they are pinned
-# to $meta.$reconciliation the same way the carried counts are.
+# as "aliases resolving to values already carried". The reconciler disproved that, and its
+# figures are now quoted across seven documents - exactly the kind of restated number that rots.
 _rec = t['$meta'].get('$reconciliation', {})
 chk('reconciliation: tokens.json records it', bool(_rec),
-    'run: python3 harvest/reconcile-tokens.py --write, then record $meta.$reconciliation')
+    'regenerate the report, then record $meta.$reconciliation')
 
 if _rec:
     chk('reconciliation: the split adds up',
-        _rec['notCarriedGenericPalette'] + _rec['notCarriedDgaNamespaced'] == _rec['notCarried'],
-        f"{_rec['notCarriedGenericPalette']} + {_rec['notCarriedDgaNamespaced']} "
-        f"!= {_rec['notCarried']}")
-    chk('reconciliation: what is not carried is fewer than what DGA declares',
-        _rec['notCarried'] < _rec['distinctCustomProperties'])
+        (_rec['notCarriedGenericRamp'] + _rec['notCarriedDgaNamespaced']
+         + _rec['notCarriedUnknownFamily'] == _rec['notCarried']),
+        f"{_rec['notCarriedGenericRamp']} + {_rec['notCarriedDgaNamespaced']} + "
+        f"{_rec['notCarriedUnknownFamily']} != {_rec['notCarried']}")
+    chk('reconciliation: triage is the non-generic remainder',
+        _rec['toTriage'] == _rec['notCarriedDgaNamespaced'] + _rec['notCarriedUnknownFamily'],
+        f"toTriage {_rec['toTriage']} != {_rec['notCarriedDgaNamespaced']} + "
+        f"{_rec['notCarriedUnknownFamily']}")
+    chk('reconciliation: carried + notCarried is every declaration',
+        _rec['carried'] + _rec['notCarried'] == _rec['totalDeclarations'],
+        f"{_rec['carried']} + {_rec['notCarried']} != {_rec['totalDeclarations']}")
     chk('reconciliation: the report exists',
         os.path.exists(os.path.join(ROOT, 'harvest/RECONCILIATION.md')),
-        'run: python3 harvest/reconcile-tokens.py --write')
+        'regenerate it with the reconciler --write')
 
-    # Every doc that quotes the real-gap figure must quote the CURRENT one. This is the number a
-    # reader acts on - it is the difference between "tokens.json is complete" and "read the value
-    # off the live :root instead".
-    _GAP_DOCS = ['README.md', 'COVERAGE.md', 'skills/dga-design-system/SKILL.md',
-                 'skills/dga-ui-adapter/SKILL.md',
-                 'skills/dga-design-system/references/foundations.md']
-    _n = str(_rec['notCarriedDgaNamespaced'])
-    _missing = [f for f in _GAP_DOCS
-                if _n not in open(os.path.join(ROOT, f), encoding='utf-8').read()]
-    chk('reconciliation: every doc naming the real gap quotes the current figure', not _missing,
-        f'{_missing} do not mention {_n}')
+    # EVERY count-bearing claim is parsed and compared - not "do the right digits appear
+    # somewhere in the file". That weaker rule passed while the README headline said 241,
+    # because a correct 240 survived elsewhere in the same document. Each pattern captures the
+    # number out of the claim itself, and every occurrence in every document must match.
+    #
+    # `required` is per-DOCUMENT and load-bearing. A global "was this figure claimed anywhere"
+    # tally has the same hole one level up: the README headline going unmatched passed because
+    # another file still matched. Each listed document must carry the claim itself.
+    _CLAIMS = [
+        ('notCarried',
+         [r'(\d+)\s+(?:declarations\s+)?resolv\w+\s+to\s+values'],
+         ['README.md', 'COVERAGE.md', 'skills/dga-design-system/SKILL.md']),
+        ('notCarriedGenericRamp',
+         [r'(\d+)\s+(?:are\s+)?the generic ramp',
+          r'generic ramp\*{0,2}\s*\((\d+)\s+declarations\)'],
+         ['README.md', 'COVERAGE.md', 'skills/dga-design-system/SKILL.md']),
+        ('notCarriedDgaNamespaced',
+         [r'(\d+)\s+DGA-namespaced'],
+         ['README.md', 'COVERAGE.md']),
+        ('toTriage',
+         [r'(\d+)[^.\n]{0,14}?to triage',
+          r'(\d+)\s+values? are NOT carried',
+          r'(\d+)\s+values these files do not carry',
+          r'(\d+)\s+values the kit does not hold',
+          r'(\d+)\s+declarations are not carried'],
+         ['README.md', 'COVERAGE.md', 'skills/dga-design-system/SKILL.md',
+          'skills/dga-ui-adapter/SKILL.md', 'skills/dga-tokens-sync/SKILL.md',
+          'skills/dga-design-system/references/foundations.md']),
+    ]
+    _wrong, _seen = [], {}
+    for _f in _PROSE:
+        _txt = re.sub(r'\s+', ' ', ''.join(l for _, l in _unfenced(_f)))
+        for _key, _pats, _req in _CLAIMS:
+            for _pat in _pats:
+                for _m in re.finditer(_pat, _txt):
+                    _seen.setdefault(_key, set()).add(_f)
+                    if int(_m.group(1)) != _rec[_key]:
+                        _wrong.append(f'{_f}: "{_m.group(0)[:44]}" but {_key}={_rec[_key]}')
+    chk('reconciliation: every count-bearing claim matches $meta', not _wrong, str(_wrong))
 
-    # The retracted wording must not come back. It read as reassurance and it was false.
+    # ...and each document that is supposed to state a figure must actually still state it.
+    _gone = [f'{_k} missing from {_f}' for _k, _p, _req in _CLAIMS for _f in _req
+             if _f not in _seen.get(_k, set())]
+    chk('reconciliation: every document still states the figures it owns', not _gone,
+        str(_gone) + ' - either the claim was dropped or its wording drifted past the pattern; '
+        'update _CLAIMS with the new phrasing rather than deleting the check')
+
+    # The retracted wording must not come back - in Markdown OR in a JSON annotation. It read as
+    # reassurance and it was false, and tokens.json carried it for a release after the prose
+    # had been corrected.
     _RETRACTED = re.compile(
         r'(?i)(aliases and per-component role vars resolving to values already'
-        r'|the rest are aliases and per-component role vars)')
+        r'|the rest are aliases and per-component role vars'
+        r'|has NOT been reconciled)')
     _back = []
     for _f in _PROSE:
         for _i, _line in _unfenced(_f):
             if _RETRACTED.search(_line):
                 _back.append(f'{_f}:{_i}')
+    for _f in ('skills/dga-design-system/assets/tokens.json',
+               'harvest/source-inventory.json'):
+        _txt = open(os.path.join(ROOT, _f), encoding='utf-8').read()
+        # $reconciliation quotes the retracted claim in order to retract it; that annotation is
+        # the record and is exempt by name, nothing else is.
+        _txt = re.sub(r'"\$reconciliation":\s*\{.*?\n  \}', '', _txt, flags=re.S)
+        if _RETRACTED.search(_txt):
+            _back.append(_f)
     chk('reconciliation: the retracted "all aliases" wording has not returned', not _back,
-        str(_back) + ' - disproved by harvest/reconcile-tokens.py; see $meta.$reconciliation')
+        str(_back) + ' - disproved by the reconciler; see $meta.$reconciliation')
 
 
 print()

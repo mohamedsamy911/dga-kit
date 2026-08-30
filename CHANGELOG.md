@@ -24,19 +24,39 @@ declaration by declaration against live stylesheet build `PDaQ7SHU`:
 
 - DGA's stylesheet declares **1,126** custom properties — 1,065 on `:root`, 402 under the
   unmatchable dark selector, 61 elsewhere. Two independent parsers agree exactly.
-- **516 declarations resolve to values `tokens.json` does not hold.**
-- **276** of those are the upstream Untitled-UI ramp DGA ships in CSS but does not publish as a
-  Platforms Code colour — blue, cyan, fuchsia, indigo, moss, orange, pink, purple, red, teal,
+- **412 declarations resolve to values `tokens.json` does not hold.**
+- **246** of those are the upstream Untitled-UI generic ramp DGA ships in CSS but does not publish
+  as a Platforms Code colour — blue, cyan, fuchsia, indigo, moss, orange, pink, purple, red, teal,
   violet, yellow and seven separate grey ramps. Excluding them is right; **never stating the
   exclusion** is what made the count look like a contradiction.
-- **240 are a real coverage gap** — the whole `--alpha-*` transparency scale (49), `--tag-*`
-  (29), `--notification-*` (22), `--button-*` interaction states (17), `--featuredicons-*` (17),
-  `--link-*` (16), `--border-*` (15), `--form-*` (14) and more. Every one is listed in
-  `harvest/RECONCILIATION.md`.
+- **166 go to triage** — 141 DGA-namespaced values the kit does not hold, plus 25 whose family is
+  unrecognised and are left for review rather than excluded. Covers the whole `--alpha-*`
+  transparency scale (49), `--button-*` interaction states (17), `--link-*` (16),
+  `--notification-*` (14), `--gradient-*` (12), `--tag-*` (10) and more. Every one is listed in
+  the reconciliation report.
 
 **A skill must not tell a caller a value is absent from DGA because it is absent from
 `tokens.json`.** That warning is now in `dga-design-system`, `dga-ui-adapter` and
 `foundations.md`, and the gap is a stated row in COVERAGE.md's known-gaps table.
+
+### Corrected — two defects in the reconciler itself, found in review
+
+The first cut of this reconciliation reported 516/276/240. Those numbers were wrong, and both
+causes are worth recording because they are the failure modes any such tool has:
+
+- **Resolution ignored the cascade and the theme scope.** It followed the *first* declaration of
+  a name anywhere in the stylesheet. DGA redeclares **393** light names — `--colors-base-black`
+  is `#000000` in one `:root` block and `#161616` in a later one — so `--background-black` was
+  reported as an uncarried `#000000` when its effective value is the already-carried `#161616`.
+  Dark aliases also resolved through light definitions. Fixed to last-declaration-wins per scope,
+  with dark falling back to light only where dark does not redefine. **That bug alone invented
+  104 declarations of gap.**
+- **The "generic palette" exclusion was inferred, and swept up semantic tokens.** The rule was
+  "any `--colors-*` family not in the published set", which classified `--colors-border-primary`,
+  `--colors-text-primary` and the `--colors-alpha-*` primitives as decorative ramp steps. The
+  exclusion is now an **explicit, evidenced list of ramp names**; anything neither on it nor a
+  known DGA family is reported as `review` and counted in the triage total. A wrong exclusion is
+  worse than no exclusion: it hides a real gap behind a plausible label.
 
 - **`customProperties: 1209` was an over-count, and the monitoring produced it.**
   `sources.py`'s pattern anchored on nothing, so `.btn--close[disabled],.btn--sort:hover` matched
@@ -54,9 +74,11 @@ declaration by declaration against live stylesheet build `PDaQ7SHU`:
   so a name diff reports a gap ten times larger and is useless). Reuses `sources.py`'s fetch path
   and its refusal-to-trust-the-response guards. `--write` regenerates `harvest/RECONCILIATION.md`;
   `--css FILE` runs offline against a saved stylesheet.
-- Four guards in `evals/validate-fixtures.py`: the reconciliation split must add up, every doc
-  naming the real gap must quote the current figure, the report must exist, and **the retracted
-  "all aliases" wording must not come back**. All mutation-tested.
+- Guards in `evals/validate-fixtures.py`: the reconciliation split must add up, the report must
+  exist, **every count-bearing claim in prose is parsed and compared to `$meta.$reconciliation`**
+  (presence of the right digits somewhere in the file is not enough — an earlier version passed
+  while the README headline said 241), and **the retracted "all aliases" wording must not come
+  back, in Markdown or in JSON annotations**. All mutation-tested.
 
 
 ## 0.7.1 — 2026-08-30

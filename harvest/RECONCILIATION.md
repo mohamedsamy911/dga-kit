@@ -30,40 +30,42 @@ two unrelated roles can both be `8px`.
 
 ## Verdict
 
-**951 of 1467** declarations resolve to a value `tokens.json` already carries. **516** do
+**1055 of 1467** declarations resolve to a value `tokens.json` already carries. **412** do
 not, so the "all aliases" reading of the gap is **wrong** and is retracted.
 
-| The 516 that do not reconcile | Count |
+| The 412 that do not reconcile | Count |
 |---|---|
-| Generic UI-kit palette DGA ships but does not publish as a DGA token | 276 |
-| **DGA-namespaced values this kit simply does not hold** | **240** |
+| Generic UI-kit ramp DGA ships but does not publish as a DGA token | 246 |
+| **DGA-namespaced values this kit does not hold** | **141** |
+| Unknown family, left for review rather than excluded | 25 |
+| **To triage (the last two together)** | **166** |
 
 The first group is a defensible exclusion — DGA's stylesheet carries the whole upstream
 Untitled-UI ramp (blue, cyan, fuchsia, indigo, moss, orange, pink, purple, red, teal,
 violet, yellow, and seven separate grey ramps) and the published system names 11 families.
-It was never *stated* as an exclusion, which is the actual defect. The second group is a
-real coverage gap.
+It was never *stated* as an exclusion, which is the actual defect.
 
-### The 240 to triage, by family
+That exclusion list is **explicit, not inferred**. An earlier "anything not in the
+semantic set" rule swept up `--colors-border-primary`, `--colors-text-primary` and the
+`--colors-alpha-*` primitives as though they were ramp steps — and a wrong exclusion
+**hides** a real gap. Anything neither evidenced-generic nor a known DGA family is left
+for review and counted in the triage total, never dropped silently.
+
+### The 166 to triage, by family
 
 | Family | Count | Example | Resolves to |
 |---|---|---|---|
 | `--alpha` | 49 | `--alpha-black-0` | `#16161600` |
-| `--tag` | 29 | `--tag-background-on-color` | `#ffffff33` |
-| `--notification` | 22 | `--notification-background-brand-50` | `#1b835433` |
+| `--colors` | 27 | `--colors-alpha-alpha-black-0` | `#16161600` |
 | `--button` | 17 | `--button-background-danger-primary-pressed` | `#7a2619` |
-| `--featuredicons` | 17 | `--featuredicons-background-success-light` | `#EDFCF2` |
 | `--link` | 16 | `--link-danger-pressed` | `#7a2619` |
-| `--border` | 15 | `--border-black` | `#000000` |
-| `--form` | 14 | `--form-datecell-today-background-default` | `#ffffff00` |
-| `--background` | 12 | `--background-black` | `#000000` |
+| `--notification` | 14 | `--notification-background-brand-25` | `#166a4519` |
 | `--gradient` | 12 | `--gradient-brand-600-500-90deg` | `linear-gradient( 90deg, var(--colors-brand-600) 0%, var(--colors-brand-500) 100% )` |
-| `--colors` | 9 | `--colors-border-disabled` | `#D0D5DD` |
-| `--icon` | 9 | `--icon-default` | `#000000` |
-| `--text` | 6 | `--text-default` | `#000000` |
+| `--tag` | 10 | `--tag-background-on-color` | `#ffffff33` |
+| `--border` | 6 | `--border-oncolor-transparent-30` | `#ffffff4c` |
 | `--controls` | 5 | `--controls-control-primary` | `#ffffff00` |
-| `--table` | 4 | `--table-cell-border-inverse` | `#000000` |
-| `--stepper` | 3 | `--stepper-button-completed` | `#099250` |
+| `--featuredicons` | 5 | `--featuredicons-bg-icon-brand-light` | `#166a4519` |
+| `--form` | 4 | `--form-datecell-today-background-default` | `#ffffff00` |
 | `--control` | 1 | `--control-disabled` | `#ffffff4c` |
 
 ### Every one of them
@@ -95,94 +97,57 @@ real coverage gap.
 | dark | `--alpha-white-50` | `var(--colors-alpha-alpha-black-50)` | `#1616167f` |
 | dark | `--alpha-white-60` | `var(--colors-alpha-alpha-black-60)` | `#16161699` |
 | dark | `--alpha-white-90` | `var(--colors-alpha-alpha-black-90)` | `#161616e5` |
-| dark | `--background-success` | `var(--colors-green-600)` | `#099250` |
-| dark | `--background-warning` | `var(--colors-yellow-600)` | `#CA8504` |
 | dark | `--border-oncolor-transparent-30` | `var(--colors-alpha-alpha-white-30)` | `#ffffff4c` |
-| dark | `--border-primary-light` | `var(--colors-green-200)` | `#AAF0C4` |
-| dark | `--border-success` | `var(--colors-green-500)` | `#16B364` |
-| dark | `--border-success-light` | `var(--colors-green-200)` | `#AAF0C4` |
-| dark | `--border-transparent-10` | `var(--alpha-white-10)` | `#ffffff19` |
-| dark | `--border-warning` | `var(--colors-yellow-700)` | `#A15C07` |
-| dark | `--border-warning-light` | `var(--colors-yellow-200)` | `#FEEE95` |
-| dark | `--border-white` | `var(--colors-base-black)` | `#000000` |
+| dark | `--border-success` | `var(--colors-green-500)` | `#17b169` |
+| dark | `--border-transparent-10` | `var(--alpha-white-10)` | `#16161619` |
+| dark | `--border-white-40` | `var(--alpha-white-40)` | `#16161666` |
 | dark | `--button-background-danger-primary-pressed` | `var(--colors-red-900)` | `#7a2619` |
-| dark | `--button-background-disabled-on-color` | `var(--alpha-white-20)` | `#ffffff33` |
-| dark | `--button-background-oncolor-default` | `var(--colors-base-black)` | `#000000` |
-| dark | `--button-background-oncolor-pressed` | `var(--alpha-white-60)` | `#ffffff99` |
-| dark | `--button-background-transparent-default` | `var(--alpha-white-0)` | `#ffffff00` |
-| dark | `--button-background-transparent-focused` | `var(--alpha-white-0)` | `#ffffff00` |
-| dark | `--button-background-transparent-hovered` | `var(--alpha-white-20)` | `#ffffff33` |
-| dark | `--button-background-transparent-selected` | `var(--alpha-white-30)` | `#ffffff4c` |
+| dark | `--button-background-disabled-on-color` | `var(--alpha-white-20)` | `#16161633` |
+| dark | `--button-background-oncolor-pressed` | `var(--alpha-white-60)` | `#16161699` |
+| dark | `--button-background-transparent-default` | `var(--alpha-white-0)` | `#16161619` |
+| dark | `--button-background-transparent-focused` | `var(--alpha-white-0)` | `#16161619` |
+| dark | `--button-background-transparent-hovered` | `var(--alpha-white-20)` | `#16161633` |
+| dark | `--button-background-transparent-pressed` | `var(--alpha-white-40)` | `#16161666` |
+| dark | `--button-background-transparent-selected` | `var(--alpha-white-30)` | `#1616164c` |
 | dark | `--button-label-danger-primary-hovered-oncolor` | `var(--colors-red-300)` | `#fca19b` |
 | dark | `--control-disabled` | `var(--colors-alpha-alpha-white-30)` | `#ffffff4c` |
-| dark | `--controls-control-primary` | `var(--alpha-white-0)` | `#ffffff00` |
-| dark | `--controls-control-primary--readonly` | `var(--alpha-white-0)` | `#ffffff00` |
+| dark | `--controls-control-primary` | `var(--alpha-white-0)` | `#16161619` |
+| dark | `--controls-control-primary--readonly` | `var(--alpha-white-0)` | `#16161619` |
 | dark | `--controls-control-text-error` | `var(--colors-red-300)` | `#fca19b` |
-| dark | `--featuredicons-background-success-light` | `var(--colors-green-50)` | `#EDFCF2` |
-| dark | `--featuredicons-background-warning-light` | `var(--colors-yellow-50)` | `#FEFBE8` |
-| dark | `--featuredicons-bg-icon-error-light` | `var(--alpha-error-10)` | `#d92c2019` |
+| dark | `--featuredicons-bg-icon-brand-light` | `var(--alpha-primary-10)` | `#166a4519` |
+| dark | `--featuredicons-bg-icon-error-light` | `var(--alpha-error-10)` | `#b4231819` |
 | dark | `--featuredicons-bg-icon-info-light` | `var(--alpha-info-10)` | `#156fee19` |
 | dark | `--featuredicons-bg-icon-success-light` | `var(--alpha-success-10)` | `#06945419` |
-| dark | `--featuredicons-bg-icon-warning-light` | `var(--alpha-warning-10)` | `#dc680319` |
-| dark | `--featuredicons-icon-success` | `var(--colors-green-600)` | `#099250` |
-| dark | `--featuredicons-icon-success-light` | `var(--colors-green-50)` | `#EDFCF2` |
-| dark | `--featuredicons-icon-warning` | `var(--colors-yellow-700)` | `#A15C07` |
-| dark | `--form-datecell-today-background-default` | `var(--alpha-white-0)` | `#ffffff00` |
-| dark | `--form-datecell-today-background-focused` | `var(--alpha-white-0)` | `#ffffff00` |
-| dark | `--form-field-text-filled` | `var(--text-default)` | `#000000` |
-| dark | `--form-field-text-hovered` | `var(--text-default)` | `#000000` |
-| dark | `--form-field-text-label` | `var(--text-default)` | `#000000` |
-| dark | `--form-field-text-readonly` | `var(--text-default)` | `#000000` |
-| dark | `--form-text-form-title` | `var(--text-default)` | `#000000` |
-| dark | `--icon-success` | `var(--colors-green-600)` | `#099250` |
-| dark | `--icon-success-light` | `var(--colors-green-50)` | `#EDFCF2` |
-| dark | `--icon-warning` | `var(--colors-yellow-700)` | `#A15C07` |
-| dark | `--icon-warning-light` | `var(--colors-yellow-50)` | `#FEFBE8` |
+| dark | `--featuredicons-bg-icon-warning-light` | `var(--alpha-warning-10)` | `#fec84b19` |
+| dark | `--form-datecell-today-background-default` | `var(--alpha-white-0)` | `#16161619` |
+| dark | `--form-datecell-today-background-focused` | `var(--alpha-white-0)` | `#16161619` |
 | dark | `--link-danger-pressed` | `var(--colors-red-900)` | `#7a2619` |
 | dark | `--link-icon-danger-pressed` | `var(--colors-red-900)` | `#7a2619` |
-| dark | `--link-icon-oncolor-disabled` | `var(--alpha-white-30)` | `#ffffff4c` |
-| dark | `--link-icon-oncolor-pressed` | `var(--alpha-white-60)` | `#ffffff99` |
-| dark | `--link-icon-oncolor-visited` | `var(--alpha-white-90)` | `#ffffffe5` |
+| dark | `--link-icon-oncolor-disabled` | `var(--alpha-white-30)` | `#1616164c` |
+| dark | `--link-icon-oncolor-pressed` | `var(--alpha-white-60)` | `#16161699` |
+| dark | `--link-icon-oncolor-visited` | `var(--alpha-white-90)` | `#161616e5` |
 | dark | `--link-oncolor-disabled` | `var(--colors-alpha-alpha-white-30)` | `#ffffff4c` |
 | dark | `--link-oncolor-pressed` | `var(--colors-alpha-alpha-white-60)` | `#ffffff99` |
 | dark | `--link-oncolor-visited` | `var(--colors-alpha-alpha-white-90)` | `#ffffffe5` |
-| dark | `--notification-background-brand-50` | `var(--alpha-primary-20)` | `#1b835433` |
-| dark | `--notification-background-default-25` | `var(--alpha-white-0)` | `#ffffff00` |
-| dark | `--notification-background-default-50` | `var(--alpha-white-10)` | `#ffffff19` |
-| dark | `--notification-background-error-25` | `var(--alpha-error-10)` | `#d92c2019` |
-| dark | `--notification-background-error-50` | `var(--alpha-error-20)` | `#d92c2033` |
+| dark | `--notification-background-brand-25` | `var(--alpha-primary-10)` | `#166a4519` |
+| dark | `--notification-background-brand-50` | `var(--alpha-primary-20)` | `#166a4533` |
+| dark | `--notification-background-default-25` | `var(--alpha-white-0)` | `#16161619` |
+| dark | `--notification-background-default-50` | `var(--alpha-white-10)` | `#16161619` |
+| dark | `--notification-background-error-25` | `var(--alpha-error-10)` | `#b4231819` |
+| dark | `--notification-background-error-50` | `var(--alpha-error-20)` | `#b4231833` |
 | dark | `--notification-background-info-25` | `var(--alpha-info-10)` | `#156fee19` |
 | dark | `--notification-background-info-50` | `var(--alpha-info-20)` | `#156fee33` |
+| dark | `--notification-background-success-25` | `var(--alpha-primary-10)` | `#166a4519` |
 | dark | `--notification-background-success-50` | `var(--alpha-success-20)` | `#06945433` |
-| dark | `--notification-background-success-light` | `var(--colors-green-50)` | `#EDFCF2` |
-| dark | `--notification-background-warning-25` | `var(--alpha-warning-10)` | `#dc680319` |
-| dark | `--notification-background-warning-50` | `var(--alpha-warning-20)` | `#dc680333` |
-| dark | `--notification-background-warning-light` | `var(--colors-yellow-50)` | `#FEFBE8` |
+| dark | `--notification-background-warning-25` | `var(--alpha-warning-10)` | `#fec84b19` |
+| dark | `--notification-background-warning-50` | `var(--alpha-warning-20)` | `#fec84b33` |
 | dark | `--notification-text-error` | `var(--colors-red-300)` | `#fca19b` |
-| dark | `--notification-text-success` | `var(--colors-green-300)` | `#73E2A3` |
-| dark | `--notification-text-warning` | `var(--colors-yellow-300)` | `#FDE272` |
-| dark | `--stepper-button-completed` | `var(--colors-green-600)` | `#099250` |
-| dark | `--stepper-button-current` | `var(--colors-green-600)` | `#099250` |
-| dark | `--stepper-text-primary` | `var(--text-default)` | `#000000` |
-| dark | `--table-cell-border-inverse` | `var(--border-black)` | `#000000` |
-| dark | `--table-text-body` | `var(--text-default)` | `#000000` |
+| dark | `--notification-text-success` | `var(--colors-green-300)` | `#75dfa6` |
 | dark | `--tag-background-on-color` | `var(--colors-alpha-alpha-white-20)` | `#ffffff33` |
-| dark | `--tag-background-success` | `var(--colors-green-700)` | `#087443` |
-| dark | `--tag-background-success-light` | `var(--colors-green-50)` | `#EDFCF2` |
-| dark | `--tag-background-warning` | `var(--colors-yellow-700)` | `#A15C07` |
-| dark | `--tag-background-warning-light` | `var(--colors-yellow-50)` | `#FEFBE8` |
 | dark | `--tag-border-on-color` | `var(--colors-alpha-alpha-white-60)` | `#ffffff99` |
-| dark | `--tag-border-success` | `var(--colors-green-700)` | `#087443` |
-| dark | `--tag-border-success-light` | `var(--colors-green-200)` | `#AAF0C4` |
-| dark | `--tag-border-warning-light` | `var(--colors-yellow-200)` | `#FEEE95` |
 | dark | `--tag-dot` | `var(--colors-alpha-alpha-white-60)` | `#ffffff99` |
-| dark | `--tag-icon-success` | `var(--colors-green-800)` | `#095C37` |
-| dark | `--tag-icon-warning` | `var(--colors-yellow-800)` | `#854A0E` |
-| dark | `--tag-text-success` | `var(--colors-green-800)` | `#095C37` |
-| dark | `--tag-text-warning` | `var(--colors-yellow-800)` | `#854A0E` |
-| dark | `--text-default-oncolor-disabled` | `var(--alpha-black-40)` | `#16161666` |
-| dark | `--text-success` | `var(--colors-green-600)` | `#099250` |
-| dark | `--text-warning` | `var(--colors-yellow-600)` | `#CA8504` |
+| dark | `--tag-icon-warning` | `var(--colors-yellow-800)` | `#93370c` |
+| dark | `--tag-text-warning` | `var(--colors-yellow-800)` | `#93370c` |
 | light | `--alpha-black-0` | `var(--colors-alpha-alpha-black-0)` | `#16161600` |
 | light | `--alpha-black-10` | `var(--colors-alpha-alpha-black-10)` | `#16161619` |
 | light | `--alpha-black-20` | `var(--colors-alpha-alpha-black-20)` | `#16161633` |
@@ -207,23 +172,8 @@ real coverage gap.
 | light | `--alpha-white-50` | `var(--colors-alpha-alpha-white-50)` | `#ffffff7f` |
 | light | `--alpha-white-60` | `var(--colors-alpha-alpha-white-60)` | `#ffffff99` |
 | light | `--alpha-white-90` | `var(--colors-alpha-alpha-white-90)` | `#ffffffe5` |
-| light | `--background-black` | `var(--colors-base-black)` | `#000000` |
-| light | `--background-sa-flag` | `var(--colors-green-900)` | `#084C2E` |
-| light | `--background-sa-flag-50` | `var(--colors-green-50)` | `#EDFCF2` |
-| light | `--background-success` | `var(--colors-green-600)` | `#099250` |
-| light | `--background-success-50` | `var(--colors-green-50)` | `#EDFCF2` |
-| light | `--background-success-light` | `var(--colors-green-50)` | `#EDFCF2` |
-| light | `--background-warning` | `var(--colors-yellow-600)` | `#CA8504` |
-| light | `--background-warning-25` | `var(--colors-yellow-25)` | `#FEFDF0` |
-| light | `--background-warning-50` | `var(--colors-yellow-50)` | `#FEFBE8` |
-| light | `--background-warning-light` | `var(--colors-yellow-50)` | `#FEFBE8` |
-| light | `--border-black` | `var(--colors-base-black)` | `#000000` |
 | light | `--border-oncolor-transparent-30` | `var(--colors-alpha-alpha-white-30)` | `#ffffff4c` |
-| light | `--border-success` | `var(--colors-green-700)` | `#087443` |
-| light | `--border-success-light` | `var(--colors-green-200)` | `#AAF0C4` |
 | light | `--border-transparent-10` | `var(--alpha-white-10)` | `#ffffff19` |
-| light | `--border-warning` | `var(--colors-yellow-700)` | `#A15C07` |
-| light | `--border-warning-light` | `var(--colors-yellow-200)` | `#FEEE95` |
 | light | `--button-background-danger-primary-pressed` | `var(--colors-red-900)` | `#7a2619` |
 | light | `--button-background-disabled-on-color` | `var(--alpha-white-20)` | `#ffffff33` |
 | light | `--button-background-oncolor-pressed` | `var(--alpha-white-60)` | `#ffffff99` |
@@ -232,32 +182,37 @@ real coverage gap.
 | light | `--button-background-transparent-hovered` | `var(--alpha-white-20)` | `#ffffff33` |
 | light | `--button-background-transparent-selected` | `var(--alpha-white-30)` | `#ffffff4c` |
 | light | `--button-label-danger-primary-hovered-oncolor` | `var(--colors-red-300)` | `#fca19b` |
-| light | `--colors-border-disabled` | `var(--colors-gray-300)` | `#D0D5DD` |
-| light | `--colors-border-disabled_subtle` | `var(--colors-gray-200)` | `#EAECF0` |
-| light | `--colors-border-secondary` | `var(--colors-gray-200)` | `#EAECF0` |
+| light | `--colors-alpha-alpha-black-0` | `#16161600` | `#16161600` |
+| light | `--colors-alpha-alpha-black-10` | `#16161619` | `#16161619` |
+| light | `--colors-alpha-alpha-black-20` | `#16161633` | `#16161633` |
+| light | `--colors-alpha-alpha-black-30` | `#1616164c` | `#1616164c` |
+| light | `--colors-alpha-alpha-black-40` | `#16161666` | `#16161666` |
+| light | `--colors-alpha-alpha-black-50` | `#1616167f` | `#1616167f` |
+| light | `--colors-alpha-alpha-black-60` | `#16161699` | `#16161699` |
+| light | `--colors-alpha-alpha-black-90` | `#161616e5` | `#161616e5` |
+| light | `--colors-alpha-alpha-green-20` | `#1b835433` | `#1b835433` |
+| light | `--colors-alpha-alpha-green-30` | `#1b83544c` | `#1b83544c` |
+| light | `--colors-alpha-alpha-green-40` | `#1b835466` | `#1b835466` |
+| light | `--colors-alpha-alpha-green-50` | `#1b83547f` | `#1b83547f` |
+| light | `--colors-alpha-alpha-green-60` | `#1b835499` | `#1b835499` |
+| light | `--colors-alpha-alpha-green-70` | `#1b8354b2` | `#1b8354b2` |
+| light | `--colors-alpha-alpha-green-80` | `#1b8354cc` | `#1b8354cc` |
+| light | `--colors-alpha-alpha-green-90` | `#1b8354e5` | `#1b8354e5` |
+| light | `--colors-alpha-alpha-white-0` | `#ffffff00` | `#ffffff00` |
+| light | `--colors-alpha-alpha-white-10` | `#ffffff19` | `#ffffff19` |
+| light | `--colors-alpha-alpha-white-20` | `#ffffff33` | `#ffffff33` |
+| light | `--colors-alpha-alpha-white-30` | `#ffffff4c` | `#ffffff4c` |
+| light | `--colors-alpha-alpha-white-50` | `#ffffff7f` | `#ffffff7f` |
+| light | `--colors-alpha-alpha-white-60` | `#ffffff99` | `#ffffff99` |
+| light | `--colors-alpha-alpha-white-90` | `#ffffffe5` | `#ffffffe5` |
+| light | `--colors-alpha-black` | `0deg 0% 0%` | `0deg 0% 0%` |
+| light | `--colors-alpha-white` | `0deg 0% 100%` | `0deg 0% 100%` |
 | light | `--colors-primary-sa-flag-500-alpha-10` | `#25935f19` | `#25935f19` |
-| light | `--colors-text-disabled` | `var(--colors-gray-500)` | `#667085` |
-| light | `--colors-text-placeholder` | `var(--colors-gray-500)` | `#667085` |
-| light | `--colors-text-quarterary` | `var(--colors-gray-500)` | `#667085` |
 | light | `--colors-text-secondary_on-brand` | `hsla(var(--colors-alpha-white) / 70%)` | `hsla(var(--colors-alpha-white) / 70%)` |
-| light | `--colors-text-tertiary` | `var(--colors-gray-600)` | `#475467` |
 | light | `--controls-control-primary` | `var(--alpha-white-0)` | `#ffffff00` |
 | light | `--controls-control-primary--readonly` | `var(--alpha-white-0)` | `#ffffff00` |
-| light | `--featuredicons-background-success-light` | `var(--colors-green-50)` | `#EDFCF2` |
-| light | `--featuredicons-background-warning-light` | `var(--colors-yellow-50)` | `#FEFBE8` |
-| light | `--featuredicons-bg-icon-success-light` | `var(--background-success-50)` | `#EDFCF2` |
-| light | `--featuredicons-bg-icon-warning-light` | `var(--background-warning-50)` | `#FEFBE8` |
-| light | `--featuredicons-icon-default` | `var(--colors-base-black)` | `#000000` |
-| light | `--featuredicons-icon-success` | `var(--colors-green-700)` | `#087443` |
-| light | `--featuredicons-icon-success-light` | `var(--colors-green-50)` | `#EDFCF2` |
-| light | `--featuredicons-icon-warning` | `var(--colors-yellow-700)` | `#A15C07` |
 | light | `--form-datecell-today-background-default` | `var(--alpha-white-0)` | `#ffffff00` |
 | light | `--form-datecell-today-background-focused` | `var(--alpha-white-0)` | `#ffffff00` |
-| light | `--form-field-text-filled` | `var(--text-default)` | `#000000` |
-| light | `--form-field-text-hovered` | `var(--text-default)` | `#000000` |
-| light | `--form-field-text-label` | `var(--text-default)` | `#000000` |
-| light | `--form-field-text-readonly` | `var(--text-default)` | `#000000` |
-| light | `--form-text-form-title` | `var(--text-default)` | `#000000` |
 | light | `--gradient-brand-600-500-90deg` | `linear-gradient( 90deg, var(--colors-brand-600) ` | `linear-gradient( 90deg, var(--colors-brand-600) 0%, var(--colors-brand-500) 100% )` |
 | light | `--gradient-brand-700-600-45deg` | `linear-gradient( 45deg, var(--colors-brand-700) ` | `linear-gradient( 45deg, var(--colors-brand-700) 0%, var(--colors-brand-600) 100% )` |
 | light | `--gradient-brand-800-600-45deg` | `linear-gradient( 45deg, var(--colors-brand-800) ` | `linear-gradient( 45deg, var(--colors-brand-800) 0%, var(--colors-brand-600) 100% )` |
@@ -270,11 +225,6 @@ real coverage gap.
 | light | `--gradient-gray-800-600-90deg` | `linear-gradient( 90deg, var(--colors-gray-800) 0` | `linear-gradient( 90deg, var(--colors-gray-800) 0%, var(--colors-gray-600) 100% )` |
 | light | `--gradient-gray-800-700-26-5deg` | `linear-gradient( 26.5deg, var(--colors-gray-600)` | `linear-gradient( 26.5deg, var(--colors-gray-600) 0%, var(--colors-gray-700) 100% )` |
 | light | `--gradient-gray-900-600-45deg` | `linear-gradient( 45deg, var(--colors-gray-900) 0` | `linear-gradient( 45deg, var(--colors-gray-900) 0%, var(--colors-gray-600) 100% )` |
-| light | `--icon-default` | `var(--colors-base-black)` | `#000000` |
-| light | `--icon-success` | `var(--colors-green-700)` | `#087443` |
-| light | `--icon-success-light` | `var(--colors-green-50)` | `#EDFCF2` |
-| light | `--icon-warning` | `var(--colors-yellow-700)` | `#A15C07` |
-| light | `--icon-warning-light` | `var(--colors-yellow-50)` | `#FEFBE8` |
 | light | `--link-danger-pressed` | `var(--colors-red-900)` | `#7a2619` |
 | light | `--link-icon-danger-pressed` | `var(--colors-red-900)` | `#7a2619` |
 | light | `--link-icon-oncolor-disabled` | `var(--alpha-white-30)` | `#ffffff4c` |
@@ -283,30 +233,8 @@ real coverage gap.
 | light | `--link-oncolor-disabled` | `var(--colors-alpha-alpha-white-30)` | `#ffffff4c` |
 | light | `--link-oncolor-pressed` | `var(--colors-alpha-alpha-white-60)` | `#ffffff99` |
 | light | `--link-oncolor-visited` | `var(--colors-alpha-alpha-white-90)` | `#ffffffe5` |
-| light | `--notification-background-success-50` | `var(--background-success-50)` | `#EDFCF2` |
-| light | `--notification-background-success-light` | `var(--colors-green-50)` | `#EDFCF2` |
-| light | `--notification-background-warning-25` | `var(--background-warning-25)` | `#FEFDF0` |
-| light | `--notification-background-warning-50` | `var(--background-warning-50)` | `#FEFBE8` |
-| light | `--notification-background-warning-light` | `var(--colors-yellow-50)` | `#FEFBE8` |
-| light | `--notification-text-success` | `var(--text-success)` | `#087443` |
-| light | `--notification-text-warning` | `var(--text-warning)` | `#A15C07` |
-| light | `--table-cell-border-inverse` | `var(--border-black)` | `#000000` |
-| light | `--table-text-body` | `var(--text-default)` | `#000000` |
 | light | `--tag-background-on-color` | `var(--colors-alpha-alpha-white-20)` | `#ffffff33` |
-| light | `--tag-background-success` | `var(--colors-green-700)` | `#087443` |
-| light | `--tag-background-success-light` | `var(--colors-green-50)` | `#EDFCF2` |
-| light | `--tag-background-warning` | `var(--colors-yellow-700)` | `#A15C07` |
-| light | `--tag-background-warning-light` | `var(--colors-yellow-50)` | `#FEFBE8` |
 | light | `--tag-border-on-color` | `var(--colors-alpha-alpha-white-60)` | `#ffffff99` |
-| light | `--tag-border-success` | `var(--colors-green-700)` | `#087443` |
-| light | `--tag-border-success-light` | `var(--colors-green-200)` | `#AAF0C4` |
-| light | `--tag-border-warning` | `var(--colors-yellow-700)` | `#A15C07` |
-| light | `--tag-border-warning-light` | `var(--colors-yellow-200)` | `#FEEE95` |
 | light | `--tag-dot` | `var(--colors-alpha-alpha-white-60)` | `#ffffff99` |
-| light | `--tag-icon-success` | `var(--colors-green-800)` | `#095C37` |
-| light | `--tag-icon-warning` | `var(--colors-yellow-800)` | `#854A0E` |
-| light | `--tag-text-success` | `var(--colors-green-800)` | `#095C37` |
-| light | `--tag-text-warning` | `var(--colors-yellow-800)` | `#854A0E` |
-| light | `--text-default` | `var(--colors-base-black)` | `#000000` |
-| light | `--text-success` | `var(--colors-green-700)` | `#087443` |
-| light | `--text-warning` | `var(--colors-yellow-700)` | `#A15C07` |
+| light | `--tag-icon-warning` | `var(--colors-yellow-800)` | `#93370c` |
+| light | `--tag-text-warning` | `var(--colors-yellow-800)` | `#93370c` |

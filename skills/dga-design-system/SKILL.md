@@ -15,13 +15,14 @@ reads from here rather than carrying its own copy of the rules.
 > properties, plus **67** dark values held for audit only. Every rule carries a source URL and
 > retrieval date.
 >
-> **⚠️ 240 DGA-namespaced values are NOT carried.** DGA's stylesheet declares 1,126 custom
-> properties; a declaration-by-declaration reconciliation found 516 resolving to values
-> `tokens.json` does not hold — 276 of them the upstream Untitled-UI ramp DGA ships but does not
-> publish (a deliberate exclusion), and **240 a real gap**: the whole `--alpha-*` transparency
-> scale, `--tag-*`, `--notification-*`, `--button-*` interaction states, `--featuredicons-*`,
-> `--link-*`, `--border-*`, `--form-*`. **Never tell a caller a value is absent from DGA because
-> it is absent from `tokens.json`.** Read it off the live `:root`. See `$meta.$reconciliation`.
+> **⚠️ 166 values are NOT carried and need triage.** DGA's stylesheet declares 1,126 custom
+> properties; a declaration-by-declaration reconciliation found 412 resolving to values
+> `tokens.json` does not hold — **246 the generic ramp** DGA ships but does not publish (a stated
+> exclusion), and **166 to triage**: the whole `--alpha-*` transparency scale, `--button-*`
+> interaction states, `--link-*`, `--notification-*`, `--gradient-*`, `--tag-*`, `--border-*`,
+> `--controls-*`, `--featuredicons-*`, `--form-*`. **Never tell a caller a value is absent from
+> DGA because it is absent from `tokens.json`.** Read it off the live `:root`. See
+> `$meta.$reconciliation`.
 >
 > **Known gaps, stated so no answer implies coverage it lacks:** the Digital Transformation and
 > Digital Experience Maturity indicators (published outside design.dga.gov.sa); the responsive

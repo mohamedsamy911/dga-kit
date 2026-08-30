@@ -3,8 +3,10 @@
 
 For two releases the kit explained the difference away as aliasing - "the rest are aliases and
 per-component role vars resolving to values already carried" - and marked it unreconciled. This
-settles it declaration by declaration. It disproved that claim: 516 declarations resolve to
-values the kit does not hold, of which 240 are DGA-namespaced and a real coverage gap.
+settles it declaration by declaration, cascade- and scope-correct. It disproved that claim:
+declarations resolving to values the kit does not hold are counted and split three ways -
+evidenced generic ramp, real DGA gap, and unknown-family-left-for-review. Live figures are
+in harvest/RECONCILIATION.md; none are hardcoded here.
 
 What it proves, and what it does not: matching is by RESOLVED VALUE, not by name. A var that
 resolves to a literal already present in tokens.json carries no value the kit is missing - that
@@ -111,34 +113,69 @@ def semantic_families(tok):
     return {k for k in tok['color'] if not k.startswith('$')}
 
 
-def is_generic_palette(name, sem):
-    """True for the UI-kit ramp DGA ships in CSS but does not publish as a DGA token.
+# The upstream Untitled-UI ramp DGA ships in its CSS but does not publish as a Platforms Code
+# colour. EXPLICIT, not inferred: the first version of this used a "not in the semantic set"
+# rule, which swept up --colors-border-primary, --colors-text-primary and
+# --colors-alpha-alpha-white-20 as though they were decorative ramp steps. They are not. An
+# exclusion list has to be evidenced name by name; anything not on it and not semantic is left
+# for review rather than quietly dropped, because a wrong exclusion HIDES a real gap.
+GENERIC_RAMPS = frozenset("""
+    blue blue-dark blue-light cyan fuchsia green green-light indigo moss orange orange-dark
+    pink purple red rose rosé teal violet yellow
+    gray-blue gray-cool gray-iron gray-modern gray-neutral gray-true gray-warm
+""".split())
 
-    DGA's stylesheet carries the whole upstream Untitled-UI palette - blue, cyan, fuchsia,
-    indigo, moss, orange, pink, purple, red, rose, teal, violet, yellow, and seven separate grey
-    ramps. Those are not Platforms Code colours; the published system names eleven families.
 
-    Prefix matching has to be exact on the family, with one exception: a step-like suffix
-    (`primary-sa-flag-500-alpha-10`) is a sub-token of a semantic family and stays. Matching
-    `gray-blue` as a variant of `gray` is the trap - it is a different ramp entirely, and a
-    prefix rule without the step-like test classified six generic grey ramps as DGA's own.
-    """
+def palette_class(name, sem):
+    """'generic' (evidenced exclusion), 'semantic' (a DGA family), or 'review' (unknown)."""
     m = re.fullmatch(r'--colors-(.+?)-(\d+|primary|white|black|alpha-\d+)', name)
     if not m:
-        return False
+        return 'semantic'
     fam = m.group(1)
+    # Case-insensitive: DGA declares `--colors-Teal-*` with a capital while every other ramp is
+    # lower-case, and an exact-case set left 12 Teal steps sitting in the review bucket.
+    if fam.lower() in GENERIC_RAMPS:
+        return 'generic'
     for s in sem:
-        if fam == s:
-            return False
-        if fam.startswith(s + '-') and re.fullmatch(r'[\d-]+|.*-\d+', fam[len(s) + 1:]):
-            return False
-    return True
+        # exact family, or a step-like sub-token of one (primary-sa-flag-500-alpha-10)
+        if fam == s or (fam.startswith(s + '-')
+                        and re.fullmatch(r'[\d-]+|.*-\d+', fam[len(s) + 1:])):
+            return 'semantic'
+    return 'review'
 
 
-def classify(css, table, carried, all_carried, scope):
+def scope_maps(decls):
+    """Per-scope name -> declared value, LAST declaration winning.
+
+    The cascade, not the first regex hit. DGA redeclares 393 light names - `--colors-base-black`
+    is `#000000` in one :root block and `#161616` in a later one - so resolving through the first
+    match reports the wrong value and invents gaps that are not there. Dark is kept separate:
+    a dark alias must resolve through dark's own redefinitions before falling back to light.
+    """
+    light, dark, other = {}, {}, {}
+    for sel, n, v in decls:
+        (dark if DARK_SEL in sel else light if sel.endswith(':root') else other)[n] = v
+    return light, dark, other
+
+
+def resolve(value, light, dark, scope, depth=0):
+    """Follow var() chains within the correct scope. Handles var(--x, fallback)."""
+    if not value or depth > 8:
+        return value
+    m = re.fullmatch(r'var\(\s*(--[^,)\s]+)\s*(?:,\s*(.+?))?\s*\)', value.strip())
+    if not m:
+        return value
+    name, fallback = m.group(1), m.group(2)
+    nxt = (dark.get(name) if scope == 'dark' else None) or light.get(name)
+    if nxt is None:
+        return resolve(fallback, light, dark, scope, depth + 1) if fallback else value
+    return resolve(nxt, light, dark, scope, depth + 1)
+
+
+def classify(table, light, dark, carried, all_carried, scope):
     rows = []
     for n, v in sorted(table.items()):
-        resolved = S._resolve(css, v)
+        resolved = resolve(v, light, dark, scope)
         is_alias = bool(re.fullmatch(r'var\(\s*--[^,)\s]+\s*\)', v.strip()))
         nv = norm(resolved) if resolved else None
         rows.append({
@@ -165,16 +202,13 @@ def main():
     decls = declarations(css)
     names = {n for _, n, _ in decls}
 
-    light, dark, other = {}, {}, {}
-    for sel, n, v in decls:
-        target = dark if DARK_SEL in sel else (light if sel.endswith(':root') else other)
-        target[n] = v
+    light, dark, other = scope_maps(decls)
 
     lit_light, lit_dark = carried_values(tok)
     all_carried = lit_light | lit_dark
 
-    rows = (classify(css, light, lit_light, all_carried, 'light')
-            + classify(css, dark, lit_dark, all_carried, 'dark'))
+    rows = (classify(light, light, dark, lit_light, all_carried, 'light')
+            + classify(dark, light, dark, lit_dark, all_carried, 'dark'))
 
     print('DGA stylesheet build %s' % build)
     print('%d distinct custom-property names, %d declarations' % (len(names), len(decls)))
@@ -211,14 +245,19 @@ def main():
 
     gap_all = [r for r in rows if not r['in_any_set']]
     sem = semantic_families(tok)
-    generic = [r for r in gap_all if is_generic_palette(r['name'], sem)]
-    triage = [r for r in gap_all if not is_generic_palette(r['name'], sem)]
+    _cls = {r['name']: palette_class(r['name'], sem) for r in gap_all}
+    generic = [r for r in gap_all if _cls[r['name']] == 'generic']
+    review = [r for r in gap_all if _cls[r['name']] == 'review']
+    triage = [r for r in gap_all if _cls[r['name']] == 'semantic'] + review
     print('CLAIM "the uncarried vars resolve to values already carried": %s'
           % ('HOLDS' if not gap_all
              else 'DOES NOT HOLD - %d declarations resolve to values tokens.json does not carry'
                   % len(gap_all)))
-    print('  of those, generic UI-kit palette (defensible exclusion): %d' % len(generic))
-    print('  genuinely missing DGA-namespaced values (triage):        %d' % len(triage))
+    print('  generic UI-kit ramp, evidenced exclusion:  %d' % len(generic))
+    print('  DGA-namespaced, a real gap:                %d'
+          % len([r for r in gap_all if _cls[r['name']] == 'semantic']))
+    print('  unknown family, left for review:           %d' % len(review))
+    print('  -> to triage (real gap + review):          %d' % len(triage))
     fam = {}
     for r in triage:
         fam.setdefault('--' + r['name'].lstrip('-').split('-')[0], []).append(r['name'])
@@ -233,8 +272,10 @@ def main():
 def write_report(build, names, light, dark, other, rows, tok):
     gap = [r for r in rows if not r['in_any_set']]
     sem = semantic_families(tok)
-    generic = [r for r in gap if is_generic_palette(r['name'], sem)]
-    triage = [r for r in gap if not is_generic_palette(r['name'], sem)]
+    _cls = {r['name']: palette_class(r['name'], sem) for r in gap}
+    generic = [r for r in gap if _cls[r['name']] == 'generic']
+    review = [r for r in gap if _cls[r['name']] == 'review']
+    triage = [r for r in gap if _cls[r['name']] == 'semantic'] + review
 
     def block(scope):
         sub = [r for r in rows if r['scope'] == scope]
@@ -274,14 +315,21 @@ def write_report(build, names, light, dark, other, rows, tok):
     add('not, so the "all aliases" reading of the gap is **wrong** and is retracted.\n')
     add('| The %d that do not reconcile | Count |' % len(gap))
     add('|---|---|')
-    add('| Generic UI-kit palette DGA ships but does not publish as a DGA token | %d |' % len(generic))
-    add('| **DGA-namespaced values this kit simply does not hold** | **%d** |\n' % len(triage))
+    add('| Generic UI-kit ramp DGA ships but does not publish as a DGA token | %d |' % len(generic))
+    add('| **DGA-namespaced values this kit does not hold** | **%d** |'
+        % len([r for r in gap if _cls[r['name']] == 'semantic']))
+    add('| Unknown family, left for review rather than excluded | %d |' % len(review))
+    add('| **To triage (the last two together)** | **%d** |\n' % len(triage))
     add('The first group is a defensible exclusion — DGA\'s stylesheet carries the whole upstream')
     add('Untitled-UI ramp (blue, cyan, fuchsia, indigo, moss, orange, pink, purple, red, teal,')
     add('violet, yellow, and seven separate grey ramps) and the published system names %d families.'
         % len(sem))
-    add('It was never *stated* as an exclusion, which is the actual defect. The second group is a')
-    add('real coverage gap.\n')
+    add('It was never *stated* as an exclusion, which is the actual defect.\n')
+    add('That exclusion list is **explicit, not inferred**. An earlier "anything not in the')
+    add('semantic set" rule swept up `--colors-border-primary`, `--colors-text-primary` and the')
+    add('`--colors-alpha-*` primitives as though they were ramp steps — and a wrong exclusion')
+    add('**hides** a real gap. Anything neither evidenced-generic nor a known DGA family is left')
+    add('for review and counted in the triage total, never dropped silently.\n')
     if triage:
         fam = {}
         for r in triage:

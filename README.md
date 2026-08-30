@@ -138,11 +138,13 @@ The rest are aliases and per-component role vars resolving to values already hel
 ```
 
 [`harvest/reconcile-tokens.py`](harvest/reconcile-tokens.py) settled it declaration by
-declaration against the live stylesheet: **516 resolve to values `tokens.json` does not hold.**
-Of those, **276** are the upstream Untitled-UI ramp DGA ships in CSS but does not publish as a
-Platforms Code colour — a deliberate exclusion that had simply never been *stated*. The other
-**240 are a real coverage gap**, including the entire `--alpha-*` transparency scale and the
-`--tag-*`, `--notification-*` and `--featuredicons-*` role sets. Every one is listed in
+declaration against the live stylesheet: **412 resolve to values `tokens.json` does not hold.**
+Of those, **246 are the generic ramp** — the upstream Untitled-UI palette DGA ships in CSS but
+does not publish as a Platforms Code colour, a deliberate exclusion that had simply never been
+*stated*. The remaining **166 go to triage**: 141 DGA-namespaced values the kit does not hold,
+plus 25 whose family is unrecognised and are left for review rather than quietly excluded. That
+covers the entire `--alpha-*` transparency scale and the `--button-*`, `--link-*`,
+`--notification-*` and `--tag-*` role sets. Every one is listed in
 [harvest/RECONCILIATION.md](harvest/RECONCILIATION.md).
 
 The system is "Platforms Code", published version **1.0.3** (released 4 Nov 2025, per
@@ -218,7 +220,7 @@ harvest/    the evidence behind every rule, and the monitoring that keeps it hon
               snapshots/          machine-owned page text, for diffing only
               FRESHNESS.md        generated: last check, what moved, review pending?
               reconcile-tokens.py    every DGA declaration vs every value we carry
-              RECONCILIATION.md      generated: the 240 DGA values we do NOT carry
+              RECONCILIATION.md      generated: every DGA value we do NOT carry
 evals/      23 eval cases across two suites, run by `claude plugin eval`:
               <suite>/cases/*.md        the cases, in markdown — the source a human reviews
               build-evals-json.py       generates skills/<skill>/evals/evals.json from them

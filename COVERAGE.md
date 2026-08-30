@@ -382,16 +382,20 @@ convert one number into the other:
 set must quote it, and no file anywhere may describe the 1,052 read as a count of tokens shipped.
 **That "aliases" explanation was itself wrong, and is retracted.**
 `harvest/reconcile-tokens.py` reconciled the gap declaration by declaration against the live
-stylesheet (build `PDaQ7SHU`): **516 resolve to values `tokens.json` does not hold** — 276 the
-upstream Untitled-UI ramp DGA ships but does not publish as a Platforms Code colour, and **240 a
-real coverage gap**. Both figures are recorded in `$meta.$reconciliation` and every one of the
-240 is listed in `harvest/RECONCILIATION.md`.
+stylesheet (build `PDaQ7SHU`): **412 resolve to values `tokens.json` does not hold** — **246 the
+generic ramp** DGA ships but does not publish as a Platforms Code colour, and **166 to triage**
+(141 DGA-namespaced, plus 25 of unrecognised family left for review). Every figure is recorded in
+`$meta.$reconciliation` and every declaration is listed in `harvest/RECONCILIATION.md`.
 
-Two lessons worth keeping. The unstated exclusion was the actual defect on the 276 — dropping the
-generic ramp is right, *not saying so* is what made the count look like a contradiction. And the
-reconciliation was only possible because it compared **resolved values, not names**: DGA declares
-its roles as `var()` chains, so a name-based diff would have reported a gap ten times larger and
-been useless.
+Three lessons worth keeping. The unstated exclusion was the actual defect on the generic ramp —
+dropping it is right, *not saying so* is what made the count look like a contradiction. The
+reconciliation only works because it compares **resolved values, not names**: DGA declares its
+roles as `var()` chains, so a name diff reports a gap ten times larger and is useless. And
+resolution has to honour the **cascade and the theme scope** — DGA redeclares 393 light names,
+so a first-match resolver reported `--background-black` as an uncarried `#000000` when the
+effective value is the already-carried `#161616`. That bug alone inflated the gap by 104
+declarations, and the exclusion rule that replaced it has to be an **evidenced list**, because
+one that infers "not semantic, therefore decorative" hides real gaps behind a plausible label.
 
 **Values restated in prose.** The breakpoint bands, spacing steps and paragraph width are
 re-derived from `tokens.json` and compared against every markdown copy. The first version of the
@@ -424,8 +428,8 @@ Stated plainly so no skill implies coverage it lacks.
 | **Digital Transformation Measurement Indicator** | `dga-launch-gate` §6 incomplete | Harvest — published outside design.dga.gov.sa |
 | **Digital Experience Maturity Indicator** | same | same |
 | **Assessment Criteria *checklist file*** | The scoring page is captured (`harvest/raw/2026-08-27-section-sweep.md`); the downloadable checklist is a separate file | `Download Checklist` on `/AssessmentCriteria` |
-| **240 DGA-namespaced token values** | Reconciled 2026-08-30 against build `PDaQ7SHU`: the whole `--alpha-*` transparency scale (49), `--tag-*` (29), `--notification-*` (22), `--button-*` interaction states (17), `--featuredicons-*` (17), `--link-*` (16), `--border-*` (15), `--form-*` (14), and more. **A skill must not tell a caller a value is absent from DGA because it is absent from `tokens.json`.** Full list in `harvest/RECONCILIATION.md` | Re-harvest and carry them — `python3 harvest/reconcile-tokens.py` regenerates the list |
-| **The upstream Untitled-UI ramp** (276 declarations) | *Deliberately excluded*, not missing: blue, cyan, fuchsia, indigo, moss, orange, pink, purple, red, teal, violet, yellow and seven separate grey ramps. DGA ships them in CSS but does not publish them as Platforms Code colours. Recorded here because failing to **state** the exclusion is what made the token count look like a contradiction | None — but never quote these as DGA colours |
+| **166 token values to triage** | Reconciled 2026-08-31 against build `PDaQ7SHU`: 141 DGA-namespaced values this kit does not hold, plus 25 whose family is unrecognised and are left for review rather than excluded. Covers the whole `--alpha-*` transparency scale (49), `--button-*` interaction states (17), `--link-*` (16), `--notification-*` (14), `--gradient-*` (12), `--tag-*` (10), `--border-*` (6), `--controls-*` (5), `--featuredicons-*` (5), `--form-*` (4). **A skill must not tell a caller a value is absent from DGA because it is absent from `tokens.json`.** Full list in the reconciliation report | Re-harvest and carry them — the reconciler regenerates the list |
+| **The upstream Untitled-UI generic ramp** (246 declarations) | *Deliberately excluded*, not missing: blue, cyan, fuchsia, indigo, moss, orange, pink, purple, red, teal, violet, yellow and seven separate grey ramps. DGA ships them in CSS but does not publish them as Platforms Code colours. The exclusion list is **explicit, name by name** — an inferred "not semantic, therefore decorative" rule wrongly swept up `--colors-border-primary`, `--colors-text-primary` and the `--colors-alpha-*` primitives, and a wrong exclusion hides a real gap | None — but never quote these as DGA colours |
 | **Responsive radius & spacing values** | Per-breakpoint tokens can't be resolved; treating them as constants is wrong on two of three breakpoints | PC 1.0 Foundations Figma variable collections |
 | ~~**Dark theme values**~~ | **Closed 2026-08-27** — all **402** are in the public CSS bundle; the 67 text/background roles are in `tokens.json` as `role.dark` and audited by `check-contrast.mjs --theme dark`. 🚩 DGA's selector `[data-theme=dark] :root` can never match, so its dark theme is inert. **We do not ship it either** — see the row below | Remaining 340 non-role declarations are uncaptured in **both** themes — see `role.dark.$comment` |
 | **Dark theme, shippable** | `tokens.css` deliberately emits **no** dark rule. Correcting DGA's selector would activate 1.05:1 pairings for anyone already using `data-theme="dark"`, and the five `*-light` status surfaces have no dark tint anywhere in DGA's output — so it cannot be made safe without inventing values | An entity that wants dark mode owns the remediation and records it in `dga-brand-overlay` |

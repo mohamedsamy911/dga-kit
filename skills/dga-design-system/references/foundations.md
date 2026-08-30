@@ -6,7 +6,7 @@
 
 Machine-readable values live in `../assets/tokens.json` — **303 values**, extracted verbatim from
 DGA's own CSS custom properties. Prefer those over anything transcribed here, but note that
-**240 DGA-namespaced declarations are not carried** (the `--alpha-*` scale, `--tag-*`,
+**166 declarations are not carried** (the `--alpha-*` scale, `--button-*`, `--link-*`,
 `--notification-*` and other role sets); read those off the live `:root`. See
 `$meta.$reconciliation` in `tokens.json`.
 
