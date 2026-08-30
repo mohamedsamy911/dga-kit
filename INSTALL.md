@@ -69,10 +69,13 @@ reads *"Migrate subagents from `~/.claude/agents` to `~/.codex/agents`"*, and
 tested, five of this kit's six agents had been converted to TOML that way. **Five of six is the
 point:** `dga-frontend-architect` was missing, and no local log or specification explains what
 performed the conversion. It also reads from `~/.claude/agents`, not from the installed plugin —
-so it is a Codex feature that may run, not an install path this kit controls. **Converting an agent by hand.** Codex agents are TOML in `~/.codex/agents/`. Each of this kit's
-agents is Markdown with YAML front matter (`name`, `description`) and a Markdown body. The mapping
-is direct — front matter `name` and `description` become TOML keys, and the entire Markdown body
-becomes `developer_instructions`:
+so it is a Codex feature that may run, not an install path this kit controls.
+
+**Converting an agent by hand.** Codex agents are TOML — in `~/.codex/agents/` for your machine,
+or `.codex/agents/` for a single project. Each of this kit's agents is Markdown with YAML front
+matter (`name`, `description`) and a Markdown body. The mapping is direct — front matter `name`
+and `description` become TOML keys, and the entire Markdown body becomes
+`developer_instructions`:
 
 ```toml
 # ~/.codex/agents/dga-designer.toml
@@ -89,9 +92,29 @@ Verify it was picked up with:
 codex agents
 ```
 
-⚠️ This is a **manual workaround, not a supported path**. The shape above is copied from files
-Codex itself produced on the machine this was tested on; no published specification for the agent
-TOML format was found, so treat the field set as observed rather than documented.
+**This is a supported Codex feature, and it is documented.** An earlier version of this page said
+no published specification for the agent TOML format existed and that the field set should be
+treated as observed rather than documented. That was wrong, and it understated what you can rely
+on. OpenAI documents custom agents at
+[learn.chatgpt.com/docs/agent-configuration/subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents)
+(retrieved 2026-08-31): standalone TOML files in `~/.codex/agents/` for personal agents or
+`.codex/agents/` for project-scoped ones, one agent per file. `name`, `description` and
+`developer_instructions` are the **required** fields — exactly the three above — and `model`,
+`model_reasoning_effort`, `sandbox_mode`, `mcp_servers` and `skills.config` are optional, along
+with other `config.toml` keys.
+
+Two details worth knowing before you convert anything:
+
+- **`name` is the source of truth, not the filename.** Matching the two is the simplest
+  convention, but Codex identifies the agent by the field.
+- **`.codex/agents/` works per project.** If you want these agents on one repo rather than your
+  whole machine, put the TOML there and commit it — this page's `~/.codex/agents/` examples are
+  the personal-scope case.
+
+⚠️ **What remains unsupported is shipping them through this plugin**, not writing them by hand.
+Codex's plugin manifest has no top-level `agents` field, so `codex plugin add dga-kit@dga-kit`
+installs the 11 skills and nothing else. Converting an agent is a supported thing you do
+yourself; it is not something the install does for you.
 
 ### `interface.capabilities`
 

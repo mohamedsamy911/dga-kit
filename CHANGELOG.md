@@ -42,6 +42,32 @@ declaration by declaration against live stylesheet build `PDaQ7SHU`:
 `tokens.json`.** That warning is now in `dga-design-system`, `dga-ui-adapter` and
 `foundations.md`, and the gap is a stated row in COVERAGE.md's known-gaps table.
 
+### Corrected — the Codex agent TOML format is documented, and this page said it was not
+
+`INSTALL.md` claimed *"no published specification for the agent TOML format was found, so treat
+the field set as observed rather than documented"*, and labelled hand-conversion a **manual
+workaround, not a supported path**. Both were wrong, and they understated what a reader can rely
+on — the opposite of this kit's usual failure, but the same defect: a claim about a source that
+does not match the source.
+
+OpenAI documents custom agents at
+[learn.chatgpt.com/docs/agent-configuration/subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents)
+(retrieved 2026-08-31). `name`, `description` and `developer_instructions` are the **required**
+fields — exactly the three this page had inferred from observed files, so the shape was right and
+only its status was wrong — with `model`, `model_reasoning_effort`, `sandbox_mode`, `mcp_servers`
+and `skills.config` optional. Two things the guesswork had missed entirely:
+
+- **`.codex/agents/` is a supported project scope.** The page only knew about `~/.codex/agents/`,
+  so it never told anyone they could commit these agents to a single repo.
+- **`name` is the source of truth, not the filename.**
+
+The unsupported part is narrower than the page claimed and is now stated precisely: **shipping
+the agents through this plugin** is what Codex's manifest cannot do, because it has no top-level
+`agents` field. Writing the TOML yourself is a documented, supported thing.
+
+Also fixed in that section: a lost paragraph break had run the import-caveat sentence and the
+"Converting an agent by hand" heading into one line.
+
 ### Corrected — two defects in the reconciler itself, found in review
 
 Successive review cuts reported 516/276/240 and then 412/246/166. Those were wrong, and each
