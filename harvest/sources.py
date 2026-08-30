@@ -98,6 +98,16 @@ THOUGHTS = ['AccessibilityEase', 'atomic-design', 'consistency-and-unified-ident
 DS = 'skills/dga-design-system/references/'
 
 
+# A custom property is an ident at the START of a declaration - after `{` or `;`. The first
+# version of this pattern anchored on nothing, so `.btn--close[disabled],.btn--sort:hover`
+# matched as a property named `--close[disabled],.btn--sort` and 83 BEM class fragments were
+# counted as tokens: 1,209 reported against 1,126 real. Excluding the selector characters
+# `,[]()` while keeping the class otherwise broad matters - DGA declares `--colors-rose-*`
+# with a non-ASCII acute, so an [A-Za-z0-9_-] ident class drops 14 real properties. Verified
+# against an independent block parser (harvest/reconcile-tokens.py): both give 1,126 exactly.
+CUSTOM_PROP = rb'[{;]\s*(--[^\s:{};,\[\]()]+)\s*:'
+
+
 def fetch(url, timeout=45):
     req = urllib.request.Request(url, headers={'User-Agent': UA})
     with urllib.request.urlopen(req, timeout=timeout) as r:
@@ -135,7 +145,7 @@ def asset_problem(kind, status, body):
     if not body.strip():
         return f'{kind} responded with an empty body'
     if kind == 'stylesheet':
-        n = len(set(re.findall(rb'(--[^\s:{};]+)\s*:', body)))
+        n = len(set(re.findall(CUSTOM_PROP, body)))
         if n < 100:
             return (f'stylesheet declares {n} custom properties; DGA publishes over a thousand, '
                     f'so this is not the token surface')
@@ -185,7 +195,7 @@ def tier_a_baselines():
     out['stylesheet'] = {
         'url': BASE + css_path, 'status': status, 'bytes': len(css), 'sha256': sha(css),
         'buildHash': css_path.split('index-')[-1].split('.css')[0],
-        'customProperties': len(set(re.findall(rb'(--[^\s:{};]+)\s*:', css))),
+        'customProperties': len(set(re.findall(CUSTOM_PROP, css))),
         'facts': facts_from_css(css),
         'note': 'THE tripwire. The filename carries Vite\'s build hash, so it changes on '
                 'every DGA deploy. This file also holds the whole token surface, including '
@@ -312,7 +322,7 @@ def facts_from_css(css):
         'text.secondary.resolved': _resolve(css, ts),
         'darkSelectorUnmatchable': b'[data-theme=dark] :root' in css,
         'darkSelectorFixed': b':root[data-theme=dark]' in css or b':root[data-theme="dark"]' in css,
-        'customProperties': len(set(re.findall(rb'(--[^\s:{};]+)\s*:', css))),
+        'customProperties': len(set(re.findall(CUSTOM_PROP, css))),
     }
 
 

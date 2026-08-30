@@ -70,13 +70,13 @@
       "bytes": 4044922,
       "sha256": "a1ccbe89c4c58f65f949f9c1775cee6f23835127b1f2e70d5bea3798489a9a9b",
       "buildHash": "PDaQ7SHU",
-      "customProperties": 1209,
+      "customProperties": 1126,
       "facts": {
         "text.secondary.declared": "var(--colors-secondary-gold-600-primary)",
         "text.secondary.resolved": "#dba102",
         "darkSelectorUnmatchable": true,
         "darkSelectorFixed": false,
-        "customProperties": 1209
+        "customProperties": 1126
       },
       "note": "THE tripwire. The filename carries Vite's build hash, so it changes on every DGA deploy. This file also holds the whole token surface, including the 402 dark-theme declarations under the unmatchable [data-theme=dark] :root selector."
     },

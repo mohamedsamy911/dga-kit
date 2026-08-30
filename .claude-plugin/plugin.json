@@ -1,6 +1,6 @@
 {
   "name": "dga-kit",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Saudi DGA \"Platforms Code\" guidance (unofficial; not a DGA certification) for designers and developers, on any UI library. 11 skills + 6 agents. Foundations, 50 components, 19 templates, 303 token values — every reference cited to its DGA page set.",
   "author": {
     "name": "Mohamed Samy",

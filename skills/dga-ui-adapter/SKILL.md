@@ -41,10 +41,16 @@ the specific mistakes that pass a build, a type check and a casual review.
 
 ## Step 1 — wire the tokens once, at the theme layer
 
-DGA's token values are already extracted and machine-readable — **303 of them**, read from the
-1,052 CSS custom properties DGA declares on `:root`. That is a distillation, not the whole 1,052:
-the rest are aliases and per-component role vars resolving to values already here. If one you
-need is missing, read it off the live `:root` rather than assuming it was dropped deliberately.
+DGA's token values are already extracted and machine-readable — **303 of them**, distilled from
+the 1,126 custom properties DGA's stylesheet declares.
+
+⚠️ **That distillation has known holes, and they are in the roles you will reach for.** A
+declaration-by-declaration reconciliation found **240 DGA-namespaced values these files do not
+carry** — the whole `--alpha-*` transparency scale, plus `--tag-*`, `--notification-*`,
+`--button-*` interaction states, `--featuredicons-*`, `--link-*`, `--border-*` and `--form-*`.
+If the value you need is missing, **read it off the live `:root`** rather than substituting the
+nearest carried token. See [the reconciliation record](https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/RECONCILIATION.md) for the
+full list.
 
 | File (in `../dga-design-system/assets/`) | Use it when |
 |---|---|

@@ -1421,6 +1421,52 @@ for _f in _PROSE:
 chk('prose: every line sizing running text states the paragraph max-width', not _bad,
     f'tokens.json says {_pw}px - {_bad}')
 
+# --- the reconciliation figures ------------------------------------------------
+# The gap between what DGA declares and what tokens.json carries was described for two releases
+# as "aliases resolving to values already carried". harvest/reconcile-tokens.py disproved that:
+# 516 declarations resolve to values this kit does not hold. Those numbers are now quoted in six
+# documents, which makes them exactly the kind of restated figure that rots - so they are pinned
+# to $meta.$reconciliation the same way the carried counts are.
+_rec = t['$meta'].get('$reconciliation', {})
+chk('reconciliation: tokens.json records it', bool(_rec),
+    'run: python3 harvest/reconcile-tokens.py --write, then record $meta.$reconciliation')
+
+if _rec:
+    chk('reconciliation: the split adds up',
+        _rec['notCarriedGenericPalette'] + _rec['notCarriedDgaNamespaced'] == _rec['notCarried'],
+        f"{_rec['notCarriedGenericPalette']} + {_rec['notCarriedDgaNamespaced']} "
+        f"!= {_rec['notCarried']}")
+    chk('reconciliation: what is not carried is fewer than what DGA declares',
+        _rec['notCarried'] < _rec['distinctCustomProperties'])
+    chk('reconciliation: the report exists',
+        os.path.exists(os.path.join(ROOT, 'harvest/RECONCILIATION.md')),
+        'run: python3 harvest/reconcile-tokens.py --write')
+
+    # Every doc that quotes the real-gap figure must quote the CURRENT one. This is the number a
+    # reader acts on - it is the difference between "tokens.json is complete" and "read the value
+    # off the live :root instead".
+    _GAP_DOCS = ['README.md', 'COVERAGE.md', 'skills/dga-design-system/SKILL.md',
+                 'skills/dga-ui-adapter/SKILL.md',
+                 'skills/dga-design-system/references/foundations.md']
+    _n = str(_rec['notCarriedDgaNamespaced'])
+    _missing = [f for f in _GAP_DOCS
+                if _n not in open(os.path.join(ROOT, f), encoding='utf-8').read()]
+    chk('reconciliation: every doc naming the real gap quotes the current figure', not _missing,
+        f'{_missing} do not mention {_n}')
+
+    # The retracted wording must not come back. It read as reassurance and it was false.
+    _RETRACTED = re.compile(
+        r'(?i)(aliases and per-component role vars resolving to values already'
+        r'|the rest are aliases and per-component role vars)')
+    _back = []
+    for _f in _PROSE:
+        for _i, _line in _unfenced(_f):
+            if _RETRACTED.search(_line):
+                _back.append(f'{_f}:{_i}')
+    chk('reconciliation: the retracted "all aliases" wording has not returned', not _back,
+        str(_back) + ' - disproved by harvest/reconcile-tokens.py; see $meta.$reconciliation')
+
+
 print()
 if failures:
     print(f'{len(failures)} FAILING — fixtures disagree with tokens.json')

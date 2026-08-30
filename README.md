@@ -126,10 +126,24 @@ out loud, [where DGA itself is silent or self-contradictory](COVERAGE.md#where-d
 ## Status, honestly
 
 Token values were **extracted from the live site's CSS custom properties**, not transcribed, on
-2026-08-26. DGA declares **1,052 custom properties** on `:root`; `tokens.json` carries the **303**
-a project consumes, plus **67** dark values held for audit only. The rest are aliases and
-per-component role vars resolving to values already held — a reduction **not** reconciled
-var-by-var, so read 1,052 as what was *read*, never as what is *shipped*.
+2026-08-26. `tokens.json` carries **303** values a project consumes, plus **67** dark values held
+for audit only. DGA's stylesheet declares **1,126** custom properties — 1,065 on `:root`, 402
+under the dark selector, 61 elsewhere.
+
+**That gap is now reconciled, and the earlier explanation of it was wrong.** This kit used to
+explain the difference away as aliasing:
+
+```text
+The rest are aliases and per-component role vars resolving to values already held.
+```
+
+[`harvest/reconcile-tokens.py`](harvest/reconcile-tokens.py) settled it declaration by
+declaration against the live stylesheet: **516 resolve to values `tokens.json` does not hold.**
+Of those, **276** are the upstream Untitled-UI ramp DGA ships in CSS but does not publish as a
+Platforms Code colour — a deliberate exclusion that had simply never been *stated*. The other
+**240 are a real coverage gap**, including the entire `--alpha-*` transparency scale and the
+`--tag-*`, `--notification-*` and `--featuredicons-*` role sets. Every one is listed in
+[harvest/RECONCILIATION.md](harvest/RECONCILIATION.md).
 
 The system is "Platforms Code", published version **1.0.3** (released 4 Nov 2025, per
 `/updates/change-log`). The nav badge and footer still read "Version 1.0" and the Figma files
@@ -203,6 +217,8 @@ harvest/    the evidence behind every rule, and the monitoring that keeps it hon
               deep.py             Tier B: browser-captured page text (--capture / --accept)
               snapshots/          machine-owned page text, for diffing only
               FRESHNESS.md        generated: last check, what moved, review pending?
+              reconcile-tokens.py    every DGA declaration vs every value we carry
+              RECONCILIATION.md      generated: the 240 DGA values we do NOT carry
 evals/      23 eval cases across two suites, run by `claude plugin eval`:
               <suite>/cases/*.md        the cases, in markdown — the source a human reviews
               build-evals-json.py       generates skills/<skill>/evals/evals.json from them

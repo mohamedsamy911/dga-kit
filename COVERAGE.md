@@ -368,9 +368,9 @@ worse than having no eval.
 
 It also guards two things the quote checker structurally cannot, because neither is a quote:
 
-**The token count contract.** DGA declares **1,052** custom properties on `:root`; `tokens.json`
-carries **303**, plus **67** dark values held for audit only. The prose used to convert one number
-into the other:
+**The token count contract.** `tokens.json` carries **303** values, plus **67** dark held for
+audit only, out of the **1,126** custom properties DGA's stylesheet declares. The prose used to
+convert one number into the other:
 
 ```text
 "1,052 design tokens"
@@ -380,9 +380,18 @@ into the other:
 — which promised a developer wiring a theme roughly 3.5× what the file holds.
 `$meta.carriedValues` is now asserted to be the real leaf count, every doc that sizes the token
 set must quote it, and no file anywhere may describe the 1,052 read as a count of tokens shipped.
-Quote **1,052 as what was read** and **303 as what is shipped**; the gap is aliases and
-per-component role vars resolving to values already carried, and it has **not** been reconciled
-var-by-var.
+**That "aliases" explanation was itself wrong, and is retracted.**
+`harvest/reconcile-tokens.py` reconciled the gap declaration by declaration against the live
+stylesheet (build `PDaQ7SHU`): **516 resolve to values `tokens.json` does not hold** — 276 the
+upstream Untitled-UI ramp DGA ships but does not publish as a Platforms Code colour, and **240 a
+real coverage gap**. Both figures are recorded in `$meta.$reconciliation` and every one of the
+240 is listed in `harvest/RECONCILIATION.md`.
+
+Two lessons worth keeping. The unstated exclusion was the actual defect on the 276 — dropping the
+generic ramp is right, *not saying so* is what made the count look like a contradiction. And the
+reconciliation was only possible because it compared **resolved values, not names**: DGA declares
+its roles as `var()` chains, so a name-based diff would have reported a gap ten times larger and
+been useless.
 
 **Values restated in prose.** The breakpoint bands, spacing steps and paragraph width are
 re-derived from `tokens.json` and compared against every markdown copy. The first version of the
@@ -415,6 +424,8 @@ Stated plainly so no skill implies coverage it lacks.
 | **Digital Transformation Measurement Indicator** | `dga-launch-gate` §6 incomplete | Harvest — published outside design.dga.gov.sa |
 | **Digital Experience Maturity Indicator** | same | same |
 | **Assessment Criteria *checklist file*** | The scoring page is captured (`harvest/raw/2026-08-27-section-sweep.md`); the downloadable checklist is a separate file | `Download Checklist` on `/AssessmentCriteria` |
+| **240 DGA-namespaced token values** | Reconciled 2026-08-30 against build `PDaQ7SHU`: the whole `--alpha-*` transparency scale (49), `--tag-*` (29), `--notification-*` (22), `--button-*` interaction states (17), `--featuredicons-*` (17), `--link-*` (16), `--border-*` (15), `--form-*` (14), and more. **A skill must not tell a caller a value is absent from DGA because it is absent from `tokens.json`.** Full list in `harvest/RECONCILIATION.md` | Re-harvest and carry them — `python3 harvest/reconcile-tokens.py` regenerates the list |
+| **The upstream Untitled-UI ramp** (276 declarations) | *Deliberately excluded*, not missing: blue, cyan, fuchsia, indigo, moss, orange, pink, purple, red, teal, violet, yellow and seven separate grey ramps. DGA ships them in CSS but does not publish them as Platforms Code colours. Recorded here because failing to **state** the exclusion is what made the token count look like a contradiction | None — but never quote these as DGA colours |
 | **Responsive radius & spacing values** | Per-breakpoint tokens can't be resolved; treating them as constants is wrong on two of three breakpoints | PC 1.0 Foundations Figma variable collections |
 | ~~**Dark theme values**~~ | **Closed 2026-08-27** — all **402** are in the public CSS bundle; the 67 text/background roles are in `tokens.json` as `role.dark` and audited by `check-contrast.mjs --theme dark`. 🚩 DGA's selector `[data-theme=dark] :root` can never match, so its dark theme is inert. **We do not ship it either** — see the row below | Remaining 340 non-role declarations are uncaptured in **both** themes — see `role.dark.$comment` |
 | **Dark theme, shippable** | `tokens.css` deliberately emits **no** dark rule. Correcting DGA's selector would activate 1.05:1 pairings for anyone already using `data-theme="dark"`, and the five `*-light` status surfaces have no dark tint anywhere in DGA's output — so it cannot be made safe without inventing values | An entity that wants dark mode owns the remediation and records it in `dga-brand-overlay` |

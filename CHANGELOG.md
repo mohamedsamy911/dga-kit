@@ -11,6 +11,54 @@ patch means corrections. Nothing here is a DGA release — see
 `skills/dga-design-system/dga-version.md` for the Platforms Code version this kit is pinned to
 (currently **PC 1.0.3**, released 4 Nov 2025).
 
+## 0.7.2 — 2026-08-31
+
+One finding, followed all the way down: the gap explanation 0.7.1 shipped was wrong, and
+the monitoring that should have caught it was miscounting.
+
+### Corrected — the token gap is reconciled, and the old explanation was wrong
+
+0.7.1 stated the gap between what DGA declares and what `tokens.json` carries, and explained it
+as aliasing. **The explanation was false.** `harvest/reconcile-tokens.py` (new) settled it
+declaration by declaration against live stylesheet build `PDaQ7SHU`:
+
+- DGA's stylesheet declares **1,126** custom properties — 1,065 on `:root`, 402 under the
+  unmatchable dark selector, 61 elsewhere. Two independent parsers agree exactly.
+- **516 declarations resolve to values `tokens.json` does not hold.**
+- **276** of those are the upstream Untitled-UI ramp DGA ships in CSS but does not publish as a
+  Platforms Code colour — blue, cyan, fuchsia, indigo, moss, orange, pink, purple, red, teal,
+  violet, yellow and seven separate grey ramps. Excluding them is right; **never stating the
+  exclusion** is what made the count look like a contradiction.
+- **240 are a real coverage gap** — the whole `--alpha-*` transparency scale (49), `--tag-*`
+  (29), `--notification-*` (22), `--button-*` interaction states (17), `--featuredicons-*` (17),
+  `--link-*` (16), `--border-*` (15), `--form-*` (14) and more. Every one is listed in
+  `harvest/RECONCILIATION.md`.
+
+**A skill must not tell a caller a value is absent from DGA because it is absent from
+`tokens.json`.** That warning is now in `dga-design-system`, `dga-ui-adapter` and
+`foundations.md`, and the gap is a stated row in COVERAGE.md's known-gaps table.
+
+- **`customProperties: 1209` was an over-count, and the monitoring produced it.**
+  `sources.py`'s pattern anchored on nothing, so `.btn--close[disabled],.btn--sort:hover` matched
+  as a property named `--close[disabled],.btn--sort`. **83 BEM class fragments were counted as
+  tokens.** Anchoring on `{` or `;` and excluding selector characters gives **1,126**, matching
+  an independent block parser exactly. The recorded baseline was corrected and the sentinel
+  re-run deep against live DGA: no change, so the fix is consistent with the site rather than
+  merely self-consistent. Note the ident class stays broad on purpose — DGA declares
+  `--colors-rosé-*` with a non-ASCII acute, and an `[A-Za-z0-9_-]` ident drops 14 real properties.
+
+### Added
+
+- `harvest/reconcile-tokens.py` — reconciles every DGA declaration against every value the kit
+  carries, by **resolved value rather than by name** (DGA declares its roles as `var()` chains,
+  so a name diff reports a gap ten times larger and is useless). Reuses `sources.py`'s fetch path
+  and its refusal-to-trust-the-response guards. `--write` regenerates `harvest/RECONCILIATION.md`;
+  `--css FILE` runs offline against a saved stylesheet.
+- Four guards in `evals/validate-fixtures.py`: the reconciliation split must add up, every doc
+  naming the real gap must quote the current figure, the report must exist, and **the retracted
+  "all aliases" wording must not come back**. All mutation-tested.
+
+
 ## 0.7.1 — 2026-08-30
 
 Corrections and guards, no new DGA coverage. Every fix here closes a gap between what the kit
