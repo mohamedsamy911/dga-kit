@@ -36,6 +36,8 @@ not, so the "all aliases" reading of the gap is **wrong** and is retracted.
 | The 412 that do not reconcile | Count |
 |---|---|
 | Generic UI-kit ramp DGA ships but does not publish as a DGA token | 246 |
+| Composite of values already carried — the gradient set. Not a missing value: what is absent is the gradient *definition* | 12 |
+| Unresolved expression — still holds a `var()` nothing declares. Not evidence of a missing value | 0 |
 | **DGA-namespaced values this kit does not hold** | **129** |
 | Unknown family, left for review rather than excluded | 25 |
 | **To triage (the last two together)** | **154** |
@@ -225,3 +227,24 @@ for review and counted in the triage total, never dropped silently.
 | light | `--tag-dot` | `var(--colors-alpha-alpha-white-60)` | `#ffffff99` |
 | light | `--tag-icon-warning` | `var(--colors-yellow-800)` | `#93370c` |
 | light | `--tag-text-warning` | `var(--colors-yellow-800)` | `#93370c` |
+
+### The 12 composites of already-carried values
+
+Not missing values. Every colour in each of these is already in `tokens.json`; what
+the kit does not carry is the composite definition itself — the angle and the stops.
+Listed so that is a decision someone makes, not an omission nobody sees.
+
+| Scope | Custom property | Resolves to | Components carried |
+|---|---|---|---|
+| light | `--gradient-brand-600-500-90deg` | `linear-gradient( 90deg, #1b8354 0%, #25935f 100% )` | 2/2 |
+| light | `--gradient-brand-700-600-45deg` | `linear-gradient( 45deg, #166a45 0%, #1b8354 100% )` | 2/2 |
+| light | `--gradient-brand-800-600-45deg` | `linear-gradient( 45deg, #14573a 0%, #1b8354 100% )` | 2/2 |
+| light | `--gradient-brand-800-600-90deg` | `linear-gradient( 90deg, #14573a 0%, #1b8354 100% )` | 2/2 |
+| light | `--gradient-brand-800-700-26-5deg` | `linear-gradient( 26.5deg, #1b8354 0%, #166a45 100% )` | 2/2 |
+| light | `--gradient-brand-900-600-45deg` | `linear-gradient( 45deg, #104631 0%, #1b8354 100% )` | 2/2 |
+| light | `--gradient-gray-600-500-90deg` | `linear-gradient( 90deg, #61646c 0%, #85888e 100% )` | 2/2 |
+| light | `--gradient-gray-700-600-45deg` | `linear-gradient( 45deg, #333741 0%, #61646c 100% )` | 2/2 |
+| light | `--gradient-gray-800-600-45deg` | `linear-gradient( 45deg, #1f242f 0%, #61646c 100% )` | 2/2 |
+| light | `--gradient-gray-800-600-90deg` | `linear-gradient( 90deg, #1f242f 0%, #61646c 100% )` | 2/2 |
+| light | `--gradient-gray-800-700-26-5deg` | `linear-gradient( 26.5deg, #61646c 0%, #333741 100% )` | 2/2 |
+| light | `--gradient-gray-900-600-45deg` | `linear-gradient( 45deg, #161b26 0%, #61646c 100% )` | 2/2 |

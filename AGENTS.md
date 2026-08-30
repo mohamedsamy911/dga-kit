@@ -25,6 +25,7 @@ python evals/validate-fixtures.py                # "All fixtures valid against t
 python evals/test-automation.py                  # "All automation scenarios detected correctly"
 python evals/check-quote-fidelity.py --ci        # must exit 0
 python evals/build-evals-json.py --check          # "evals.json is current for both suites"
+python harvest/reconcile-tokens.py --test         # "reconcile self-check passed" (offline)
 node skills/dga-design-system/assets/check-contrast.mjs --test   # "self-check passed"
 node skills/dga-design-system/assets/generate-tokens.mjs          # then `git diff` must be empty
 bash -n install-skills.sh

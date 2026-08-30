@@ -20,6 +20,7 @@ Usage:
   python3 harvest/reconcile-tokens.py             # fetch live, report
   python3 harvest/reconcile-tokens.py --write     # also write harvest/RECONCILIATION.md
   python3 harvest/reconcile-tokens.py --css FILE  # reconcile a saved stylesheet, no network
+  python3 harvest/reconcile-tokens.py --test      # offline self-check, no network
 """
 import importlib.util, json, os, re, sys
 
@@ -266,8 +267,107 @@ def gap_class(row, sem):
     return palette_class(row['name'], sem)
 
 
+def bucket(gap, sem):
+    """Split the unmatched declarations into their five categories.
+
+    Keyed by (scope, name), NEVER by name alone. The same custom property is declared in both
+    :root and the dark block, so a name-keyed dict collapses the two and the last one written
+    wins for both: a genuinely missing light value inherits its dark counterpart's
+    'composite-covered' and disappears from the gap. Today's stylesheet happens to have no
+    light/dark pair that is unmatched on both sides, which is exactly why this had to be fixed
+    on the structure rather than left to the data.
+    """
+    cls = {(r['scope'], r['name']): gap_class(r, sem) for r in gap}
+    def of(*kinds):
+        return [r for r in gap if cls[(r['scope'], r['name'])] in kinds]
+    return {
+        'generic': of('generic'),
+        'semantic': of('semantic'),
+        'review': of('review'),
+        'unresolved': of('unresolved'),
+        'composite': of('composite-covered'),
+        'triage': of('semantic', 'review'),
+    }
+
+
+def closing_note(triage, unresolved):
+    """What the report says when the triage bucket is empty.
+
+    Split out so it is assertable: "Nothing outstanding" must NEVER appear while an unresolved
+    expression remains. An expression nobody could resolve is an unanswered question about DGA's
+    stylesheet, not a clean bill of health, and a report that calls it clean is the one failure
+    this file exists to prevent.
+    """
+    if triage:
+        return []
+    if unresolved:
+        return ['Nothing is in the triage bucket, but %d expression(s) below could not be'
+                % len(unresolved),
+                'resolved. Read those before treating this as complete.']
+    return ['Nothing outstanding: every declaration DGA publishes resolves to a value this kit',
+            'already carries.']
+
+
+def _row(scope, name, **kw):
+    r = {'scope': scope, 'name': name, 'declared': '#abcdef', 'resolved': '#abcdef',
+         'kind': 'literal', 'unresolved': False, 'components': [], 'components_carried': None,
+         'in_scope_set': False, 'in_any_set': False}
+    r.update(kw)
+    return r
+
+
+def self_test():
+    """Offline assertions for the three defects review found in this file. No network."""
+    sem = {'brand', 'gray', 'error'}
+    light = {'--a': '#111111', '--g': 'linear-gradient(90deg, var(--a) 0%, var(--a) 100%)',
+             '--miss': 'var(--never-declared)', '--fb': 'var(--never-declared, #222222)'}
+    dark = {'--a': '#333333'}
+
+    # 1. Scope-correct resolution, composites included.
+    assert resolve(light['--g'], light, dark, 'light') == \
+        'linear-gradient(90deg, #111111 0%, #111111 100%)', 'composite did not resolve'
+    assert resolve('var(--a)', light, dark, 'dark') == '#333333', 'dark did not win in dark scope'
+    assert resolve('var(--a)', light, dark, 'light') == '#111111', 'light scope leaked dark'
+    assert resolve(light['--fb'], light, dark, 'light') == '#222222', 'fallback ignored'
+    assert 'var(' in resolve(light['--miss'], light, dark, 'light'), 'undeclared var vanished'
+
+    # 2. Classification must key on (scope, name). A name-keyed dict lets a dark row's verdict
+    #    overwrite the light row's, hiding a genuinely missing light value as 'covered'.
+    collide = [
+        _row('light', '--tag-x'),
+        _row('dark', '--tag-x', kind='composite', components=['#1b8354'],
+             components_carried=True, resolved='linear-gradient(90deg, #1b8354 0%)'),
+    ]
+    b = bucket(collide, sem)
+    assert collide[0] in b['semantic'], 'light row lost its own classification to the dark row'
+    assert collide[1] in b['composite'], 'dark row misclassified'
+    assert len(b['semantic']) + len(b['composite']) == 2, 'a row was double-counted or dropped'
+
+    # 3. Buckets partition the gap exactly - no row in two, none missing.
+    everything = collide + [_row('light', '--colors-blue-500'),
+                            _row('light', '--u', unresolved=True, resolved='var(--nope)')]
+    b2 = bucket(everything, sem)
+    counted = sum(len(b2[k]) for k in ('generic', 'semantic', 'review', 'unresolved', 'composite'))
+    assert counted == len(everything), f'buckets cover {counted} of {len(everything)}'
+    assert len(b2['triage']) == len(b2['semantic']) + len(b2['review']), 'triage is not the sum'
+
+    # 4. An unresolved expression is never reported as a confirmed missing value.
+    assert b2['unresolved'] and everything[3] not in b2['semantic'], \
+        'unresolved expression counted as a missing DGA value'
+
+    # 5. "Nothing outstanding" must never appear while anything is unresolved.
+    assert closing_note([], []) and 'Nothing outstanding' in closing_note([], [])[0],         'a genuinely clean run should say so'
+    assert not any('Nothing outstanding' in l for l in closing_note([], [_row('light', '--u')])),         'reported "Nothing outstanding" while an unresolved expression remained'
+    assert closing_note([_row('light', '--t')], []) == [],         'closing note emitted while the triage table is being printed'
+
+    print('reconcile self-check passed')
+    return 0
+
+
 def main():
     args = sys.argv[1:]
+    if '--test' in args:
+        return self_test()
     tok = json.load(open(os.path.join(ROOT, 'skills/dga-design-system/assets/tokens.json'),
                          encoding='utf-8'))
 
@@ -324,12 +424,9 @@ def main():
 
     gap_all = [r for r in rows if not r['in_any_set']]
     sem = semantic_families(tok)
-    _cls = {r['name']: gap_class(r, sem) for r in gap_all}
-    generic = [r for r in gap_all if _cls[r['name']] == 'generic']
-    review = [r for r in gap_all if _cls[r['name']] == 'review']
-    unresolved = [r for r in gap_all if _cls[r['name']] == 'unresolved']
-    composite = [r for r in gap_all if _cls[r['name']] == 'composite-covered']
-    triage = [r for r in gap_all if _cls[r['name']] == 'semantic'] + review
+    _b = bucket(gap_all, sem)
+    generic, review, unresolved = _b['generic'], _b['review'], _b['unresolved']
+    composite, triage = _b['composite'], _b['triage']
     print('CLAIM "the uncarried vars resolve to values already carried": %s'
           % ('HOLDS' if not gap_all
              else 'DOES NOT HOLD - %d declarations resolve to values tokens.json does not carry'
@@ -339,8 +436,7 @@ def main():
     print('  unresolved expression:                     %d  (not a missing value)'
           % len(unresolved))
     print('  generic UI-kit ramp, evidenced exclusion:  %d' % len(generic))
-    print('  DGA-namespaced, a real gap:                %d'
-          % len([r for r in gap_all if _cls[r['name']] == 'semantic']))
+    print('  DGA-namespaced, a real gap:                %d' % len(_b['semantic']))
     print('  unknown family, left for review:           %d' % len(review))
     print('  -> to triage (real gap + review):          %d' % len(triage))
     fam = {}
@@ -357,12 +453,9 @@ def main():
 def write_report(build, names, light, dark, other, rows, tok):
     gap = [r for r in rows if not r['in_any_set']]
     sem = semantic_families(tok)
-    _cls = {r['name']: gap_class(r, sem) for r in gap}
-    generic = [r for r in gap if _cls[r['name']] == 'generic']
-    review = [r for r in gap if _cls[r['name']] == 'review']
-    unresolved = [r for r in gap if _cls[r['name']] == 'unresolved']
-    composite = [r for r in gap if _cls[r['name']] == 'composite-covered']
-    triage = [r for r in gap if _cls[r['name']] == 'semantic'] + review
+    _b = bucket(gap, sem)
+    generic, review, unresolved = _b['generic'], _b['review'], _b['unresolved']
+    composite, triage = _b['composite'], _b['triage']
 
     def block(scope):
         sub = [r for r in rows if r['scope'] == scope]
@@ -400,12 +493,28 @@ def write_report(build, names, light, dark, other, rows, tok):
     add('**%d of %d** declarations resolve to a value `tokens.json` already carries. **%d** do'
         % (len(rows) - len(gap), len(rows), len(gap)))
     add('not, so the "all aliases" reading of the gap is **wrong** and is retracted.\n')
+    # Every row of this table, summed, must equal the header total. An earlier version listed
+    # only three of the five categories, so it showed 246 + 129 + 25 = 400 under a heading that
+    # said 412: the twelve composites simply vanished, and unresolved entries would have too.
+    # A reader cannot tell an omitted category from a category that is empty, so the assertion
+    # below fails the run rather than publishing a table that does not add up.
+    _TABLE = [
+        ('Generic UI-kit ramp DGA ships but does not publish as a DGA token', generic, False),
+        ('Composite of values already carried — the gradient set. Not a missing value: '
+         'what is absent is the gradient *definition*', composite, False),
+        ('Unresolved expression — still holds a `var()` nothing declares. Not evidence of a '
+         'missing value', unresolved, False),
+        ('**DGA-namespaced values this kit does not hold**', _b['semantic'], True),
+        ('Unknown family, left for review rather than excluded', review, False),
+    ]
+    _sum = sum(len(rs) for _, rs, _ in _TABLE)
+    if _sum != len(gap):
+        raise AssertionError('report categories total %d but %d declarations did not reconcile - '
+                             'a category is missing from _TABLE' % (_sum, len(gap)))
     add('| The %d that do not reconcile | Count |' % len(gap))
     add('|---|---|')
-    add('| Generic UI-kit ramp DGA ships but does not publish as a DGA token | %d |' % len(generic))
-    add('| **DGA-namespaced values this kit does not hold** | **%d** |'
-        % len([r for r in gap if _cls[r['name']] == 'semantic']))
-    add('| Unknown family, left for review rather than excluded | %d |' % len(review))
+    for _label, _rs, _bold in _TABLE:
+        add('| %s | %s |' % (_label, ('**%d**' % len(_rs)) if _bold else len(_rs)))
     add('| **To triage (the last two together)** | **%d** |\n' % len(triage))
     add('The first group is a defensible exclusion — DGA\'s stylesheet carries the whole upstream')
     add('Untitled-UI ramp (blue, cyan, fuchsia, indigo, moss, orange, pink, purple, red, teal,')
@@ -435,8 +544,34 @@ def write_report(build, names, light, dark, other, rows, tok):
             add('| %s | `%s` | `%s` | `%s` |'
                 % (r['scope'], r['name'], r['declared'][:48], r['resolved']))
     else:
-        add('Nothing outstanding: every declaration DGA publishes resolves to a value this kit')
-        add('already carries.')
+        for _l in closing_note(triage, unresolved):
+            add(_l)
+
+    if composite:
+        add('')
+        add('### The %d composites of already-carried values\n' % len(composite))
+        add('Not missing values. Every colour in each of these is already in `tokens.json`; what')
+        add('the kit does not carry is the composite definition itself — the angle and the stops.')
+        add('Listed so that is a decision someone makes, not an omission nobody sees.\n')
+        add('| Scope | Custom property | Resolves to | Components carried |')
+        add('|---|---|---|---|')
+        for r in sorted(composite, key=lambda r: (r['scope'], r['name'])):
+            add('| %s | `%s` | `%s` | %d/%d |'
+                % (r['scope'], r['name'], str(r['resolved'])[:64],
+                   len(r['components']), len(r['components'])))
+
+    if unresolved:
+        add('')
+        add('### The %d unresolved expressions\n' % len(unresolved))
+        add('⚠️ These still contain a `var()` after substitution — they reference something DGA')
+        add('never declares in the scope they are used in. They are **not** counted as missing')
+        add('values, because an expression nobody can resolve is not evidence this kit is short a')
+        add('value. They are an open question about DGA\'s own stylesheet.\n')
+        add('| Scope | Custom property | Declared | Left unresolved as |')
+        add('|---|---|---|---|')
+        for r in sorted(unresolved, key=lambda r: (r['scope'], r['name'])):
+            add('| %s | `%s` | `%s` | `%s` |'
+                % (r['scope'], r['name'], r['declared'][:44], str(r['resolved'])[:44]))
     p = os.path.join(ROOT, 'harvest', 'RECONCILIATION.md')
     open(p, 'w', encoding='utf-8', newline='\n').write('\n'.join(out) + '\n')
     print('\nwrote %s' % os.path.relpath(p, ROOT))

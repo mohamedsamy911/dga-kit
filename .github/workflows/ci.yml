@@ -47,6 +47,14 @@ jobs:
       - name: The monitoring detects what it claims to
         run: python evals/test-automation.py
 
+      - name: Reconciler self-check
+        # Offline: the live reconciliation runs in the freshness workflow, but its classification
+        # and reporting logic is asserted here. Three defects review found in it - resolution
+        # ignoring the cascade, classification keyed by name across themes, and a report whose
+        # categories did not sum to its own total - were all invisible to a run that simply
+        # succeeded.
+        run: python harvest/reconcile-tokens.py --test
+
       - name: Eval JSON matches the markdown cases
         # skills/*/evals/evals.json is what `claude plugin eval` reads; the markdown cases under
         # evals/*/cases/ are what a human reviews. Generated, never hand-edited - a case added in

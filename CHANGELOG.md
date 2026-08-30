@@ -63,6 +63,25 @@ cause is worth recording because they are the failure modes any such tool has:
   carried are their own category, and anything still holding a `var()` after substitution is
   counted as *unresolved* rather than missing — an expression nobody can resolve is not evidence
   the kit is short a value. Currently 0 unresolved; every composite resolves.
+- **Classification was keyed by variable name, across themes.** The same custom property is
+  declared in both `:root` and the dark block, so a name-keyed dict collapsed the two and the
+  last one written won for both — a genuinely missing *light* value inheriting its dark
+  counterpart's "composite of carried values" and vanishing from the gap. Today's stylesheet has
+  no light/dark pair unmatched on both sides, so nothing was wrong in the output; the structure
+  was. Now keyed by `(scope, name)` in one `bucket()` helper used by both the CLI and the report,
+  rather than the same dict comprehension written twice.
+- **The generated report's categories did not sum to its own total.** It announced 412 unmatched
+  declarations and then listed 246 + 129 + 25 = 400. The twelve composites were simply absent,
+  and unresolved entries would have been too — and a reader cannot tell an omitted category from
+  an empty one. The table is now built from a single list of all five categories, and the writer
+  **refuses to emit a report whose rows do not add up to its header**. Both new categories get
+  their own detail sections, and "Nothing outstanding" can no longer be printed while any
+  expression remains unresolved.
+- **`harvest/reconcile-tokens.py --test`** — an offline self-check, now a CI gate. It asserts
+  scope-correct resolution, composite substitution, `var()` fallbacks, that the buckets partition
+  the gap exactly, that a light row keeps its own classification when a dark row shares its name,
+  and that a clean bill of health is impossible while anything is unresolved. Every one of those
+  is a defect review had to find by hand; a run that merely succeeded looked identical.
 - **The JSON exemption for the retracted wording was indentation-sensitive.** It stripped from
   `$reconciliation` to the first `\n  }`, which under two-space indentation is the close of
   `$meta` itself — so `$note`, `$countsNote`, `$disputed` and `$conventions` were all silently
