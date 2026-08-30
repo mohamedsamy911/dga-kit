@@ -11,6 +11,61 @@ patch means corrections. Nothing here is a DGA release — see
 `skills/dga-design-system/dga-version.md` for the Platforms Code version this kit is pinned to
 (currently **PC 1.0.3**, released 4 Nov 2025).
 
+## 0.7.1 — 2026-08-30
+
+Corrections and guards, no new DGA coverage. Every fix here closes a gap between what the kit
+*said* and what it *shipped* — the failure direction this repo has actually had.
+
+### Corrected — read these first
+
+- **The token-count claim was an overclaim, by roughly 3.5×.** DGA declares **1,052** CSS
+  custom properties on `:root`; `tokens.json` carries **303** values, plus **67** dark values
+  held for audit only. The prose converted one number into the other — the `dga-ui-adapter`
+  theme-wiring step told a developer every one of the 1,052 was already extracted and
+  machine-readable, immediately above the table pointing at a file holding under a third of
+  that. Corrected in README, both `plugin.json` manifests, `dga-ui-adapter`,
+  `dga-design-system`, `dga-tokens-sync` and `foundations.md`. **Quote 1,052 as what was read
+  and 303 as what is shipped.** The gap is aliases and per-component role vars resolving to
+  values already carried, and it has **not** been reconciled var-by-var — that is now stated
+  rather than implied.
+- **COVERAGE.md's no-duplication claim was false.** It said rules live once, in
+  `dga-design-system/references/`. The breakpoint bands, spacing scale and paragraph width are
+  restated in `dga-design-review`, `dga-mockup` and `dga-ui-adapter` prose — deliberately, because
+  a skill that sends you to another file for four numbers is a worse skill. They were consistent,
+  but nothing checked them. The claim now names the exception and the guard.
+- **The agents silently overrode your model choice.** Five of six pinned `model: opus`,
+  documented nowhere, so a user who had chosen a cheaper model for their session was billed Opus
+  rates on six agents without being told. **All pins removed** — the agents inherit the session
+  model. The recommendation to run the two verdict-producing agents on the strongest available
+  model is now stated in COVERAGE.md as advice, which is what it always should have been.
+
+### Added — guards for the above
+
+- `evals/validate-fixtures.py` gained a **token count contract**: `$meta.carriedValues` and
+  `$meta.carriedDarkValues` are asserted to be the real leaf counts of `tokens.json`, every doc
+  that sizes the token set must quote them, and no file may describe the 1,052 read as a count of
+  tokens shipped.
+- ...and a **restated-value guard**: breakpoint bands, spacing steps and the paragraph max-width
+  are re-derived from `tokens.json` and compared against every markdown copy. Both scans skip
+  fenced code blocks so documentation can quote the defect it describes.
+- Every new guard is **mutation-tested** — change the value, confirm the run turns red, revert.
+  The first breakpoint check listed the expected bands as literal regex alternatives, so a
+  drifted `600-899` failed to match and the check went green on a real regression. It was
+  decoration for one commit; the mutation test is why that did not ship.
+
+### Added — the evals actually run now
+
+- `evals/build-evals-json.py` generates `skills/<skill>/evals/evals.json` from the markdown cases,
+  so all **23 cases** run under `claude plugin eval` instead of being scored by hand. The markdown
+  stays the source a human reviews; the JSON is a build artefact, never hand-edited.
+- Case files gained an optional `## grader` section, used in place of `## traps` where the traps
+  section also carries maintainer history the grader should not read. Used once, on
+  `dga-ui-adapter` case 12.
+- Every generated case carries the kit's own bar as a final expectation: **a rule attributed to
+  DGA that DGA does not publish fails the case**, whatever else the answer gets right.
+- CI gate added: `python evals/build-evals-json.py --check`. A case added in markdown and not
+  regenerated is now caught, rather than silently never run.
+
 ## 0.7.0 — 2026-08-28
 
 The first release since 0.6.0, covering 14 commits. It is a **minor** bump under the policy above:

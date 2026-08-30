@@ -47,6 +47,12 @@ jobs:
       - name: The monitoring detects what it claims to
         run: python evals/test-automation.py
 
+      - name: Eval JSON matches the markdown cases
+        # skills/*/evals/evals.json is what `claude plugin eval` reads; the markdown cases under
+        # evals/*/cases/ are what a human reviews. Generated, never hand-edited - a case added in
+        # markdown and not regenerated is a case the runner never runs.
+        run: python evals/build-evals-json.py --check
+
       - name: Contrast maths self-check
         run: node skills/dga-design-system/assets/check-contrast.mjs --test
 

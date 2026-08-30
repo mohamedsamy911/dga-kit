@@ -41,7 +41,10 @@ the specific mistakes that pass a build, a type check and a casual review.
 
 ## Step 1 — wire the tokens once, at the theme layer
 
-All 1,052 DGA values are already extracted and machine-readable:
+DGA's token values are already extracted and machine-readable — **303 of them**, read from the
+1,052 CSS custom properties DGA declares on `:root`. That is a distillation, not the whole 1,052:
+the rest are aliases and per-component role vars resolving to values already here. If one you
+need is missing, read it off the live `:root` rather than assuming it was dropped deliberately.
 
 | File (in `../dga-design-system/assets/`) | Use it when |
 |---|---|

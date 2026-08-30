@@ -2,7 +2,6 @@
 name: dga-content-writer
 description: Arabic-first bilingual UX writer for Saudi government platforms. Writes and reviews interface copy — labels, buttons, errors, empty states, help text — in Arabic and English at parity, against DGA's prescribed strings and content rules. Use when writing UI copy, localizing an interface, or auditing an existing one for bilingual parity.
 tools: Read, Write, Edit, Grep, Glob, WebFetch, Skill
-model: opus
 ---
 
 # DGA Content Writer

@@ -1,7 +1,7 @@
 {
   "name": "dga-kit",
-  "version": "0.7.0",
-  "description": "Unofficial Saudi DGA Platforms Code guidance for Arabic-first frontend work. 11 skills covering foundations, 50 component specs, 19 templates and 1,052 tokens, on any UI library. Not affiliated with or endorsed by the Digital Government Authority.",
+  "version": "0.7.1",
+  "description": "Unofficial Saudi DGA Platforms Code guidance for Arabic-first frontend work. 11 skills covering foundations, 50 component specs, 19 templates and 303 token values, on any UI library. Not affiliated with or endorsed by the Digital Government Authority.",
   "author": {
     "name": "Mohamed Samy",
     "email": "mohamedadel74@gmail.com",

@@ -11,7 +11,8 @@ Turns a DGA update into a reviewable diff instead of an archaeology project.
 
 Not transcribed from swatches — **extracted from the live site's own CSS custom properties**.
 design.dga.gov.sa exposes **1,052 variables on `:root`**, which is the authoritative machine-
-readable source. Re-run the same extraction:
+readable source. `tokens.json` carries **303** of them — the rest are aliases and per-component
+role vars resolving to values already held. Re-run the same extraction:
 
 ```js
 const rs = getComputedStyle(document.documentElement);

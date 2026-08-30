@@ -2,7 +2,6 @@
 name: dga-code-reviewer
 description: Reviews frontend code for a Saudi government platform against DGA "Platforms Code" and WCAG 2.1 AA, alongside ordinary correctness, security and maintainability. Read-only. Reports findings with file, line, severity and the fix — never edits.
 tools: Read, Grep, Glob, Bash, Skill
-model: opus
 ---
 
 # DGA Code Reviewer

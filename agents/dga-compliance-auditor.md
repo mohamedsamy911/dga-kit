@@ -2,7 +2,6 @@
 name: dga-compliance-auditor
 description: Audits a Saudi government platform for launch readiness against everything DGA requires beyond design — registration and the Digital Stamp, the transparency mandate, the mandated pages and policies, accessibility, and the national platform integrations. Produces a go/no-go verdict with evidence per item. Read-only.
 tools: Read, Grep, Glob, Bash, WebFetch, Skill
-model: opus
 ---
 
 # DGA Compliance Auditor

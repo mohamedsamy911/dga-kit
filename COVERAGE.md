@@ -1,7 +1,17 @@
 # Coverage map
 
-Every area of design.dga.gov.sa, and which skill owns it. One owner per area — no skill
-duplicates another's rules, because rules live once in `dga-design-system/references/`.
+Every area of design.dga.gov.sa, and which skill owns it. One owner per area: normative rules
+live once, in `dga-design-system/references/`, and every other skill cites rather than restates.
+
+**One documented exception.** A handful of values are used on literally every screen — the four
+breakpoint bands, the named spacing scale, the container and paragraph widths — and sending a
+reviewer to another file for four numbers makes a worse skill. Those are restated in
+`dga-design-review`, `dga-mockup` and `dga-ui-adapter` prose **on purpose**. The duplication is
+deliberate; going unguarded was not, so `evals/validate-fixtures.py` now re-derives each restated
+figure from `tokens.json` and fails on any copy that drifts. Prose is what the model actually
+reads, so a stale copy outranks the correct token — see
+[Guarding against our own drift](#guarding-against-our-own-drift). **Nothing else is duplicated:**
+add a rule to `references/` and cite it.
 
 ## DGA source → owning skill
 
@@ -68,6 +78,18 @@ duplicates another's rules, because rules live once in `dga-design-system/refere
 | `dga-code-reviewer` | Correctness, security, DGA, WCAG AA | **No** |
 | `dga-compliance-auditor` | Pre-launch go/no-go with evidence | **No** |
 | `dga-content-writer` | Arabic-first bilingual interface copy | Yes |
+
+## Which model the agents run on
+
+**None of the six pins a model.** They inherit whatever the session is set to, which is your
+choice to make and not this kit's — an earlier version pinned `model: opus` on five of them,
+which silently overrode a user who had deliberately selected a cheaper model and billed them
+accordingly. A plugin should not do that.
+
+The recommendation, so it is an informed choice rather than a default: run
+`dga-code-reviewer` and `dga-compliance-auditor` on the strongest model you have access to.
+Both produce a **verdict** on work that is going to be scored, and a missed Blocker there costs
+an assessment, not a review cycle. The rest degrade gracefully.
 
 ## Eval suites
 
@@ -343,6 +365,38 @@ Raising the numerator means capturing more pages, never editing a reference to m
 `evals/validate-fixtures.py` checks every value the cases assert against `tokens.json`. Run it
 after any re-harvest: an eval asserting a stale value teaches the skill a false rule, which is
 worse than having no eval.
+
+It also guards two things the quote checker structurally cannot, because neither is a quote:
+
+**The token count contract.** DGA declares **1,052** custom properties on `:root`; `tokens.json`
+carries **303**, plus **67** dark values held for audit only. The prose used to convert one number
+into the other:
+
+```text
+"1,052 design tokens"
+"All 1,052 DGA values are already extracted and machine-readable"
+```
+
+— which promised a developer wiring a theme roughly 3.5× what the file holds.
+`$meta.carriedValues` is now asserted to be the real leaf count, every doc that sizes the token
+set must quote it, and no file anywhere may describe the 1,052 read as a count of tokens shipped.
+Quote **1,052 as what was read** and **303 as what is shipped**; the gap is aliases and
+per-component role vars resolving to values already carried, and it has **not** been reconciled
+var-by-var.
+
+**Values restated in prose.** The breakpoint bands, spacing steps and paragraph width are
+re-derived from `tokens.json` and compared against every markdown copy. The first version of the
+breakpoint check listed the expected bands as literal regex alternatives, so a drifted band:
+
+```text
+Tablet 600–899
+```
+
+simply failed to match and the check went green on a real regression. Every guard here is
+mutation-tested: change the value, confirm the run turns red, revert.
+
+Both scans skip fenced code blocks, so this section can quote the defects it describes without
+tripping the guard that forbids them.
 
 **Any fabrication fails a suite outright**, regardless of detection score.
 

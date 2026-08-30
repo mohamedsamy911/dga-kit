@@ -16,8 +16,29 @@ a Chakra codebase, or naming a component the library does not have. Cases 03 and
 
 ## Running
 
-Give the model the case `input`, let it invoke `dga-ui-adapter`, and score its output against
-`expect`.
+```bash
+claude plugin eval --skill dga-ui-adapter
+```
+
+The cases here are the source; `skills/dga-ui-adapter/evals/evals.json` is generated from them and is
+what the runner reads. **Never edit the JSON** — add or change a case in `cases/`, then:
+
+```bash
+python3 evals/build-evals-json.py
+```
+
+CI runs `--check` and fails if the two have diverged, so a case added in markdown and not
+regenerated is caught rather than silently never run.
+
+Each case maps across as: `## input` → the prompt (prefixed with the skill invocation),
+`## expect` bullets → `expectations`, and `## grader` (falling back to `## traps`) →
+`expected_output`, because on these cases the trap *is* the expected behaviour — a grader that
+never sees it scores a confident fabrication as a pass. Every case also carries the kit's own
+bar as a final expectation: **a rule attributed to DGA that DGA does not publish fails the case**,
+whatever else the answer gets right.
+
+To run one by hand instead: give the model the case `input`, let it invoke `dga-ui-adapter`, and score
+against `expect`.
 
 ## Scoring
 

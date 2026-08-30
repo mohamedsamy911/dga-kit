@@ -1289,6 +1289,138 @@ orphan = [e['key'] for k in sections for e in _node[k].get('$verify', [])
           if e['status'] == 'disputed' and e['key'].split('.')[-1] not in xtext]
 chk('$verify: every disputed value is written up in the cross-reference', not orphan, str(orphan))
 
+
+# --- the token COUNT contract: what was read vs what is shipped -----------------
+# DGA declares 1,052 custom properties on :root. tokens.json ships far fewer, because most of
+# those are aliases and per-component role vars resolving to values already carried. The prose
+# used to convert one number into the other - "1,052 design tokens", "All 1,052 DGA values are
+# already extracted" - which promises a developer wiring a theme 3.5x what the file holds. That
+# is the same defect class check-quote-fidelity.py catches for quotes, applied to numbers, and
+# nothing caught it. Two rules: the counts in $meta must be the real leaf counts, and no prose
+# may describe 1,052 as a token count.
+def _leaves(o):
+    n = 0
+    if isinstance(o, dict):
+        for k, v in o.items():
+            if k.startswith('$'):
+                continue
+            n += _leaves(v) if isinstance(v, (dict, list)) else 1
+    return n
+
+_dark_n = _leaves(t['role']['dark'])
+_all_n = _leaves(t)
+chk('counts: $meta.carriedDarkValues is the real role.dark leaf count',
+    t['$meta'].get('carriedDarkValues') == _dark_n,
+    f"$meta says {t['$meta'].get('carriedDarkValues')}, tokens.json holds {_dark_n}")
+chk('counts: $meta.carriedValues is the real non-dark leaf count',
+    t['$meta'].get('carriedValues') == _all_n - _dark_n,
+    f"$meta says {t['$meta'].get('carriedValues')}, tokens.json holds {_all_n - _dark_n}"
+    ' - update $meta AND every doc quoting it')
+chk('counts: carried is strictly fewer than what was read',
+    t['$meta']['carriedValues'] < t['$meta']['totalCssVarsOnPage'])
+
+# 1,052 may only ever be described as what was READ. Naming it a count of tokens or values, or
+# writing "all 1,052", asserts coverage this file does not have.
+def _unfenced(path):
+    """Yield (lineno, line) for lines OUTSIDE ``` blocks.
+
+    Documentation has to be able to quote the defect it is describing - COVERAGE.md spells out
+    the exact overclaiming phrasings these guards forbid, and a whole-file scan flagged the
+    explanation as the defect it was explaining. Same reasoning as _FENCE above; done as a state
+    toggle rather than a regex strip so line numbers stay real.
+    """
+    fenced = False
+    for i, line in enumerate(open(os.path.join(ROOT, path), encoding='utf-8', errors='replace'), 1):
+        if line.lstrip().startswith('```'):
+            fenced = not fenced
+            continue
+        if not fenced:
+            yield i, line
+
+_OVERCLAIM = re.compile(r'(?i)\b(?:all\s+1,?052|1,?052\s+(?:dga\s+)?(?:design\s+)?(?:tokens|values)\b)')
+_docs = []
+for _dp, _dn, _fn in os.walk(ROOT):
+    if any(p in _dp for p in ('.git', 'node_modules', '__pycache__')):
+        continue
+    _docs += [os.path.join(_dp, f) for f in _fn if f.endswith(('.md', '.json'))]
+_over = []
+for _f in _docs:
+    for _i, _line in _unfenced(os.path.relpath(_f, ROOT)):
+        if _OVERCLAIM.search(_line):
+            _over.append(os.path.relpath(_f, ROOT).replace(os.sep, '/') + f':{_i}')
+chk('counts: no doc calls the 1,052 read a count of tokens shipped', not _over,
+    str(_over) + f" - say \"{t['$meta']['carriedValues']} token values, read from 1,052 CSS"
+    ' custom properties\"')
+
+# ...and the docs that DO state the shipped count must state the current one.
+_CARRIES = ['README.md', 'skills/dga-ui-adapter/SKILL.md', 'skills/dga-design-system/SKILL.md',
+            'skills/dga-design-system/references/foundations.md',
+            'skills/dga-tokens-sync/SKILL.md',
+            '.claude-plugin/plugin.json', '.codex-plugin/plugin.json']
+_stale = [f for f in _CARRIES
+          if str(t['$meta']['carriedValues']) not in open(os.path.join(ROOT, f), encoding='utf-8').read()]
+chk('counts: every doc that sizes the token set quotes $meta.carriedValues', not _stale,
+    f"{_stale} do not mention {t['$meta']['carriedValues']}")
+
+# --- values restated in prose must match tokens.json ---------------------------
+# COVERAGE.md says rules live once, in dga-design-system/references/. Mostly true - but the
+# breakpoint bands and the spacing scale are restated verbatim in review, mockup and ui-adapter
+# prose, because a skill that has to send you to another file for the four numbers it uses on
+# every screen is a worse skill. That duplication is deliberate; going UNGUARDED was not. Prose
+# is what the model actually reads, so a drifted copy outranks the correct token.
+_PROSE = [os.path.relpath(f, ROOT).replace(os.sep, '/') for f in _docs if f.endswith('.md')]
+
+_bp = [t['breakpoint'][k]['token'] for k in ('mobile', 'tablet', 'desktop')]
+_want_bands = {f'0-{_bp[0] - 1}', f'{_bp[0]}-{_bp[1] - 1}',
+               f'{_bp[1]}-{_bp[2] - 1}', f'{_bp[2]}+'}
+# The regex must NOT spell out the expected bands - the first version listed them as literal
+# alternatives, so a drifted "600-899" simply failed to match and the check went green on a
+# real regression. Match the SHAPE, compare the values.
+_BAND = re.compile(r'\b(\d{1,4}-\d{3,4}|\d{3,4}\+)')
+# "Scored 1-100 in ten named bands" is a score range, not a breakpoint: the word "band" alone
+# is too broad. All three real restatement sites name a device tier or xl.
+_BAND_LINE = re.compile(r'(?i)\b(breakpoint|mobile|tablet|desktop|xl)\b')
+_bad = []
+for _f in _PROSE:
+    for _i, _line in _unfenced(_f):
+        _norm = _line.replace('\u2013', '-').replace('\u2014', '-')
+        if not _BAND_LINE.search(_norm):
+            continue
+        _off = [b for b in _BAND.findall(_norm) if b not in _want_bands]
+        if _off:
+            _bad.append(f'{_f}:{_i} {_off}')
+chk('prose: every restated breakpoint band matches tokens.json', not _bad,
+    f'expected {sorted(_want_bands)} from tokens.json {_bp} - drifted: {_bad}')
+
+# The named spacing scale, restated in dga-design-review's grid pass.
+_scale = t['space']['named']
+_bad = []
+for _f in _PROSE:
+    _txt = open(os.path.join(ROOT, _f), encoding='utf-8', errors='replace').read()
+    for _m in re.finditer(r'`(none|xxs|xs|sm|md|lg|xl|2xl|3xl|4xl)`\s+(\d+)\b', _txt):
+        _k, _v = _m.group(1), _m.group(2)
+        if _k in _scale and _scale[_k].rstrip('px') != _v:
+            _bad.append(f'{_f}: `{_k}` {_v} vs tokens.json {_scale[_k]}')
+chk('prose: every restated spacing step matches tokens.json', not _bad, str(_bad))
+
+# The paragraph max-width, restated in six places across review, mockup and the references.
+# Phrased as the invariant - "a line that sizes running text must say 720px" - rather than as a
+# proximity regex, which matched the hex in `text-primary-paragraph #384250`.
+_pw = t['container']['paragraph-max-width'].rstrip('px')
+_SIZES_TEXT = re.compile(
+    r'(?i)paragraphs?\b[^\n]{0,30}?(?:max-?width|width|within)'
+    r'|(?:within|max-?width)[^\n]{0,30}?\bparagraphs?\b'
+    r'|paragraphs?\s+\*{0,2}\d')
+_bad = []
+for _f in _PROSE:
+    for _i, _line in _unfenced(_f):
+        # A line that names the token but states no size cannot drift - only gate lines
+        # that actually carry a width figure.
+        if _SIZES_TEXT.search(_line) and re.search(r'\b\d{3,4}\b', _line) and _pw not in _line:
+            _bad.append(f'{_f}:{_i} {_line.strip()[:70]}')
+chk('prose: every line sizing running text states the paragraph max-width', not _bad,
+    f'tokens.json says {_pw}px - {_bad}')
+
 print()
 if failures:
     print(f'{len(failures)} FAILING — fixtures disagree with tokens.json')

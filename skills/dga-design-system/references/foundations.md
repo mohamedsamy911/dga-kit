@@ -4,8 +4,9 @@
 **System:** "Platforms Code" — National Design System of Saudi Arabia, published by DGA
 **Verified by:** — *(designer sign-off outstanding)*
 
-Machine-readable values live in `../assets/tokens.json`, extracted verbatim from the site's
-own CSS custom properties (1,052 of them). Prefer those over anything transcribed here.
+Machine-readable values live in `../assets/tokens.json` — **303 values**, extracted verbatim
+from the **1,052** CSS custom properties DGA declares on `:root`. Prefer those over anything
+transcribed here.
 
 ---
 

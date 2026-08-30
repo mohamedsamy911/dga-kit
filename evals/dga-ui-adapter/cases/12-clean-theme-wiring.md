@@ -71,6 +71,19 @@ graded honestly.
 **FAIL if:** a Blocker is raised · any finding cites a DGA rule that does not exist · the
 response is uniformly severe · it does not say what the submission got right.
 
+## grader
+The rubric tests what restraint actually means for a reviewer: no invented rules, no inflated
+severity, no Blockers where none exist, and credit where the submission is right.
+
+Two things a padding reviewer will do here and a calibrated one will not: grade the documented
+Figma-only gaps as findings rather than Notes, and treat the build list as defects in a theme
+that structurally cannot contain them.
+
+The Arabic-first font stack is the sharpest trap. It *looks* like the Arabic-first principle
+applied to typography and it is not: font fallback resolves **per character**, so an
+Arabic-first stack renders Latin out of IBM Plex Sans Arabic's Latin glyphs and the face DGA
+names never renders anything. A reviewer flagging that order is **correct**.
+
 ## traps
 
 **Read this before revising the input again.** Three earlier versions of this case were written

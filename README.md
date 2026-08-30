@@ -125,14 +125,19 @@ out loud, [where DGA itself is silent or self-contradictory](COVERAGE.md#where-d
 
 ## Status, honestly
 
-Token values were **extracted from the live site's CSS custom properties**, not transcribed —
-1,052 of them, on 2026-08-26. The system is "Platforms Code", published version **1.0.3** (released 4 Nov 2025, per
+Token values were **extracted from the live site's CSS custom properties**, not transcribed, on
+2026-08-26. DGA declares **1,052 custom properties** on `:root`; `tokens.json` carries the **303**
+a project consumes, plus **67** dark values held for audit only. The rest are aliases and
+per-component role vars resolving to values already held — a reduction **not** reconciled
+var-by-var, so read 1,052 as what was *read*, never as what is *shipped*.
+
+The system is "Platforms Code", published version **1.0.3** (released 4 Nov 2025, per
 `/updates/change-log`). The nav badge and footer still read "Version 1.0" and the Figma files
 are still named `PC 1.0 …` — those are chrome and filenames, not the version. The harvest postdates 1.0.3, so the values are current.
 
 | | |
 |---|---|
-| Harvest — 5 foundations, 50 components, **all 19 templates**, 1,052 tokens | ✅ Complete |
+| Harvest — 5 foundations, 50 components, **all 19 templates**, **303 token values** read from 1,052 CSS custom properties | ✅ Complete |
 | **Assessment Criteria** — the rubric a platform is actually scored against | ✅ Captured |
 | 11 skills, 6 agents | ✅ |
 | Contrast checker, self-tested — light **and dark** | ✅ |
@@ -198,10 +203,12 @@ harvest/    the evidence behind every rule, and the monitoring that keeps it hon
               deep.py             Tier B: browser-captured page text (--capture / --accept)
               snapshots/          machine-owned page text, for diffing only
               FRESHNESS.md        generated: last check, what moved, review pending?
-evals/      23 eval cases across two suites, plus three checkers:
-              validate-fixtures.py     the kit against its own tokens and evidence
-              check-quote-fidelity.py  the DGA quotes a capture covers (14 of 92 today)
-              test-automation.py       whether the monitoring detects what it claims to
+evals/      23 eval cases across two suites, run by `claude plugin eval`:
+              <suite>/cases/*.md        the cases, in markdown — the source a human reviews
+              build-evals-json.py       generates skills/<skill>/evals/evals.json from them
+              validate-fixtures.py      the kit against its own tokens, evidence and prose
+              check-quote-fidelity.py   the DGA quotes a capture covers (14 of 92 today)
+              test-automation.py        whether the monitoring detects what it claims to
 .github/    CI on push, and the weekly freshness sentinel
 ```
 
