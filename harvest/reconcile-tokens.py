@@ -158,18 +158,67 @@ def scope_maps(decls):
     return light, dark, other
 
 
-def resolve(value, light, dark, scope, depth=0):
-    """Follow var() chains within the correct scope. Handles var(--x, fallback)."""
-    if not value or depth > 8:
+def _split_var(inner):
+    """`--name, fallback` -> ('--name', 'fallback'), splitting at the first TOP-LEVEL comma."""
+    depth = 0
+    for i, ch in enumerate(inner):
+        if ch == '(':
+            depth += 1
+        elif ch == ')':
+            depth -= 1
+        elif ch == ',' and depth == 0:
+            return inner[:i].strip(), inner[i + 1:].strip()
+    return inner.strip(), None
+
+
+def _sub_vars(value, light, dark, scope):
+    """Substitute EVERY var() occurrence in a value, not just a whole-value one.
+
+    A fullmatch-only resolver leaves composites untouched -
+    `linear-gradient(90deg, var(--colors-brand-600) 0%, ...)` came back verbatim and was then
+    compared against a set of plain literals, so 13 gradients and one hsla() were reported as
+    confirmed-missing values when their components are all carried. Paren matching is balanced
+    rather than regex, because fallbacks nest: var(--a, var(--b)).
+    """
+    out, i = [], 0
+    while True:
+        j = value.find('var(', i)
+        if j < 0:
+            out.append(value[i:])
+            return ''.join(out)
+        out.append(value[i:j])
+        depth, k = 0, j + 3
+        while k < len(value):
+            if value[k] == '(':
+                depth += 1
+            elif value[k] == ')':
+                depth -= 1
+                if depth == 0:
+                    break
+            k += 1
+        if k >= len(value):                       # unbalanced - leave the rest alone
+            out.append(value[j:])
+            return ''.join(out)
+        name, fallback = _split_var(value[j + 4:k])
+        repl = (dark.get(name) if scope == 'dark' else None) or light.get(name)
+        if repl is None:
+            # Undeclared: fall back if one is given, else leave the var() in place so the caller
+            # can see it never resolved rather than silently treating it as a literal.
+            repl = fallback if fallback is not None else value[j:k + 1]
+        out.append(repl)
+        i = k + 1
+
+
+def resolve(value, light, dark, scope, depth=8):
+    """Resolve a declared value within the correct scope, composites included."""
+    if not value:
         return value
-    m = re.fullmatch(r'var\(\s*(--[^,)\s]+)\s*(?:,\s*(.+?))?\s*\)', value.strip())
-    if not m:
-        return value
-    name, fallback = m.group(1), m.group(2)
-    nxt = (dark.get(name) if scope == 'dark' else None) or light.get(name)
-    if nxt is None:
-        return resolve(fallback, light, dark, scope, depth + 1) if fallback else value
-    return resolve(nxt, light, dark, scope, depth + 1)
+    for _ in range(depth):
+        nxt = _sub_vars(value, light, dark, scope)
+        if nxt == value:                          # stable: fully resolved, or genuinely stuck
+            break
+        value = nxt
+    return value
 
 
 def classify(table, light, dark, carried, all_carried, scope):
@@ -177,14 +226,44 @@ def classify(table, light, dark, carried, all_carried, scope):
     for n, v in sorted(table.items()):
         resolved = resolve(v, light, dark, scope)
         is_alias = bool(re.fullmatch(r'var\(\s*--[^,)\s]+\s*\)', v.strip()))
-        nv = norm(resolved) if resolved else None
+        # A value still holding a var() after resolution points at something DGA never declares.
+        # It is NOT evidence that the kit is missing a value, so it is counted separately rather
+        # than swelling the missing total with expressions nobody has resolved.
+        unresolved = bool(resolved) and 'var(' in str(resolved)
+        nv = norm(resolved) if resolved and not unresolved else None
+        # A composite - linear-gradient(...), hsla(...) - is not a single value, so asking
+        # "is this string in the carried set" always answers no and reads as a missing value.
+        # The honest question is whether its COMPONENTS are carried: all twelve DGA gradients
+        # resolve entirely to brand and gray steps tokens.json already holds. What the kit
+        # lacks there is the gradient DEFINITION, not any value, and the two are not the same
+        # finding. `None` where there is nothing to extract - never claim cover without it.
+        comps = re.findall(r'#[0-9a-fA-F]{3,8}', str(resolved or ''))
+        is_composite = bool(re.search(r'[a-z-]+\(', str(resolved or ''))) and not unresolved
+        comps_carried = (all(norm(c) in all_carried for c in comps)
+                         if is_composite and comps else None)
         rows.append({
             'scope': scope, 'name': n, 'declared': v, 'resolved': resolved,
             'kind': 'alias' if is_alias else ('composite' if 'var(' in v else 'literal'),
+            'unresolved': unresolved,
+            'components': comps,
+            'components_carried': comps_carried,
             'in_scope_set': bool(nv) and nv in carried,
             'in_any_set': bool(nv) and nv in all_carried,
         })
     return rows
+
+
+def gap_class(row, sem):
+    """Why a declaration failed to match a carried value.
+
+    Ordered: the reasons that are NOT evidence of a missing value come first, so a gradient of
+    carried colours or an expression nothing resolves can never be reported as a gap.
+    """
+    if row['unresolved']:
+        return 'unresolved'
+    if row['components_carried']:
+        return 'composite-covered'
+    return palette_class(row['name'], sem)
 
 
 def main():
@@ -245,14 +324,20 @@ def main():
 
     gap_all = [r for r in rows if not r['in_any_set']]
     sem = semantic_families(tok)
-    _cls = {r['name']: palette_class(r['name'], sem) for r in gap_all}
+    _cls = {r['name']: gap_class(r, sem) for r in gap_all}
     generic = [r for r in gap_all if _cls[r['name']] == 'generic']
     review = [r for r in gap_all if _cls[r['name']] == 'review']
+    unresolved = [r for r in gap_all if _cls[r['name']] == 'unresolved']
+    composite = [r for r in gap_all if _cls[r['name']] == 'composite-covered']
     triage = [r for r in gap_all if _cls[r['name']] == 'semantic'] + review
     print('CLAIM "the uncarried vars resolve to values already carried": %s'
           % ('HOLDS' if not gap_all
              else 'DOES NOT HOLD - %d declarations resolve to values tokens.json does not carry'
                   % len(gap_all)))
+    print('  composite of values already carried:       %d  (not a missing value)'
+          % len(composite))
+    print('  unresolved expression:                     %d  (not a missing value)'
+          % len(unresolved))
     print('  generic UI-kit ramp, evidenced exclusion:  %d' % len(generic))
     print('  DGA-namespaced, a real gap:                %d'
           % len([r for r in gap_all if _cls[r['name']] == 'semantic']))
@@ -272,9 +357,11 @@ def main():
 def write_report(build, names, light, dark, other, rows, tok):
     gap = [r for r in rows if not r['in_any_set']]
     sem = semantic_families(tok)
-    _cls = {r['name']: palette_class(r['name'], sem) for r in gap}
+    _cls = {r['name']: gap_class(r, sem) for r in gap}
     generic = [r for r in gap if _cls[r['name']] == 'generic']
     review = [r for r in gap if _cls[r['name']] == 'review']
+    unresolved = [r for r in gap if _cls[r['name']] == 'unresolved']
+    composite = [r for r in gap if _cls[r['name']] == 'composite-covered']
     triage = [r for r in gap if _cls[r['name']] == 'semantic'] + review
 
     def block(scope):

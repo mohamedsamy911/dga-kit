@@ -383,9 +383,10 @@ set must quote it, and no file anywhere may describe the 1,052 read as a count o
 **That "aliases" explanation was itself wrong, and is retracted.**
 `harvest/reconcile-tokens.py` reconciled the gap declaration by declaration against the live
 stylesheet (build `PDaQ7SHU`): **412 resolve to values `tokens.json` does not hold** — **246 the
-generic ramp** DGA ships but does not publish as a Platforms Code colour, and **166 to triage**
-(141 DGA-namespaced, plus 25 of unrecognised family left for review). Every figure is recorded in
-`$meta.$reconciliation` and every declaration is listed in `harvest/RECONCILIATION.md`.
+generic ramp** DGA ships but does not publish as a Platforms Code colour, **12 gradients** whose
+components are all already carried, and **154 to triage** (129 DGA-namespaced, plus 25 of
+unrecognised family left for review). Every figure is recorded in `$meta.$reconciliation` and
+every declaration is listed in `harvest/RECONCILIATION.md`.
 
 Three lessons worth keeping. The unstated exclusion was the actual defect on the generic ramp —
 dropping it is right, *not saying so* is what made the count look like a contradiction. The
@@ -428,7 +429,7 @@ Stated plainly so no skill implies coverage it lacks.
 | **Digital Transformation Measurement Indicator** | `dga-launch-gate` §6 incomplete | Harvest — published outside design.dga.gov.sa |
 | **Digital Experience Maturity Indicator** | same | same |
 | **Assessment Criteria *checklist file*** | The scoring page is captured (`harvest/raw/2026-08-27-section-sweep.md`); the downloadable checklist is a separate file | `Download Checklist` on `/AssessmentCriteria` |
-| **166 token values to triage** | Reconciled 2026-08-31 against build `PDaQ7SHU`: 141 DGA-namespaced values this kit does not hold, plus 25 whose family is unrecognised and are left for review rather than excluded. Covers the whole `--alpha-*` transparency scale (49), `--button-*` interaction states (17), `--link-*` (16), `--notification-*` (14), `--gradient-*` (12), `--tag-*` (10), `--border-*` (6), `--controls-*` (5), `--featuredicons-*` (5), `--form-*` (4). **A skill must not tell a caller a value is absent from DGA because it is absent from `tokens.json`.** Full list in the reconciliation report | Re-harvest and carry them — the reconciler regenerates the list |
+| **154 token values to triage** | Reconciled 2026-08-31 against build `PDaQ7SHU`: 129 DGA-namespaced values this kit does not hold, plus 25 whose family is unrecognised and are left for review rather than excluded. Covers the whole `--alpha-*` transparency scale (49), the `--colors-alpha-*` primitives behind it (27), `--button-*` interaction states (17), `--link-*` (16), `--notification-*` (14), `--tag-*` (10), `--border-*` (6), `--controls-*` (5), `--featuredicons-*` (5), `--form-*` (4). The 12 `--gradient-*` declarations are **not** here: every colour in them is already carried, so what is missing is the gradient definition rather than a value. **A skill must not tell a caller a value is absent from DGA because it is absent from `tokens.json`.** Full list in the reconciliation report | Re-harvest and carry them — the reconciler regenerates the list |
 | **The upstream Untitled-UI generic ramp** (246 declarations) | *Deliberately excluded*, not missing: blue, cyan, fuchsia, indigo, moss, orange, pink, purple, red, teal, violet, yellow and seven separate grey ramps. DGA ships them in CSS but does not publish them as Platforms Code colours. The exclusion list is **explicit, name by name** — an inferred "not semantic, therefore decorative" rule wrongly swept up `--colors-border-primary`, `--colors-text-primary` and the `--colors-alpha-*` primitives, and a wrong exclusion hides a real gap | None — but never quote these as DGA colours |
 | **Responsive radius & spacing values** | Per-breakpoint tokens can't be resolved; treating them as constants is wrong on two of three breakpoints | PC 1.0 Foundations Figma variable collections |
 | ~~**Dark theme values**~~ | **Closed 2026-08-27** — all **402** are in the public CSS bundle; the 67 text/background roles are in `tokens.json` as `role.dark` and audited by `check-contrast.mjs --theme dark`. 🚩 DGA's selector `[data-theme=dark] :root` can never match, so its dark theme is inert. **We do not ship it either** — see the row below | Remaining 340 non-role declarations are uncaptured in **both** themes — see `role.dark.$comment` |

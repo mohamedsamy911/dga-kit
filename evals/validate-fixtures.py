@@ -1430,11 +1430,14 @@ chk('reconciliation: tokens.json records it', bool(_rec),
     'regenerate the report, then record $meta.$reconciliation')
 
 if _rec:
+    # Five buckets, and every declaration that failed to match lands in exactly one. Two of
+    # them - composites of carried values, and unresolved expressions - are NOT evidence of a
+    # missing value; they are broken out precisely so they stop inflating the gap.
+    _BUCKETS = ('notCarriedGenericRamp', 'notCarriedDgaNamespaced', 'notCarriedUnknownFamily',
+                'notCarriedCompositeOfCarried', 'notCarriedUnresolved')
     chk('reconciliation: the split adds up',
-        (_rec['notCarriedGenericRamp'] + _rec['notCarriedDgaNamespaced']
-         + _rec['notCarriedUnknownFamily'] == _rec['notCarried']),
-        f"{_rec['notCarriedGenericRamp']} + {_rec['notCarriedDgaNamespaced']} + "
-        f"{_rec['notCarriedUnknownFamily']} != {_rec['notCarried']}")
+        sum(_rec[b] for b in _BUCKETS) == _rec['notCarried'],
+        ' + '.join(f'{_rec[b]}' for b in _BUCKETS) + f" != {_rec['notCarried']}")
     chk('reconciliation: triage is the non-generic remainder',
         _rec['toTriage'] == _rec['notCarriedDgaNamespaced'] + _rec['notCarriedUnknownFamily'],
         f"toTriage {_rec['toTriage']} != {_rec['notCarriedDgaNamespaced']} + "
@@ -1465,6 +1468,12 @@ if _rec:
         ('notCarriedDgaNamespaced',
          [r'(\d+)\s+DGA-namespaced'],
          ['README.md', 'COVERAGE.md']),
+        # The two "not actually missing" buckets must stay named in the prose, or the headline
+        # gap silently re-absorbs them. A substring test is not enough here: "12" occurs inside
+        # "412", so `str(12) in text` passed even with the gradient sentence deleted.
+        ('notCarriedCompositeOfCarried',
+         [r'(\d+)[^.\n]{0,10}?gradients'],
+         ['README.md', 'COVERAGE.md', 'skills/dga-design-system/SKILL.md']),
         ('toTriage',
          [r'(\d+)[^.\n]{0,14}?to triage',
           r'(\d+)\s+values? are NOT carried',
@@ -1505,14 +1514,32 @@ if _rec:
         for _i, _line in _unfenced(_f):
             if _RETRACTED.search(_line):
                 _back.append(f'{_f}:{_i}')
+    # JSON is PARSED, not pattern-stripped. $meta.$reconciliation quotes the retracted claim in
+    # order to retract it, so it is exempt - but the first version of this exemption was a
+    # text regex ending at `\n  }`, which under two-space indentation matched the close of
+    # $meta itself and silently exempted every sibling annotation with it: $note, $countsNote,
+    # $disputed, $conventions. Planting the forbidden wording in $meta.$note passed. Walking
+    # the parsed object exempts exactly one subtree and nothing adjacent to it.
+    _EXEMPT = (('$meta', '$reconciliation'),)
+
+    def _annotations(node, path=()):
+        if path in _EXEMPT:
+            return
+        if isinstance(node, dict):
+            for _k, _v in node.items():
+                yield from _annotations(_v, path + (_k,))
+        elif isinstance(node, list):
+            for _v in node:
+                yield from _annotations(_v, path)
+        elif isinstance(node, str):
+            yield '.'.join(path), node
+
     for _f in ('skills/dga-design-system/assets/tokens.json',
                'harvest/source-inventory.json'):
-        _txt = open(os.path.join(ROOT, _f), encoding='utf-8').read()
-        # $reconciliation quotes the retracted claim in order to retract it; that annotation is
-        # the record and is exempt by name, nothing else is.
-        _txt = re.sub(r'"\$reconciliation":\s*\{.*?\n  \}', '', _txt, flags=re.S)
-        if _RETRACTED.search(_txt):
-            _back.append(_f)
+        _doc = json.load(open(os.path.join(ROOT, _f), encoding='utf-8'))
+        for _path, _val in _annotations(_doc):
+            if _RETRACTED.search(_val):
+                _back.append(f'{_f}:{_path}')
     chk('reconciliation: the retracted "all aliases" wording has not returned', not _back,
         str(_back) + ' - disproved by the reconciler; see $meta.$reconciliation')
 

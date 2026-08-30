@@ -36,9 +36,9 @@ not, so the "all aliases" reading of the gap is **wrong** and is retracted.
 | The 412 that do not reconcile | Count |
 |---|---|
 | Generic UI-kit ramp DGA ships but does not publish as a DGA token | 246 |
-| **DGA-namespaced values this kit does not hold** | **141** |
+| **DGA-namespaced values this kit does not hold** | **129** |
 | Unknown family, left for review rather than excluded | 25 |
-| **To triage (the last two together)** | **166** |
+| **To triage (the last two together)** | **154** |
 
 The first group is a defensible exclusion — DGA's stylesheet carries the whole upstream
 Untitled-UI ramp (blue, cyan, fuchsia, indigo, moss, orange, pink, purple, red, teal,
@@ -51,7 +51,7 @@ semantic set" rule swept up `--colors-border-primary`, `--colors-text-primary` a
 **hides** a real gap. Anything neither evidenced-generic nor a known DGA family is left
 for review and counted in the triage total, never dropped silently.
 
-### The 166 to triage, by family
+### The 154 to triage, by family
 
 | Family | Count | Example | Resolves to |
 |---|---|---|---|
@@ -60,7 +60,6 @@ for review and counted in the triage total, never dropped silently.
 | `--button` | 17 | `--button-background-danger-primary-pressed` | `#7a2619` |
 | `--link` | 16 | `--link-danger-pressed` | `#7a2619` |
 | `--notification` | 14 | `--notification-background-brand-25` | `#166a4519` |
-| `--gradient` | 12 | `--gradient-brand-600-500-90deg` | `linear-gradient( 90deg, var(--colors-brand-600) 0%, var(--colors-brand-500) 100% )` |
 | `--tag` | 10 | `--tag-background-on-color` | `#ffffff33` |
 | `--border` | 6 | `--border-oncolor-transparent-30` | `#ffffff4c` |
 | `--controls` | 5 | `--controls-control-primary` | `#ffffff00` |
@@ -208,23 +207,11 @@ for review and counted in the triage total, never dropped silently.
 | light | `--colors-alpha-black` | `0deg 0% 0%` | `0deg 0% 0%` |
 | light | `--colors-alpha-white` | `0deg 0% 100%` | `0deg 0% 100%` |
 | light | `--colors-primary-sa-flag-500-alpha-10` | `#25935f19` | `#25935f19` |
-| light | `--colors-text-secondary_on-brand` | `hsla(var(--colors-alpha-white) / 70%)` | `hsla(var(--colors-alpha-white) / 70%)` |
+| light | `--colors-text-secondary_on-brand` | `hsla(var(--colors-alpha-white) / 70%)` | `hsla(0deg 0% 100% / 70%)` |
 | light | `--controls-control-primary` | `var(--alpha-white-0)` | `#ffffff00` |
 | light | `--controls-control-primary--readonly` | `var(--alpha-white-0)` | `#ffffff00` |
 | light | `--form-datecell-today-background-default` | `var(--alpha-white-0)` | `#ffffff00` |
 | light | `--form-datecell-today-background-focused` | `var(--alpha-white-0)` | `#ffffff00` |
-| light | `--gradient-brand-600-500-90deg` | `linear-gradient( 90deg, var(--colors-brand-600) ` | `linear-gradient( 90deg, var(--colors-brand-600) 0%, var(--colors-brand-500) 100% )` |
-| light | `--gradient-brand-700-600-45deg` | `linear-gradient( 45deg, var(--colors-brand-700) ` | `linear-gradient( 45deg, var(--colors-brand-700) 0%, var(--colors-brand-600) 100% )` |
-| light | `--gradient-brand-800-600-45deg` | `linear-gradient( 45deg, var(--colors-brand-800) ` | `linear-gradient( 45deg, var(--colors-brand-800) 0%, var(--colors-brand-600) 100% )` |
-| light | `--gradient-brand-800-600-90deg` | `linear-gradient( 90deg, var(--colors-brand-800) ` | `linear-gradient( 90deg, var(--colors-brand-800) 0%, var(--colors-brand-600) 100% )` |
-| light | `--gradient-brand-800-700-26-5deg` | `linear-gradient( 26.5deg, var(--colors-brand-600` | `linear-gradient( 26.5deg, var(--colors-brand-600) 0%, var(--colors-brand-700) 100% )` |
-| light | `--gradient-brand-900-600-45deg` | `linear-gradient( 45deg, var(--colors-brand-900) ` | `linear-gradient( 45deg, var(--colors-brand-900) 0%, var(--colors-brand-600) 100% )` |
-| light | `--gradient-gray-600-500-90deg` | `linear-gradient( 90deg, var(--colors-gray-600) 0` | `linear-gradient( 90deg, var(--colors-gray-600) 0%, var(--colors-gray-500) 100% )` |
-| light | `--gradient-gray-700-600-45deg` | `linear-gradient( 45deg, var(--colors-gray-700) 0` | `linear-gradient( 45deg, var(--colors-gray-700) 0%, var(--colors-gray-600) 100% )` |
-| light | `--gradient-gray-800-600-45deg` | `linear-gradient( 45deg, var(--colors-gray-800) 0` | `linear-gradient( 45deg, var(--colors-gray-800) 0%, var(--colors-gray-600) 100% )` |
-| light | `--gradient-gray-800-600-90deg` | `linear-gradient( 90deg, var(--colors-gray-800) 0` | `linear-gradient( 90deg, var(--colors-gray-800) 0%, var(--colors-gray-600) 100% )` |
-| light | `--gradient-gray-800-700-26-5deg` | `linear-gradient( 26.5deg, var(--colors-gray-600)` | `linear-gradient( 26.5deg, var(--colors-gray-600) 0%, var(--colors-gray-700) 100% )` |
-| light | `--gradient-gray-900-600-45deg` | `linear-gradient( 45deg, var(--colors-gray-900) 0` | `linear-gradient( 45deg, var(--colors-gray-900) 0%, var(--colors-gray-600) 100% )` |
 | light | `--link-danger-pressed` | `var(--colors-red-900)` | `#7a2619` |
 | light | `--link-icon-danger-pressed` | `var(--colors-red-900)` | `#7a2619` |
 | light | `--link-icon-oncolor-disabled` | `var(--alpha-white-30)` | `#ffffff4c` |

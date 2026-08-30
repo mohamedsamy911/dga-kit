@@ -141,9 +141,11 @@ The rest are aliases and per-component role vars resolving to values already hel
 declaration against the live stylesheet: **412 resolve to values `tokens.json` does not hold.**
 Of those, **246 are the generic ramp** — the upstream Untitled-UI palette DGA ships in CSS but
 does not publish as a Platforms Code colour, a deliberate exclusion that had simply never been
-*stated*. The remaining **166 go to triage**: 141 DGA-namespaced values the kit does not hold,
-plus 25 whose family is unrecognised and are left for review rather than quietly excluded. That
-covers the entire `--alpha-*` transparency scale and the `--button-*`, `--link-*`,
+*stated*. Another **12 are gradients** whose every colour component the kit already holds: what
+is missing there is the gradient *definition*, not a value. The remaining **154 go to triage**:
+129 DGA-namespaced values the kit does not hold, plus 25 whose family is unrecognised and are
+left for review rather than quietly excluded. That covers the entire `--alpha-*` transparency
+scale, the `--colors-alpha-*` primitives behind it, and the `--button-*`, `--link-*`,
 `--notification-*` and `--tag-*` role sets. Every one is listed in
 [harvest/RECONCILIATION.md](harvest/RECONCILIATION.md).
 

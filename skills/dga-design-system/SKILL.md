@@ -15,13 +15,14 @@ reads from here rather than carrying its own copy of the rules.
 > properties, plus **67** dark values held for audit only. Every rule carries a source URL and
 > retrieval date.
 >
-> **⚠️ 166 values are NOT carried and need triage.** DGA's stylesheet declares 1,126 custom
+> **⚠️ 154 values are NOT carried and need triage.** DGA's stylesheet declares 1,126 custom
 > properties; a declaration-by-declaration reconciliation found 412 resolving to values
 > `tokens.json` does not hold — **246 the generic ramp** DGA ships but does not publish (a stated
-> exclusion), and **166 to triage**: the whole `--alpha-*` transparency scale, `--button-*`
-> interaction states, `--link-*`, `--notification-*`, `--gradient-*`, `--tag-*`, `--border-*`,
-> `--controls-*`, `--featuredicons-*`, `--form-*`. **Never tell a caller a value is absent from
-> DGA because it is absent from `tokens.json`.** Read it off the live `:root`. See
+> exclusion), **12 gradients** whose colour components are all already carried, and **154 to
+> triage**: the whole `--alpha-*` transparency scale, its `--colors-alpha-*` primitives,
+> `--button-*` interaction states, `--link-*`, `--notification-*`, `--tag-*`, `--border-*`,
+> `--controls-*`, `--featuredicons-*`, `--form-*`. **Never tell a caller a value is absent
+> from DGA because it is absent from `tokens.json`.** Read it off the live `:root`. See
 > `$meta.$reconciliation`.
 >
 > **Known gaps, stated so no answer implies coverage it lacks:** the Digital Transformation and

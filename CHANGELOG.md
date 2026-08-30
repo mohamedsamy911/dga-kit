@@ -29,11 +29,14 @@ declaration by declaration against live stylesheet build `PDaQ7SHU`:
   as a Platforms Code colour — blue, cyan, fuchsia, indigo, moss, orange, pink, purple, red, teal,
   violet, yellow and seven separate grey ramps. Excluding them is right; **never stating the
   exclusion** is what made the count look like a contradiction.
-- **166 go to triage** — 141 DGA-namespaced values the kit does not hold, plus 25 whose family is
+- **12 are gradients** whose every colour component the kit already holds. What is missing there
+  is the gradient *definition* — the angle and stops — not a value, and the two are different
+  findings.
+- **154 go to triage** — 129 DGA-namespaced values the kit does not hold, plus 25 whose family is
   unrecognised and are left for review rather than excluded. Covers the whole `--alpha-*`
-  transparency scale (49), `--button-*` interaction states (17), `--link-*` (16),
-  `--notification-*` (14), `--gradient-*` (12), `--tag-*` (10) and more. Every one is listed in
-  the reconciliation report.
+  transparency scale (49), its `--colors-alpha-*` primitives (27), `--button-*` interaction
+  states (17), `--link-*` (16), `--notification-*` (14), `--tag-*` (10) and more. Every one is
+  listed in the reconciliation report.
 
 **A skill must not tell a caller a value is absent from DGA because it is absent from
 `tokens.json`.** That warning is now in `dga-design-system`, `dga-ui-adapter` and
@@ -41,8 +44,8 @@ declaration by declaration against live stylesheet build `PDaQ7SHU`:
 
 ### Corrected — two defects in the reconciler itself, found in review
 
-The first cut of this reconciliation reported 516/276/240. Those numbers were wrong, and both
-causes are worth recording because they are the failure modes any such tool has:
+Successive review cuts reported 516/276/240 and then 412/246/166. Those were wrong, and each
+cause is worth recording because they are the failure modes any such tool has:
 
 - **Resolution ignored the cascade and the theme scope.** It followed the *first* declaration of
   a name anywhere in the stylesheet. DGA redeclares **393** light names — `--colors-base-black`
@@ -51,6 +54,20 @@ causes are worth recording because they are the failure modes any such tool has:
   Dark aliases also resolved through light definitions. Fixed to last-declaration-wins per scope,
   with dark falling back to light only where dark does not redefine. **That bug alone invented
   104 declarations of gap.**
+- **Composites were counted as confirmed-missing values.** `resolve()` only handled a value that
+  was *entirely* a `var()`, so `linear-gradient(90deg, var(--colors-brand-600) 0%, …)` came back
+  verbatim and was then compared against a set of plain literals — which can never match. All 12
+  DGA gradients and one `hsla()` were reported as values the kit lacks, when **every colour in
+  them is already carried**. `var()` is now substituted wherever it appears, with balanced-paren
+  matching because fallbacks nest (`var(--a, var(--b))`). Composites whose components are all
+  carried are their own category, and anything still holding a `var()` after substitution is
+  counted as *unresolved* rather than missing — an expression nobody can resolve is not evidence
+  the kit is short a value. Currently 0 unresolved; every composite resolves.
+- **The JSON exemption for the retracted wording was indentation-sensitive.** It stripped from
+  `$reconciliation` to the first `\n  }`, which under two-space indentation is the close of
+  `$meta` itself — so `$note`, `$countsNote`, `$disputed` and `$conventions` were all silently
+  exempt, and planting the forbidden wording in `$meta.$note` passed. The guard now parses the
+  JSON and exempts exactly the `$meta.$reconciliation` subtree, by path.
 - **The "generic palette" exclusion was inferred, and swept up semantic tokens.** The rule was
   "any `--colors-*` family not in the published set", which classified `--colors-border-primary`,
   `--colors-text-primary` and the `--colors-alpha-*` primitives as decorative ramp steps. The

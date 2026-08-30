@@ -45,9 +45,9 @@ DGA's token values are already extracted and machine-readable — **303 of them*
 the 1,126 custom properties DGA's stylesheet declares.
 
 ⚠️ **That distillation has known holes, and they are in the roles you will reach for.** A
-declaration-by-declaration reconciliation found **166 values these files do not carry** — the
-whole `--alpha-*` transparency scale, plus `--button-*` interaction states, `--link-*`,
-`--notification-*`, `--gradient-*`, `--tag-*`, `--border-*` and `--form-*`.
+declaration-by-declaration reconciliation found **154 values these files do not carry** — the
+whole `--alpha-*` transparency scale and its `--colors-alpha-*` primitives, plus `--button-*`
+interaction states, `--link-*`, `--notification-*`, `--tag-*`, `--border-*` and `--form-*`.
 If the value you need is missing, **read it off the live `:root`** rather than substituting the
 nearest carried token. See [the reconciliation record](https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/RECONCILIATION.md) for the
 full list.
