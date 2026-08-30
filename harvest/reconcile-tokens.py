@@ -290,20 +290,32 @@ def bucket(gap, sem):
     }
 
 
-def closing_note(triage, unresolved):
+def closing_note(triage, unresolved, excluded):
     """What the report says when the triage bucket is empty.
 
-    Split out so it is assertable: "Nothing outstanding" must NEVER appear while an unresolved
-    expression remains. An expression nobody could resolve is an unanswered question about DGA's
-    stylesheet, not a clean bill of health, and a report that calls it clean is the one failure
-    this file exists to prevent.
+    Split out so it is assertable. Two ways this sentence can lie, and both have to be closed:
+
+    "Nothing outstanding" must NEVER appear while an unresolved expression remains - an
+    expression nobody could resolve is an unanswered question about DGA's stylesheet, not a
+    clean bill of health.
+
+    And it must not claim EVERY declaration is carried while the generic ramp or a composite
+    definition is still unmatched. Those are unmatched by decision rather than by omission, but
+    they are unmatched: saying "every declaration resolves to a value this kit carries" over
+    them is false. `excluded` is that count, and only when it is zero too has the stylesheet
+    genuinely been fully absorbed.
     """
     if triage:
         return []
     if unresolved:
-        return ['Nothing is in the triage bucket, but %d expression(s) below could not be'
+        return ['No triage entries remain, but %d expression(s) below could not be resolved.'
                 % len(unresolved),
-                'resolved. Read those before treating this as complete.']
+                'Read those before treating this as complete.']
+    if excluded:
+        return ['No triage entries or unresolved expressions remain. %d declaration(s) still do'
+                % excluded,
+                'not match a carried value - the generic ramp and the composite definitions',
+                'listed below - and those are excluded by decision, not by omission.']
     return ['Nothing outstanding: every declaration DGA publishes resolves to a value this kit',
             'already carries.']
 
@@ -355,10 +367,14 @@ def self_test():
     assert b2['unresolved'] and everything[3] not in b2['semantic'], \
         'unresolved expression counted as a missing DGA value'
 
-    # 5. "Nothing outstanding" must never appear while anything is unresolved.
-    assert closing_note([], []) and 'Nothing outstanding' in closing_note([], [])[0],         'a genuinely clean run should say so'
-    assert not any('Nothing outstanding' in l for l in closing_note([], [_row('light', '--u')])),         'reported "Nothing outstanding" while an unresolved expression remained'
-    assert closing_note([_row('light', '--t')], []) == [],         'closing note emitted while the triage table is being printed'
+    # 5. The closing note must not overclaim in any of its three states.
+    assert 'Nothing outstanding' in closing_note([], [], 0)[0],         'a genuinely clean run should say so'
+    assert not any('Nothing outstanding' in l for l in closing_note([], [_row('light', '--u')], 0)),         'reported "Nothing outstanding" while an unresolved expression remained'
+    _exc = closing_note([], [], 246)
+    assert not any('Nothing outstanding' in l for l in _exc),         'claimed every declaration is carried while excluded declarations remain unmatched'
+    assert 'No triage entries or unresolved expressions remain' in _exc[0], _exc[0]
+    assert '246' in ' '.join(_exc), 'the excluded count is not stated'
+    assert closing_note([_row('light', '--t')], [], 246) == [],         'closing note emitted while the triage table is being printed'
 
     print('reconcile self-check passed')
     return 0
@@ -544,7 +560,7 @@ def write_report(build, names, light, dark, other, rows, tok):
             add('| %s | `%s` | `%s` | `%s` |'
                 % (r['scope'], r['name'], r['declared'][:48], r['resolved']))
     else:
-        for _l in closing_note(triage, unresolved):
+        for _l in closing_note(triage, unresolved, len(generic) + len(composite)):
             add(_l)
 
     if composite:

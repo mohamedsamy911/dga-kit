@@ -77,6 +77,14 @@ cause is worth recording because they are the failure modes any such tool has:
   **refuses to emit a report whose rows do not add up to its header**. Both new categories get
   their own detail sections, and "Nothing outstanding" can no longer be printed while any
   expression remains unresolved.
+- **The report's clean-run message overclaimed.** With the triage bucket empty it said "every
+  declaration DGA publishes resolves to a value this kit already carries" — untrue whenever the
+  generic ramp or a composite definition is still unmatched, which is 258 declarations today.
+  Those are unmatched by *decision*, but they are unmatched. The note now has three honest
+  states: fully clean, "no triage entries or unresolved expressions remain" with the excluded
+  count named, and the unresolved warning. The `excluded` argument is deliberately **required**
+  — a default of `0` would make the writer forgetting to pass it silently the overclaiming case
+  again, and the self-check calls the function directly so it could not see that.
 - **`harvest/reconcile-tokens.py --test`** — an offline self-check, now a CI gate. It asserts
   scope-correct resolution, composite substitution, `var()` fallbacks, that the buckets partition
   the gap exactly, that a light row keeps its own classification when a dark row shares its name,
