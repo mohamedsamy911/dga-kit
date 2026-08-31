@@ -28,7 +28,7 @@
 import { existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, rmSync, cpSync,
          writeFileSync, appendFileSync, statSync, symlinkSync } from 'node:fs'
 import { homedir } from 'node:os'
-import { dirname, join, resolve, sep, relative } from 'node:path'
+import { dirname, join, resolve, isAbsolute, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createInterface } from 'node:readline'
 import { execFileSync } from 'node:child_process'
@@ -273,10 +273,15 @@ function codexTarget({ project }) {
   }
   const configured = process.env.CODEX_HOME
   if (configured) {
-    if (!resolve(configured).startsWith(sep) && !/^[A-Za-z]:/.test(resolve(configured))) {
-      fail('CODEX_HOME must be an absolute path')
+    // isAbsolute on the RAW value. The old test called resolve() first, which always returns
+    // an absolute path, so it could never fire - and a relative CODEX_HOME was silently
+    // resolved against the current directory, installing agents wherever npx happened to run.
+    if (!isAbsolute(configured)) {
+      fail(`CODEX_HOME must be an absolute path, got: ${configured}`)
     }
-    return join(resolve(configured), 'agents')
+    const root = resolve(configured)
+    plainPath(root)
+    return join(root, 'agents')
   }
   return join(homedir(), '.codex', 'agents')
 }
@@ -350,6 +355,10 @@ function installClaude(home, { force, skills = true, agents = true }) {
   const dest = join(home, '.claude', 'skills')
   const adest = join(home, '.claude', 'agents')
   plainPath(dest); plainPath(adest)
+  // PREFLIGHT the manifest before copying anything. claim() runs after each copy, so a
+  // symlinked or unwritable manifest used to abort mid-install with files already on disk and
+  // nothing recording them - untracked, and invisible to --uninstall forever.
+  plainPath(manifestPath(home))
   if (!DRY) { mkdirSync(dest, { recursive: true }); mkdirSync(adest, { recursive: true }) }
   legacyNotice(home)
 
@@ -647,7 +656,18 @@ async function cleanLegacy(home) {
   const rl = createInterface({ input: process.stdin, output: process.stdout })
   const reply = await new Promise((r) => rl.question('Type DELETE to confirm: ', (a) => { rl.close(); r(a) }))
   if (reply.trim() !== 'DELETE') { say('Aborted. Nothing removed.'); return 1 }
-  for (const p of targets) { if (!DRY) rmSync(p, { recursive: true, force: true }); say(`removed   ${p}`) }
+  for (const p of targets) {
+    // Guard the deletion the same way uninstall does: a linked legacy directory would
+    // otherwise be followed and something outside it removed.
+    try {
+      plainPath(p)
+    } catch (e) {
+      say(`REFUSED   ${p} - ${e.message}. Left untouched.`)
+      continue
+    }
+    if (!DRY) rmSync(p, { recursive: true, force: true })
+    say(`${DRY ? 'would remove' : 'removed  '} ${p}`)
+  }
   say('Legacy agent .md files were NOT touched - those names are generic. Remove by hand if yours.')
   return 0
 }
@@ -691,6 +711,14 @@ function cleanScratch() {
  *  is symlink refusal and the agent-payload validation, so those are pinned here.
  */
 function selfTest() {
+  try {
+    return runSelfTest()
+  } finally {
+    cleanScratch()
+  }
+}
+
+function runSelfTest() {
   const assert = (cond, msg) => { if (!cond) throw new Error('SELF-CHECK: ' + msg) }
   const throws = (fn, msg) => {
     try { fn() } catch { return }
@@ -750,11 +778,16 @@ function selfTest() {
   const tmp = scratchDir('links')
   mkdirSync(join(tmp, 'real'), { recursive: true })
   plainPath(join(tmp, 'real'))                       // a plain path is accepted
-  let linked = false
+  let linked = false        // directory links (junctions) - unprivileged on Windows
+  let fileLinked = false    // FILE symlinks - need Developer Mode or admin on Windows
   try {
     symlinkSync(join(tmp, 'real'), join(tmp, 'link'), 'junction')
     linked = true
-  } catch { /* unprivileged Windows cannot create links; the check below is then skipped */ }
+  } catch { /* this platform will not create a directory link; those cases are skipped */ }
+  try {
+    symlinkSync(join(tmp, 'real', 'nope.txt'), join(tmp, 'flink'), 'file')
+    fileLinked = true
+  } catch { /* file symlinks are a SEPARATE privilege on Windows - do not assume the junction */ }
   if (linked) {
     throws(() => plainPath(join(tmp, 'link')), 'a symlinked directory')
     throws(() => plainPath(join(tmp, 'link', 'child.toml')), 'a symlinked PARENT')
@@ -922,7 +955,7 @@ function selfTest() {
 
   // 14. A dangling link is SOMETHING, not an empty slot. present() must see it where
   //     existsSync() could not - that gap silently replaced a user's symlinked agent.
-  if (linked) {
+  if (fileLinked) {
     const tmp6 = scratchDir('present')
     symlinkSync(join(tmp6, 'no-such-target'), join(tmp6, 'link'), 'file')
     assert(!existsSync(join(tmp6, 'link')), 'fixture wrong - the link is not dangling')
@@ -932,7 +965,7 @@ function selfTest() {
 
   // 15. The manifest is guarded like any other destination: a SYMLINKED manifest used to be
   //     appended to, writing installed paths into whatever it pointed at.
-  if (linked) {
+  if (fileLinked) {
     const tmp7 = scratchDir('manifest')
     mkdirSync(join(tmp7, '.claude'), { recursive: true })
     writeFileSync(join(tmp7, 'external.json'), '{"important":"config"}')
@@ -952,17 +985,65 @@ function selfTest() {
   const seq = Number((s1.match(/-(\d+)-collide$/) || [])[1])
   assert(Number.isInteger(seq), `scratch name is not sequenced: ${s1}`)
   const wouldBe = s1.replace(`-${seq}-collide`, `-${seq + 1}-collide2`)
-  mkdirSync(wouldBe, { recursive: true })
-  writeFileSync(join(wouldBe, 'USER-FILE.txt'), 'precious')
-  const s2 = scratchDir('collide2')
-  assert(s2 !== wouldBe, 'scratchDir adopted a directory it did not create')
-  assert(existsSync(join(wouldBe, 'USER-FILE.txt')),
-    'scratchDir destroyed a pre-existing directory')
-  assert(readdirSync(s2).length === 0, 'scratchDir returned a directory that was not empty')
-  rmSync(wouldBe, { recursive: true, force: true })
+  // Create the decoy EXCLUSIVELY, and only clean up what this call actually made. The first
+  // version used mkdirSync(recursive) then rmSync - so if anything already sat at that path,
+  // this test adopted and then deleted it. That is the very bug it exists to catch.
+  let decoy = false
+  try {
+    mkdirSync(wouldBe)
+    decoy = true
+  } catch (e) {
+    if (e.code !== 'EEXIST') throw e
+  }
+  if (decoy) {
+    writeFileSync(join(wouldBe, 'USER-FILE.txt'), 'precious')
+    const s2 = scratchDir('collide2')
+    assert(s2 !== wouldBe, 'scratchDir adopted a directory it did not create')
+    assert(existsSync(join(wouldBe, 'USER-FILE.txt')),
+      'scratchDir destroyed a pre-existing directory')
+    assert(readdirSync(s2).length === 0, 'scratchDir returned a directory that was not empty')
+    rmSync(wouldBe, { recursive: true, force: true })
+  }
 
+  // 17. CODEX_HOME must be absolute, tested on the RAW value. The old check called resolve()
+  //     first - which always returns an absolute path - so it could never fire, and a relative
+  //     value was silently resolved against wherever npx happened to run.
+  const prevHome = process.env.CODEX_HOME
+  try {
+    for (const rel of ['relative-dir', './x', '..', 'a/b']) {
+      process.env.CODEX_HOME = rel
+      let e = null
+      try { codexTarget({ project: null }) } catch (err) { e = err }
+      assert(e && /must be an absolute path/.test(e.message),
+        `relative CODEX_HOME ${JSON.stringify(rel)} was accepted`)
+    }
+    process.env.CODEX_HOME = scratchDir('codexhome')
+    assert(codexTarget({ project: null }).endsWith('agents'), 'an absolute CODEX_HOME was refused')
+  } finally {
+    if (prevHome === undefined) delete process.env.CODEX_HOME
+    else process.env.CODEX_HOME = prevHome
+  }
+
+  // 18. Claude preflights the manifest BEFORE copying. It used to copy, then claim() - so a
+  //     symlinked manifest aborted mid-install with files on disk and nothing recording them:
+  //     untracked, and invisible to --uninstall forever.
+  if (fileLinked) {
+    const tmp8 = scratchDir('preflight')
+    mkdirSync(join(tmp8, '.claude'), { recursive: true })
+    writeFileSync(join(tmp8, 'external.json'), '{"a":1}')
+    symlinkSync(join(tmp8, 'external.json'), manifestPath(tmp8), 'file')
+    throws(() => installClaude(tmp8, { force: false, skills: true, agents: true }),
+      'installing with a symlinked manifest')
+    assert(!present(join(tmp8, '.claude', 'skills', SKILLS[0])),
+      'a skill was copied before the manifest was validated - it is now untracked')
+    assert(readFileSync(join(tmp8, 'external.json'), 'utf8') === '{"a":1}',
+      'the linked-to file was modified')
+  }
+
+  const skips = [linked ? null : 'directory links', fileLinked ? null : 'file symlinks']
+    .filter(Boolean)
   console.log('installer self-check passed'
-    + (linked ? '' : ' (symlink cases skipped: this platform would not create one)'))
+    + (skips.length ? ` (skipped: this platform would not create ${skips.join(' or ')})` : ''))
   return 0
 }
 

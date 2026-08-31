@@ -149,6 +149,35 @@ than changed again.
   carries a per-tool table, and both promises are qualified.
 
 
+- **`CODEX_HOME` absoluteness was never actually checked.** The test called `resolve()` first —
+  which always returns an absolute path — so the condition could never fire, and a relative
+  `CODEX_HOME` was silently resolved against whatever directory `npx` ran in. Reproduced: agents
+  installed into `./relative-dir/agents` under the current working directory. Now tested on the
+  raw value with `isAbsolute()`, and the resolved root is link-checked like every other
+  destination.
+- **Claude copied files before validating its manifest.** `claim()` runs after each copy, so a
+  symlinked or unwritable manifest aborted mid-install with skills already on disk and nothing
+  recording them — untracked, and invisible to `--uninstall` forever. The manifest is now
+  preflighted before the first copy, so a run that cannot record what it installs writes nothing.
+- **Legacy cleanup deleted through linked directories.** `--clean-legacy` was the one deletion
+  path with no ancestry check, so a junction at `skills/dga-chakra` would have been followed and
+  something outside it removed. It now refuses a linked target the same way uninstall does.
+- **Windows file-symlink tests used the wrong capability guard.** One `linked` flag was set by
+  creating a **junction**, which is unprivileged on Windows, and then gated three tests that
+  create **file symlinks**, which need Developer Mode or admin. On an ordinary Windows box those
+  turned a skip into a hard failure. The two capabilities are probed separately now, and the
+  summary line names whichever was unavailable.
+- **The collision self-test could delete pre-existing temporary data** — it created its decoy
+  directory with `mkdirSync(recursive)` and then removed it, which is precisely the bug that test
+  exists to catch. The decoy is created exclusively and only cleaned up if this run made it.
+  Separately, `cleanScratch()` had been written but never called: 49 fixture directories had
+  accumulated. It now runs from a `finally`, and CI asserts the temp folder is left empty,
+  because a leak is invisible from inside the test itself.
+- **INSTALL still stated a Codex-only rule as universal.** "Any different file aborts the
+  install" is true for Codex agents and false for Claude, which skips with a note unless
+  `--force`. The paragraph now separates what holds for both tools from what is Codex-specific.
+
+
 All of these are pinned by `node bin/dga-kit.mjs --test` and by new cases in the three-OS matrix.
 One of those assertions was vacuous on its first draft — the fixture's Codex target did not
 exist, so the branch it was meant to cover never ran and the test passed with the selector still

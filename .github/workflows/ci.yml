@@ -56,6 +56,15 @@ jobs:
         # succeeded.
         run: python harvest/reconcile-tokens.py --test
 
+      - name: Installer self-check leaves no scratch directories
+        # cleanScratch() is called from a finally, so a leak is invisible from inside the test
+        # itself - 49 fixture directories piled up in the temp folder before it was wired in.
+        shell: bash
+        run: |
+          node bin/dga-kit.mjs --test
+          leaked=$(ls -d "${RUNNER_TEMP:-/tmp}"/dga-kit-selftest-* 2>/dev/null | wc -l)
+          test "$leaked" -eq 0 || { echo "self-check leaked $leaked scratch directories"; exit 1; }
+
       - name: Installer self-check
         # Symlink refusal and the agent-payload validation, which the end-to-end matrix below
         # cannot easily reach. These moved here from the Python installer's unittest suite when

@@ -115,11 +115,16 @@ a directory anything else can write. The installer does not edit `config.toml` i
 does. Use `--codex --agents` if you want the file copy and no configuration change, or
 `--dry-run` to see the exact commands first.
 
-**Safety and updates.** All six source files and destination conflicts are checked before
-copying. Identical existing files are untouched; any different file (including a migrated or
-customized agent) aborts the install. Linked paths — symlinks, dangling symlinks and Windows
-junctions — are refused, on the path and on every parent, and files are created exclusively so a
-link planted mid-install cannot be followed.
+**Safety and updates.** Two guarantees hold for **both** tools: linked paths — symlinks,
+dangling symlinks and Windows junctions — are refused, on the path and on every parent, and
+files are created exclusively so a link planted mid-install cannot be followed. The Claude
+manifest is checked before any file is copied, so a run that cannot record what it installs
+writes nothing at all.
+
+For **Codex agents** specifically, all six source files and every destination conflict are
+checked before copying, and any different file — including a migrated or customized agent —
+aborts the whole install rather than replacing it. Claude's rule is different, and the table
+below is the one to read.
 
 ⚠️ **The two tools have deliberately different rules.** Read the row for the one you mean:
 

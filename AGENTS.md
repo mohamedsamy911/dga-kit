@@ -30,7 +30,7 @@ python evals/test-codex-agents.py                 # conversion and isolated inst
 python harvest/reconcile-tokens.py --test         # "reconcile self-check passed" (offline)
 node skills/dga-design-system/assets/check-contrast.mjs --test   # "self-check passed"
 node skills/dga-design-system/assets/generate-tokens.mjs          # then `git diff` must be empty
-node bin/dga-kit.mjs --test                       # "installer self-check passed"
+node bin/dga-kit.mjs --test                       # "installer self-check passed"; leaves no temp dirs
 node bin/dga-kit.mjs --dry-run                    # installer parses and plans; writes nothing
 ```
 
