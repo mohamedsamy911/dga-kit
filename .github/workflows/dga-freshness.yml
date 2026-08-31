@@ -40,6 +40,31 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Diagnose runner connectivity (temporary)
+        run: |
+          python -u - <<'PY'
+          import runpy, socket, time
+          source = runpy.run_path('harvest/sources.py', run_name='probe')
+          try:
+              print('DNS:', sorted({entry[4][0] for entry in socket.getaddrinfo('design.dga.gov.sa', 443)}))
+          except OSError as exc:
+              print('DNS failed:', type(exc).__name__, str(exc))
+          start = time.monotonic()
+          try:
+              status, body = source['fetch'](source['BASE'] + '/', timeout=15)
+              print('Python GET:', status, 'bytes:', len(body))
+          except Exception as exc:
+              print('Python GET failed:', type(exc).__name__, str(exc))
+          print('Python elapsed:', round(time.monotonic() - start, 2))
+          PY
+          for family in -4 -6; do
+            curl "$family" --connect-timeout 10 --max-time 20 --silent --show-error \
+              --user-agent 'dga-kit source inventory (+https://github.com/mohamedsamy911/dga-kit)' \
+              --output /dev/null \
+              --write-out "family=$family status=%{http_code} ip=%{remote_ip} dns=%{time_namelookup} tcp=%{time_connect} tls=%{time_appconnect} total=%{time_total}\n" \
+              https://design.dga.gov.sa/ || true
+          done
+
       - name: Run the sentinel
         id: sentinel
         run: |
