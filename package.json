@@ -1,0 +1,48 @@
+{
+  "name": "dga-kit",
+  "version": "0.7.2",
+  "description": "Unofficial Saudi DGA \"Platforms Code\" guidance as Claude Code and Codex skills and agents. Not affiliated with or endorsed by the Digital Government Authority.",
+  "bin": {
+    "dga-kit": "bin/dga-kit.mjs"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "bin/",
+    "skills/",
+    "agents/",
+    "codex-agents/",
+    ".claude-plugin/",
+    "README.md",
+    "INSTALL.md",
+    "COVERAGE.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node bin/dga-kit.mjs --dry-run --claude"
+  },
+  "author": {
+    "name": "Mohamed Samy",
+    "email": "mohamedadel74@gmail.com"
+  },
+  "homepage": "https://github.com/mohamedsamy911/dga-kit",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohamedsamy911/dga-kit.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "dga",
+    "platforms-code",
+    "saudi",
+    "gov-sa",
+    "claude-code",
+    "codex",
+    "design-system",
+    "accessibility",
+    "rtl",
+    "arabic"
+  ]
+}

@@ -70,6 +70,12 @@ add a rule to `references/` and cite it.
 
 ## Agents
 
+The six roles ship as Claude Markdown in `agents/` and generated Codex TOML in `codex-agents/`.
+The Codex skills plugin does not register agents: run the
+[separate installer](INSTALL.md#install-the-six-codex-agents-separately). Generation preserves
+each role's body and adds only Codex skill lookup instructions and read-only sandbox defaults
+for the three non-writing roles. No new DGA coverage is implied by the second format.
+
 | Agent | Lane | Writes files? |
 |---|---|---|
 | `dga-designer` | Problem framing → state matrix → copy → handoff | Yes |

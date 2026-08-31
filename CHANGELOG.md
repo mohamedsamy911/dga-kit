@@ -11,6 +11,184 @@ patch means corrections. Nothing here is a DGA release — see
 `skills/dga-design-system/dga-version.md` for the Platforms Code version this kit is pinned to
 (currently **PC 1.0.3**, released 4 Nov 2025).
 
+## Unreleased
+
+### Added — six native Codex agents
+
+- `codex-agents/*.toml` is generated from the six Claude Markdown definitions. Descriptions and
+  complete instruction bodies are preserved, with a Codex skill-lookup preamble so plugin-cache
+  paths are not mistaken for paths beside the agents. The three read-only roles also receive
+  a read-only sandbox default. No model or reasoning-effort overrides are shipped.
+- Regeneration/parity checks guard both formats and the safety contract. README, INSTALL and
+  COVERAGE distinguish plugin setup from agent setup.
+- Fixed invalid YAML in the Claude frontend architect's description by quoting its colon;
+  the description's wording is unchanged.
+
+> The Python installer these agents originally shipped with (`install-codex-agents.py`) was
+> replaced before release by the single Node installer below. Nothing in this release recommends
+> it, and it is not in the repository.
+### Added — one command, both tools
+
+```bash
+npx github:mohamedsamy911/dga-kit
+```
+
+It **detects what is on the machine** and installs everything it can for each tool found: the
+11 skills and 6 agents for Claude Code, and the 6 agents plus the skills plugin for Codex.
+**Nothing is published to npm** — `npx` runs it straight from this repository, so there is no
+clone of your own, no `npm install`, no release step, and no package to keep in sync with the
+plugin. **Prerequisites are Node 18+ and Git**: npm resolves a `github:` spec by cloning, so
+without git on PATH `npx` fails with an ENOENT from git. Publishing to npm would remove that
+requirement and shorten the command to `npx dga-kit`; it has not been done.
+
+Two independent axes narrow it, each defaulting to "all" when its own flags are absent:
+`--claude` / `--codex` picks the tool, `--skills` / `--agents` picks the kind, and one from each
+reaches a single cell (`--codex --skills`). `--help` lists them. The matrix is asserted by
+`--test` from the **same function `main()` uses**, so a copy in the test cannot drift from the
+behaviour.
+
+**Codex skills are the one step that is not a file copy.** Codex serves plugin skills from
+`~/.codex/plugins/cache/…` plus a registration in `config.toml`, so the installer runs
+`codex plugin marketplace add` and `codex plugin add` rather than reimplementing that against an
+undocumented layout. If the `codex` CLI is not callable it installs what it can, names what it
+skipped, and prints the two commands. Detection probes by running `<tool> --version`, never by
+shelling out to `which`/`where` — the platform-binary dependency that broke the old installers.
+
+Before this, installing the Codex agents meant cloning the repo and running a Python script that
+needed 3.11+ for `tomllib`. Node is the runtime this kit's users — frontend developers building
+`.gov.sa` platforms — already have; Python 3.11 is not.
+
+### Corrected — three defects in the new installer, found in review before release
+
+- **Uninstall ignored the tool and kind selectors.** `--claude --uninstall` deleted Codex agents
+  as well, because uninstall was dispatched *before* the selector flags were parsed and then
+  ignored them. Removal now runs on exactly the plan an install would use, and manifest entries
+  outside that scope are **preserved** — the manifest is rewritten with what was kept rather than
+  blanket-deleted, so a scoped uninstall does not orphan the paths it deliberately left behind.
+- **Uninstall did not validate path ancestry the way installation does.** A Windows junction on
+  the destination let a delete follow the link and remove a file in an unrelated directory: the
+  allowlist compared **strings**, and the string was fine — the directory was not. `plainPath()`
+  now guards every removal, on both the Codex and the Claude manifest paths, and a refusal keeps
+  its manifest record because the path is still ours.
+- **CI still ran `bash -n install-skills.sh` after that file was deleted.** The job failed on "No
+  such file or directory" while the gate-consistency checker passed, because its parser had been
+  narrowed to `python`/`node` and no longer recognised a `bash` gate at all. Replaced with
+  `node --check bin/dga-kit.mjs`, and the checker gained the axis it was missing: **every script
+  the workflow or AGENTS.md names must exist on disk.** A gate nobody parses is invisible to the
+  two consistency checks, so it has to be caught on the cruder axis.
+
+- **An explicit selector did not override detection.** The skip message said *"Pass `--claude` to
+  install anyway"* — and passing it changed nothing, because detection ran first and skipped
+  regardless. On a machine where Claude Code is installed but `~/.claude` does not exist yet, the
+  installer wrote nothing and told the user to pass the flag they had just passed. Detection now
+  decides only what a **bare** run does; a flag is the user saying "yes, this one". Found while
+  replaying the CI matrix, which created a scratch `$DGA_KIT_HOME` without `.claude` and would
+  have failed every assertion after it.
+
+- **A dangling symlink bypassed the path guard entirely.** `plainPath()` called `lstat` only
+  after an `existsSync()` precheck — and `existsSync()` *follows* the link, so a link whose
+  target did not exist yet answered `false`, the lstat never ran, and the write then created the
+  target **through** the link, outside the destination. Reproduced: a link at
+  `.codex/agents/dga-designer.toml` pointing at `../outside/planted.toml` produced
+  `../outside/planted.toml`. The precheck is gone (ENOENT is caught instead, any other errno is
+  a refusal), and writes now use exclusive creation `'wx'` so a link planted between the guard
+  and the write refuses rather than following.
+- **Windows npm-installed CLIs were not callable.** An npm CLI on Windows is a `codex.cmd` shim,
+  and `execFileSync` cannot launch a batch file: bare `codex` gives `ENOENT`, and even an
+  explicit `codex.cmd` gives `EINVAL`. Only a shell can. A working mock CLI was reported
+  unavailable and Codex skills were silently skipped. Detection and installation both go through
+  one `runCli()` that sets `shell: true` **on win32 only** — POSIX keeps the safer direct exec —
+  and every argument crossing it is validated as a hardcoded constant, because under a shell an
+  argument is syntax.
+- **A failed Codex plugin install reported success.** Both subprocess failures were swallowed as
+  "it may already be added" and `'done'` was returned regardless, so a genuinely failed
+  `plugin add` exited 0 and told the user to restart Codex and expect skills that were never
+  installed. Now: `marketplace add` failing is tolerated **only when the output says it is
+  already registered**, `plugin add` failing is never tolerated, the status propagates into the
+  exit code, and the closing line says `FINISHED WITH ERRORS` instead of `Done`.
+- **Legacy PowerShell manifests were misparsed.** Windows PowerShell 5.1 writes UTF-8 **with** a
+  BOM, so a manifest from the old `install-skills.ps1` began `"\uFEFFC:\Users\..."`. The reader
+  treated the mark as part of the first path, refused that legitimate entry as out-of-allowlist,
+  and left its skill orphaned. One shared `readManifest()` now normalises it, and every read —
+  `owns()`, `claim()`, uninstall — goes through it.
+
+Two of the six findings (explicit flags not overriding discovery, and the CI fixtures never
+enabling Claude detection) were already fixed in the previous round and re-verified here rather
+than changed again.
+
+
+- **Link protection covered the reads but not the writes.** `plainPath()` guarded the Codex
+  agent path and the uninstall path, and nothing else. Two consequences, both reproduced:
+  a **symlinked `.dga-kit-manifest`** meant a normal install appended installed paths into
+  whatever it pointed at — an external `settings.json` stopped being valid JSON — and a
+  **dangling** Claude skill or agent link was silently replaced by a regular file with no
+  `--force`, because every "does this already exist" test used `existsSync()`, which follows a
+  link and so answers *false* for a dangling one. Added `present()` (lstat-based, link-aware) for
+  every existence test, and `plainPath()` on the manifest and on every destination leaf before
+  it is written.
+- **Unknown arguments were ignored, so a typo installed everything.** `-CleanLegacy` and
+  `-Force` — PowerShell forms this page still documented from the installer that was replaced —
+  fell straight through to a full default install: asking to clean legacy paths performed an
+  install instead. Arguments are now validated **before any mutation**, unknown ones are refused
+  with the valid list, and a `-Capitalised` flag gets a note explaining where it went.
+- **The self-check deleted pre-existing temporary directories.** Five fixed names under the temp
+  directory were `rm -rf`'d before ownership was established, so a seeded file was destroyed
+  while the run reported success, and two concurrent runs shared the same paths. Scratch
+  directories are now created with a non-recursive `mkdirSync` under a per-process name, so the
+  directory returned is provably new and an existing one is stepped over, never adopted.
+- **Two CI assertions could never pass.** The fixture created `.claude` and then asserted
+  `.claude` did not exist, so the dry-run check failed on every run; and the conflict test
+  deleted `dga-designer.toml` immediately before the selector test asserted that same file
+  survived. The dry-run check now asserts on the children a dry run must not create, and the
+  conflict test restores the agent it removed. Both were verified by extracting the workflow
+  step and running it: it now exits 0.
+- **Docs mixed the two tools' safety semantics.** The `--force` paragraph sat in the Codex
+  section, where `--force` has no effect at all; a table row still said Codex agents are never
+  deleted, which uninstall contradicts; and README promised unconditionally that nothing you
+  edited is overwritten, which is exactly what `--force` does on the Claude side. INSTALL now
+  carries a per-tool table, and both promises are qualified.
+
+
+All of these are pinned by `node bin/dga-kit.mjs --test` and by new cases in the three-OS matrix.
+One of those assertions was vacuous on its first draft — the fixture's Codex target did not
+exist, so the branch it was meant to cover never ran and the test passed with the selector still
+ignored. It now installs real agents before asserting they survive.
+
+### Changed — three installers became one
+
+`install-skills.sh`, `install-skills.ps1` and `install-codex-agents.py` are **removed**, replaced
+by `bin/dga-kit.mjs`. Three implementations of one behaviour is the drift this repo spends its CI
+preventing, and the shell pair had already proved it: `xargs -r` is a GNU extension, so
+`install-skills.sh` passed on Linux for months while being broken on the macOS it advertised.
+
+Everything they guaranteed is carried over, and each guarantee is now asserted in one place:
+
+- **The manifest is a record, not an authority.** A path is deleted only if it is recorded *and*
+  matches the fixed allowlist, so a corrupted manifest can under-delete but never delete
+  something unrelated. A path the manifest does not claim is treated as yours.
+- **`--force` is the only thing that touches an unclaimed path**, still only writes allowlisted
+  `dga-*` names, and announces each one.
+- **Codex agents are content-addressed.** An agent you edited is a refusal, not an overwrite, and
+  the preflight runs before anything is written — a half-installed agent set is worse than a
+  refusal, because Codex will load the half.
+- **Symlinks and Windows reparse points are refused**, on the path and on every parent.
+- **`--uninstall` removes only what it wrote**, byte-identical Codex agents included.
+- **Cross-references are verified against the tree that actually landed**, and a broken one exits
+  non-zero.
+
+New: `--dry-run` prints the plan and writes nothing, and `--test` is an offline self-check of the
+safety guards — symlink refusal, strict TOML parsing, the read-only sandbox on the three
+report-only agents, and the absence of a `model` pin. Both are CI gates. The three-OS matrix now
+exercises the real thing end to end: dry-run writes nothing, install, idempotence, refusal to
+overwrite an edited agent, uninstall scoping, and a check that the real profile was never touched.
+
+The unit tests that covered the Python installer moved with it: `evals/test-codex-agents.py`
+keeps the conversion tests, and the installer's own guards are asserted by `--test`.
+
+One thing worth stating plainly: **`cross-references OK` is no longer printed on a dry run.**
+It reported a check that had not run, which is exactly the unearned reassurance this repo exists
+to stamp out.
+
 ## 0.7.2 — 2026-08-31
 
 One finding, followed all the way down: the gap explanation 0.7.1 shipped was wrong, and

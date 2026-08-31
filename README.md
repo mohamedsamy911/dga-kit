@@ -1,6 +1,6 @@
 # dga-kit
 
-**Saudi DGA "Platforms Code" compliance, as Claude Code skills and agents.**
+**Saudi DGA "Platforms Code" guidance, as skills and agents for Claude Code and Codex.**
 
 If you build for a `.gov.sa` platform, you have to satisfy the National Design System of Saudi
 Arabia — [design.dga.gov.sa](https://design.dga.gov.sa/). It is a **scored** requirement: the
@@ -29,6 +29,49 @@ or Angular kit, plain CSS, or DGA's own React package.
 
 ## Install
 
+**One command. Everything, for whatever you have installed.**
+
+```bash
+npx github:mohamedsamy911/dga-kit
+```
+
+It detects Claude Code and Codex on your machine and installs the **11 skills and 6 agents** for
+each.
+
+**Prerequisites: Node 18+ and Git.** Git is not optional — npm resolves a `github:` spec by
+cloning, so without it `npx` fails with an ENOENT from git rather than anything useful. Nothing
+is published to npm, and there is no `npm install` step: `npx` fetches this repository and runs
+it.
+
+Anything it cannot do, it names and tells you how to finish — it never half-installs and calls it
+done. A file you have edited is never overwritten **unless you pass `--force`** — and on the
+Codex side not even then, because a differing agent is always refused. `--uninstall`
+removes only what the installer wrote.
+
+Narrow it with one flag from each axis:
+
+| | |
+|---|---|
+| `--claude` · `--codex` | one tool instead of both |
+| `--skills` · `--agents` | one kind instead of both |
+| `--claude --skills` | a single cell — any combination works |
+| `--project .` | Codex agents into this project's `.codex/agents/`, not your home |
+| `--dry-run` | print the plan, write nothing |
+| `--uninstall` | remove only what it installed |
+| `--help` | the full list |
+
+Then restart Claude Code, and start a new Codex session.
+
+> **One step is not a file copy.** Codex serves plugin *skills* from its own cache plus
+> `config.toml`, not from a directory, so the installer runs `codex plugin marketplace add` and
+> `codex plugin add` for you. If the `codex` CLI is not on your PATH it says so and prints the two
+> commands rather than guessing at Codex's internal layout. Codex *agents* are a plain file copy,
+> because its plugin manifest has no top-level `agents` field — which is why they need their own
+> step at all.
+
+<details>
+<summary>Installing Claude Code through the plugin marketplace instead</summary>
+
 ```bash
 /plugin marketplace add mohamedsamy911/dga-kit
 ```
@@ -37,20 +80,7 @@ or Angular kit, plain CSS, or DGA's own React package.
 /plugin install dga-kit@dga-kit
 ```
 
-Then restart Claude Code.
-
-**OpenAI Codex** installs the **11 skills** (not the agents — Codex's plugin contract has no
-`agents` field):
-
-```bash
-codex plugin marketplace add mohamedsamy911/dga-kit
-```
-
-```bash
-codex plugin add dga-kit@dga-kit
-```
-
-Prefer per-project or global copies without the plugin system? See [INSTALL.md](INSTALL.md).
+</details>
 
 ## What you get
 
@@ -70,7 +100,8 @@ Prefer per-project or global copies without the plugin system? See [INSTALL.md](
 | `dga-tokens-sync` | Re-harvesting DGA's tokens and diffing them against this repo. |
 | `dga-brand-overlay` | Your entity's brand on top of DGA, and the decisions DGA leaves open. |
 
-**6 agents** — ask for one by name, or let Claude pick.
+**6 agents, in both formats** — ask for one by name, or let Claude pick. In Codex, install them
+separately as above and explicitly ask for delegation to the named subagent.
 
 | Agent | Does |
 |---|---|
@@ -160,7 +191,8 @@ are still named `PC 1.0 …` — those are chrome and filenames, not the version
 | 11 skills, 6 agents | ✅ |
 | Contrast checker, self-tested — light **and dark** | ✅ |
 | **Freshness monitoring** — weekly, review-gated | ✅ See below |
-| **Codex install path** | ✅ Verified 2026-08-28 — skills only; passes Codex's own `validate_plugin.py` |
+| **Codex plugin install path** | ✅ Verified 2026-08-28 — skills only; passes Codex's own `validate_plugin.py` |
+| **Codex-native agents** | Six generated TOML definitions; separate installer with offline safety/parity checks. Confirm runtime discovery in your Codex session. |
 | **Designer sign-off** | ⚠️ **Outstanding** — values are exact, interpretation unverified |
 | **Figma-only values** (responsive radius/spacing, mobile kit specs) | ❌ Not public. Omitted, not guessed. |
 
@@ -212,7 +244,9 @@ like a quiet week.
 
 ```
 skills/     the 11 skills; dga-design-system is the source of truth the rest read
-agents/     the 6 agents
+agents/     the 6 Claude Markdown agents — source of truth for both formats
+codex-agents/  generated native Codex TOML agents — installed separately
+bin/dga-kit.mjs  the one installer (npx); never overwrites or deletes what it did not write
 harvest/    the evidence behind every rule, and the monitoring that keeps it honest
               raw/                curated captures, with <!-- dga --> marking DGA's own words
               CAPTURE-LOG.md      what was captured, from where, when
@@ -226,6 +260,8 @@ harvest/    the evidence behind every rule, and the monitoring that keeps it hon
 evals/      23 eval cases across two suites, run by `claude plugin eval`:
               <suite>/cases/*.md        the cases, in markdown — the source a human reviews
               build-evals-json.py       generates skills/<skill>/evals/evals.json from them
+              build-codex-agents.py      generates native Codex agents from agents/*.md
+              test-codex-agents.py       conversion and safe-install regressions
               validate-fixtures.py      the kit against its own tokens, evidence and prose
               check-quote-fidelity.py   the DGA quotes a capture covers (14 of 92 today)
               test-automation.py        whether the monitoring detects what it claims to

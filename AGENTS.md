@@ -25,10 +25,13 @@ python evals/validate-fixtures.py                # "All fixtures valid against t
 python evals/test-automation.py                  # "All automation scenarios detected correctly"
 python evals/check-quote-fidelity.py --ci        # must exit 0
 python evals/build-evals-json.py --check          # "evals.json is current for both suites"
+python evals/build-codex-agents.py --check         # six native agents match their Markdown sources
+python evals/test-codex-agents.py                 # conversion and isolated installer regressions
 python harvest/reconcile-tokens.py --test         # "reconcile self-check passed" (offline)
 node skills/dga-design-system/assets/check-contrast.mjs --test   # "self-check passed"
 node skills/dga-design-system/assets/generate-tokens.mjs          # then `git diff` must be empty
-bash -n install-skills.sh
+node bin/dga-kit.mjs --test                       # "installer self-check passed"
+node bin/dga-kit.mjs --dry-run                    # installer parses and plans; writes nothing
 ```
 
 **The freshness sentinel's exit codes are a contract.** `harvest/sources.py --check` returns
@@ -77,6 +80,11 @@ node skills/dga-design-system/assets/generate-tokens.mjs
 
 A hand-edit is silently reverted by the next contributor who regenerates.
 
+The same rule applies to `codex-agents/*.toml`: edit `agents/*.md`, then run
+`python evals/build-codex-agents.py` (Python 3.11+ and PyYAML). The Markdown body and description
+must survive conversion intact. Only the Codex skill-lookup preamble and read-only sandbox
+defaults are added; do not copy Claude tool names or pin models/reasoning effort.
+
 **3 · `$`-prefixed keys are annotations, never token values.** `$source`, `$verify`, `$note`,
 `$meta`. **Every loop in a generator must skip them** or they leak into output as
 `--dga-width-$source: [object Object]`. This has already happened once.
@@ -85,9 +93,9 @@ A hand-edit is silently reverted by the next contributor who regenerates.
 never read. `status` must come from the vocabulary in `$meta.$conventions`, and anything marked
 `disputed` must also be written up in `harvest/` — both are enforced.
 
-**5 · Nothing in `skills/` may reference outside `skills/`.** Only `skills/` and `agents/` are
-installed; `harvest/`, `evals/` and `COVERAGE.md` are not. A `../../harvest/…` link resolves in
-this repo and dangles for every user. Enforced by the *installed layout* check.
+**5 · Nothing in `skills/` may reference outside `skills/`.** Only runtime skills and agent
+definitions are installed; `harvest/`, `evals/` and `COVERAGE.md` are not. A `../../harvest/…`
+link resolves in this repo and dangles for every user. Enforced by the *installed layout* check.
 
 **6 · Eval fixtures must not contradict the guidance they test.** Case 12 shipped four times with
 a defect a reviewer then correctly reported, scoring a right answer as a false positive. Where a
@@ -98,16 +106,22 @@ fixture asserts a number or a code pattern, assert it against the source of trut
 #dba102, 2.30:1) that fails AA. The script audits **DGA's own** table and never reads project
 source, so it cannot be a green gate and is not a substitute for checking a real codebase.
 
-**8 · The installers may only ever delete what they installed.** A path is removed only if it is
-both recorded in `~/.claude/.dga-kit-manifest` **and** matches the fixed allowlist. The manifest is
-editable text, so it is a record, not an authority. Never reintroduce deletion by name — an
-earlier version deleted `rga-brand`, a plausible name for a user's own skill.
+**8 · The installers may only ever delete what they installed.** For the Claude installers, a
+path is removed only if it is both recorded in `~/.claude/.dga-kit-manifest` **and** matches the
+fixed allowlist. The manifest is editable text, so it is a record, not an authority. Never
+reintroduce deletion by name — an earlier version deleted `rga-brand`, a plausible name for a
+user's own skill.
+
+`bin/dga-kit.mjs` never deletes or overwrites anything it did not write. It takes an explicit project
+or user scope, preflights every file, and refuses conflicting or linked destinations. Test it
+in scratch directories, never by modifying the maintainer's real Codex profile.
 
 ## Layout
 
 ```
 skills/     11 skills; dga-design-system is the source of truth the rest read
-agents/     6 agents, each self-contained (no shared includes)
+agents/     6 Claude Markdown agents, each self-contained (source of truth)
+codex-agents/  6 generated native Codex TOML agents, installed separately
 harvest/    the evidence trail — capture log and cross-references
 evals/      23 cases across two suites, plus validate-fixtures.py
 ```

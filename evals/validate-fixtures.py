@@ -579,7 +579,8 @@ if os.path.exists(_inv_path):
     if os.path.exists(_ci_wf):
         _c = open(_ci_wf, encoding='utf-8').read()
         for _cmd in ('evals/validate-fixtures.py', 'evals/check-quote-fidelity.py --ci',
-                     'check-contrast.mjs --test', 'generate-tokens.mjs', 'install-skills.sh'):
+                     'check-contrast.mjs --test', 'generate-tokens.mjs',
+                     'bin/dga-kit.mjs'):
             chk(f'workflow: CI runs {_cmd}', _cmd in _c)
         chk('workflow: CI does not reach the network',
             'sources.py --check' not in _c and 'sources.py --baseline' not in _c,
@@ -787,13 +788,13 @@ if os.path.exists(_inv_path):
     chk('codex: the manifest declares no agents key',
         'agents' not in _xp,
         "Codex's plugin contract has no agents field and validate_plugin.py rejects unknown keys")
-    # The docs must not re-assert the claim this evidence overturned, nor promise the agents.
+    # Keep automatic plugin loading distinct from the separate native-agent installer.
     _install_md = open(os.path.join(ROOT, 'INSTALL.md'), encoding='utf-8').read()
     chk('codex: INSTALL.md no longer claims there is no verified Codex path',
         'no verified Codex install path' not in _install_md)
-    chk('codex: INSTALL.md still says the agents are not installed by Codex',
+    chk('codex: INSTALL.md still says the plugin does not register agents',
         'no top-level `agents` field' in ' '.join(_install_md.split()),
-        'Codex installs the skills only - promising the agents would be a false claim')
+        'the Codex plugin installs skills only; native agents need the separate installer')
 
     # --- per-skill Codex UI metadata -----------------------------------------
     # `<skill>/agents/openai.yaml` is read by Codex's own validator at
@@ -875,7 +876,7 @@ if os.path.exists(_inv_path):
     chk('codex: openai.yaml is present for all 11 skills', len(_skills) == 11, str(len(_skills)))
 
     # The distinction the docs got wrong: skill-level agents/openai.yaml (metadata, read) vs a
-    # repo-root agents/ directory (agent definitions, NOT installed by Codex).
+    # repo-root agents/ directory (Claude definitions, NOT registered by the Codex plugin).
     # Whitespace-collapsed: these phrases wrap across lines in the rendered paragraph, and
     # matching raw text made the check fail on re-wrapping rather than on meaning.
     _inst = open(os.path.join(ROOT, 'INSTALL.md'), encoding='utf-8').read()
@@ -883,6 +884,12 @@ if os.path.exists(_inv_path):
     chk('codex: INSTALL.md keeps the two meanings of agents/ apart',
         'agents/openai.yaml' in _inst_flat and 'no top-level `agents` field' in _inst_flat,
         'the page must not imply Codex has no agents/ concept - it has one, for skill metadata')
+
+    _native_check = subprocess.run(
+        [sys.executable, os.path.join(ROOT, 'evals/build-codex-agents.py'), '--check'],
+        capture_output=True, text=True, encoding='utf-8')
+    chk('codex: native agents match their Markdown sources', _native_check.returncode == 0,
+        _native_check.stdout + _native_check.stderr)
 
     # Whatever the manifests claim must actually be there.
     chk('manifest: the skills directory the codex manifest names exists',
@@ -940,7 +947,7 @@ if os.path.exists(_inv_path):
         and _facts['published version'] == _inv['$meta']['publishedVersion'])
 
 # --- installed skills must not point at files the installer does not ship -----
-# `install-skills.sh` copies skills/ and agents/ into ~/.claude. Everything else in this repo -
+# `bin/dga-kit.mjs` copies skills/ and agents/ into ~/.claude. Everything else in this repo -
 # harvest/, evals/, COVERAGE.md, README.md - is left behind. A reference to one of those reads
 # fine in the repo and is a dead end for every installed user. The ../ check below catches path
 # escapes; this catches the repo-root form, which is what the dark-theme work actually used.
@@ -965,10 +972,6 @@ for _dir, _, _files in os.walk(os.path.join(ROOT, 'skills')):
             if _OK_URL.search(_txt[:_m.start()]):
                 continue
             _dangling.append(os.path.relpath(_p, ROOT).replace('\\', '/') + ' -> ' + _m.group(1).rstrip('.'))
-_sh = open(os.path.join(ROOT, 'install-skills.sh'), encoding='utf-8').read()
-# Comment lines are exempt: the replacement is DOCUMENTED in a comment naming `xargs -r`, and a
-# whole-file substring check flagged that explanation as the defect it was explaining.
-_sh_code = '\n'.join(l for l in _sh.split('\n') if not l.lstrip().startswith('#'))
 # --- quote-coverage figures in the docs must be the REAL ones ----------------
 # README, COVERAGE and CHANGELOG each quote "N of M blockquotes". Those went stale the moment
 # anyone added a blockquote anywhere in skills/ - which is exactly what happened: three documents
@@ -1005,8 +1008,7 @@ _disk_skills = sorted(d for d in os.listdir(os.path.join(ROOT, 'skills'))
                       if os.path.isdir(os.path.join(ROOT, 'skills', d)))
 _disk_agents = sorted(f[:-3] for f in os.listdir(os.path.join(ROOT, 'agents'))
                       if f.endswith('.md'))
-_sh_txt = open(os.path.join(ROOT, 'install-skills.sh'), encoding='utf-8').read()
-_ps_txt = open(os.path.join(ROOT, 'install-skills.ps1'), encoding='utf-8').read()
+_inst = open(os.path.join(ROOT, 'bin/dga-kit.mjs'), encoding='utf-8').read()
 
 
 def _names(txt, pattern):
@@ -1014,31 +1016,43 @@ def _names(txt, pattern):
     return sorted(set(_re.findall(r'dga-[a-z0-9-]+', _m.group(1)))) if _m else []
 
 
-_sh_sk = _names(_sh_txt, r'SKILLS=\((.*?)\)')
-_sh_ag = _names(_sh_txt, r'AGENTS=\((.*?)\)')
-_ps_sk = _names(_ps_txt, r'\$skills \s*=\s*@\((.*?)\)'.replace(' ', ''))
-_ps_ag = _names(_ps_txt, r'\$agents \s*=\s*@\((.*?)\)'.replace(' ', ''))
-chk('installer: bash SKILLS list equals the skills on disk', _sh_sk == _disk_skills,
-    f'missing {sorted(set(_disk_skills) - set(_sh_sk))} / extra '
-    f'{sorted(set(_sh_sk) - set(_disk_skills))} - an unlisted skill is silently not installed')
-chk('installer: bash AGENTS list equals the agents on disk', _sh_ag == _disk_agents,
-    f'missing {sorted(set(_disk_agents) - set(_sh_ag))} / extra '
-    f'{sorted(set(_sh_ag) - set(_disk_agents))}')
-chk('installer: powershell skills list equals the skills on disk', _ps_sk == _disk_skills,
-    f'missing {sorted(set(_disk_skills) - set(_ps_sk))} / extra '
-    f'{sorted(set(_ps_sk) - set(_disk_skills))}')
-chk('installer: powershell agents list equals the agents on disk', _ps_ag == _disk_agents,
-    f'missing {sorted(set(_disk_agents) - set(_ps_ag))} / extra '
-    f'{sorted(set(_ps_ag) - set(_disk_agents))}')
-chk('installer: the two installers agree with each other',
-    _sh_sk == _ps_sk and _sh_ag == _ps_ag,
-    'bash and powershell would install different sets')
-# Non-vacuous by construction: the lists must be non-trivial, or every comparison above is
-# comparing two empty lists and passing.
+# One installer now, so there is no bash-vs-powershell-vs-python agreement left to check - the
+# three lists that had to stay in step are one list. What still matters, and matters more, is
+# that it matches the repo: a skill absent from the array is silently never installed.
+_in_sk = _names(_inst, r'const SKILLS = \[(.*?)\]')
+_in_ag = _names(_inst, r'const AGENTS = \[(.*?)\]')
+chk('installer: SKILLS list equals the skills on disk', _in_sk == _disk_skills,
+    f'missing {sorted(set(_disk_skills) - set(_in_sk))} / extra '
+    f'{sorted(set(_in_sk) - set(_disk_skills))} - an unlisted skill is silently not installed')
+chk('installer: AGENTS list equals the agents on disk', _in_ag == _disk_agents,
+    f'missing {sorted(set(_disk_agents) - set(_in_ag))} / extra '
+    f'{sorted(set(_in_ag) - set(_disk_agents))}')
+# Non-vacuous by construction: if the array patterns stop matching, these become two empty
+# lists comparing equal and every check above passes while installing nothing.
 chk('installer: the parsed lists are non-empty',
-    len(_sh_sk) >= 5 and len(_ps_sk) >= 5 and len(_sh_ag) >= 3 and len(_ps_ag) >= 3,
-    f'parsed sh={len(_sh_sk)}/{len(_sh_ag)} ps1={len(_ps_sk)}/{len(_ps_ag)} - if these are 0 the '
-    f'array patterns stopped matching and the checks above became vacuous')
+    len(_in_sk) >= 5 and len(_in_ag) >= 3,
+    f'parsed {len(_in_sk)} skills / {len(_in_ag)} agents - the array patterns stopped matching')
+
+# The generated Codex agents must be exactly the agents this repo ships, or `--codex` installs a
+# stale set. The installer refuses to run on a mismatch; this catches it at commit time instead.
+_codex_dir = os.path.join(ROOT, 'codex-agents')
+_codex = sorted(f[:-5] for f in os.listdir(_codex_dir) if f.endswith('.toml')) \
+    if os.path.isdir(_codex_dir) else []
+chk('installer: codex-agents/ matches agents/', _codex == _disk_agents,
+    f'missing {sorted(set(_disk_agents) - set(_codex))} / extra '
+    f'{sorted(set(_codex) - set(_disk_agents))} - regenerate with evals/build-codex-agents.py')
+
+# The three read-only agents must ship a read-only sandbox: they report findings and never edit,
+# and a Codex agent without the field defaults to whatever the session allows.
+_ro = {'dga-code-reviewer', 'dga-compliance-auditor', 'dga-frontend-architect'}
+_missing_ro = [n for n in sorted(_ro)
+               if os.path.exists(os.path.join(_codex_dir, n + '.toml'))
+               and 'read-only' not in open(os.path.join(_codex_dir, n + '.toml'),
+                                           encoding='utf-8').read()]
+chk('installer: read-only Codex agents declare sandbox_mode', not _missing_ro, str(_missing_ro))
+chk('installer: the installer enforces that same read-only set',
+    all(n in _inst for n in _ro) and 'read-only' in _inst,
+    'bin/dga-kit.mjs must refuse an agent that lost its read-only sandbox')
 
 # --- documented contrast totals must come from the checker -------------------
 # The invariant nothing checked: token-wiring.md said "exactly one DGA text token fails AA" and
@@ -1160,7 +1174,7 @@ _ci_yml = open(os.path.join(ROOT, '.github/workflows/ci.yml'), encoding='utf-8')
 _RUN_RE = _re.compile(r'^\s*(?:- )?run:\s*(.+)$', _re.M)
 _SKIP = ('actions/', 'pip install', 'npm init', 'npm i ', 'npm install', 'mkdir', 'cp ', 'printf',
          'export ', 'git diff', 'grep ', 'test ', 'echo ', 'npx tailwindcss', 'if ', 'foreach',
-         'New-Item', 'Write-Output', '$', 'bash install-skills.sh')
+         'New-Item', 'Write-Output', '$')
 _ci_gates = set()
 for _m in _RUN_RE.finditer(_ci_yml):
     for _cmd in _m.group(1).split(chr(10)):
@@ -1174,7 +1188,7 @@ for _m in _RUN_RE.finditer(_ci_yml):
 # Multi-line `run: |` blocks put the commands on following lines, so sweep those too.
 for _line in _ci_yml.split(chr(10)):
     _line = _line.strip()
-    if _re.match(r'(python|node|bash)\s+(evals/|skills/|-n install-skills)', _line):
+    if _re.match(r'(python|node)\s+(evals/|skills/|harvest/|bin/)', _line):
         _ci_gates.add(' '.join(_line.split()))
 _ci_gates = {g for g in _ci_gates if not any(g.startswith(p) for p in _SKIP)}
 chk('gates: the workflow actually declares gate commands', len(_ci_gates) >= 5,
@@ -1183,7 +1197,7 @@ chk('gates: the workflow actually declares gate commands', len(_ci_gates) >= 5,
 
 def _gate_key(cmd):
     """The identifying fragment of a gate command, for comparing workflow against docs."""
-    _t = _re.search(r'(evals/[A-Za-z0-9_.-]+\.py|[A-Za-z0-9_.-]+\.mjs|install-skills\.sh)', cmd)
+    _t = _re.search(r'((?:evals|harvest)/[A-Za-z0-9_.-]+\.py|[A-Za-z0-9_.-]+\.mjs)', cmd)
     if not _t:
         return None
     _f = _t.group(1)
@@ -1198,31 +1212,109 @@ chk('gates: AGENTS.md documents every gate CI runs', not _missing_doc,
 
 # The reverse: a gate removed from CI but still documented is a contributor running a check the
 # pipeline no longer enforces, which is how a gate silently stops being a gate.
-_doc_block = _agents_md.split('## Before you commit', 1)[-1].split('##', 1)[0]
+# The gate list is the FENCED BLOCK, not the whole section. Prose below it discusses
+# `harvest/sources.py --check` - the networked weekly sentinel, deliberately not a CI gate -
+# and a section-wide scan read that discussion as a documented gate CI was failing to run.
+_after_heading = _agents_md.split('## Before you commit', 1)[-1]
+_fences = _after_heading.split('```')
+_doc_block = _fences[1] if len(_fences) > 1 else ''
+chk('gates: AGENTS.md still has a fenced gate list', _doc_block.strip().count(chr(10)) >= 4,
+    'the "Before you commit" block lost its fence, so the reverse check reads nothing')
 _doc_keys = {k for k in (_gate_key(l) for l in _doc_block.split(chr(10))) if k}
 _missing_ci = sorted(k for k in _doc_keys if k not in _ci_keys)
 chk('gates: CI still runs every gate AGENTS.md documents', not _missing_ci,
     str(_missing_ci) + ' - documented as a gate but absent from the workflow')
 
-_ps1 = open(os.path.join(ROOT, 'install-skills.ps1'), encoding='utf-8').read()
-_ps1_code = chr(10).join(l for l in _ps1.split(chr(10)) if not l.lstrip().startswith('#'))
-# PowerShell's $HOME is ReadOnly+AllScope: a test harness cannot redirect it by assignment, and
-# $env:USERPROFILE does not feed it. So while the installer derived its paths from $HOME directly,
-# there was NO way to exercise it without writing into the real profile - which is why it had
-# never been run by CI at all. -ClaudeHome makes the destination an input. Both halves are pinned:
-# the parameter must exist, and no path may be built from $HOME behind its back.
-chk('installer: install-skills.ps1 takes -ClaudeHome', '$ClaudeHome = $HOME' in _ps1_code,
-    'without it the script cannot be tested anywhere but the real profile')
-_home_joins = [l.strip() for l in _ps1_code.split(chr(10))
-               if 'Join-Path $HOME' in l]
-chk('installer: no path is built from $HOME behind the parameter', not _home_joins,
-    str(_home_joins) + ' - these ignore -ClaudeHome, so a test would write to the real profile')
+# Every script the workflow RUNS must exist. This is the check that was missing: `bash -n
+# install-skills.sh` survived that file's deletion for a whole review round, because the gate
+# parser had been narrowed to python/node and stopped recognising it as a gate at all. A gate
+# nobody parses is invisible to the two consistency checks above, so it has to be caught on the
+# cruder axis - does the path it names still exist.
+#
+# Matched as "the argument to an interpreter", not "any path-shaped token": a bare-filename rule
+# missed `install-skills.sh` at the repo root, and a path-shaped rule flagged tokens.json by
+# truncating `.json` to `.js`.
+_RUNS = _re.compile(r'\b(?:bash|sh|node|python3?|pwsh|powershell)\s+(?:--?[\w-]+\s+)*'
+                    r'([A-Za-z0-9_./\-]+\.(?:py|mjs|js|sh|ps1))(?!\w)')
 
-chk('installer: no GNU-only xargs -r', 'xargs -r' not in _sh_code,
-    'BSD xargs on macOS rejects -r, and set -euo pipefail turns that into a silent skip - on the '
-    'platform install-skills.sh advertises support for')
-chk('installer: the scan_dirs helper that replaced it exists',
-    'scan_dirs()' in _sh and 'scan_dirs grep' in _sh)
+
+def _ghost_scripts(text):
+    """Named scripts that are not in the repo. Skips comments and shell-created temporaries."""
+    out = set()
+    for _line in text.split(chr(10)):
+        _s = _line.strip()
+        if _s.startswith('#'):
+            continue
+        for _m in _RUNS.finditer(_s):
+            _f = _m.group(1)
+            # $VAR-rooted and bare temp names are created during the run, not shipped.
+            if _f.startswith('$') or '/' not in _f.replace(chr(92), '/'):
+                if os.path.exists(os.path.join(ROOT, _f)):
+                    continue
+                # A bare name is a ghost only if nothing in the run creates it.
+                if _re.search(r'(?:>|cp\s+\S+\s+|printf[^\n]*>\s*)' + _re.escape(_f), text):
+                    continue
+            if not os.path.exists(os.path.join(ROOT, _f)):
+                out.add(_f)
+    return out
+
+
+_ghost = _ghost_scripts(_ci_yml)
+chk('gates: every script the workflow runs exists on disk', not _ghost,
+    f'{sorted(_ghost)} - the workflow names files this repo no longer ships')
+_ghost_doc = _ghost_scripts(_doc_block)
+chk('gates: every script AGENTS.md documents exists on disk', not _ghost_doc,
+    f'{sorted(_ghost_doc)} - documented as a gate but not in the repo')
+
+
+# The shell installers are gone; their two hard-won lessons are pinned on their replacement.
+#
+# 1. A test harness must be able to redirect the destination. PowerShell's $HOME is
+#    ReadOnly+AllScope, so install-skills.ps1 could not be exercised without writing into the
+#    real profile - which is why it had never been run by CI at all until -ClaudeHome was added.
+#    bin/dga-kit.mjs takes DGA_KIT_HOME and honours CODEX_HOME for the same reason.
+# 2. Nothing platform-specific in the install path. `xargs -r` is a GNU extension: it worked on
+#    Linux and died on macOS, and `set -euo pipefail` turned that into a silent skip on the
+#    platform the script advertised support for. One Node runtime removes the whole class.
+chk('installer: the destination is redirectable for testing',
+    'DGA_KIT_HOME' in _inst and 'CODEX_HOME' in _inst,
+    'without an override CI can only test by writing into the real profile')
+_hardcoded = [l.strip() for l in _inst.split(chr(10))
+              if 'homedir()' in l and 'process.env' not in l and not l.strip().startswith('//')]
+chk('installer: no destination is built from homedir() behind the override',
+    len(_hardcoded) <= 2, str(_hardcoded)
+    + ' - each of these ignores the override, so a test would write to the real profile')
+# The rule is not "never shell out" - it is "never shell out to a PLATFORM binary". Invoking
+# `codex` is invoking the target tool's own supported installer, and it is the only correct way
+# to add Codex skills: a plugin is a git cache under ~/.codex/plugins plus a registration in
+# config.toml, so copying files would mean reimplementing Codex's installer against an
+# undocumented layout. Invoking `sh`, `bash`, `powershell`, `which` or `where` is the thing that
+# reintroduces the bash-vs-BSD split one runtime exists to remove.
+_PLATFORM_BINS = ("'sh'", "'bash'", "'cmd'", "'powershell'", "'pwsh'", "'which'", "'where'",
+                  'execSync(')
+_shelled = [b for b in _PLATFORM_BINS if b in _inst]
+chk('installer: no shell-out to a platform binary', not _shelled, str(_shelled))
+# `shell: true` is REQUIRED on Windows and forbidden as a blanket setting. An npm-installed CLI
+# is a `codex.cmd` shim, and execFileSync cannot launch a batch file: bare `codex` gives ENOENT
+# and an explicit `codex.cmd` gives EINVAL. Only a shell can. So it must be conditional on
+# win32, and every argument passed under it must be a constant - under a shell an argument is
+# syntax, so anything user-supplied would be an injection surface.
+_inst_code = chr(10).join(l for l in _inst.split(chr(10))
+                          if not l.lstrip().startswith(('//', '*', '/*')))
+chk('installer: shell execution is win32-only, never blanket',
+    "shell: process.platform === 'win32'" in _inst_code and 'shell: true' not in _inst_code,
+    'a bare `shell: true` runs every argument through a shell on POSIX too')
+chk('installer: shell-executed arguments are validated as constants',
+    'Refusing to shell-execute a non-constant argument' in _inst,
+    'runCli() must reject anything that is not a hardcoded constant')
+# ...and detection must not do it either. Probing by running `<tool> --version` is portable;
+# searching PATH with which/where is not, and was how the shell installers went wrong.
+chk('installer: CLI detection probes the tool, not PATH',
+    "runCli(bin, ['--version']" in _inst,
+    'detect() must run the tool itself rather than shelling out to which/where')
+chk('installer: dependency-free', 'dependencies' not in
+    open(os.path.join(ROOT, 'package.json'), encoding='utf-8').read(),
+    'npx github:... must not need an install step; a dependency makes the one-liner fragile')
 
 chk('installed skills reference nothing outside skills/', not _dangling,
     'these resolve in the repo and break once installed; use a full GitHub URL: '
@@ -1542,6 +1634,22 @@ if _rec:
                 _back.append(f'{_f}:{_path}')
     chk('reconciliation: the retracted "all aliases" wording has not returned', not _back,
         str(_back) + ' - disproved by the reconciler; see $meta.$reconciliation')
+
+
+# --- the advertised install command must state its real prerequisites ----------
+# `npx github:owner/repo` resolves through git: npm clones the repository. With git off PATH it
+# fails with an ENOENT from git, which reads as a broken installer rather than a missing tool.
+# Every document that advertises the command must say so - README said "Node 18+ and nothing
+# else" for a full round.
+_ADVERTISE = 'npx github:mohamedsamy911/dga-kit'
+_no_git = []
+for _f in _PROSE:
+    _txt = re.sub(r'\s+', ' ', ''.join(l for _, l in _unfenced(_f))
+                  + open(os.path.join(ROOT, _f), encoding='utf-8').read())
+    if _ADVERTISE in _txt and not re.search(r'(?i)\bgit\b', _txt):
+        _no_git.append(_f)
+chk('install docs: anything advertising npx github: also names Git as a prerequisite',
+    not _no_git, f'{_no_git} - npm clones to resolve a github: spec; without git npx fails')
 
 
 print()

@@ -49,7 +49,7 @@ Codex git marketplace.
 > recommended `"../skills/"`; it would resolve outside the repository and fail validation.
 > `evals/validate-fixtures.py` pins it.
 
-### What Codex does NOT install: the 6 agents
+### Install the six Codex agents separately
 
 `codex plugin add` installs this kit's **11 skills**. It does **not** register the six Markdown
 files in the repository-root `agents/` directory as Codex agents: Codex's plugin manifest has no
@@ -63,58 +63,106 @@ top-level `agents` field — `validate_plugin.py` rejects unknown keys — and t
 > different thing from a repository-root `agents/` folder holding agent definitions, and an
 > earlier version of this page conflated the two.
 
-**Why the agents cannot be promised.** Codex can import Claude Code agents — its own selector
-reads *"Migrate subagents from `~/.claude/agents` to `~/.codex/agents`"*, and
-`external-agent-import-sync-enabled` appears in `config.toml`. On the machine where this was
-tested, five of this kit's six agents had been converted to TOML that way. **Five of six is the
-point:** `dga-frontend-architect` was missing, and no local log or specification explains what
-performed the conversion. It also reads from `~/.claude/agents`, not from the installed plugin —
-so it is a Codex feature that may run, not an install path this kit controls.
+The repository supplies all six native TOML definitions in [`codex-agents/`](codex-agents/).
+They are generated from the Claude Markdown definitions, not maintained as a second set of
+rules. No Claude installation or automatic migration is required.
 
-**Converting an agent by hand.** Codex agents are TOML — in `~/.codex/agents/` for your machine,
-or `.codex/agents/` for a single project. Each of this kit's agents is Markdown with YAML front
-matter (`name`, `description`) and a Markdown body. The mapping is direct — front matter `name`
-and `description` become TOML keys, and the entire Markdown body becomes
-`developer_instructions`:
+**Prerequisites:** install and enable the 11 skills through the Codex plugin above, and have
+**Node 18+ and Git**. No `npm install`, no Python, and no clone of your own — but Git must be on
+PATH, because npm resolves a `github:` spec by cloning this repository for you. Without it `npx`
+fails with an ENOENT from git. The same command works on Windows, macOS, Linux and WSL.
 
-```toml
-# ~/.codex/agents/dga-designer.toml
-name = "dga-designer"
-description = "Principal-level product designer for Saudi government platforms. Arabic-first."
-developer_instructions = """
-<the whole Markdown body of agents/dga-designer.md, verbatim>
-"""
-```
-
-Verify it was picked up with:
+**Everything Codex can take, in one command:**
 
 ```bash
-codex agents
+npx github:mohamedsamy911/dga-kit --codex
 ```
 
-**This is a supported Codex feature, and it is documented.** An earlier version of this page said
-no published specification for the agent TOML format existed and that the field set should be
-treated as observed rather than documented. That was wrong, and it understated what you can rely
-on. OpenAI documents custom agents at
-[learn.chatgpt.com/docs/agent-configuration/subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents)
-(retrieved 2026-08-31): standalone TOML files in `~/.codex/agents/` for personal agents or
-`.codex/agents/` for project-scoped ones, one agent per file. `name`, `description` and
-`developer_instructions` are the **required** fields — exactly the three above — and `model`,
-`model_reasoning_effort`, `sandbox_mode`, `mcp_servers` and `skills.config` are optional, along
-with other `config.toml` keys.
+That copies the six agents into `~/.codex/agents/` **and** runs `codex plugin marketplace add`
+/ `codex plugin add` for the skills. If the `codex` CLI is not callable it installs the agents,
+says so, and prints the two commands — it does not write Codex's `config.toml` by hand.
 
-Two details worth knowing before you convert anything:
+**Agents into one project instead** (the TOMLs land in that project's `.codex/agents/` and can be
+committed with it; each teammate still needs the skills in their own Codex session):
 
-- **`name` is the source of truth, not the filename.** Matching the two is the simplest
-  convention, but Codex identifies the agent by the field.
-- **`.codex/agents/` works per project.** If you want these agents on one repo rather than your
-  whole machine, put the TOML there and commit it — this page's `~/.codex/agents/` examples are
-  the personal-scope case.
+```bash
+npx github:mohamedsamy911/dga-kit --codex --agents --project .
+```
 
-⚠️ **What remains unsupported is shipping them through this plugin**, not writing them by hand.
-Codex's plugin manifest has no top-level `agents` field, so `codex plugin add dga-kit@dga-kit`
-installs the 11 skills and nothing else. Converting an agent is a supported thing you do
-yourself; it is not something the install does for you.
+**Skills only:**
+
+```bash
+npx github:mohamedsamy911/dga-kit --codex --skills
+```
+
+The destination is `~/.codex/agents/`, or `CODEX_HOME/agents/` if `CODEX_HOME` is set to an
+absolute path. The installer prints the full destination. `--project` ignores `CODEX_HOME`.
+
+Add `--dry-run` to either to see the plan without writing anything.
+
+**Then start a new Codex session in the target project** and explicitly request a named agent,
+for example: *"Use the dga-code-reviewer subagent to review this change. Do not edit files."*
+Check that Codex actually launches that named role and can read the installed DGA skills.
+File installation and TOML validation alone do not prove runtime discovery on your Codex version.
+**Installing the agents changes nothing else.** Copying the six TOML files does not touch
+`config.toml`, permissions, models or plugin settings.
+
+⚠️ **Installing the Codex *skills* does.** `--codex --skills` (and the default run) invokes
+`codex plugin marketplace add` and `codex plugin add` on your behalf, and Codex registers the
+plugin in `~/.codex/config.toml` under `[plugins."dga-kit@dga-kit"]`. That is the supported way
+and the only one — Codex serves plugin skills from its own cache plus that registration, not from
+a directory anything else can write. The installer does not edit `config.toml` itself; Codex
+does. Use `--codex --agents` if you want the file copy and no configuration change, or
+`--dry-run` to see the exact commands first.
+
+**Safety and updates.** All six source files and destination conflicts are checked before
+copying. Identical existing files are untouched; any different file (including a migrated or
+customized agent) aborts the install. Linked paths — symlinks, dangling symlinks and Windows
+junctions — are refused, on the path and on every parent, and files are created exclusively so a
+link planted mid-install cannot be followed.
+
+⚠️ **The two tools have deliberately different rules.** Read the row for the one you mean:
+
+| | Codex agents | Claude skills & agents |
+|---|---|---|
+| An existing file that **differs** | **Always refused.** The install aborts; nothing is written. | Skipped with a note, unless `--force`. |
+| `--force` | **No effect.** There is no override — a differing Codex agent is never overwritten. | Overwrites, and adopts a `dga-*` path this kit did not record. Each is printed as `OVERWRITE`. |
+| How to update a changed file | Move yours aside, then rerun. | `--force`, or move yours aside and rerun. |
+| `--uninstall` | Removes only a **byte-identical** copy. An edited agent is kept and reported. | Removes a path only if it is in the manifest **and** on the fixed allowlist. |
+
+`--uninstall` obeys the same `--claude` / `--codex` / `--skills` / `--agents` selectors as an
+install, and preserves the manifest entries it was told to leave.
+
+Uninstall does **not** remove the Codex skills plugin: that is Codex's to manage, with
+`codex plugin remove dga-kit@dga-kit`. Updating or uninstalling the skills plugin does **not**
+update or remove the separately copied agents. An interrupted copy can leave a partial install;
+update or remove the separately copied agents. An interrupted copy can leave a partial install;
+inspect the printed destination before retrying.
+
+**Format and conversion.** OpenAI documents native custom agents as one TOML file per role in
+the personal or project agent directory, requiring `name`, `description` and
+`developer_instructions`. This kit also sets `sandbox_mode = "read-only"` for the code reviewer,
+compliance auditor and frontend architect. These are defaults; Codex's parent-session runtime
+permissions still apply. No agent pins a model or reasoning effort, and Claude `tools` lists
+are not copied as unsupported Codex fields. See the
+[official custom-agent documentation](https://learn.chatgpt.com/docs/agent-configuration/subagents#custom-agents)
+(retrieved 2026-08-31).
+
+The complete Markdown body is preserved after a short Codex-specific skill-lookup preamble.
+That preamble resolves references through the installed skill's `SKILL.md` location instead of
+assuming the skills live beside the agent files. Optional external skills, such as `design`,
+are not bundled. These definitions remain unofficial DGA guidance, not compliance certification.
+
+**Maintainers:** edit `agents/*.md`, then regenerate and check (Python 3.11+ and PyYAML):
+
+```bash
+python evals/build-codex-agents.py
+python evals/build-codex-agents.py --check
+python evals/test-codex-agents.py
+```
+
+Never hand-edit `codex-agents/*.toml`. CI checks source/output parity and runs the installer
+regressions in scratch directories on Windows, macOS and Linux.
 
 ### `interface.capabilities`
 
@@ -123,7 +171,7 @@ place so the two copies cannot drift apart.
 
 ### The manual route
 
-§2 and §3 below are **Claude Code layouts** — `install-skills.sh` and `install-skills.ps1` write to
+§2 and §3 below are **Claude Code layouts** — the installer writes to
 `~/.claude/skills` and `~/.claude/agents`, and §2 is `.claude/` inside your project. Codex does not
 read those directories. The skills themselves are plain Markdown with YAML front matter and no
 Claude-specific syntax, so you can copy `skills/` anywhere a tool will read it.
@@ -157,8 +205,8 @@ presentation"*, component loading is declared separately through the top-level `
 its scaffold generates an empty array. No enumeration exists in the specification, the validator,
 the runtime, or the official OpenAI documentation searched on 2026-08-28.
 
-So this manifest declares `["Instructions"]` **by convention, not by specification**. dga-kit
-ships skills and nothing else, and `"Instructions"` is the label the installed ponytail plugin
+So this manifest declares `["Instructions"]` **by convention, not by specification**. The Codex
+plugin registers skills only, and `"Instructions"` is the label the installed ponytail plugin
 uses for exactly that component — reserving `"Lifecycle hooks"` for its separate hooks component.
 Every OpenAI-authored plugin instead draws from `{Interactive, Read, Write}`, which describes
 connector-style plugins rather than instruction packages.
@@ -181,23 +229,18 @@ through review rather than each person installing their own copy.
 Copies the skills into `~/.claude/skills` and the agents into `~/.claude/agents`, so they load in
 every project.
 
-**Windows (PowerShell), from inside this folder:**
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\install-skills.ps1
-```
-
-**macOS / Linux / WSL:**
+**Any platform** — Windows, macOS, Linux or WSL, same command:
 
 ```bash
-./install-skills.sh
+npx github:mohamedsamy911/dga-kit --claude
 ```
 
-Flags: `-Force` / `--force` overwrites an existing install · `-Uninstall` / `--uninstall` removes
-everything it installed.
+Flags: `--force` overwrites an existing install (and adopts one this kit did not record) ·
+`--uninstall` removes only what it installed · `--clean-legacy` removes pre-0.5 paths after you
+type DELETE · `--dry-run` prints the plan and writes nothing.
 
-Both installers verify that every relative cross-reference resolves in the installed layout and
-report any that don't. Skills reference each other as siblings (`../dga-design-system/...`), so
+The installer verifies that every relative cross-reference resolves in the installed layout and
+reports any that don't — it exits non-zero if any is broken.
 the flat `skills/` layout is required — **don't nest them**.
 
 ## Naming — why everything is `dga-` prefixed
@@ -207,16 +250,19 @@ your own. If you already have a `frontend-dev` or a `code-reviewer`, it is untou
 
 ## Ownership — how the installer decides what it may delete
 
+This section covers the **Claude installers**. The separate Codex-agent installer never deletes
+or overwrites files; see [its safety and update instructions above](#install-the-six-codex-agents-separately).
+
 The prefix is not the safeguard; a manifest is. Every path the installer creates is recorded in
 `~/.claude/.dga-kit-manifest`, and **it will only ever delete a path listed there**.
 
 | Situation | What happens |
 |---|---|
-| A skill directory exists that the manifest does not claim | **Skipped, untouched.** Re-run with `--force` / `-Force` to adopt it — that is the upgrade path from a pre-0.5.1 install, and each adoption is printed as `OVERWRITE`. |
+| A skill directory exists that the manifest does not claim | **Skipped, untouched.** Re-run with `--force` to adopt it — that is the upgrade path from a pre-0.5.1 install, and each adoption is printed as `OVERWRITE`. |
 | `--uninstall` with no manifest | **Refuses to run.** It will not delete by name. |
 | `--uninstall` with a manifest | Removes a path only if it is **both** listed in the manifest **and** matches the fixed allowlist (`skills/dga-*` from the shipped list, or `agents/dga-*.md`). |
 | A manifest entry outside that allowlist | **Refused and reported.** The manifest is editable text, so it is treated as a record, not an authority — a corrupted one can under-delete, never delete something unrelated. |
-| Pre-0.5 leftovers (`dga-chakra`, `rga-brand`, `agents/_shared/`) | **Never deleted automatically.** Reported as notes. `--clean-legacy` / `-CleanLegacy` lists each path and requires you to type `DELETE`. |
+| Pre-0.5 leftovers (`dga-chakra`, `rga-brand`, `agents/_shared/`) | **Never deleted automatically.** Reported as notes. `--clean-legacy` lists each path and requires you to type `DELETE`. |
 
 This matters because `rga-brand` is a plausible name for a skill of your own. Versions before
 0.5.1 deleted it by name during a normal install. They no longer do.
@@ -229,6 +275,8 @@ This matters because `rga-brand` is a plausible name for a skill of your own. Ve
 | **6 agents** | `dga-designer` · `dga-frontend-architect` · `dga-frontend-dev` · `dga-code-reviewer` · `dga-compliance-auditor` · `dga-content-writer` |
 
 Each agent is self-contained — no shared include files, nothing written outside its own file.
+Claude uses `agents/*.md`; Codex uses the generated `codex-agents/*.toml` through the separate
+installation step above. Installing the Codex plugin alone still installs only the skills.
 
 **Adding DGA awareness to an agent of your own** is one line in its markdown:
 

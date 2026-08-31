@@ -5,9 +5,10 @@
 # The DGA-facing sentinel is a separate, scheduled workflow (dga-freshness.yml), and nothing here
 # contacts design.dga.gov.sa.
 #
-# TWO steps do use the network, and neither talks to DGA:
+# Bootstrap steps use the network, but none talks to DGA:
+#   * checkout and setup actions fetch the repository and toolchains.
+#   * the check job and installer matrix install PyYAML for YAML/conversion tests.
 #   * "Tailwind preset actually builds" installs tailwindcss from npm.
-#   * the installer matrix runs actions/checkout.
 # An earlier version of this header claimed "none of these touch the network" while the Tailwind
 # step ran `npm i`. If you add a networked step, amend this list rather than the claim.
 name: CI
@@ -55,11 +56,31 @@ jobs:
         # succeeded.
         run: python harvest/reconcile-tokens.py --test
 
+      - name: Installer self-check
+        # Symlink refusal and the agent-payload validation, which the end-to-end matrix below
+        # cannot easily reach. These moved here from the Python installer's unittest suite when
+        # three installers became one.
+        run: node bin/dga-kit.mjs --test
+
+      - name: Codex agents match their Markdown sources
+        # codex-agents/*.toml is generated from agents/*.md. An agent edited in Markdown and not
+        # regenerated ships stale guidance to every Codex user, and nothing else would catch it.
+        run: python evals/build-codex-agents.py --check
+
+      - name: Codex agent conversion and installer regressions
+        run: python evals/test-codex-agents.py
+
       - name: Eval JSON matches the markdown cases
         # skills/*/evals/evals.json is what `claude plugin eval` reads; the markdown cases under
         # evals/*/cases/ are what a human reviews. Generated, never hand-edited - a case added in
         # markdown and not regenerated is a case the runner never runs.
         run: python evals/build-evals-json.py --check
+
+      - name: Native Codex agents match the Claude sources
+        run: python evals/build-codex-agents.py --check
+
+      - name: Codex agent conversion and installer safety
+        run: python evals/test-codex-agents.py
 
       - name: Contrast maths self-check
         run: node skills/dga-design-system/assets/check-contrast.mjs --test
@@ -91,8 +112,11 @@ jobs:
           python -m pip install --quiet pyyaml
           python "$V" .
 
-      - name: Installer syntax
-        run: bash -n install-skills.sh
+      - name: Installer parses and plans
+        # Replaced `bash -n install-skills.sh`, which kept running for a full review round after
+        # that file was deleted - the job failed on "No such file or directory" while the
+        # gate-consistency checker passed, because its parser no longer recognised a `bash` gate.
+        run: node --check bin/dga-kit.mjs
 
       - name: Manifests are valid JSON
         run: |
@@ -124,76 +148,91 @@ jobs:
         # Installs into a scratch HOME so the cross-reference and unshipped-reference checks run
         # against a real installed tree, not the repo layout.
         run: |
-          export HOME="$RUNNER_TEMP/fakehome"
-          mkdir -p "$HOME"
-          bash install-skills.sh | tee install.log
+          export DGA_KIT_HOME="$RUNNER_TEMP/fakehome"
+          export CODEX_HOME="$RUNNER_TEMP/fakecodex"
+          mkdir -p "$DGA_KIT_HOME/.claude" "$CODEX_HOME"
+          node bin/dga-kit.mjs | tee install.log
           grep -q 'cross-references OK' install.log
 
-  # install-skills.sh advertises macOS, and install-skills.ps1 is the documented Windows route.
-  # Neither had ever run on the platform it targets. The `xargs -r` bug this repo just fixed was
-  # exactly that gap: GNU-only, so it broke on macOS while every Linux run stayed green.
+  # ONE installer now, but it still has to be proven on every platform it claims. The pair it
+  # replaced had diverged in exactly this gap: `xargs -r` is GNU-only, so install-skills.sh
+  # passed on Linux for months while being broken on the macOS it advertised.
   installers:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - os: macos-latest
-            shell: bash
-          - os: ubuntu-latest
-            shell: bash
-          - os: windows-latest
-            shell: pwsh
+        os: [macos-latest, ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '20'
 
-      - name: Bash installer, into a scratch HOME
-        if: matrix.shell == 'bash'
+      - name: Install, verify, re-run, uninstall
+        shell: bash
         run: |
-          export HOME="$RUNNER_TEMP/fakehome"
-          mkdir -p "$HOME"
-          bash install-skills.sh | tee install.log
+          set -euo pipefail
+          export DGA_KIT_HOME="$RUNNER_TEMP/fakehome"
+          export CODEX_HOME="$RUNNER_TEMP/fakecodex"
+          mkdir -p "$DGA_KIT_HOME/.claude" "$CODEX_HOME"
+
+          # A dry run must write nothing at all. Assert on the CHILDREN it would create, not on
+          # .claude itself - the fixture creates that, so asserting its absence always failed.
+          node bin/dga-kit.mjs --dry-run
+          for p in "$DGA_KIT_HOME/.claude/skills" "$DGA_KIT_HOME/.claude/agents"                    "$DGA_KIT_HOME/.claude/.dga-kit-manifest" "$CODEX_HOME/agents"; do
+            test ! -e "$p" || { echo "dry run wrote to disk: $p"; exit 1; }
+          done
+
+          node bin/dga-kit.mjs | tee install.log
           grep -q 'cross-references OK' install.log
-          test -f "$HOME/.claude/skills/dga-design-system/SKILL.md"
-          test -f "$HOME/.claude/agents/dga-designer.md"
+          test -f "$DGA_KIT_HOME/.claude/skills/dga-design-system/SKILL.md"
+          test -f "$DGA_KIT_HOME/.claude/agents/dga-designer.md"
+          test -f "$CODEX_HOME/agents/dga-designer.toml"
 
-      - name: PowerShell installer, into a scratch -ClaudeHome
-        if: matrix.shell == 'pwsh'
-        shell: pwsh
-        run: |
-          # $HOME is ReadOnly+AllScope in PowerShell and CANNOT be assigned, and
-          # $env:USERPROFILE does not feed it. An earlier version of this step tried both and
-          # died before reaching the installer. -ClaudeHome makes the destination an input.
-          $scratch = Join-Path $env:RUNNER_TEMP 'fakehome'
-          New-Item -ItemType Directory -Force $scratch | Out-Null
-          $realPath = Join-Path $HOME '.claude/skills/dga-design-system'
-          $realBefore = Test-Path $realPath
-          ./install-skills.ps1 -ClaudeHome $scratch
-          foreach ($f in @('skills/dga-design-system/SKILL.md', 'agents/dga-designer.md')) {
-            if (-not (Test-Path (Join-Path $scratch ".claude/$f"))) { throw "$f did not install" }
-          }
-          # Leak check, phrased as a DELTA. Asserting the real profile is simply empty fails on
-          # any machine that already has dga-kit installed - a maintainer's laptop, not just CI.
-          if (-not $realBefore -and (Test-Path $realPath)) {
-            throw 'the installer wrote into the real profile despite -ClaudeHome'
-          }
-          # ...and it removes only what it installed.
-          New-Item -ItemType File -Force (Join-Path $scratch '.claude/skills/NOT-OURS.md') | Out-Null
-          ./install-skills.ps1 -ClaudeHome $scratch -Uninstall
-          if (-not (Test-Path (Join-Path $scratch '.claude/skills/NOT-OURS.md'))) {
-            throw 'uninstall deleted a file it did not install'
-          }
-          if (Test-Path (Join-Path $scratch '.claude/skills/dga-design-system')) {
-            throw 'uninstall left its own skill behind'
-          }
-          Write-Output 'powershell installer installs and uninstalls cleanly'
+          # Idempotent: a second run installs nothing and still succeeds.
+          node bin/dga-kit.mjs | tee rerun.log
+          grep -q 'already identical' rerun.log
 
-      - name: Uninstall removes only what it installed
-        if: matrix.shell == 'bash'
+          # An edited Codex agent is a REFUSAL, not an overwrite, and nothing is written.
+          echo '# my own edit' >> "$CODEX_HOME/agents/dga-designer.toml"
+          if node bin/dga-kit.mjs --codex; then echo 'overwrote an edited agent'; exit 1; fi
+          grep -q 'my own edit' "$CODEX_HOME/agents/dga-designer.toml"
+          # Put the pristine agent back: the selector test below asserts it SURVIVES a
+          # --claude uninstall, and an edited-then-deleted fixture made that assertion fail
+          # for a reason that had nothing to do with the selectors.
+          rm "$CODEX_HOME/agents/dga-designer.toml"
+          node bin/dga-kit.mjs --codex --agents
+          test -f "$CODEX_HOME/agents/dga-designer.toml" || { echo 'failed to restore the agent'; exit 1; }
+
+          # Uninstall HONOURS THE SELECTORS. `--claude --uninstall` used to delete Codex
+          # agents too, because uninstall was dispatched before the flags were parsed.
+          node bin/dga-kit.mjs --claude --uninstall
+          test -f "$CODEX_HOME/agents/dga-designer.toml" || { echo '--claude uninstall ate Codex agents'; exit 1; }
+          test ! -d "$DGA_KIT_HOME/.claude/skills/dga-design-system" || { echo '--claude uninstall kept Claude skills'; exit 1; }
+          node bin/dga-kit.mjs   # put it back for the scoping test below
+
+          # A kind-scoped uninstall leaves the other kind, and PRESERVES its manifest entries.
+          node bin/dga-kit.mjs --claude --skills --uninstall
+          test -f "$DGA_KIT_HOME/.claude/agents/dga-designer.md" || { echo '--skills uninstall ate agents'; exit 1; }
+          grep -q 'dga-designer.md' "$DGA_KIT_HOME/.claude/.dga-kit-manifest"             || { echo 'excluded manifest entry was not preserved'; exit 1; }
+          node bin/dga-kit.mjs
+
+          # Uninstall removes only what it installed.
+          touch "$DGA_KIT_HOME/.claude/skills/NOT-OURS.md"
+          echo 'custom = 1' > "$CODEX_HOME/agents/my-agent.toml"
+          node bin/dga-kit.mjs --uninstall
+          test -f "$DGA_KIT_HOME/.claude/skills/NOT-OURS.md" || { echo 'uninstall ate a foreign file'; exit 1; }
+          test -f "$CODEX_HOME/agents/my-agent.toml" || { echo 'uninstall ate a foreign agent'; exit 1; }
+          test ! -d "$DGA_KIT_HOME/.claude/skills/dga-design-system" || { echo 'uninstall left its own skill'; exit 1; }
+          echo "installer OK on ${{ matrix.os }}"
+
+      - name: The real profile was never touched
+        shell: bash
         run: |
-          export HOME="$RUNNER_TEMP/fakehome"
-          touch "$HOME/.claude/skills/NOT-OURS.md"
-          bash install-skills.sh --uninstall || true
-          test -f "$HOME/.claude/skills/NOT-OURS.md" || { echo 'uninstall ate a file it did not install'; exit 1; }
-          test ! -d "$HOME/.claude/skills/dga-design-system" || { echo 'uninstall left its own skill behind'; exit 1; }
+          # A leak check phrased as a DELTA would need a baseline; here the override is the only
+          # destination the installer is ever given, so the real profile must simply not exist.
+          test ! -d "$HOME/.claude/skills/dga-design-system" || { echo 'wrote into the real profile'; exit 1; }
+          test ! -f "$HOME/.codex/agents/dga-designer.toml"  || { echo 'wrote into the real profile'; exit 1; }
+          echo 'no leak into the real profile'
