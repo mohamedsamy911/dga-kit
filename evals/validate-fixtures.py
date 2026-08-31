@@ -759,10 +759,11 @@ if os.path.exists(_inv_path):
         _src['source'] == 'url' and _src['url'].endswith('mohamedsamy911/dga-kit.git'), str(_src))
     # A ref that is not the real default branch fetches nothing. ponytail uses "main"; this repo
     # is "master", and copying ponytail's file verbatim would have shipped a dead marketplace.
-    _head = open(os.path.join(ROOT, '.git', 'HEAD'), encoding='utf-8').read().strip()
+    # This is the published branch contract, not the current checkout. HEAD can be a feature
+    # branch or a detached PR checkout; neither changes the repository's default branch.
     chk('codex: the marketplace ref matches this repository default branch',
-        _src.get('ref') == 'master' and _head.endswith('/master'),
-        f"marketplace ref {_src.get('ref')!r} vs HEAD {_head!r}")
+        _src.get('ref') == 'master',
+        f"marketplace ref {_src.get('ref')!r} vs published default 'master'")
     # Both policy values are validated against their enumerations. An earlier version checked
     # `installation` and merely asserted `authentication` was PRESENT, so setting it to "INVALID"
     # passed - the check named a field it never validated.

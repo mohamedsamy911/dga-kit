@@ -23,11 +23,15 @@ Six scenarios, from the plan:
   python3 evals/test-automation.py --ci    # exit 1 on any failure (same as default)
 """
 import io
+import contextlib
 import json
 import os
 import shutil
 import sys
 import tempfile
+import ssl
+import subprocess
+from unittest.mock import MagicMock, patch
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, 'harvest'))
@@ -40,6 +44,13 @@ if hasattr(sys.stdout, 'reconfigure'):
 
 import sources  # noqa: E402
 import deep     # noqa: E402
+
+
+def _forbid_report_write(*_args, **_kwargs):
+    raise AssertionError('Offline scenarios must not overwrite the real freshness report')
+
+
+sources.write_freshness = _forbid_report_write
 
 failures = []
 
@@ -271,6 +282,7 @@ for _label, _body, _status in (
         _refused = False
     chk('C. ' + _label + ' answering 200 is refused as a baseline', _refused,
         'a baseline with no build-hash tripwire reports a quiet week forever')
+sources.fetch = _saved
 # The nastier shape: a VALID shell - real markup, real /assets/index-<hash> links, so the build
 # hashes read out fine - in front of a proxy that answers the two asset requests with a login
 # page. Every response is a 200. Guarding only the shell (which an earlier version did) let this
@@ -376,6 +388,68 @@ chk('6. the roadmap vs change-log date contradiction is still recorded',
 # looking healthy. Mocked here because the real failure only happens when the network is down.
 import urllib.error  # noqa: E402
 
+# Exercise the real fetch loop, not a replacement for fetch(). No network or actual sleep.
+# A single timeout killed the 2026-08-31 scheduled run before it could compare anything.
+def _response():
+    response = MagicMock()
+    response.__enter__.return_value = response
+    response.status = 200
+    response.read.return_value = b'complete response'
+    return response
+
+
+for _label, _exc in (
+        ('a direct timeout', TimeoutError('brief timeout')),
+        ('a wrapped timeout', urllib.error.URLError(TimeoutError('brief timeout'))),
+        ('a connection reset', ConnectionResetError('brief reset'))):
+    _log = io.StringIO()
+    with patch.object(sources.urllib.request, 'urlopen', side_effect=[_exc, _response()]) as _get, \
+            patch.object(sources.time, 'sleep') as _sleep, contextlib.redirect_stderr(_log):
+        try:
+            _got = sources.fetch(sources.BASE + '/sitemap.xml', timeout=7)
+        except OSError as _error:
+            _got = str(_error)
+        chk('retry: ' + _label + ' recovers on the next GET',
+            _got == (200, b'complete response') and _get.call_count == 2, str(_got))
+        chk('retry: ' + _label + ' waits once and preserves the socket timeout',
+            _sleep.call_args_list == [((5,), {})]
+            and all(c.kwargs.get('timeout') == 7 for c in _get.call_args_list))
+        chk('retry: ' + _label + ' names the exact failing URL in diagnostics',
+            sources.BASE + '/sitemap.xml' in _log.getvalue() and 'attempt 1/3' in _log.getvalue())
+
+# Recovery must also work after a read timeout, closing the incomplete response first.
+_partial = _response()
+_partial.read.side_effect = TimeoutError('read stalled')
+with patch.object(sources.urllib.request, 'urlopen', side_effect=[_partial, _response()]), \
+        patch.object(sources.time, 'sleep'), contextlib.redirect_stderr(io.StringIO()):
+    try:
+        _got = sources.fetch(sources.BASE + '/')
+    except OSError as _error:
+        _got = str(_error)
+    chk('retry: a partial read is discarded and its response closed',
+        _got == (200, b'complete response') and _partial.__exit__.call_count == 1)
+
+# Exhaustion still goes through check_main(), not a successful or review-pending report.
+with patch.object(sources.urllib.request, 'urlopen',
+                  side_effect=urllib.error.URLError(TimeoutError('persistent timeout'))) as _get, \
+        patch.object(sources.time, 'sleep') as _sleep, \
+        patch.object(sources, 'write_freshness') as _write, contextlib.redirect_stderr(io.StringIO()):
+    chk('retry: persistent timeout exhausts three attempts and exits 2',
+        sources.check_main() == 2 and _get.call_count == 3)
+    chk('retry: backoff is bounded to 5s then 10s with no final sleep',
+        _sleep.call_args_list == [((5,), {}), ((10,), {})])
+    chk('retry: exhaustion writes no current report', not _write.called)
+
+for _label, _exc in (
+        ('HTTP 403', urllib.error.HTTPError(sources.BASE, 403, 'Forbidden', {}, None)),
+        ('HTTP 500', urllib.error.HTTPError(sources.BASE, 500, 'Server Error', {}, None)),
+        ('certificate validation', urllib.error.URLError(ssl.SSLCertVerificationError('untrusted'))),
+        ('DNS failure', urllib.error.URLError('name resolution failed'))):
+    with patch.object(sources.urllib.request, 'urlopen', side_effect=_exc) as _get, \
+            patch.object(sources.time, 'sleep') as _sleep, contextlib.redirect_stderr(io.StringIO()):
+        chk('retry: ' + _label + ' remains an immediate operational failure',
+            sources.check_main() == 2 and _get.call_count == 1 and not _sleep.called)
+
 _real_fetch = sources.fetch
 _FRESH_PATH = os.path.join(ROOT, 'harvest', 'FRESHNESS.md')
 _fresh_before = (io.open(_FRESH_PATH, encoding='utf-8').read()
@@ -418,6 +492,71 @@ sources.check = _saved_check
 _wf = io.open(os.path.join(ROOT, '.github/workflows/dga-freshness.yml'), encoding='utf-8').read()
 chk('ops: the workflow fails the job on exit > 1', '-gt 1' in _wf,
     'the exit codes are meaningless unless the workflow branches on them')
+
+
+def _workflow_step(name):
+    """Read this workflow's named step verbatim; do not duplicate its shell logic in a test."""
+    marker = '      - name: ' + name + '\n'
+    assert _wf.count(marker) == 1, name
+    return _wf.split(marker, 1)[1].split('\n      - ', 1)[0]
+
+
+def _workflow_script(name):
+    return '\n'.join(line[10:] for line in
+                     _workflow_step(name).split('        run: |\n', 1)[1].splitlines())
+
+
+# Bash is already used by the cross-platform installer CI. Use Git Bash on Windows, not WSL.
+_bash = (os.path.join(os.environ.get('ProgramFiles', r'C:\Program Files'), 'Git', 'bin', 'bash.exe')
+         if os.name == 'nt' else shutil.which('bash'))
+chk('ops: Bash is available for the actual workflow regression tests', bool(_bash and os.path.isfile(_bash)))
+if _bash and os.path.isfile(_bash):
+    _sentinel = _workflow_script('Run the sentinel')
+    _sentinel = _sentinel.replace("${{ inputs.deep && '--deep' || '' }}", '')
+    _stub = ('python -c "import os,sys; print(\'test stdout\'); '
+             'print(\'test stderr\',file=sys.stderr); sys.exit(int(os.environ[\'TEST_SENTINEL_EXIT\']))"')
+    assert _sentinel.count('python harvest/sources.py --check') == 1
+    _sentinel = _sentinel.replace('python harvest/sources.py --check', _stub)
+    with tempfile.TemporaryDirectory(prefix='dga-workflow-test-') as _tmp:
+        for _code in ('0', '1', '2'):
+            _output = os.path.join(_tmp, 'output').replace('\\', '/')
+            _summary = os.path.join(_tmp, 'summary').replace('\\', '/')
+            _env = dict(os.environ, TEST_SENTINEL_EXIT=_code, SENTINEL_EXIT=_code,
+                        GITHUB_OUTPUT=_output, GITHUB_STEP_SUMMARY=_summary)
+            _run = subprocess.run([_bash, '-e', '-c', _sentinel], cwd=_tmp, env=_env,
+                                  capture_output=True, text=True, timeout=30)
+            chk(f'ops: real workflow shell preserves exit {_code}',
+                _run.returncode == (2 if _code == '2' else 0), _run.stdout + _run.stderr)
+            _outputs = io.open(_output, encoding='utf-8').read().splitlines()
+            chk(f'ops: exit {_code} is published for downstream steps',
+                bool(_outputs) and _outputs[-1] == f'exit_code={_code}', str(_outputs))
+            _logged = io.open(os.path.join(_tmp, 'sentinel.log'), encoding='utf-8').read()
+            chk(f'ops: exit {_code} captures stderr as well as stdout',
+                'test stdout' in _logged and 'test stderr' in _logged)
+            _summary_run = subprocess.run([_bash, '-e', '-c', _workflow_script('Summary')],
+                                          cwd=_tmp, env=_env, capture_output=True, text=True, timeout=30)
+            _text = io.open(_summary, encoding='utf-8').read()
+            _expected = {'0': 'No change against', '1': '**Review pending**', '2': '**Check failed**'}[_code]
+            chk(f'ops: exit {_code} has the correct human summary',
+                _summary_run.returncode == 0 and _expected in _text
+                and (_code != '2' or '**Review pending**' not in _text), _text)
+            os.remove(_summary)
+        # A setup failure that never reached the sentinel must not claim review pending either.
+        _env['SENTINEL_EXIT'] = ''
+        _summary_run = subprocess.run([_bash, '-e', '-c', _workflow_script('Summary')],
+                                      cwd=_tmp, env=_env, capture_output=True, text=True, timeout=30)
+        _text = io.open(_summary, encoding='utf-8').read()
+        chk('ops: a missing sentinel result reports an incomplete check',
+            _summary_run.returncode == 0 and '**Check failed**' in _text
+            and '**Review pending**' not in _text)
+
+_report_step = _workflow_step('Upload the freshness report')
+_failure_step = _workflow_step('Upload diagnostics when the check could not complete')
+chk('ops: the saved freshness report is uploaded only for completed checks',
+    "if: always() && (steps.sentinel.outputs.exit_code == '0' || steps.sentinel.outputs.exit_code == '1')" in _report_step)
+chk('ops: an incomplete check uploads only its diagnostic log',
+    "if: always() && steps.sentinel.outputs.exit_code != '0' && steps.sentinel.outputs.exit_code != '1'" in _failure_step
+    and 'path: sentinel.log' in _failure_step and 'harvest/FRESHNESS.md' not in _failure_step)
 
 # Testing check_main() proves the wrapper works, not that anything calls it. Break-testing found
 # exactly that hole: swapping the entry point back to bare check() failed nothing. Pin the call

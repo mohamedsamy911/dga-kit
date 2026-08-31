@@ -2,6 +2,9 @@
 __pycache__/
 *.py[cod]
 
+# Local command output and diagnostics
+*.log
+
 # Editor / OS noise
 .DS_Store
 Thumbs.db

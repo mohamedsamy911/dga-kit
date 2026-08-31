@@ -213,7 +213,7 @@ than left for someone to discover.
 
 | Workflow | Trigger | Does |
 |---|---|---|
-| `.github/workflows/dga-freshness.yml` | Mondays 06:00 UTC, or manual | Runs the sentinel, uploads `FRESHNESS.md`, opens **one rolling issue** when review is pending |
+| `.github/workflows/dga-freshness.yml` | Mondays 06:00 UTC, or manual | Runs the sentinel, uploads a current `FRESHNESS.md` only after a completed check, opens **one rolling issue** when review is pending |
 | `.github/workflows/ci.yml` | push + PR | The offline checks: fixtures, quote fidelity, contrast self-test, generated-file drift, installer, manifests |
 
 Two properties of the sentinel workflow are load-bearing and asserted by the eval suite:
@@ -226,6 +226,13 @@ Two properties of the sentinel workflow are load-bearing and asserted by the eva
   turns every real DGA change into a red build people learn to ignore, or hides a broken check
   behind an expected red.
 
+Transient GET timeouts and connection resets get at most three attempts, with 5-second and
+10-second pauses. HTTP, DNS and certificate errors fail immediately; TLS validation is unchanged.
+Exhausted retries still return exit 2. A failed check means **freshness is unknown**, not that DGA
+changed or that the recorded guidance is current. Its artifact contains only `sentinel.log`
+(stdout and stderr), never the previously committed `FRESHNESS.md`. Inspect the failing URL and
+network error before rerunning; retries cannot repair a persistently unreachable source.
+
 The issue has a full lifecycle, not just an open:
 
 | Sentinel | Workflow does |
@@ -234,6 +241,7 @@ The issue has a full lifecycle, not just an open:
 | exit 1, issue already open | **comments** on it — a fresh issue every Monday for the same unread finding is how a queue stops being read |
 | exit 0, issue open | **comments and closes** it: the baseline now matches, so the finding was accepted or reverted upstream |
 | exit 0, no issue | nothing |
+| exit >1, or the sentinel never ran | fails the job, reports an incomplete check, leaves review issues unchanged |
 
 The close arm matters as much as the open one. Without it the issue stays open after a maintainer
 accepts the baseline, and the next unrelated change is appended to an issue whose body describes

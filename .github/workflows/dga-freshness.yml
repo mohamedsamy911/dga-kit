@@ -44,7 +44,7 @@ jobs:
         id: sentinel
         run: |
           set +e
-          python harvest/sources.py --check ${{ inputs.deep && '--deep' || '' }} | tee sentinel.log
+          python harvest/sources.py --check ${{ inputs.deep && '--deep' || '' }} 2>&1 | tee sentinel.log
           code=${PIPESTATUS[0]}
           echo "exit_code=$code" >> "$GITHUB_OUTPUT"
           # 0 = nothing changed. 1 = review pending, which is a RESULT, not a failure - the issue
@@ -56,13 +56,22 @@ jobs:
           exit 0
 
       - name: Upload the freshness report
-        if: always()
+        if: always() && (steps.sentinel.outputs.exit_code == '0' || steps.sentinel.outputs.exit_code == '1')
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: dga-freshness-${{ github.run_number }}
           path: |
             harvest/FRESHNESS.md
             sentinel.log
+          if-no-files-found: warn
+          retention-days: 90
+
+      - name: Upload diagnostics when the check could not complete
+        if: always() && steps.sentinel.outputs.exit_code != '0' && steps.sentinel.outputs.exit_code != '1'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: dga-freshness-${{ github.run_number }}
+          path: sentinel.log
           if-no-files-found: warn
           retention-days: 90
 
@@ -134,15 +143,18 @@ jobs:
 
       - name: Summary
         if: always()
+        env:
+          SENTINEL_EXIT: ${{ steps.sentinel.outputs.exit_code }}
         run: |
           {
             echo "### DGA freshness"
             echo
-            if [ "${{ steps.sentinel.outputs.exit_code }}" = "0" ]; then
-              echo "No change against the recorded baseline."
-            else
-              echo "**Review pending** - see the issue and the attached report."
-            fi
+            case "$SENTINEL_EXIT" in
+              0) echo "No change against the recorded baseline." ;;
+              1) echo "**Review pending** - see the issue and the attached report." ;;
+              *) echo "**Check failed** - the sentinel could not complete. DGA freshness is unknown."
+                 echo "No current freshness report is available. See sentinel.log for diagnostics." ;;
+            esac
             echo
             echo '```'
             cat sentinel.log 2>/dev/null || echo '(no log)'
