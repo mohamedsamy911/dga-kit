@@ -13,6 +13,17 @@ patch means corrections. Nothing here is a DGA release — see
 
 ## Unreleased
 
+### Fixed — freshness failure diagnostics
+
+- Transient GET timeouts/resets now have three bounded attempts with 5s/10s backoff. Exhaustion
+  remains an operational failure (exit 2); no baseline, TLS or review-gate behavior is relaxed.
+- The weekly workflow captures stderr, distinguishes failed checks from review findings, and
+  uploads only the diagnostic log on failure instead of a stale committed freshness report.
+- Offline regressions exercise the actual workflow shell and the retry loop. The suite also
+  restores its fetch mock and forbids writing the repository's real freshness report.
+- The marketplace-ref fixture checks the published `master` contract without assuming the
+  current checkout is `master`, so feature branches and detached PR checkouts can run the gates.
+
 ### Added — bilingual live showcase
 
 - `showcase/` contains Wasl, a fictional Arabic/English service portal demonstrating the kit.

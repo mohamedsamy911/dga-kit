@@ -527,6 +527,9 @@ if _bash and os.path.isfile(_bash):
                                   capture_output=True, text=True, timeout=30)
             chk(f'ops: real workflow shell preserves exit {_code}',
                 _run.returncode == (2 if _code == '2' else 0), _run.stdout + _run.stderr)
+            _outputs = io.open(_output, encoding='utf-8').read().splitlines()
+            chk(f'ops: exit {_code} is published for downstream steps',
+                bool(_outputs) and _outputs[-1] == f'exit_code={_code}', str(_outputs))
             _logged = io.open(os.path.join(_tmp, 'sentinel.log'), encoding='utf-8').read()
             chk(f'ops: exit {_code} captures stderr as well as stdout',
                 'test stdout' in _logged and 'test stderr' in _logged)
