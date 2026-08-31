@@ -115,11 +115,17 @@ a directory anything else can write. The installer does not edit `config.toml` i
 does. Use `--codex --agents` if you want the file copy and no configuration change, or
 `--dry-run` to see the exact commands first.
 
-**Safety and updates.** Two guarantees hold for **both** tools: linked paths — symlinks,
-dangling symlinks and Windows junctions — are refused, on the path and on every parent, and
-files are created exclusively so a link planted mid-install cannot be followed. The Claude
-manifest is checked before any file is copied, so a run that cannot record what it installs
-writes nothing at all.
+**Safety and updates.** One guarantee holds for **both** tools: linked paths — symlinks,
+dangling symlinks and Windows junctions — are refused, on the path and on every parent, before
+anything is written.
+
+Beyond that the two differ, and the difference is worth knowing. **Codex agents** are written
+with exclusive creation, so a link planted between the check and the write is refused rather than
+followed. **Claude skills and agents** are copied with an ordinary recursive copy — the guard is
+the pre-write check, not the write mode. The Claude manifest is also proved writable before the
+first file is copied (a read-only, directory or symlinked manifest aborts the run with nothing on
+disk), and if recording a file fails anyway that file is removed again rather than left
+untracked.
 
 For **Codex agents** specifically, all six source files and every destination conflict are
 checked before copying, and any different file — including a migrated or customized agent —
@@ -255,8 +261,12 @@ your own. If you already have a `frontend-dev` or a `code-reviewer`, it is untou
 
 ## Ownership — how the installer decides what it may delete
 
-This section covers the **Claude installers**. The separate Codex-agent installer never deletes
-or overwrites files; see [its safety and update instructions above](#install-the-six-codex-agents-separately).
+This section covers the **Claude** side. There is one installer for both tools — the separate
+Codex-agent installer this text described was retired — and the Codex rules are different, not
+absent: a differing agent is never overwritten (`--force` included), but `--uninstall` **does**
+delete Codex agents, when and only when the file on disk is byte-identical to the one this kit
+wrote. An edited one is kept and reported. See
+[its safety and update instructions above](#install-the-six-codex-agents-separately).
 
 The prefix is not the safeguard; a manifest is. Every path the installer creates is recorded in
 `~/.claude/.dga-kit-manifest`, and **it will only ever delete a path listed there**.

@@ -178,6 +178,52 @@ than changed again.
   `--force`. The paragraph now separates what holds for both tools from what is Codex-specific.
 
 
+- **The leak check failed exactly when the run was clean.** `ls -d …/dga-kit-selftest-*` exits 2
+  on an unmatched glob, and GitHub runs `bash -e -o pipefail`, so the step I added to catch
+  leaked fixtures failed on every leak-free run — the precise opposite of its purpose. Replaced
+  with `shopt -s nullglob` and an array, which counts zero without running a command that can
+  fail. Verified under the same shell flags in both directions.
+- **The manifest preflight checked links, not usability.** `plainPath()` says nothing about file
+  type or writability, so a **read-only** manifest still failed with `EPERM` — and a
+  **directory** at that path with `EISDIR` — after the first agent was already on disk, leaving
+  it untracked. The manifest is now proved appendable before the first copy, by actually opening
+  it for append; and if recording fails anyway, the file just copied is removed again rather than
+  orphaned. That rollback is defence in depth for a race the preflight makes unlikely but cannot
+  exclude, and it is asserted **structurally, not behaviourally** — injecting a failure between
+  the preflight and the append is not something a black-box test can arrange.
+- **The self-check failed on any machine with no temp variable set.** `scratchDir()` fell back to
+  a base of `'.'`, so it returned a **relative** path — which the `CODEX_HOME` case then fed to
+  `codexTarget()`, which correctly refuses a relative path. The base is resolved to an absolute
+  path now. The test for this clears `RUNNER_TEMP`/`TMPDIR`/`TEMP`/`TMP` before asserting,
+  because with one of them set the bug is invisible and the assertion was passing vacuously.
+- **Docs promised exclusive creation for both tools.** It is true for Codex agents and false for
+  Claude, which uses an ordinary recursive copy — there the guard is the pre-write check, not the
+  write mode. INSTALL now separates the one guarantee that holds for both from the two that do
+  not, and the unconditional "never overwrites or deletes what it did not write" in README and
+  AGENTS.md is replaced by what actually happens: `--force` adopts and overwrites an unclaimed
+  `dga-*` path, and `--clean-legacy` deletes pre-0.5 paths after you type DELETE.
+
+
+- **The two regression guards added for the previous round were both vacuous.** They matched text
+  that exists whether or not the code does anything: `'assertManifestUsable(home)' in _inst`
+  matched the function **definition**, so deleting the call still passed; and the rollback check
+  counted the failure **message**, which survives deleting the `rmSync` that is the actual
+  rollback. Both are now structural checks on `installClaude`'s isolated body — the preflight
+  must appear before the first `cpSync`, and every `claim()` must sit in a `try` whose `catch`
+  really removes the file. Four mutations confirm it: removing the call, removing the `rmSync`,
+  removing the whole `try`/`catch`, and moving the preflight after the copy.
+- **INSTALL still said the Codex installer never deletes files.** `--uninstall` does delete Codex
+  agents — precisely when the file on disk is byte-identical to the one this kit wrote; an edited
+  one is kept and reported. The sentence also referred to a "separate Codex-agent installer" that
+  no longer exists. **README omitted `--clean-legacy`** from the exceptions to what the installer
+  leaves alone.
+- Added a guard for that class, because it has now recurred three times: no document may state
+  that the installer never deletes or overwrites what it did not write without naming `--force`
+  or `--clean-legacy` within three lines. Its first two versions were themselves vacuous — a
+  ±400-character window let an unrelated `--clean-legacy` further down the section excuse the
+  claim, and a per-line regex could not see INSTALL's claim, which wraps across two lines.
+
+
 All of these are pinned by `node bin/dga-kit.mjs --test` and by new cases in the three-OS matrix.
 One of those assertions was vacuous on its first draft — the fixture's Codex target did not
 exist, so the branch it was meant to cover never ran and the test passed with the selector still

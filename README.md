@@ -246,7 +246,9 @@ like a quiet week.
 skills/     the 11 skills; dga-design-system is the source of truth the rest read
 agents/     the 6 Claude Markdown agents — source of truth for both formats
 codex-agents/  generated native Codex TOML agents — installed separately
-bin/dga-kit.mjs  the one installer (npx); never overwrites or deletes what it did not write
+bin/dga-kit.mjs  the one installer (npx); leaves what it did not write alone, except --force
+                 (adopts an unclaimed dga-* path) and --clean-legacy (deletes pre-0.5 paths
+                 after you type DELETE)
 harvest/    the evidence behind every rule, and the monitoring that keeps it honest
               raw/                curated captures, with <!-- dga --> marking DGA's own words
               CAPTURE-LOG.md      what was captured, from where, when

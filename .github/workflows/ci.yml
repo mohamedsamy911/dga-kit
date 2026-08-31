@@ -62,8 +62,10 @@ jobs:
         shell: bash
         run: |
           node bin/dga-kit.mjs --test
-          leaked=$(ls -d "${RUNNER_TEMP:-/tmp}"/dga-kit-selftest-* 2>/dev/null | wc -l)
-          test "$leaked" -eq 0 || { echo "self-check leaked $leaked scratch directories"; exit 1; }
+          shopt -s nullglob
+          leaked=( "${RUNNER_TEMP:-/tmp}"/dga-kit-selftest-* )
+          test "${#leaked[@]}" -eq 0             || { echo "self-check leaked ${#leaked[@]} scratch directories: ${leaked[*]}"; exit 1; }
+          echo 'self-check left no scratch directories'
 
       - name: Installer self-check
         # Symlink refusal and the agent-payload validation, which the end-to-end matrix below

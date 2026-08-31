@@ -26,7 +26,8 @@
 // manifest does not claim is treated as YOURS. --force is the only thing that touches an
 // unclaimed path, it still only writes allowlisted dga-* names, and it announces each one.
 import { existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, rmSync, cpSync,
-         writeFileSync, appendFileSync, statSync, symlinkSync } from 'node:fs'
+         writeFileSync, appendFileSync, statSync, symlinkSync, openSync,
+         closeSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { dirname, join, resolve, isAbsolute, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -146,6 +147,32 @@ function write(p, data) {
   } catch (e) {
     if (e.code === 'EEXIST') fail(`Refusing to overwrite ${p} - it appeared after the preflight`)
     throw e
+  }
+}
+
+/** Prove the manifest can actually RECORD before anything is copied.
+ *
+ *  plainPath() only answers "is this a link". It says nothing about file type or writability, so
+ *  a read-only manifest still failed with EPERM - and a DIRECTORY at that path with EISDIR -
+ *  after the first agent was already on disk, leaving it untracked and invisible to --uninstall.
+ *  The only honest test of "can I append to this" is to append to it, so that is what this does.
+ */
+function assertManifestUsable(home) {
+  const m = manifestPath(home)
+  plainPath(dirname(m))
+  plainPath(m)
+  if (present(m)) {
+    const st = lstatSync(m)
+    if (!st.isFile()) fail(`${m} exists but is not a regular file - cannot record installs there`)
+  }
+  if (DRY) return
+  mkdirSync(dirname(m), { recursive: true })
+  try {
+    // Append nothing: this creates the file if absent and proves the handle, without writing.
+    closeSync(openSync(m, 'a'))
+  } catch (e) {
+    fail(`Cannot record installs in ${m}: ${e.code || e.message}\n`
+      + '  Nothing was installed. Fix the manifest\'s permissions and re-run.')
   }
 }
 
@@ -356,9 +383,9 @@ function installClaude(home, { force, skills = true, agents = true }) {
   const adest = join(home, '.claude', 'agents')
   plainPath(dest); plainPath(adest)
   // PREFLIGHT the manifest before copying anything. claim() runs after each copy, so a
-  // symlinked or unwritable manifest used to abort mid-install with files already on disk and
-  // nothing recording them - untracked, and invisible to --uninstall forever.
-  plainPath(manifestPath(home))
+  // symlinked, read-only, or directory manifest used to abort mid-install with files already on
+  // disk and nothing recording them - untracked, and invisible to --uninstall forever.
+  assertManifestUsable(home)
   if (!DRY) { mkdirSync(dest, { recursive: true }); mkdirSync(adest, { recursive: true }) }
   legacyNotice(home)
 
@@ -377,7 +404,16 @@ function installClaude(home, { force, skills = true, agents = true }) {
     // Guard the LEAF too: the parents were checked, this is the one that gets replaced.
     plainPath(d)
     if (!DRY) { rmSync(d, { recursive: true, force: true }); cpSync(join(src, n), d, { recursive: true }) }
-    claim(home, d); ok++; say(`${DRY ? 'would install' : 'installed'} skill ${n}`)
+    // Roll back if recording fails anyway. The preflight makes this unlikely, not impossible -
+    // permissions can change under us - and an unrecorded copy is one --uninstall can never
+    // remove.
+    try {
+      claim(home, d)
+    } catch (e) {
+      if (!DRY) rmSync(d, { recursive: true, force: true })
+      fail(`Installed ${n} but could not record it, so it was removed again: ${e.message}`)
+    }
+    ok++; say(`${DRY ? 'would install' : 'installed'} skill ${n}`)
   }
 
   let aok = 0
@@ -394,7 +430,13 @@ function installClaude(home, { force, skills = true, agents = true }) {
     } else if (present(d) && !force) { say(`exists    ${a} (use --force)`); continue }
     plainPath(d)
     if (!DRY) cpSync(join(asrc, a + '.md'), d)
-    claim(home, d); aok++; say(`${DRY ? 'would install' : 'installed'} agent ${a}`)
+    try {
+      claim(home, d)
+    } catch (e) {
+      if (!DRY) rmSync(d, { force: true })
+      fail(`Installed ${a} but could not record it, so it was removed again: ${e.message}`)
+    }
+    aok++; say(`${DRY ? 'would install' : 'installed'} agent ${a}`)
   }
   return { ok, aok, dest }
 }
@@ -684,7 +726,8 @@ async function cleanLegacy(home) {
  */
 let _scratchSeq = 0
 function scratchDir(label) {
-  const base = process.env.RUNNER_TEMP || process.env.TMPDIR || process.env.TEMP || '.'
+  const base = resolve(process.env.RUNNER_TEMP || process.env.TMPDIR
+                      || process.env.TEMP || '.')
   for (let attempt = 0; attempt < 1000; attempt++) {
     // No Math.random(): the pid plus a counter is unique per process and reproducible in a log.
     const p = join(base, `dga-kit-selftest-${process.pid}-${_scratchSeq++}-${label}`)
@@ -1038,6 +1081,40 @@ function runSelfTest() {
       'a skill was copied before the manifest was validated - it is now untracked')
     assert(readFileSync(join(tmp8, 'external.json'), 'utf8') === '{"a":1}',
       'the linked-to file was modified')
+  }
+
+  // 19. The manifest must be proved USABLE, not merely unlinked, before anything is copied.
+  //     plainPath() answers "is this a link" and nothing about type or writability, so a
+  //     read-only manifest failed with EPERM - and a directory with EISDIR - after the first
+  //     agent was already on disk, leaving it untracked.
+  const tmp9 = scratchDir('usable')
+  mkdirSync(join(tmp9, '.claude', 'agents'), { recursive: true })
+  mkdirSync(manifestPath(tmp9), { recursive: true })          // a DIRECTORY where the file goes
+  let mfErr = null
+  try { installClaude(tmp9, { force: false, skills: false, agents: true }) } catch (e) { mfErr = e }
+  assert(mfErr, 'installing with a directory in place of the manifest was allowed')
+  assert(/is not a regular file/.test(mfErr.message),
+    'the manifest was not checked BEFORE copying - the failure came from the copy path instead: '
+    + mfErr.message)
+  assert(!present(join(tmp9, '.claude', 'agents', AGENTS[0] + '.md')),
+    'an agent was copied before the manifest was proved usable - it is now untracked')
+
+  // 20. scratchDir returns an ABSOLUTE path. With no RUNNER_TEMP/TMPDIR/TEMP the base fell back
+  //     to '.', so the CODEX_HOME case below fed a relative path to codexTarget(), which
+  //     correctly refused it - and the whole self-check failed on any machine without one set.
+  assert(isAbsolute(tmp9), `scratchDir returned a relative path: ${tmp9}`)
+  const tempVars = ['RUNNER_TEMP', 'TMPDIR', 'TEMP', 'TMP']
+  const saved = Object.fromEntries(tempVars.map((k) => [k, process.env[k]]))
+  try {
+    for (const k of tempVars) delete process.env[k]
+    const bare = scratchDir('no-tmpdir')
+    assert(isAbsolute(bare),
+      `scratchDir returned a relative path with no temp variable set: ${bare}`)
+  } finally {
+    for (const k of tempVars) {
+      if (saved[k] === undefined) delete process.env[k]
+      else process.env[k] = saved[k]
+    }
   }
 
   const skips = [linked ? null : 'directory links', fileLinked ? null : 'file symlinks']

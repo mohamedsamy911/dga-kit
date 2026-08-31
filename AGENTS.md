@@ -112,7 +112,9 @@ fixed allowlist. The manifest is editable text, so it is a record, not an author
 reintroduce deletion by name — an earlier version deleted `rga-brand`, a plausible name for a
 user's own skill.
 
-`bin/dga-kit.mjs` never deletes or overwrites anything it did not write. It takes an explicit project
+`bin/dga-kit.mjs` leaves anything it did not write alone, with two announced exceptions: `--force`
+adopts and overwrites an unclaimed `dga-*` path, and `--clean-legacy` deletes pre-0.5 paths after
+you type DELETE. It takes an explicit project
 or user scope, preflights every file, and refuses conflicting or linked destinations. Test it
 in scratch directories, never by modifying the maintainer's real Codex profile.
 

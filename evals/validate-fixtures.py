@@ -1312,6 +1312,41 @@ chk('installer: shell-executed arguments are validated as constants',
 chk('installer: CLI detection probes the tool, not PATH',
     "runCli(bin, ['--version']" in _inst,
     'detect() must run the tool itself rather than shelling out to which/where')
+# These two are STRUCTURAL checks on installClaude's body, not substring searches over the whole
+# file. Both earlier versions were vacuous for the same reason - they matched text that exists
+# somewhere regardless of whether the code does anything:
+#   * `'assertManifestUsable(home)' in _inst` matched the function DEFINITION, so deleting the
+#     call still passed.
+#   * counting the rollback's failure MESSAGE passed with the `rmSync` deleted and the message
+#     left behind - the message is not the rollback.
+# So: isolate the function, then look for the operations.
+_m = _re.search(r'\nfunction installClaude\([^\n]*\n(.*?)\n\}\n', _inst, _re.S)
+chk('installer: installClaude can be isolated for structural checks', bool(_m),
+    'the function signature changed; these checks are now blind and must be re-pointed')
+
+if _m:
+    _body = _m.group(1)
+    _pre = _body.find('assertManifestUsable(home)')
+    _first_copy = min([i for i in (_body.find('cpSync('),) if i >= 0] or [-1])
+    chk('installer: the manifest is proved usable before any copy',
+        _pre >= 0 and _first_copy >= 0 and _pre < _first_copy,
+        f'preflight at {_pre}, first cpSync at {_first_copy} - a read-only or directory manifest '
+        'otherwise aborts with files already on disk and nothing recording them')
+
+    # Every claim() in the copy loops must sit in a try whose catch actually REMOVES the file.
+    _bad_claims = []
+    for _mm in _re.finditer(r'claim\(home, d\)', _body):
+        _tail = _body[_mm.end():_mm.end() + 400]
+        _catch = _re.search(r'\}\s*catch\s*\([^)]*\)\s*\{(.*?)\n\s{4}\}', _tail, _re.S)
+        _pre_try = _body[max(0, _mm.start() - 200):_mm.start()]
+        if 'try {' not in _pre_try or not _catch or 'rmSync(' not in _catch.group(1):
+            _bad_claims.append(_body[max(0, _mm.start() - 60):_mm.end()].strip()[-60:])
+    chk('installer: every copy rolls back the FILE if recording fails', not _bad_claims,
+        f'{_bad_claims} - a claim() whose catch does not rmSync leaves an unrecorded copy, '
+        'which is one --uninstall can never remove')
+    chk('installer: there are two copy loops to guard', _body.count('claim(home, d)') == 2,
+        f"found {_body.count('claim(home, d)')} claim() sites in installClaude, expected 2")
+
 chk('installer: dependency-free', 'dependencies' not in
     open(os.path.join(ROOT, 'package.json'), encoding='utf-8').read(),
     'npx github:... must not need an install step; a dependency makes the one-liner fragile')
@@ -1650,6 +1685,39 @@ for _f in _PROSE:
         _no_git.append(_f)
 chk('install docs: anything advertising npx github: also names Git as a prerequisite',
     not _no_git, f'{_no_git} - npm clones to resolve a github: spec; without git npx fails')
+
+
+# --- the installer's safety claims must match its two exceptions ---------------
+# This exact drift has now recurred three times: a doc says the installer never overwrites or
+# deletes anything it did not write, while --force adopts an unclaimed dga-* path and
+# --clean-legacy deletes pre-0.5 paths after a typed DELETE. An unqualified claim is the failure
+# mode, so the rule is: name an exception ON or NEXT TO the claim, or do not make it.
+#
+# Scoped to the claim's own line plus the two after it. A wider window is worthless here: the
+# first version searched +/-400 characters of flattened text and passed on a reinstated bad
+# claim, because `--clean-legacy` happened to appear further down the same section.
+_UNQUALIFIED = re.compile(
+    r'(?i)never (?:deletes?|overwrites?)[^.]{0,80}?(?:it did not write|anything it did not '
+    r'write|files)')
+_claims = []
+for _f in ('README.md', 'AGENTS.md', 'INSTALL.md'):
+    _lines = open(os.path.join(ROOT, _f), encoding='utf-8').read().split(chr(10))
+    _seen = set()
+    for _i in range(len(_lines)):
+        # Match over a THREE-LINE window, not a single line: the claim in INSTALL.md wraps
+        # ("never deletes\nor overwrites files"), and a per-line regex could not see it. The
+        # same window is what must carry the exception, so a mention further down the section
+        # cannot excuse it.
+        _win = re.sub(r'\s+', ' ', ' '.join(_lines[_i:_i + 3]))
+        _m2 = _UNQUALIFIED.search(_win)
+        if not _m2 or _m2.group(0) in _seen:
+            continue
+        if '--force' not in _win and '--clean-legacy' not in _win:
+            _seen.add(_m2.group(0))
+            _claims.append(f'{_f}:{_i + 1} "{_m2.group(0)[:60]}"')
+chk('install docs: no unqualified never-deletes/never-overwrites claim', not _claims,
+    str(_claims) + ' - --force adopts an unclaimed dga-* path and --clean-legacy deletes '
+    'pre-0.5 paths after a typed DELETE; name the exception beside the claim')
 
 
 print()
