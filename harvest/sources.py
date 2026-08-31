@@ -60,6 +60,7 @@ import json
 import os
 import re
 import sys
+import time
 import urllib.error
 import urllib.request
 from datetime import date, timezone, datetime
@@ -109,9 +110,27 @@ CUSTOM_PROP = rb'[{;]\s*(--[^\s:{};,\[\]()]+)\s*:'
 
 
 def fetch(url, timeout=45):
+    """Retry transient GET timeouts/resets, never reinterpret a failure as a finding.
+
+    Three attempts with 5s/10s pauses keep a brief network interruption from losing the weekly
+    check. HTTP errors, DNS errors and certificate failures are not retried. The final error
+    still reaches check_main() as exit 2; neither TLS validation nor the baseline is changed.
+    """
     req = urllib.request.Request(url, headers={'User-Agent': UA})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
-        return r.status, r.read()
+    for attempt in range(1, 4):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                return r.status, r.read()
+        except (urllib.error.URLError, TimeoutError, ConnectionError) as exc:
+            reason = getattr(exc, 'reason', exc)
+            retry = isinstance(reason, (TimeoutError, ConnectionError)) and attempt < 3
+            print(f'GET {url} failed (attempt {attempt}/3): {type(exc).__name__}: {exc}',
+                  file=sys.stderr, flush=True)
+            if not retry:
+                raise
+            delay = 5 * attempt
+            print(f'Retrying in {delay}s.', file=sys.stderr, flush=True)
+            time.sleep(delay)
 
 
 def sha(b):
