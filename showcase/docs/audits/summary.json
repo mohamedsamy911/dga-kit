@@ -1,0 +1,928 @@
+{
+  "date": "2026-08-31T17:13:05.741Z",
+  "origin": "http://127.0.0.1:4173/dga-kit/",
+  "pa11y": [
+    {
+      "locale": "ar",
+      "route": "/",
+      "issues": [
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/about\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/about\">تعرّف على التجربة<svg xmlns=\"ht...</a>",
+          "selector": "#root > header > div:nth-child(2) > div > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/\" within the document, but no anchor exists with that name.",
+          "context": "<a class=\"brand-link\" href=\"#/\" aria-label=\"وصل — الرئيسية\"><span class=\"brand \"><svg class...</a>",
+          "selector": "#root > header > div:nth-child(3) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/\" aria-current=\"page\">الرئيسية</a>",
+          "selector": "#main-navigation > a:nth-child(1)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services\">الخدمات</a>",
+          "selector": "#main-navigation > a:nth-child(2)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/track\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/track\">متابعة طلب</a>",
+          "selector": "#main-navigation > a:nth-child(3)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/about\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/about\">عن التجربة</a>",
+          "selector": "#main-navigation > a:nth-child(4)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/home-permit\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services/home-permit\">تصريح منزل</a>",
+          "selector": "#main-content > div > section:nth-child(1) > div > div:nth-child(1) > div > a:nth-child(2)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/municipal-appointment\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services/municipal-appointment\">حجز موعد</a>",
+          "selector": "#main-content > div > section:nth-child(1) > div > div:nth-child(1) > div > a:nth-child(4)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/track\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/track\">متابعة طلب</a>",
+          "selector": "#main-content > div > section:nth-child(1) > div > div:nth-child(1) > div > a:nth-child(6)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services\" within the document, but no anchor exists with that name.",
+          "context": "<a class=\"text-action\" href=\"#/services\">عرض جميع الخدمات<svg xmlns=\"htt...</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(1) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/home-permit\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services/home-permit\">تصريح تحسين المنزل</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(4) > article:nth-child(1) > h3 > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/home-permit\" within the document, but no anchor exists with that name.",
+          "context": "<a class=\"card-action\" href=\"#/services/home-permit\">تفاصيل الخدمة<svg xmlns=\"http:/...</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(4) > article:nth-child(1) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/municipal-appointment\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services/municipal-appointment\">حجز موعد استشارة</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(4) > article:nth-child(2) > h3 > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/municipal-appointment\" within the document, but no anchor exists with that name.",
+          "context": "<a class=\"card-action\" href=\"#/services/municipal-appointment\">تفاصيل الخدمة<svg xmlns=\"http:/...</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(4) > article:nth-child(2) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/business-license\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services/business-license\">تجديد رخصة نشاط</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(4) > article:nth-child(3) > h3 > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/business-license\" within the document, but no anchor exists with that name.",
+          "context": "<a class=\"card-action\" href=\"#/services/business-license\">تفاصيل الخدمة<svg xmlns=\"http:/...</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(4) > article:nth-child(3) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/community-event\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services/community-event\">تنظيم فعالية مجتمعية</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(4) > article:nth-child(4) > h3 > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/community-event\" within the document, but no anchor exists with that name.",
+          "context": "<a class=\"card-action\" href=\"#/services/community-event\">تفاصيل الخدمة<svg xmlns=\"http:/...</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(4) > article:nth-child(4) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/volunteer\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services/volunteer\">الانضمام إلى فرصة تطوعية</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(4) > article:nth-child(5) > h3 > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/volunteer\" within the document, but no anchor exists with that name.",
+          "context": "<a class=\"card-action\" href=\"#/services/volunteer\">تفاصيل الخدمة<svg xmlns=\"http:/...</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(4) > article:nth-child(5) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/participation-certificate\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services/participation-certificate\">طلب شهادة مشاركة</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(4) > article:nth-child(6) > h3 > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/participation-certificate\" within the document, but no anchor exists with that name.",
+          "context": "<a class=\"card-action\" href=\"#/services/participation-certificate\">تفاصيل الخدمة<svg xmlns=\"http:/...</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(4) > article:nth-child(6) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services\" within the document, but no anchor exists with that name.",
+          "context": "<a class=\"text-action\" href=\"#/services\">ابدأ باستكشاف الخدمات<svg xmlns...</a>",
+          "selector": "#main-content > div > section:nth-child(4) > div > div > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/about\" within the document, but no anchor exists with that name.",
+          "context": "<a class=\"button secondary\" href=\"#/about\">اكتشف الإضافة<svg xmlns=\"http:/...</a>",
+          "selector": "#main-content > div > section:nth-child(5) > div > div > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services\">جميع الخدمات</a>",
+          "selector": "#root > footer > div > div:nth-child(2) > div:nth-child(2) > a:nth-child(2)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/track\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/track\">متابعة طلب تجريبي</a>",
+          "selector": "#root > footer > div > div:nth-child(2) > div:nth-child(2) > a:nth-child(3)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/about\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/about\">كيف بُنيت التجربة</a>",
+          "selector": "#root > footer > div > div:nth-child(2) > div:nth-child(2) > a:nth-child(4)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/accessibility\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/accessibility\">إمكانية الوصول</a>",
+          "selector": "#root > footer > div > div:nth-child(2) > div:nth-child(3) > a:nth-child(2)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/privacy\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/privacy\">الخصوصية والبيانات</a>",
+          "selector": "#root > footer > div > div:nth-child(2) > div:nth-child(3) > a:nth-child(3)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        }
+      ],
+      "reviewedRouteAnchors": 29,
+      "actionable": []
+    },
+    {
+      "locale": "ar",
+      "route": "/apply/home-permit",
+      "issues": [
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/about\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/about\">تعرّف على التجربة<svg xmlns=\"ht...</a>",
+          "selector": "#root > header > div:nth-child(2) > div > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/\" within the document, but no anchor exists with that name.",
+          "context": "<a class=\"brand-link\" href=\"#/\" aria-label=\"وصل — الرئيسية\"><span class=\"brand \"><svg class...</a>",
+          "selector": "#root > header > div:nth-child(3) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/\">الرئيسية</a>",
+          "selector": "#main-navigation > a:nth-child(1)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services\" aria-current=\"page\">الخدمات</a>",
+          "selector": "#main-navigation > a:nth-child(2)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/track\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/track\">متابعة طلب</a>",
+          "selector": "#main-navigation > a:nth-child(3)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/about\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/about\">عن التجربة</a>",
+          "selector": "#main-navigation > a:nth-child(4)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/\">الرئيسية</a>",
+          "selector": "#main-content > div > div > nav > ul > li:nth-child(1) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services\">الخدمات</a>",
+          "selector": "#main-content > div > div > nav > ul > li:nth-child(2) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/home-permit\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services/home-permit\">تصريح تحسين المنزل</a>",
+          "selector": "#main-content > div > div > nav > ul > li:nth-child(3) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/home-permit\" within the document, but no anchor exists with that name.",
+          "context": "<a class=\"button secondary\" href=\"#/services/home-permit\"><svg xmlns=\"http://www.w3.org/2...</a>",
+          "selector": "#main-content > div > div > div > div:nth-child(4) > form > div:nth-child(6) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services\">جميع الخدمات</a>",
+          "selector": "#root > footer > div > div:nth-child(2) > div:nth-child(2) > a:nth-child(2)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/track\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/track\">متابعة طلب تجريبي</a>",
+          "selector": "#root > footer > div > div:nth-child(2) > div:nth-child(2) > a:nth-child(3)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/about\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/about\">كيف بُنيت التجربة</a>",
+          "selector": "#root > footer > div > div:nth-child(2) > div:nth-child(2) > a:nth-child(4)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/accessibility\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/accessibility\">إمكانية الوصول</a>",
+          "selector": "#root > footer > div > div:nth-child(2) > div:nth-child(3) > a:nth-child(2)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/privacy\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/privacy\">الخصوصية والبيانات</a>",
+          "selector": "#root > footer > div > div:nth-child(2) > div:nth-child(3) > a:nth-child(3)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        }
+      ],
+      "reviewedRouteAnchors": 15,
+      "actionable": []
+    },
+    {
+      "locale": "en",
+      "route": "/",
+      "issues": [
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/about\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/about\">Explore the showcase<svg xmlns=...</a>",
+          "selector": "#root > header > div:nth-child(2) > div > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/\" within the document, but no anchor exists with that name.",
+          "context": "<a class=\"brand-link\" href=\"#/\" aria-label=\"WASL — Home\"><span class=\"brand \"><svg class...</a>",
+          "selector": "#root > header > div:nth-child(3) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/\" aria-current=\"page\">Home</a>",
+          "selector": "#main-navigation > a:nth-child(1)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services\">Services</a>",
+          "selector": "#main-navigation > a:nth-child(2)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/track\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/track\">Track a request</a>",
+          "selector": "#main-navigation > a:nth-child(3)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/about\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/about\">About the showcase</a>",
+          "selector": "#main-navigation > a:nth-child(4)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/home-permit\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services/home-permit\">Home permit</a>",
+          "selector": "#main-content > div > section:nth-child(1) > div > div:nth-child(1) > div > a:nth-child(2)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/municipal-appointment\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services/municipal-appointment\">Appointment</a>",
+          "selector": "#main-content > div > section:nth-child(1) > div > div:nth-child(1) > div > a:nth-child(4)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/track\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/track\">Track request</a>",
+          "selector": "#main-content > div > section:nth-child(1) > div > div:nth-child(1) > div > a:nth-child(6)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services\" within the document, but no anchor exists with that name.",
+          "context": "<a class=\"text-action\" href=\"#/services\">View All services<svg xmlns=\"ht...</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(1) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/home-permit\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services/home-permit\">Home improvement permit</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(4) > article:nth-child(1) > h3 > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/home-permit\" within the document, but no anchor exists with that name.",
+          "context": "<a class=\"card-action\" href=\"#/services/home-permit\">Service details<svg xmlns=\"http...</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(4) > article:nth-child(1) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/municipal-appointment\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services/municipal-appointment\">Book an advisory appointment</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(4) > article:nth-child(2) > h3 > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/municipal-appointment\" within the document, but no anchor exists with that name.",
+          "context": "<a class=\"card-action\" href=\"#/services/municipal-appointment\">Service details<svg xmlns=\"http...</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(4) > article:nth-child(2) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/business-license\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services/business-license\">Renew a business license</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(4) > article:nth-child(3) > h3 > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/business-license\" within the document, but no anchor exists with that name.",
+          "context": "<a class=\"card-action\" href=\"#/services/business-license\">Service details<svg xmlns=\"http...</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(4) > article:nth-child(3) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/community-event\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services/community-event\">Organize a community event</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(4) > article:nth-child(4) > h3 > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/community-event\" within the document, but no anchor exists with that name.",
+          "context": "<a class=\"card-action\" href=\"#/services/community-event\">Service details<svg xmlns=\"http...</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(4) > article:nth-child(4) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/volunteer\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services/volunteer\">Join a volunteering opportunity</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(4) > article:nth-child(5) > h3 > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/volunteer\" within the document, but no anchor exists with that name.",
+          "context": "<a class=\"card-action\" href=\"#/services/volunteer\">Service details<svg xmlns=\"http...</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(4) > article:nth-child(5) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/participation-certificate\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services/participation-certificate\">Request a participation certifi...</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(4) > article:nth-child(6) > h3 > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/participation-certificate\" within the document, but no anchor exists with that name.",
+          "context": "<a class=\"card-action\" href=\"#/services/participation-certificate\">Service details<svg xmlns=\"http...</a>",
+          "selector": "#main-content > div > section:nth-child(3) > div > div:nth-child(4) > article:nth-child(6) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services\" within the document, but no anchor exists with that name.",
+          "context": "<a class=\"text-action\" href=\"#/services\">Start exploring services<svg xm...</a>",
+          "selector": "#main-content > div > section:nth-child(4) > div > div > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/about\" within the document, but no anchor exists with that name.",
+          "context": "<a class=\"button secondary\" href=\"#/about\">Discover the plugin<svg xmlns=\"...</a>",
+          "selector": "#main-content > div > section:nth-child(5) > div > div > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services\">All services</a>",
+          "selector": "#root > footer > div > div:nth-child(2) > div:nth-child(2) > a:nth-child(2)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/track\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/track\">Track a demo request</a>",
+          "selector": "#root > footer > div > div:nth-child(2) > div:nth-child(2) > a:nth-child(3)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/about\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/about\">How the showcase was built</a>",
+          "selector": "#root > footer > div > div:nth-child(2) > div:nth-child(2) > a:nth-child(4)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/accessibility\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/accessibility\">Accessibility</a>",
+          "selector": "#root > footer > div > div:nth-child(2) > div:nth-child(3) > a:nth-child(2)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/privacy\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/privacy\">Privacy and data</a>",
+          "selector": "#root > footer > div > div:nth-child(2) > div:nth-child(3) > a:nth-child(3)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        }
+      ],
+      "reviewedRouteAnchors": 29,
+      "actionable": []
+    },
+    {
+      "locale": "en",
+      "route": "/apply/home-permit",
+      "issues": [
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/about\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/about\">Explore the showcase<svg xmlns=...</a>",
+          "selector": "#root > header > div:nth-child(2) > div > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/\" within the document, but no anchor exists with that name.",
+          "context": "<a class=\"brand-link\" href=\"#/\" aria-label=\"WASL — Home\"><span class=\"brand \"><svg class...</a>",
+          "selector": "#root > header > div:nth-child(3) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/\">Home</a>",
+          "selector": "#main-navigation > a:nth-child(1)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services\" aria-current=\"page\">Services</a>",
+          "selector": "#main-navigation > a:nth-child(2)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/track\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/track\">Track a request</a>",
+          "selector": "#main-navigation > a:nth-child(3)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/about\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/about\">About the showcase</a>",
+          "selector": "#main-navigation > a:nth-child(4)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/\">Home</a>",
+          "selector": "#main-content > div > div > nav > ul > li:nth-child(1) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services\">Services</a>",
+          "selector": "#main-content > div > div > nav > ul > li:nth-child(2) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/home-permit\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services/home-permit\">Home improvement permit</a>",
+          "selector": "#main-content > div > div > nav > ul > li:nth-child(3) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services/home-permit\" within the document, but no anchor exists with that name.",
+          "context": "<a class=\"button secondary\" href=\"#/services/home-permit\"><svg xmlns=\"http://www.w3.org/2...</a>",
+          "selector": "#main-content > div > div > div > div:nth-child(4) > form > div:nth-child(6) > a",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/services\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/services\">All services</a>",
+          "selector": "#root > footer > div > div:nth-child(2) > div:nth-child(2) > a:nth-child(2)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/track\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/track\">Track a demo request</a>",
+          "selector": "#root > footer > div > div:nth-child(2) > div:nth-child(2) > a:nth-child(3)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/about\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/about\">How the showcase was built</a>",
+          "selector": "#root > footer > div > div:nth-child(2) > div:nth-child(2) > a:nth-child(4)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/accessibility\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/accessibility\">Accessibility</a>",
+          "selector": "#root > footer > div > div:nth-child(2) > div:nth-child(3) > a:nth-child(2)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        },
+        {
+          "code": "WCAG2AA.Principle2.Guideline2_4.2_4_1.G1,G123,G124.NoSuchID",
+          "type": "error",
+          "typeCode": 1,
+          "message": "This link points to a named anchor \"/privacy\" within the document, but no anchor exists with that name.",
+          "context": "<a href=\"#/privacy\">Privacy and data</a>",
+          "selector": "#root > footer > div > div:nth-child(2) > div:nth-child(3) > a:nth-child(3)",
+          "runner": "htmlcs",
+          "runnerExtras": {}
+        }
+      ],
+      "reviewedRouteAnchors": 15,
+      "actionable": []
+    }
+  ],
+  "lighthouse": [
+    {
+      "locale": "ar",
+      "score": 1
+    },
+    {
+      "locale": "en",
+      "score": 1
+    }
+  ]
+}

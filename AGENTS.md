@@ -126,10 +126,16 @@ agents/     6 Claude Markdown agents, each self-contained (source of truth)
 codex-agents/  6 generated native Codex TOML agents, installed separately
 harvest/    the evidence trail — capture log and cross-references
 evals/      23 cases across two suites, plus validate-fixtures.py
+showcase/   standalone fictional Arabic/English demo; separate dependencies and Pages build
 ```
 
 Skills reference each other as siblings (`../dga-design-system/...`), so the flat layout is
 required.
+
+For showcase changes, also follow `showcase/AGENTS.md` and run the build, theme guard, and
+production-path browser tests documented in `showcase/README.md`. Those additional gates live
+in `.github/workflows/showcase-pages.yml`; they do not replace the kit gates above. Never add
+showcase dependencies to the root installer package or publish anything except `showcase/dist`.
 
 ## Changing DGA rules
 

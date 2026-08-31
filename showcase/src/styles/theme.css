@@ -1,0 +1,87 @@
+/* Project semantic aliases over the unmodified DGA harvest. Component recipes are
+   project choices, not additional DGA tokens. See the showcase About page. */
+:root {
+  --color-text: var(--dga-text-default);
+  --color-muted: var(--dga-color-neutral-600);
+  --color-subtle: var(--dga-color-neutral-600);
+  --color-surface: var(--dga-background-white);
+  --color-surface-subtle: var(--dga-color-neutral-25);
+  --color-surface-brand: var(--dga-color-brand-50);
+  --color-surface-warm: var(--dga-color-secondary-gold-25);
+  --color-brand: var(--dga-color-brand-700);
+  --color-brand-hover: var(--dga-color-brand-800);
+  --color-brand-pressed: var(--dga-color-brand-950);
+  --color-border: var(--dga-color-neutral-200);
+  --color-border-strong: var(--dga-color-neutral-500);
+  --color-on-brand: var(--dga-background-white);
+  --color-accent: var(--dga-color-secondary-gold-800);
+  --color-accent-surface: var(--dga-color-secondary-gold-50);
+  --color-danger: var(--dga-color-error-700);
+  --color-danger-surface: var(--dga-color-error-50);
+  --color-footer: var(--dga-color-brand-900);
+  --color-footer-text: var(--dga-background-white);
+  --color-footer-muted: var(--dga-color-brand-100);
+  --color-footer-border: var(--dga-color-brand-500);
+  /* Footer button recipes are project choices; these are not DGA state tokens. */
+  --color-footer-button-border: var(--dga-color-brand-300);
+  --color-footer-button-hover: var(--dga-color-brand-800);
+  --color-footer-button-pressed: var(--dga-color-brand-950);
+  --color-footer-button-disabled-text: var(--dga-color-brand-300);
+  --color-footer-button-disabled-border: var(--dga-color-brand-400);
+  --color-footer-button-selected-hover: var(--dga-color-brand-100);
+  --color-footer-button-selected-pressed: var(--dga-color-brand-200);
+  --color-focus: var(--dga-color-brand-800);
+  --color-art: var(--dga-color-brand-100);
+  --color-art-strong: var(--dga-color-brand-200);
+  --color-art-dark: var(--dga-color-brand-900);
+  --color-lavender: var(--dga-color-tertiary-lavendar-700);
+  --color-lavender-surface: var(--dga-color-tertiary-lavendar-50);
+  --color-disabled: var(--dga-color-neutral-600);
+  --color-disabled-surface: var(--dga-color-neutral-100);
+  --radius-sm: var(--dga-radius-md);
+  --radius-md: var(--dga-radius-lg);
+  --radius-lg: var(--dga-radius-xl);
+  --radius-pill: var(--dga-radius-full);
+  --shadow-card: var(--dga-shadow-xl);
+  --font-body: 'IBM Plex Sans', 'IBM Plex Sans Arabic', system-ui, sans-serif;
+  --font-arabic: 'IBM Plex Sans Arabic', 'IBM Plex Sans', system-ui, sans-serif;
+  --page-max: 1280px;
+}
+
+/* Deliberate project high-contrast mode. Not the published DGA dark theme. */
+:root[data-contrast='high'] {
+  --color-text: var(--dga-color-neutral-950);
+  --color-muted: var(--dga-color-neutral-900);
+  --color-subtle: var(--dga-color-neutral-900);
+  --color-surface: var(--dga-background-white);
+  --color-surface-subtle: var(--dga-background-white);
+  --color-surface-brand: var(--dga-background-white);
+  --color-surface-warm: var(--dga-background-white);
+  --color-brand: var(--dga-color-brand-950);
+  --color-brand-hover: var(--dga-color-neutral-950);
+  --color-brand-pressed: var(--dga-color-neutral-950);
+  --color-border: var(--dga-color-neutral-700);
+  --color-border-strong: var(--dga-color-neutral-950);
+  --color-accent: var(--dga-color-secondary-gold-950);
+  --color-accent-surface: var(--dga-background-white);
+  --color-danger: var(--dga-color-error-900);
+  --color-danger-surface: var(--dga-background-white);
+  --color-footer: var(--dga-color-neutral-950);
+  --color-footer-text: var(--dga-background-white);
+  --color-footer-muted: var(--dga-background-white);
+  --color-footer-border: var(--dga-background-white);
+  --color-footer-button-border: var(--dga-background-white);
+  --color-footer-button-hover: var(--dga-color-neutral-800);
+  --color-footer-button-pressed: var(--dga-color-neutral-700);
+  --color-footer-button-disabled-text: var(--dga-color-neutral-300);
+  --color-footer-button-disabled-border: var(--dga-color-neutral-400);
+  --color-footer-button-selected-hover: var(--dga-color-neutral-100);
+  --color-footer-button-selected-pressed: var(--dga-color-neutral-200);
+  --color-focus: var(--dga-color-neutral-950);
+  --color-art: var(--dga-color-neutral-100);
+  --color-art-strong: var(--dga-color-neutral-300);
+  --color-art-dark: var(--dga-color-neutral-950);
+  --color-lavender: var(--dga-color-neutral-950);
+  --color-lavender-surface: var(--dga-background-white);
+  --shadow-card: none;
+}

@@ -1,0 +1,71 @@
+# The plugin remains dependency-free; this app has its own lockfile and build.
+# Only showcase/dist is uploaded. Pull requests run the checks without Pages credentials.
+name: Showcase Pages
+
+on:
+  push:
+    branches: [master]
+    paths: ['showcase/**', '.github/workflows/showcase-pages.yml']
+  pull_request:
+    paths: ['showcase/**', '.github/workflows/showcase-pages.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: showcase-pages-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: showcase
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: showcase/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - run: npm run check:theme
+      - run: npx playwright install --with-deps chromium
+      - name: Test the production build under /dga-kit/
+        run: npm run test:e2e
+      - name: Retain browser diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: showcase-browser-report
+          path: |
+            showcase/playwright-report/
+            showcase/test-results/
+          retention-days: 7
+      - name: Upload only the tested static site
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master' && github.repository == 'mohamedsamy911/dga-kit'
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
+        with:
+          path: showcase/dist
+
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master' && github.repository == 'mohamedsamy911/dga-kit'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check Pages configuration
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
+      - name: Deploy the tested artifact
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

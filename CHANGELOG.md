@@ -13,6 +13,16 @@ patch means corrections. Nothing here is a DGA release — see
 
 ## Unreleased
 
+### Added — bilingual live showcase
+
+- `showcase/` contains Wasl, a fictional Arabic/English service portal demonstrating the kit.
+  It has its own dependencies and lockfile; the plugin's installation payload is unchanged.
+- GitHub Pages publishes only the tested production output at
+  [mohamedsamy911.github.io/dga-kit](https://mohamedsamy911.github.io/dga-kit/).
+  Pull requests run build, theme, and browser checks without deployment permissions.
+- Production-path tests cover assets and deep-link reloads under `/dga-kit/`. The showcase
+  retains its unofficial-demo disclosure, source evidence, and manual accessibility limits.
+
 ### Added — six native Codex agents
 
 - `codex-agents/*.toml` is generated from the six Claude Markdown definitions. Descriptions and

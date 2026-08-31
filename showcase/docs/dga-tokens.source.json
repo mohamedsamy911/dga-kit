@@ -1,0 +1,819 @@
+{
+  "$meta": {
+    "source": "https://design.dga.gov.sa/",
+    "systemName": "Platforms Code — National Design System of Saudi Arabia",
+    "owner": "Digital Government Authority (DGA)",
+    "extractedFrom": "CSS custom properties on :root, /guidelines/foundations/color-system",
+    "retrieved": "2026-08-26",
+    "method": "live DOM extraction via browser — values are verbatim, not transcribed",
+    "totalCssVarsOnPage": 1052,
+    "$countsNote": "totalCssVarsOnPage is what was READ off DGA's :root in the 2026-08-26 browser harvest. carriedValues is what this file SHIPS. They are not the same number, and the gap IS NOW RECONCILED - see $reconciliation. Do not restore the old explanation that the difference is aliasing: the repo's reconciler disproved it. Never quote a read count as the number of tokens this kit provides; the repo's fixture validator enforces that in the prose and in these annotations.",
+    "carriedValues": 303,
+    "carriedDarkValues": 67,
+    "$reconciliation": {
+      "$note": "Settled 2026-08-31 by the repo's reconciler against DGA stylesheet build PDaQ7SHU, cascade- and scope-correct. The kit previously described the gap as 'aliases and per-component role vars resolving to values already carried'. That was WRONG and is retracted.",
+      "stylesheetBuild": "PDaQ7SHU",
+      "distinctCustomProperties": 1126,
+      "declaredOnRoot": 1065,
+      "declaredUnderDarkSelector": 402,
+      "declaredElsewhere": 61,
+      "totalDeclarations": 1467,
+      "carried": 1055,
+      "notCarried": 412,
+      "notCarriedGenericRamp": 246,
+      "notCarriedDgaNamespaced": 129,
+      "notCarriedUnknownFamily": 25,
+      "toTriage": 154,
+      "$resolutionNote": "Values are resolved with LAST-declaration-wins per scope, not first match. DGA redeclares 393 light names - --colors-base-black is #000000 in one :root block and #161616 in a later one - and a first-match resolver reported --background-black as an uncarried #000000 when the effective value is the already-carried #161616. Dark aliases resolve through dark's own redefinitions before falling back to light. That bug inflated the gap by 104 declarations.",
+      "$genericRampNote": "246 are the upstream Untitled-UI ramp DGA ships in CSS but does not publish as a Platforms Code colour. The exclusion list is EXPLICIT, name by name: an earlier 'anything not semantic' rule swept up --colors-border-primary, --colors-text-primary and the --colors-alpha-* primitives as ramp steps, and a wrong exclusion hides a real gap.",
+      "$triageNote": "154 to triage = 129 DGA-namespaced values this file does not hold + 25 whose family is unrecognised and are left for review rather than excluded. Covers the --alpha-* transparency scale, --button-* interaction states, --link-*, --notification-*, --tag-*, --border-*, --controls-*, --featuredicons-* and --form-*. Full list in the reconciliation report.",
+      "$historicalNote": "The figure 1,052 quoted before this reconciliation came from a 2026-08-26 browser getComputedStyle read of :root. The stylesheet parse gives 1,065 declared on :root and 1,126 distinct names overall. Different methods measuring different things; both are recorded rather than one silently replacing the other.",
+      "notCarriedCompositeOfCarried": 12,
+      "notCarriedUnresolved": 0,
+      "$compositeNote": "12 declarations are composites - the linear-gradient() set - whose every colour component is already carried. They are NOT missing values: what the kit lacks is the gradient definition (angle and stops), which is a different finding. An earlier cut counted them as confirmed-missing because a composite string can never equal a single carried literal.",
+      "$unresolvedNote": "Declarations whose value still contains var() after substitution - a reference to something DGA never declares. Counted separately because an unresolved expression is not evidence that this kit is missing a value. Currently 0: every composite resolves."
+    },
+    "verified": false,
+    "$note": "verified=false until a designer signs off. Values are exact. Every section carries its own $source with the page it is documented on and the date it was read; suspect values carry a $verify entry. Known-incomplete areas are the PC 1.0 Figma-only values (responsive radius/spacing, mobile kit), not the foundation pages. The dark theme is NOT among them: DGA publishes it in the public CSS and this file carries it under role.dark - but for AUDIT ONLY, because upstream it is unactivatable. See role.dark.$activation.",
+    "$disputed": {
+      "$note": "Values an independent extraction of the same DGA page (2026-06-21) read differently. Unresolved - settle at the next harvest. See https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/CROSSREF-SECOND-EXTRACTION.md. Neither difference changes a contrast verdict.",
+      "color.neutral.500": {
+        "ours": "#6c727e",
+        "theirs": "#6c737f",
+        "status": "TODO(verify)"
+      },
+      "color.neutral.950": {
+        "ours": "#0c111b",
+        "theirs": "#0d121c",
+        "status": "TODO(verify)"
+      },
+      "color.info.50": {
+        "ours": "#eff8ff",
+        "theirs": "#ecfdf3",
+        "status": "likely a DGA source typo they flagged, corrected upstream between 2026-06-21 and 2026-08-26"
+      }
+    },
+    "$conventions": {
+      "$source": "per-section provenance: documenting page, where values came from, read date, method",
+      "$verify": "values that are disputed, defective in the source, or where DGA is silent. status is one of: disputed | confirmed-defect-in-source | confirmed-naming-hazard | confirmed-hazard | likely-corrected-upstream | unavailable-upstream | published-but-unactivatable | dga-silent | gap-in-extraction-method | faithful-to-source",
+      "$-prefixed keys": "ALWAYS annotations, never token values. Generators must skip them."
+    }
+  },
+  "color": {
+    "$source": {
+      "documentedAt": "https://design.dga.gov.sa/guidelines/foundations/color-system",
+      "valuesFrom": ":root CSS custom properties",
+      "retrieved": "2026-08-26",
+      "method": "live DOM extraction of CSS custom properties - verbatim, not transcribed"
+    },
+    "$verify": [
+      {
+        "key": "neutral.500",
+        "value": "#6c727e",
+        "issue": "An independent extraction of the same page (2026-06-21) read #6c737f.",
+        "status": "disputed",
+        "action": "TODO(verify) at the next harvest. No contrast consequence - 4.83:1 vs 4.78:1 on white, both clear AA. See https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/CROSSREF-SECOND-EXTRACTION.md."
+      },
+      {
+        "key": "neutral.950",
+        "value": "#0c111b",
+        "issue": "Same independent extraction read #0d121c.",
+        "status": "disputed",
+        "action": "TODO(verify) at the next harvest. No contrast consequence."
+      },
+      {
+        "key": "info.50",
+        "value": "#eff8ff",
+        "issue": "The same extraction read #ecfdf3 in June - green, character-identical to success.50 - and flagged it as a suspected source typo. Our August read is blue.",
+        "status": "likely-corrected-upstream",
+        "action": "Confirm the page was fixed between 2026-06-21 and 2026-08-26, and tell them their VERIFY note is resolved."
+      },
+      {
+        "key": "secondary-gold.600 / tertiary-lavendar.500",
+        "value": "#dba102 / #80519f",
+        "issue": "Absent from the :root ramps but present on the page, labelled \"Primary 600\" and \"Primary 500\". They survive here only as role.text.secondary and role.text.tertiary.",
+        "status": "gap-in-extraction-method",
+        "action": "Record as page-labelled palette steps at the next harvest. CSS-variable extraction cannot see on-page labels."
+      },
+      {
+        "key": "tertiary-lavendar",
+        "value": null,
+        "issue": "DGA's own spelling of \"lavender\". Preserved deliberately.",
+        "status": "faithful-to-source",
+        "action": "Do not correct it - the CSS variable name is what consumers must match."
+      }
+    ],
+    "$comment": "DGA ships 41 colour families. The three named brand ramps below are DGA-specific; the semantic ramps and the wider primitive set are Untitled UI primitives that DGA adopted wholesale.",
+    "primary-sa-flag": {
+      "$note": "Green, chosen to reference the flag of the Kingdom of Saudi Arabia. No 600 step is defined under this name — brand-600 (#1b8354) fills that role.",
+      "25": "#f7fdf9",
+      "50": "#f3fcf6",
+      "100": "#dff6e7",
+      "200": "#b8eacb",
+      "300": "#88d8ad",
+      "400": "#54c08a",
+      "500": "#25935f",
+      "700": "#166a45",
+      "800": "#14573a",
+      "900": "#104631",
+      "950": "#092a1e"
+    },
+    "brand": {
+      "25": "#f7fdf9",
+      "50": "#f3fcf6",
+      "100": "#dff6e7",
+      "200": "#b8eacb",
+      "300": "#88d8ad",
+      "400": "#54c08a",
+      "500": "#25935f",
+      "600": "#1b8354",
+      "700": "#166a45",
+      "800": "#14573a",
+      "900": "#104631",
+      "950": "#092a1e"
+    },
+    "secondary-gold": {
+      "$note": "No 600 step defined.",
+      "25": "#fffef7",
+      "50": "#fffef2",
+      "100": "#fffce6",
+      "200": "#fcf3bd",
+      "300": "#fae996",
+      "400": "#f7d54d",
+      "500": "#f5bd02",
+      "700": "#b87b02",
+      "800": "#945c01",
+      "900": "#6e3c00",
+      "950": "#472400"
+    },
+    "tertiary-lavendar": {
+      "$note": "DGA's spelling. No 500 step defined.",
+      "25": "#fefcff",
+      "50": "#f9f5fa",
+      "100": "#f2e9f5",
+      "200": "#e1cce8",
+      "300": "#ccadd9",
+      "400": "#a57bba",
+      "600": "#6d428f",
+      "700": "#532d75",
+      "800": "#3d1d5e",
+      "900": "#281047",
+      "950": "#16072e"
+    },
+    "neutral": {
+      "25": "#fcfcfd",
+      "50": "#f9fafb",
+      "100": "#f3f4f6",
+      "200": "#e5e7eb",
+      "300": "#d2d6db",
+      "400": "#9da4ae",
+      "500": "#6c727e",
+      "600": "#4d5761",
+      "700": "#384250",
+      "800": "#1f2a37",
+      "900": "#111927",
+      "950": "#0c111b"
+    },
+    "gray": {
+      "$note": "Distinct from neutral. Carries a 1000 step.",
+      "25": "#fafafa",
+      "50": "#f5f5f6",
+      "100": "#f0f1f1",
+      "200": "#ececed",
+      "300": "#cecfd2",
+      "400": "#94969c",
+      "500": "#85888e",
+      "600": "#61646c",
+      "700": "#333741",
+      "800": "#1f242f",
+      "900": "#161b26",
+      "950": "#0c111d",
+      "1000": "#161616"
+    },
+    "error": {
+      "25": "#fffbfa",
+      "50": "#fef3f2",
+      "100": "#fee4e2",
+      "200": "#fecdca",
+      "300": "#fda29b",
+      "400": "#f97066",
+      "500": "#f04438",
+      "600": "#d92d20",
+      "700": "#b42318",
+      "800": "#912018",
+      "900": "#7a271a",
+      "950": "#55160c"
+    },
+    "warning": {
+      "25": "#fffcf5",
+      "50": "#fffaeb",
+      "100": "#fef0c7",
+      "200": "#fedf89",
+      "300": "#fec84b",
+      "400": "#fdb022",
+      "500": "#f79009",
+      "600": "#dc6803",
+      "700": "#b54708",
+      "800": "#93370d",
+      "900": "#7a2e0e",
+      "950": "#4e1d09"
+    },
+    "success": {
+      "25": "#f6fef9",
+      "50": "#ecfdf3",
+      "100": "#dcfae6",
+      "200": "#abefc6",
+      "300": "#75e0a7",
+      "400": "#47cd89",
+      "500": "#17b26a",
+      "600": "#079455",
+      "700": "#067647",
+      "800": "#085d3a",
+      "900": "#074d31",
+      "950": "#053321"
+    },
+    "info": {
+      "25": "#f5faff",
+      "50": "#eff8ff",
+      "100": "#d1e9ff",
+      "200": "#b2ddff",
+      "300": "#84caff",
+      "400": "#53b1fd",
+      "500": "#2e90fa",
+      "600": "#1570ef",
+      "700": "#175cd3",
+      "800": "#1849a9",
+      "900": "#194185",
+      "950": "#102a56"
+    },
+    "base": {
+      "white": "#ffffff",
+      "black": "#161616"
+    }
+  },
+  "role": {
+    "$source": {
+      "documentedAt": "https://design.dga.gov.sa/guidelines/foundations/color-system",
+      "valuesFrom": ":root CSS custom properties",
+      "retrieved": "2026-08-26",
+      "method": "live DOM extraction of CSS custom properties - verbatim, not transcribed"
+    },
+    "$verify": [
+      {
+        "key": "text.secondary",
+        "value": "#dba102",
+        "issue": "A DGA token designated for TEXT that measures 2.30:1 on background.white - below the 4.5:1 small-text threshold AND the 3:1 large-text one. The colour-system page labels this value Gold \"Primary 600\", so it reads as a brand headline colour.",
+        "status": "confirmed-defect-in-source",
+        "action": "Never use on a light surface at any size. secondary-gold.800 (#945c01) is the first step that clears AA. Enforced by assets/check-contrast.mjs."
+      },
+      {
+        "key": "text.primary-light / text.secondary-light / text.tertiary-light",
+        "value": "#88d8ad / #fae996 / #ccadd9",
+        "issue": "Named as text roles but usable only on dark surfaces - 1.68:1, 1.22:1 and 1.99:1 on white.",
+        "status": "confirmed-naming-hazard",
+        "action": "Dark surfaces only. Run assets/check-contrast.mjs in CI."
+      },
+      {
+        "key": "role.dark.*",
+        "value": null,
+        "issue": "DGA ships 402 dark declarations in its public CSS, under the selector `[data-theme=dark] :root` - which can never match, because :root is <html> and a descendant combinator needs an ancestor it does not have. Verified live: zero elements matched. The theme is complete and unreachable.",
+        "status": "published-but-unactivatable",
+        "action": "Values are carried in role.dark for AUDIT ONLY and deliberately not generated into tokens.css - see role.dark.$activation. Build the dark slot present, and do not fill it from these: five *-light status surfaces have no dark tint at all, so white text on them measures 1.05:1."
+      }
+    ],
+    "$comment": "Semantic role tokens — what to actually reference in code. See CONTRAST-AUDIT.md before using any of these as text.",
+    "text": {
+      "default": "#161616",
+      "display": "#1f2a37",
+      "primary-paragraph": "#384250",
+      "secondary-paragraph": "#6c727e",
+      "primary": "#1b8354",
+      "secondary": "#dba102",
+      "tertiary": "#80519f",
+      "primary-sa-flag": "#14573a",
+      "success": "#067647",
+      "info": "#175cd3",
+      "warning": "#b54707",
+      "error": "#b42318",
+      "primary-light": "#88d8ad",
+      "secondary-light": "#fae996",
+      "tertiary-light": "#ccadd9",
+      "oncolor-primary": "#ffffff",
+      "oncolor-secondary": "#ffffffcc",
+      "oncolor-tertiary": "#ffffffb2",
+      "default-disabled": "#9da4ae",
+      "default-oncolor-disabled": "#ffffff66"
+    },
+    "background": {
+      "white": "#ffffff",
+      "body": "#f9fafb",
+      "menu": "#ffffff",
+      "card": "#ffffff",
+      "black": "#161616",
+      "surface-oncolor": "#ffffff",
+      "brand-light": "#f3fcf6",
+      "neutral-25": "#fcfcfd",
+      "neutral-50": "#f9fafb",
+      "neutral-100": "#f3f4f6",
+      "neutral-200": "#e5e7eb",
+      "neutral-300": "#d2d6db",
+      "neutral-400": "#9da4ae",
+      "neutral-800": "#1f2a37",
+      "primary": "#1b8354",
+      "primary-25": "#f7fdf9",
+      "primary-50": "#f3fcf6",
+      "primary-200": "#b8eacb",
+      "primary-400": "#54c08a",
+      "secondary": "#dba102",
+      "secondary-25": "#fffef7",
+      "secondary-50": "#fffef2",
+      "tertiary": "#6d428f",
+      "tertiary-25": "#fefcff",
+      "tertiary-50": "#f9f5fa",
+      "success": "#069454",
+      "success-light": "#ecfdf3",
+      "success-25": "#f6fef9",
+      "success-50": "#ecfdf3",
+      "info": "#156fee",
+      "info-light": "#eff8ff",
+      "info-25": "#f5faff",
+      "info-50": "#eff8ff",
+      "warning": "#dc6803",
+      "warning-light": "#fffaeb",
+      "warning-25": "#fffcf5",
+      "warning-50": "#fffaeb",
+      "error": "#d92c20",
+      "error-light": "#fef3f2",
+      "error-25": "#fffbfa",
+      "error-50": "#fef3f2",
+      "sa-flag": "#074c30",
+      "sa-flag-25": "#f6fef9",
+      "sa-flag-50": "#ecfdf3",
+      "disabled": "#e5e7eb",
+      "disabled-primary": "#b8eacb",
+      "inverse-disabled": "#f3f4f6"
+    },
+    "dark": {
+      "$source": {
+        "documentedAt": "none - DGA publishes no dark-mode guidance page",
+        "valuesFrom": "[data-theme=dark] :root rule in the site's CSS bundle (/assets/index-<hash>.css)",
+        "retrieved": "2026-08-27",
+        "method": "fetched the CSS bundle and parsed the rule; var() refs resolved against the light :root primitives. Values verbatim, not transcribed."
+      },
+      "$comment": "Dark-theme semantic roles. DGA ships 402 dark declarations; these are the 62 that remap the text and background roles captured above, plus 5 backgrounds dark does NOT remap (carried at their light values, which is what they compute to). The other 340 - link, button, tag, form, featuredicons, border, icon, notification, controls, stepper, table, tooltip - are uncaptured HERE and in the light theme too, by the same scope decision. All 402 are in https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-08-27-dark-theme-roles.json.",
+      "$activation": "NONE. These values are held for AUDIT ONLY and are deliberately not generated into tokens.css. DGA ships them under [data-theme=dark] :root, which can never match, so upstream the theme is inert - and inert is safe. Correcting the selector would activate 1.05:1 pairings for any consumer already using data-theme=\"dark\" (Chakra v3 does, out of the box). See $verify.",
+      "$verify": [
+        {
+          "key": "$activation",
+          "value": "[data-theme=dark] :root",
+          "issue": "DGA's own selector can never match. :root is <html>, and a descendant combinator requires :root to HAVE an ancestor carrying [data-theme=dark]. <html> has none. Verified in the live page: querySelectorAll returns 0 with the attribute on <html> and on <body>, and no computed value changes. The bundle contains no prefers-color-scheme rule, no .dark class, and zero instances of the correct :root[data-theme=...] form - so there is no alternative activation path. DGA ships a complete dark theme that cannot turn on.",
+          "status": "confirmed-defect-in-source",
+          "action": "Retain the values for audit; do NOT emit a corrected selector into any shipped stylesheet. Report the defect to DS-DGA@dga.gov.sa - the fix is theirs to make, and if they make it the theme goes live everywhere at once. Guarded by 'generated CSS ships no live dark rule' in https://github.com/mohamedsamy911/dga-kit/blob/master/evals/validate-fixtures.py. Evidence: https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-08-27-dark-theme-spike.md."
+        },
+        {
+          "key": "background.brand-light / error-light / info-light / success-light / warning-light",
+          "value": "#f3fcf6 / #fef3f2 / #eff8ff / #ecfdf3 / #fffaeb",
+          "issue": "The five *-light status surfaces are NOT remapped by the dark block, so they keep their near-white light values while text.default flips to #ffffff. White on #f3fcf6 is 1.05:1 - the worst pairing in either theme, and effectively invisible. This is more severe than the text.error problem below.",
+          "status": "confirmed-defect-in-source",
+          "action": "Do not use these surfaces in dark mode. DGA publishes no dark tint for them anywhere - every variant it ships (notification-, tag-, featuredicons-) still resolves to the same near-white value - so this is the reason a dark stylesheet cannot be made safe from DGA's own values, and the reason this kit generates none. An entity that needs dark mode substitutes its own tint and records it in dga-brand-overlay. Caught by check-contrast.mjs --theme dark."
+        },
+        {
+          "key": "text.error",
+          "value": "#b42318",
+          "issue": "Dark keeps red.700 for error text. On the dark surfaces it measures 2.68:1 (body), 2.87:1 (white) and 2.21:1 (card) - fails AA at every size on every dark surface. An error message nobody can read.",
+          "status": "confirmed-defect-in-source",
+          "action": "Substitute red.300 (#fca19b) - DGA's own choice for notification.text-error and controls.control-text-error in dark, so it is cited, not invented. Record the substitution in dga-brand-overlay. Audit-only here; nothing is generated."
+        },
+        {
+          "key": "text.primary",
+          "value": "#1b8354",
+          "issue": "The brand green is not remapped for dark. 3.71:1 on background.body - large text only, down from a marginal 4.75:1 pass in light. The primary brand text colour stops being usable for body copy.",
+          "status": "confirmed-hazard",
+          "action": "Large text only in dark, or substitute primary-sa-flag.300 (#88d8ad), which text.primary-light already uses and which measures 10.46:1."
+        },
+        {
+          "key": "text.secondary",
+          "value": "#dba102",
+          "issue": "Recorded so the light-theme finding is not over-generalised: the gold that fails at 2.30:1 on every LIGHT surface PASSES at 7.64:1 on background.body in dark. The role is not inherently broken - it is in the wrong theme.",
+          "status": "faithful-to-source",
+          "action": "Cite the 2.30:1 failure as a light-theme finding, not an absolute one."
+        },
+        {
+          "key": "form.datecell-background-disabled",
+          "value": "#ffffff",
+          "issue": "One of the 12 literal values in the dark block is a WHITE background, where every neighbouring surface resolves to #0c111b-#1f2a37. Looks like an oversight; DGA may intend a white date cell. Not captured above - form.* is outside the role scope - recorded here so the next harvest checks it.",
+          "status": "gap-in-extraction-method",
+          "action": "TODO(verify) against a rendered date picker."
+        }
+      ],
+      "text": {
+        "default": "#ffffff",
+        "display": "#f9fafb",
+        "primary-paragraph": "#f3f4f6",
+        "secondary-paragraph": "#e5e7eb",
+        "primary": "#1b8354",
+        "secondary": "#dba102",
+        "tertiary": "#80519f",
+        "primary-sa-flag": "#dff6e7",
+        "success": "#069454",
+        "info": "#156fee",
+        "warning": "#dc6803",
+        "error": "#b42318",
+        "primary-light": "#88d8ad",
+        "secondary-light": "#fae996",
+        "tertiary-light": "#ccadd9",
+        "oncolor-primary": "#ffffff",
+        "oncolor-secondary": "#161616cc",
+        "oncolor-tertiary": "#161616b2",
+        "default-disabled": "#9da4ae",
+        "default-oncolor-disabled": "#ffffff66"
+      },
+      "background": {
+        "white": "#0c111b",
+        "body": "#111927",
+        "menu": "#1f2a37",
+        "card": "#1f2a37",
+        "black": "#ffffff",
+        "surface-oncolor": "#ffffff",
+        "brand-light": "#f3fcf6",
+        "neutral-25": "#0c111b",
+        "neutral-50": "#111927",
+        "neutral-100": "#1f2a37",
+        "neutral-200": "#4d5761",
+        "neutral-300": "#6c727e",
+        "neutral-400": "#9da4ae",
+        "neutral-800": "#4d5761",
+        "primary": "#1b8354",
+        "primary-25": "#092a1e",
+        "primary-50": "#1b835419",
+        "primary-200": "#384250",
+        "primary-400": "#54c08a",
+        "secondary": "#dba102",
+        "secondary-25": "#111927",
+        "secondary-50": "#1f2a37",
+        "tertiary": "#6d428f",
+        "tertiary-25": "#111927",
+        "tertiary-50": "#1f2a37",
+        "success": "#069454",
+        "success-light": "#ecfdf3",
+        "success-25": "#111927",
+        "success-50": "#1f2a37",
+        "info": "#156fee",
+        "info-light": "#eff8ff",
+        "info-25": "#111927",
+        "info-50": "#1f2a37",
+        "warning": "#dc6803",
+        "warning-light": "#fffaeb",
+        "warning-25": "#111927",
+        "warning-50": "#1f2a37",
+        "error": "#d92c20",
+        "error-light": "#fef3f2",
+        "error-25": "#111927",
+        "error-50": "#1f2a37",
+        "sa-flag": "#1b8354",
+        "sa-flag-25": "#111927",
+        "sa-flag-50": "#1f2a37",
+        "disabled": "#384250",
+        "disabled-primary": "#166a45",
+        "inverse-disabled": "#384250"
+      }
+    }
+  },
+  "space": {
+    "$source": {
+      "documentedAt": "https://design.dga.gov.sa/guidelines/foundations/layout-and-spacing",
+      "valuesFrom": ":root CSS custom properties",
+      "retrieved": "2026-08-26",
+      "method": "live DOM extraction of CSS custom properties - verbatim, not transcribed"
+    },
+    "$verify": [
+      {
+        "key": "*",
+        "value": null,
+        "issue": "DGA's SEMANTIC spacing resolves per breakpoint; only one value each is public. Also, DGA's own .5 variables use U+2024 ONE DOT LEADER, not a full stop.",
+        "status": "unavailable-upstream",
+        "action": "Figma-only for the responsive values. TODO(harvest)."
+      }
+    ],
+    "$comment": "Numeric scale is 4px-based (the .5 steps use U+2024 ONE DOT LEADER in DGA's own var names, not a full stop — watch for this when generating CSS).",
+    "named": {
+      "none": "0px",
+      "xxs": "2px",
+      "xs": "4px",
+      "sm": "6px",
+      "md": "8px",
+      "lg": "12px",
+      "xl": "16px"
+    },
+    "numeric": {
+      "0": "0px",
+      "0.5": "2px",
+      "1": "4px",
+      "1.5": "6px",
+      "2": "8px",
+      "3": "12px",
+      "4": "16px",
+      "5": "20px",
+      "6": "24px",
+      "8": "32px",
+      "10": "40px",
+      "12": "48px",
+      "16": "64px",
+      "20": "80px",
+      "24": "96px",
+      "32": "128px",
+      "40": "160px",
+      "48": "192px",
+      "56": "224px",
+      "64": "256px",
+      "80": "320px",
+      "96": "384px",
+      "120": "480px",
+      "140": "560px",
+      "160": "640px",
+      "180": "720px",
+      "192": "768px",
+      "256": "1024px",
+      "320": "1280px",
+      "360": "1440px",
+      "400": "1600px",
+      "480": "1920px"
+    }
+  },
+  "radius": {
+    "$source": {
+      "documentedAt": null,
+      "valuesFrom": ":root CSS custom properties",
+      "retrieved": "2026-08-26",
+      "method": "live DOM extraction of CSS custom properties - verbatim, not transcribed",
+      "$note": "DGA publishes no standalone radius page. Values are from :root; the documenting page is unconfirmed. TODO(verify)."
+    },
+    "$verify": [
+      {
+        "key": "2xl / 3xl",
+        "value": "16px / 20px",
+        "issue": "Smaller than xl (24px). The t-shirt names are not an ordered scale.",
+        "status": "faithful-to-source",
+        "action": "Do not rely on the names as an ordering. Confirm with DGA."
+      },
+      {
+        "key": "*",
+        "value": null,
+        "issue": "DGA's SEMANTIC radius resolves differently on Desktop, Tablet and Mobile. The public CSS exposes one value each.",
+        "status": "unavailable-upstream",
+        "action": "Treating these as constants is wrong on two of three breakpoints. Figma-only. TODO(harvest)."
+      }
+    ],
+    "none": "0",
+    "xxs": "2px",
+    "xs": "2px",
+    "sm": "4px",
+    "md": "8px",
+    "lg": "16px",
+    "xl": "24px",
+    "2xl": "16px",
+    "3xl": "20px",
+    "4xl": "24px",
+    "full": "9999px",
+    "$note": "Not monotonic: 2xl (16px) and 3xl (20px) are smaller than xl (24px). Confirm with DGA before relying on the t-shirt names as an ordered scale."
+  },
+  "width": {
+    "$source": {
+      "documentedAt": "https://design.dga.gov.sa/guidelines/foundations/layout-and-spacing",
+      "valuesFrom": ":root CSS custom properties",
+      "retrieved": "2026-08-26",
+      "method": "live DOM extraction of CSS custom properties - verbatim, not transcribed"
+    },
+    "xxs": "320px",
+    "xs": "384px",
+    "sm": "480px",
+    "md": "560px",
+    "lg": "640px",
+    "xl": "768px",
+    "2xl": "1024px",
+    "3xl": "1280px",
+    "4xl": "1440px",
+    "5xl": "1600px",
+    "6xl": "1920px"
+  },
+  "container": {
+    "$source": {
+      "documentedAt": "https://design.dga.gov.sa/guidelines/foundations/layout-and-spacing",
+      "valuesFrom": ":root CSS custom properties",
+      "retrieved": "2026-08-26",
+      "method": "live DOM extraction of CSS custom properties - verbatim, not transcribed"
+    },
+    "padding-mobile": "16px",
+    "padding-desktop": "32px",
+    "max-width-desktop": "1280px",
+    "paragraph-max-width": "720px"
+  },
+  "shadow": {
+    "$source": {
+      "documentedAt": "https://design.dga.gov.sa/guidelines/foundations/elevation",
+      "valuesFrom": ":root CSS custom properties",
+      "retrieved": "2026-08-26",
+      "method": "live DOM extraction of CSS custom properties - verbatim, not transcribed"
+    },
+    "xs": "0px 1px 2px 0px rgba(16, 24, 40, .05)",
+    "sm": "0px 1px 2px 0px rgba(16, 24, 40, .06), 0px 1px 3px 0px rgba(16, 24, 40, .1)",
+    "md": "0px 2px 4px -2px rgba(16, 24, 40, .06), 0px 4px 8px -2px rgba(16, 24, 40, .1)",
+    "lg": "0px 4px 6px -2px rgba(16, 24, 40, .03), 0px 12px 16px -4px rgba(16, 24, 40, .08)",
+    "xl": "0px 8px 8px -4px rgba(16, 24, 40, .03), 0px 20px 24px -4px rgba(16, 24, 40, .08)",
+    "2xl": "0px 24px 48px -12px rgba(16, 24, 40, .18)",
+    "3xl": "0px 32px 64px -12px rgba(16, 24, 40, .14)"
+  },
+  "typography": {
+    "$source": {
+      "documentedAt": "https://design.dga.gov.sa/guidelines/foundations/typography",
+      "valuesFrom": ":root CSS custom properties",
+      "retrieved": "2026-08-26",
+      "method": "live DOM extraction of CSS custom properties - verbatim, not transcribed"
+    },
+    "$verify": [
+      {
+        "key": "scale.display-2xl … display-md",
+        "value": "-0.02em tracking (design spec says -2%)",
+        "issue": "Two hazards. (1) DGA publishes this as -2%, and CSS letter-spacing does not accept percentages - they were proposed in css-text-4 and never shipped, so a browser silently drops the declaration. tokens.json keeps -2% because it is what DGA publishes; generate-tokens.mjs converts it to -0.02em on the way out. (2) Arabic is a connected script - letter-spacing breaks the joins.",
+        "status": "confirmed-hazard",
+        "action": "Never emit -2% into CSS. The generator converts percentages to em; if you hand-write tracking anywhere, write -0.02em. Scope it to Latin or zero it under [dir=\"rtl\"] - tokens.css ships a guard rule. Do NOT \"fix\" this value in tokens.json: it is the harvested value and a re-harvest must diff clean."
+      },
+      {
+        "key": "$arabicBodyFace",
+        "value": null,
+        "issue": "DGA names only the Latin IBM Plex Sans and specifies no Arabic body face. IBM Plex Sans Arabic is the obvious intent but is not stated.",
+        "status": "dga-silent",
+        "action": "Confirm with DS-DGA@dga.gov.sa before locking the font stack. Do not assume."
+      }
+    ],
+    "$comment": "IBM Plex Sans for everything. Saudi Font (Ministry of Culture licence) is restricted to national/seasonal occasions, main headings only — never body or long-form. TODO(verify): DGA names only the Latin IBM Plex Sans and specifies no Arabic body face; confirm with DS-DGA@dga.gov.sa.",
+    "family": {
+      "primary": "IBM Plex Sans",
+      "occasion": "Saudi Font",
+      "arabic": null
+    },
+    "weights": {
+      "primary": [
+        "Regular",
+        "Medium",
+        "Semibold",
+        "Bold"
+      ],
+      "occasion": [
+        "Regular",
+        "Bold"
+      ]
+    },
+    "$trackingWarning": "-0.02em tracking (design spec says -2%; CSS letter-spacing does not accept percentages) on display-2xl..display-md must NEVER apply to Arabic — it is a connected script and letter-spacing breaks the joins.",
+    "scale": {
+      "display-2xl": {
+        "size": "72px",
+        "lineHeight": "90px",
+        "tracking": "-2%"
+      },
+      "display-xl": {
+        "size": "60px",
+        "lineHeight": "72px",
+        "tracking": "-2%"
+      },
+      "display-lg": {
+        "size": "48px",
+        "lineHeight": "60px",
+        "tracking": "-2%"
+      },
+      "display-md": {
+        "size": "36px",
+        "lineHeight": "44px",
+        "tracking": "-2%"
+      },
+      "display-sm": {
+        "size": "30px",
+        "lineHeight": "38px"
+      },
+      "display-xs": {
+        "size": "24px",
+        "lineHeight": "32px"
+      },
+      "text-xl": {
+        "size": "20px",
+        "lineHeight": "30px"
+      },
+      "text-lg": {
+        "size": "18px",
+        "lineHeight": "28px"
+      },
+      "text-md": {
+        "size": "16px",
+        "lineHeight": "24px"
+      },
+      "text-sm": {
+        "size": "14px",
+        "lineHeight": "20px"
+      },
+      "text-xs": {
+        "size": "12px",
+        "lineHeight": "18px"
+      },
+      "text-2xs": {
+        "size": "10px",
+        "lineHeight": "14px",
+        "$warning": "10px — non-essential metadata only, never content a user must read"
+      }
+    }
+  },
+  "iconography": {
+    "$source": {
+      "documentedAt": "https://design.dga.gov.sa/guidelines/foundations/iconography",
+      "valuesFrom": ":root CSS custom properties",
+      "retrieved": "2026-08-26",
+      "method": "live DOM extraction of CSS custom properties - verbatim, not transcribed"
+    },
+    "$comment": "Platforms Code Icons — bundled in all DGA packages, no separate install.",
+    "size": {
+      "xs": [
+        10,
+        14,
+        16
+      ],
+      "sm": [
+        18,
+        20
+      ],
+      "md": [
+        24
+      ],
+      "lg": [
+        28,
+        32
+      ]
+    },
+    "$standard": 24,
+    "$minTouchTarget": "44px",
+    "avatarSize": {
+      "sm": [
+        24,
+        32
+      ],
+      "md": [
+        40,
+        48
+      ],
+      "lg": [
+        64,
+        80,
+        120
+      ]
+    }
+  },
+  "motion": {
+    "$source": {
+      "documentedAt": null,
+      "valuesFrom": "none - no motion tokens exist in :root or on any page",
+      "retrieved": "2026-08-26",
+      "method": "searched for and not found - a documented absence, not an omission"
+    },
+    "$status": "DGA publishes no durations or easings.",
+    "$required": "prefers-reduced-motion IS required — stated on Filtration, Loading and Skeleton pages.",
+    "$flashLimit": "no more than 3 flashes per second (Loading page)"
+  },
+  "breakpoint": {
+    "$source": {
+      "documentedAt": "https://design.dga.gov.sa/guidelines/foundations/layout-and-spacing",
+      "valuesFrom": ":root CSS custom properties",
+      "retrieved": "2026-08-26",
+      "method": "live DOM extraction of CSS custom properties - verbatim, not transcribed"
+    },
+    "mobile": {
+      "min": 0,
+      "max": 599,
+      "token": 600
+    },
+    "tablet": {
+      "min": 600,
+      "max": 959,
+      "token": 960
+    },
+    "desktop": {
+      "min": 960,
+      "max": 1279,
+      "token": 1280
+    },
+    "xl": {
+      "min": 1280,
+      "token": 1280
+    }
+  },
+  "grid": {
+    "$source": {
+      "documentedAt": "https://design.dga.gov.sa/guidelines/foundations/layout-and-spacing",
+      "valuesFrom": ":root CSS custom properties",
+      "retrieved": "2026-08-26",
+      "method": "live DOM extraction of CSS custom properties - verbatim, not transcribed"
+    },
+    "columns": {
+      "desktop": 12,
+      "small": "2-4"
+    },
+    "$note": "gutter and margin values not published as CSS variables; see PC 1.0 Figma"
+  }
+}

@@ -27,6 +27,17 @@ or Angular kit, plain CSS, or DGA's own React package.
 > exact; what they mean is a reading. [COVERAGE.md](COVERAGE.md) lists every known gap and
 > unverified claim, including where DGA's own published pages are defective.
 
+## Try the showcase
+
+[**Live demo: وصل · Wasl**](https://mohamedsamy911.github.io/dga-kit/) ·
+[English](https://mohamedsamy911.github.io/dga-kit/?lang=en) ·
+[Source and local setup](showcase/README.md)
+
+An Arabic-first, bilingual fictional service portal built with the kit: explore services,
+complete a simulated request, and try keyboard navigation and accessibility controls.
+**Not a government service or evidence of compliance.** Use fictional details only; requests
+stay in memory and disappear on refresh. The demo runs independently of Claude Code and Codex.
+
 ## Install
 
 **One command. Everything, for whatever you have installed.**
@@ -267,7 +278,8 @@ evals/      23 eval cases across two suites, run by `claude plugin eval`:
               validate-fixtures.py      the kit against its own tokens, evidence and prose
               check-quote-fidelity.py   the DGA quotes a capture covers (14 of 92 today)
               test-automation.py        whether the monitoring detects what it claims to
-.github/    CI on push, and the weekly freshness sentinel
+showcase/   fictional Arabic/English React demo; separate dependencies, tests and build
+.github/    plugin CI, the weekly freshness sentinel, and showcase Pages deployment
 ```
 
 ## Prior and parallel work
@@ -289,6 +301,11 @@ If you want one focused skill rather than eleven, look there first.
 The most useful contributions are **corrections with a citation**. If a rule here does not match
 what DGA publishes, open an issue with the URL and what it says. Second most useful: token
 re-harvests when DGA updates (`dga-tokens-sync` does the diff).
+
+For demo changes, see [showcase setup and checks](showcase/README.md) and the
+[Pages publishing guide](showcase/docs/PUBLISHING.md). Keep its dependencies separate from
+the root package, preserve the fictional-demo disclosure, and test the production `/dga-kit/`
+path in both languages before publishing.
 
 **Reporting a problem:** see [SECURITY.md](SECURITY.md). A factual error in a compliance rule is
 treated with the same priority as a security bug, because a platform shipping on a wrong rule
