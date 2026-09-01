@@ -20,6 +20,7 @@ The source material below was read from the installed kit's references. This bui
 | Focus and native form semantics | Kit `accessibility.md`, plus [WCAG 2.1](https://www.w3.org/TR/WCAG21/) fallback where DGA is silent |
 | No official registration stamp | **Demo boundary.** No entity registration/license was supplied. Fabricating one would misrepresent official verification. |
 | High-contrast mode | **Project choice.** Uses tested semantic pairings; never activates DGA's upstream dark theme. |
+| Dark mode | **Project choice.** A complete showcase-specific semantic palette built from harvested primitives; it never activates DGA's published dark roles. |
 | Abstract geometric Wasl brand/hero | **Fictional project identity.** No DGA or government emblem and no official affiliation. |
 
 ## Tokens and contrast
@@ -29,6 +30,14 @@ The source material below was read from the installed kit's references. This bui
 DGA's published `text.secondary` is gold `#dba102` and measures approximately **2.30:1 on white**. The showcase does not use it as text on a light surface. The raw data still retains that value so it remains an honest harvest.
 
 `dga-upstream-contrast.json` is an audit of **DGA's token table**, not of the application. Its failures are upstream evidence, not a green build gate. The app instead checks its own theme choices and rendered pages. DGA's published dark values remain audit-only; high contrast is independently authored here.
+
+## Project dark mode
+
+DGA publishes dark declarations, but the installed kit records that their selector is unreachable and that five light status surfaces have no dark equivalent. The showcase therefore does not enable or repair those upstream roles. Its `data-theme="dark"` block is a clearly labeled project palette mapped through the same semantic aliases as light mode. Components never select primitive colors directly.
+
+The footer toggle is bilingual, keyboard operable, and exposes its state with `aria-pressed`. The selection lives only in React memory: routes and language changes preserve it, while a reload returns to light mode in line with the demo's no-persistence boundary. Native controls receive the matching CSS `color-scheme`.
+
+Dark mode and high contrast are independent settings. High contrast follows the dark block in the cascade and temporarily takes visual precedence, while `data-theme="dark"` remains selected. Turning high contrast off restores the selected dark palette. This behavior and the full dark route set are browser-tested in Arabic and English at mobile and desktop widths.
 
 ## Footer button states
 

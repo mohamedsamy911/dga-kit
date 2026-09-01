@@ -1,6 +1,8 @@
 /* Project semantic aliases over the unmodified DGA harvest. Component recipes are
    project choices, not additional DGA tokens. See the showcase About page. */
 :root {
+  color-scheme: light;
+  --color-page: var(--dga-background-white);
   --color-text: var(--dga-text-default);
   --color-muted: var(--dga-color-neutral-600);
   --color-subtle: var(--dga-color-neutral-600);
@@ -48,8 +50,55 @@
   --page-max: 1280px;
 }
 
-/* Deliberate project high-contrast mode. Not the published DGA dark theme. */
+/* Project-authored dark mode. The upstream DGA dark declarations are deliberately
+   not enabled: the kit carries them for audit only and documents unusable pairings. */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --color-page: var(--dga-color-neutral-950);
+  --color-text: var(--dga-color-neutral-100);
+  --color-muted: var(--dga-color-neutral-300);
+  --color-subtle: var(--dga-color-neutral-300);
+  --color-surface: var(--dga-color-neutral-900);
+  --color-surface-subtle: var(--dga-color-neutral-800);
+  --color-surface-brand: var(--dga-color-brand-950);
+  --color-surface-warm: var(--dga-color-secondary-gold-950);
+  --color-brand: var(--dga-color-brand-300);
+  --color-brand-hover: var(--dga-color-brand-200);
+  --color-brand-pressed: var(--dga-color-brand-100);
+  --color-border: var(--dga-color-neutral-500);
+  --color-border-strong: var(--dga-color-neutral-400);
+  --color-on-brand: var(--dga-color-neutral-950);
+  --color-accent: var(--dga-color-secondary-gold-300);
+  --color-accent-surface: var(--dga-color-secondary-gold-950);
+  --color-danger: var(--dga-color-error-300);
+  --color-danger-surface: var(--dga-color-error-950);
+  --color-footer: var(--dga-color-brand-950);
+  --color-footer-text: var(--dga-color-neutral-100);
+  --color-footer-muted: var(--dga-color-brand-200);
+  --color-footer-border: var(--dga-color-brand-400);
+  --color-footer-button-border: var(--dga-color-brand-300);
+  --color-footer-button-hover: var(--dga-color-brand-800);
+  --color-footer-button-pressed: var(--dga-color-brand-900);
+  --color-footer-button-disabled-text: var(--dga-color-brand-300);
+  --color-footer-button-disabled-border: var(--dga-color-brand-400);
+  --color-footer-button-selected-hover: var(--dga-color-brand-100);
+  --color-footer-button-selected-pressed: var(--dga-color-brand-200);
+  --color-focus: var(--dga-color-brand-300);
+  --color-art: var(--dga-color-brand-500);
+  --color-art-strong: var(--dga-color-brand-300);
+  --color-art-dark: var(--dga-color-brand-950);
+  --color-lavender: var(--dga-color-tertiary-lavendar-300);
+  --color-lavender-surface: var(--dga-color-tertiary-lavendar-950);
+  --color-disabled: var(--dga-color-neutral-400);
+  --color-disabled-surface: var(--dga-color-neutral-800);
+  --shadow-card: none;
+}
+
+/* Deliberate project high-contrast mode. It follows the dark block so it takes
+   visual precedence while preserving data-theme and the user's theme choice. */
 :root[data-contrast='high'] {
+  color-scheme: light;
+  --color-page: var(--dga-background-white);
   --color-text: var(--dga-color-neutral-950);
   --color-muted: var(--dga-color-neutral-900);
   --color-subtle: var(--dga-color-neutral-900);

@@ -1,24 +1,26 @@
 # Verification record
 
-Verified locally on 2026-08-31, Windows, Node.js 22.17.1 and Playwright Chromium. This is an engineering check of a fictional showcase, not DGA certification or a full WCAG conformance claim.
+Verified locally through 2026-09-01, Windows, Node.js 22.17.1 and Playwright Chromium. This is an engineering check of a fictional showcase, not DGA certification or a full WCAG conformance claim.
 
 ## Build and theme
 
 - Clean dependency install and production TypeScript/Vite build completed in the delivered project.
-- The theme guard checks 12 source files and 78 CSS references. Its deliberately broken examples are detected.
-- The vendored DGA token stylesheet is unchanged. Semantic aliases, including the footer color fix, live in the project theme.
+- The theme guard checks 12 source files and 84 CSS references. Its deliberately broken examples are detected.
+- The vendored DGA token stylesheet is unchanged. Semantic aliases, including the footer color fix and project-authored dark palette, live in the project theme.
+- The guard rejects a dark block that silently inherits any light color alias; its incomplete-theme example is deliberately detected.
 - Codex reports dga-kit 0.7.2 installed and enabled; the bundled plugin validator passed. The actual `dga-frontend-dev` agent authored the UI and the footer state fix.
 
 ## Browser checks
 
-All **21 Playwright tests passed** against the production build served under `/dga-kit/`
-(1.2 minutes on the integration run). They cover:
+All **28 Playwright tests passed** against the production build served under `/dga-kit/`
+(1.5 minutes on the final integration run). They cover:
 
 - Six main routes in Arabic and English at 390px and 1440px, with axe WCAG 2 A/AA and 2.1 A/AA checks and no horizontal overflow.
 - Search/filter/reset, invalid fields and linked error summaries, correction, review/edit/confirmation, and session-local request tracking in both languages.
 - Empty, unknown-reference, simulated connection-error, and retry tracking states.
 - Language switching without losing unfinished input, first-Tab skip navigation, mobile menu, 44px control targets, footer control ordering, and feedback submission.
 - High contrast and text resizing; English reflow at 320/600/960/1280px with the app's 120% text setting.
+- Dark mode across all six main routes in Arabic and English at 390px and 1440px, including axe checks, no horizontal overflow, native `color-scheme`, session-only behavior, and high-contrast precedence/restoration.
 - Real resolved button colors in both languages and contrast modes: resting, hover, pressed, selected, focus-visible, and disabled text-size limits. Disabled primary feedback buttons stay unchanged on hover. JSON measurements are attached to these test results.
 - No duplicate header/footer after navigation; no runtime errors in the tested paths; no external requests during the application journey.
 - JavaScript, CSS, favicon, and font requests stay under the GitHub Pages project path and
@@ -43,6 +45,6 @@ Machine-readable evidence is in `docs/audits/`.
 
 ## Manual evidence and limits
 
-Desktop/mobile Arabic and English layouts were visually inspected during implementation. Keyboard focus, validation transitions, and navigation were exercised. Automated color checks additionally protect the faint disabled button reported by the user.
+Desktop/mobile Arabic and English layouts were visually inspected during implementation, including the dark hero, service cards, feedback region, forms, and footer controls. Keyboard focus, validation transitions, and navigation were exercised. Automated color checks additionally protect the faint disabled button reported by the user and all footer states in light, dark, and high-contrast modes.
 
 Not completed: Arabic screen-reader pronunciation and full assistive-technology review, Safari/Firefox, real mobile devices, OS forced-colors, 200% browser zoom, or an independent DGA design/launch audit. Pa11y and Lighthouse do not cover every route/state. Real identity, registration, legal policies, and government integrations are outside this demo's scope. There is no production backend. Public hosting is a static demonstration only; see [publishing and live verification](PUBLISHING.md).

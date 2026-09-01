@@ -36,7 +36,7 @@ Open [the production preview](http://127.0.0.1:4173/dga-kit/). The output is `sh
 3. Start a demo request. Submit empty fields to see linked validation errors, then use fictional details to continue through review and confirmation.
 4. Track the demo reference **WASL-2026-1042**, or the reference generated during this session. Try an unknown reference as well.
 5. Switch Arabic/English, resize to a phone, navigate using Tab, and activate the skip link.
-6. Use the footer's text-size and high-contrast controls and try page feedback.
+6. Use the footer's text-size, dark-mode, and high-contrast controls and try page feedback.
 7. Open **About the kit** to see which skills inform the experience and where the kit's coverage stops.
 
 Requests and feedback exist only in memory and disappear on refresh. Nothing is sent to a government agency or external service. No analytics or tracking SDK is included.
@@ -84,6 +84,6 @@ Run the checks from `showcase/`. The browser suite starts its own production pre
 
 - No real authentication, Nafath integration, payment, document upload, government API, or request persistence.
 - No fabricated Digital Stamp, registration number, government emblem, or official identity.
-- The high-contrast mode is a project accessibility mode, **not** DGA's published dark theme.
+- Dark and high-contrast modes are project-authored settings; they do **not** enable DGA's published, unusable dark theme.
 - Production use needs an entity-specific design review, privacy/security review, backend, appropriate registration/integrations, and manual assistive-technology testing.
 - Kit coverage is a dated harvest: **50 component specifications, all 19 templates, and 303 consumable token values, as of 2026-08-27**. It is not a claim that this app implements every component or that all live DGA material has been verified today.

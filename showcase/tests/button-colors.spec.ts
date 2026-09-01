@@ -51,19 +51,21 @@ async function expectDisabledStable(page: Page, button: Locator) {
 }
 
 for (const locale of ['ar', 'en']) {
-  for (const highContrast of [false, true]) {
-    test(`${locale}: footer button colors in ${highContrast ? 'high' : 'standard'} contrast`, async ({ page }, testInfo) => {
+  for (const mode of ['standard', 'dark', 'high'] as const) {
+    test(`${locale}: footer button colors in ${mode} mode`, async ({ page }, testInfo) => {
       const t = (ar: string, en: string) => locale === 'ar' ? ar : en
       await page.goto(`./?lang=${locale}#/`)
       const footer = page.getByRole('contentinfo')
       const contrast = footer.getByRole('button', { name: t('تباين عالٍ', 'High contrast') })
+      const theme = footer.getByRole('button', { name: new RegExp(t('الوضع الداكن', 'Dark mode')) })
       const increase = footer.getByRole('button', { name: t('تكبير حجم الخط', 'Increase text size') })
       const decrease = footer.getByRole('button', { name: t('تصغير حجم الخط', 'Decrease text size') })
       const reset = footer.getByRole('button', { name: t('إعادة حجم الخط إلى 100 بالمئة', 'Reset text size to 100 percent') })
-      if (highContrast) await contrast.click()
+      if (mode === 'dark') await theme.click()
+      if (mode === 'high') await contrast.click()
       await expectDisabledStable(page, decrease)
       const measurements: object[] = []
-      for (const button of [increase, reset, contrast]) {
+      for (const button of [increase, reset, contrast, theme]) {
         await page.mouse.move(0, 0)
         const resting = await colors(button)
         expect(resting.textRatio).toBeGreaterThanOrEqual(4.5)

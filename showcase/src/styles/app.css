@@ -1,6 +1,6 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-block: 24px; }
-body { margin: 0; background: var(--color-surface); color: var(--color-text); font-family: var(--font-body); font-size: 1rem; line-height: 1.65; font-synthesis: none; }
+body { margin: 0; background: var(--color-page); color: var(--color-text); font-family: var(--font-body); font-size: 1rem; line-height: 1.65; font-synthesis: none; }
 body:dir(rtl) { font-family: var(--font-arabic); }
 button, input, textarea, select { font: inherit; }
 button, a, input, textarea, summary { -webkit-tap-highlight-color: transparent; }
@@ -187,19 +187,19 @@ input[type='search']::-webkit-search-cancel-button { display: none; }
 .site-footer button:focus-visible, .site-footer a:focus-visible { outline-color: var(--color-footer-text); }
 .accessibility-tools { display: flex; align-items: center; gap: 32px; padding-block: 24px; border-block-end: 1px solid var(--color-footer-border); }
 .footer-tools-title { display: flex; align-items: center; gap: 10px; font-size: .875rem; font-weight: 500; margin-inline-end: auto; }
-.tool-group { display: flex; align-items: center; gap: 4px; }
+.tool-group, .preference-group { display: flex; align-items: center; gap: 4px; }
 .tool-group > span { font-size: .75rem; margin-inline-end: 8px; }
-.site-footer :is(.footer-icon-button, .font-reset, .contrast-button) { display: inline-flex; align-items: center; justify-content: center; min-block-size: 44px; min-inline-size: 44px; color: var(--color-footer-text); border: 1px solid var(--color-footer-button-border); background: var(--color-footer); border-radius: var(--radius-sm); }
+.site-footer :is(.footer-icon-button, .font-reset, .contrast-button, .theme-button) { display: inline-flex; align-items: center; justify-content: center; min-block-size: 44px; min-inline-size: 44px; color: var(--color-footer-text); border: 1px solid var(--color-footer-button-border); background: var(--color-footer); border-radius: var(--radius-sm); }
 .site-footer .font-reset { min-inline-size: 64px; font-size: .8125rem; }
-.contrast-button { padding-inline: 14px; gap: 8px; font-size: .75rem; }
-.site-footer :is(.footer-icon-button, .font-reset, .contrast-button):not(:disabled):hover { background: var(--color-footer-button-hover); }
-.site-footer :is(.footer-icon-button, .font-reset, .contrast-button):not(:disabled):active { background: var(--color-footer-button-pressed); }
-.site-footer .contrast-button[aria-pressed='true']:not(:disabled) { color: var(--color-footer); background: var(--color-footer-text); border-color: var(--color-footer-text); }
-.site-footer .contrast-button[aria-pressed='true']:not(:disabled):hover { background: var(--color-footer-button-selected-hover); }
-.site-footer .contrast-button[aria-pressed='true']:not(:disabled):active { background: var(--color-footer-button-selected-pressed); }
+.contrast-button, .theme-button { padding-inline: 14px; gap: 8px; font-size: .75rem; }
+.site-footer :is(.footer-icon-button, .font-reset, .contrast-button, .theme-button):not(:disabled):hover { background: var(--color-footer-button-hover); }
+.site-footer :is(.footer-icon-button, .font-reset, .contrast-button, .theme-button):not(:disabled):active { background: var(--color-footer-button-pressed); }
+.site-footer :is(.contrast-button, .theme-button)[aria-pressed='true']:not(:disabled) { color: var(--color-footer); background: var(--color-footer-text); border-color: var(--color-footer-text); }
+.site-footer :is(.contrast-button, .theme-button)[aria-pressed='true']:not(:disabled):hover { background: var(--color-footer-button-selected-hover); }
+.site-footer :is(.contrast-button, .theme-button)[aria-pressed='true']:not(:disabled):active { background: var(--color-footer-button-selected-pressed); }
 /* Disabled legibility is a project quality choice. A dashed boundary distinguishes
    unavailable controls without washing out their icon or inheriting a light fill. */
-.site-footer :is(.footer-icon-button, .font-reset, .contrast-button):disabled { color: var(--color-footer-button-disabled-text); background: var(--color-footer); border-color: var(--color-footer-button-disabled-border); border-style: dashed; opacity: 1; cursor: not-allowed; }
+.site-footer :is(.footer-icon-button, .font-reset, .contrast-button, .theme-button):disabled { color: var(--color-footer-button-disabled-text); background: var(--color-footer); border-color: var(--color-footer-button-disabled-border); border-style: dashed; opacity: 1; cursor: not-allowed; }
 .footer-main { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 64px; padding-block: 44px; }
 .footer-brand .brand { color: var(--color-footer-text); }
 .footer-brand .brand-descriptor { display: none; }
@@ -529,7 +529,8 @@ input[type='search']::-webkit-search-cancel-button { display: none; }
   .feedback-form-bottom .button { inline-size: 100%; }
   .accessibility-tools { flex-wrap: wrap; gap: 12px; padding-block: 24px; }
   .footer-tools-title { inline-size: 100%; font-size: .875rem; margin-block-end: 4px; }
-  .contrast-button { margin-inline-start: auto; font-size: .6875rem; padding-inline: 12px; }
+  .preference-group { margin-inline-start: auto; }
+  .contrast-button, .theme-button { font-size: .6875rem; padding-inline: 12px; }
   .footer-main { grid-template-columns: minmax(0, 1fr); gap: 28px; padding-block: 32px; }
   .footer-brand p { max-inline-size: 340px; }
   .footer-links h2 { margin-block-end: 8px; }

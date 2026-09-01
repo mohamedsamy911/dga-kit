@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Accessibility, ArrowUpRight, Check, Contrast, Globe2, Info, Menu, Minus, Plus, X } from 'lucide-react';
+import { Accessibility, ArrowUpRight, Check, Contrast, Globe2, Info, Menu, Minus, Moon, Plus, Sun, X } from 'lucide-react';
 import { PAGE_UPDATED, PLATFORM_UPDATED } from '../data';
 import { useI18n } from '../i18n';
 import { Brand } from './ui';
@@ -42,12 +42,16 @@ export function Feedback() {
   </div></section>;
 }
 
-export function Footer({ fontScale, contrast, onFontScale, onContrast }: { fontScale: number; contrast: boolean; onFontScale: (value: number) => void; onContrast: () => void }) {
+export function Footer({ fontScale, theme, contrast, onFontScale, onTheme, onContrast }: { fontScale: number; theme: 'light' | 'dark'; contrast: boolean; onFontScale: (value: number) => void; onTheme: () => void; onContrast: () => void }) {
   const { t, date, number } = useI18n();
   return <footer className="site-footer"><div className="container">
     <div className="accessibility-tools"><div className="footer-tools-title"><Accessibility size={22} aria-hidden="true" /><span>{t('تجربة تناسب الجميع', 'An experience for everyone')}</span></div>
       <div className="tool-group" role="group" aria-label={t('حجم الخط', 'Text size')}><span>{t('حجم الخط', 'Text size')}</span><button type="button" className="footer-icon-button" disabled={fontScale === 100} onClick={() => onFontScale(Math.max(100, fontScale - 10))} aria-label={t('تصغير حجم الخط', 'Decrease text size')}><Minus size={18} aria-hidden="true" /></button><button type="button" className="font-reset" onClick={() => onFontScale(100)} aria-label={t('إعادة حجم الخط إلى 100 بالمئة', 'Reset text size to 100 percent')}><bdi>{number(fontScale)}%</bdi></button><button type="button" className="footer-icon-button" disabled={fontScale === 120} onClick={() => onFontScale(Math.min(120, fontScale + 10))} aria-label={t('تكبير حجم الخط', 'Increase text size')}><Plus size={18} aria-hidden="true" /></button></div>
-      <button type="button" className="contrast-button" onClick={onContrast} aria-pressed={contrast}><Contrast size={20} aria-hidden="true" />{t('تباين عالٍ', 'High contrast')}{contrast && <Check size={16} aria-hidden="true" />}</button>
+      <div className="preference-group" role="group" aria-label={t('مظهر المنصة', 'Display appearance')}>
+        <button type="button" className="contrast-button" onClick={onContrast} aria-pressed={contrast}><Contrast size={20} aria-hidden="true" />{t('تباين عالٍ', 'High contrast')}{contrast && <Check size={16} aria-hidden="true" />}</button>
+        <button type="button" className="theme-button" onClick={onTheme} aria-pressed={theme === 'dark'} aria-label={theme === 'dark' ? t('الوضع الداكن: مفعّل', 'Dark mode: on') : t('الوضع الداكن: غير مفعّل', 'Dark mode: off')} aria-describedby={contrast ? 'theme-contrast-note' : undefined}>{theme === 'dark' ? <Moon size={20} aria-hidden="true" /> : <Sun size={20} aria-hidden="true" />}{theme === 'dark' ? t('داكن', 'Dark') : t('فاتح', 'Light')}</button>
+      </div>
+      {contrast && <span className="sr-only" id="theme-contrast-note" role="status">{t('التباين العالي يعلو مؤقتًا على ألوان الوضع المختار. سيعود الوضع الداكن عند إيقاف التباين العالي.', 'High contrast temporarily overrides the selected theme colors. Dark mode will return when high contrast is turned off.')}</span>}
     </div>
     <div className="footer-main"><div className="footer-brand"><Brand compact /><p>{t('تفاصيل مدروسة. وصول أسهل. نموذج مفتوح لتجربة الخدمات الرقمية، مبني بإضافة dga-kit.', 'Thoughtful details. Easier access. An open digital services showcase, built with the dga-kit plugin.')}</p><span className="footer-demo-label">{t('نموذج تجريبي غير رسمي', 'Unofficial demonstration')}</span></div>
       <div className="footer-links"><h2>{t('استكشف وصل', 'Explore WASL')}</h2><a href="#/services">{t('جميع الخدمات', 'All services')}</a><a href="#/track">{t('متابعة طلب تجريبي', 'Track a demo request')}</a><a href="#/about">{t('كيف بُنيت التجربة', 'How the showcase was built')}</a></div>

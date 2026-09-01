@@ -16,6 +16,7 @@ export function App() {
   const [locale, setLocale] = useState<Locale>(() => new URLSearchParams(window.location.search).get('lang') === 'en' ? 'en' : 'ar');
   const [location, setLocation] = useState(readLocation);
   const [fontScale, setFontScale] = useState(100);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [contrast, setContrast] = useState(false);
   const [requests, setRequests] = useState<DemoRequest[]>([]);
   const nextReference = useRef(2001);
@@ -35,8 +36,11 @@ export function App() {
   }, [locale]);
   useEffect(() => {
     document.documentElement.style.fontSize = `${fontScale}%`;
+    document.documentElement.dataset.theme = theme;
     document.documentElement.dataset.contrast = contrast ? 'high' : 'standard';
-  }, [fontScale, contrast]);
+    // High contrast has CSS precedence while active. The independent theme state
+    // remains selected and is revealed again when high contrast is switched off.
+  }, [fontScale, theme, contrast]);
   useEffect(() => {
     if (previousLocation.current !== location) { main.current?.focus(); window.scrollTo({ top: 0, behavior: 'instant' }); }
     previousLocation.current = location;
@@ -62,7 +66,7 @@ export function App() {
   else if (route === '/about') page = <AboutPage />;
   else if (route === '/privacy' || route === '/accessibility') page = <InformationPage kind={route === '/privacy' ? 'privacy' : 'accessibility'} />;
   else page = <NotFound />;
-  return <LocaleProvider locale={locale}><Header key={`header:${route}`} route={route} onLanguage={() => setLocale(value => value === 'ar' ? 'en' : 'ar')} /><main id="main-content" ref={main} tabIndex={-1}><div key={location}>{page}</div></main><Feedback key={`feedback:${location}`} /><Footer fontScale={fontScale} contrast={contrast} onFontScale={setFontScale} onContrast={() => setContrast(value => !value)} /></LocaleProvider>;
+  return <LocaleProvider locale={locale}><Header key={`header:${route}`} route={route} onLanguage={() => setLocale(value => value === 'ar' ? 'en' : 'ar')} /><main id="main-content" ref={main} tabIndex={-1}><div key={location}>{page}</div></main><Feedback key={`feedback:${location}`} /><Footer fontScale={fontScale} theme={theme} contrast={contrast} onFontScale={setFontScale} onTheme={() => setTheme(value => value === 'light' ? 'dark' : 'light')} onContrast={() => setContrast(value => !value)} /></LocaleProvider>;
 }
 
 function NotFound() {

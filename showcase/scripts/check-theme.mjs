@@ -27,6 +27,24 @@ assert.deepEqual(findings('.x { color: #fff; }', 'src/styles/app.css'), ['color 
 assert.deepEqual(findings('.x { color: var(--dga-color-brand-600); }', 'src/styles/app.css'), ['primitive color outside theme']);
 assert.deepEqual(findings('.x { margin-left: 1rem; }', 'src/styles/app.css'), ['physical directional CSS']);
 
+function variablesInBlock(source, marker) {
+  const start = source.indexOf(marker);
+  if (start < 0) return new Set();
+  const open = source.indexOf('{', start);
+  const close = source.indexOf('}', open);
+  return new Set([...source.slice(open + 1, close).matchAll(/(--[\w-]+)\s*:/g)].map(match => match[1]));
+}
+
+function missingModeColors(source, marker) {
+  const base = variablesInBlock(source, ':root {');
+  const mode = variablesInBlock(source, marker);
+  return [...base].filter(name => name.startsWith('--color-') && !mode.has(name));
+}
+
+// Break test: a theme mode that silently inherits one light color must fail.
+const incompleteMode = ":root { --color-a: red; --color-b: blue; } :root[data-theme='dark'] { --color-a: green; }";
+assert.deepEqual(missingModeColors(incompleteMode, ":root[data-theme='dark'] {"), ['--color-b']);
+
 function files(directory) {
   return readdirSync(path.join(root, directory), { withFileTypes: true }).flatMap(entry => {
     const next = `${directory}/${entry.name}`;
@@ -37,10 +55,12 @@ function files(directory) {
 const sources = files('src').filter(file => /\.(?:css|tsx)$/.test(file) && file !== generated);
 assert(sources.includes(theme), 'Theme layer must exist');
 assert(sources.includes('src/styles/app.css'), 'Application stylesheet must exist');
+const themeSource = readFileSync(path.join(root, theme), 'utf8');
 const original = readFileSync(path.join(root, generated), 'utf8').replaceAll('\r\n', '\n');
 assert.equal(createHash('sha256').update(original).digest('hex'), tokenHash, 'Generated DGA tokens changed; update through a reviewed kit upgrade');
 
 const errors = sources.flatMap(file => findings(readFileSync(path.join(root, file), 'utf8'), file).map(error => `${file}: ${error}`));
+for (const name of missingModeColors(themeSource, ":root[data-theme='dark'] {")) errors.push(`Dark theme silently inherits light alias: ${name}`);
 const css = [generated, ...sources.filter(file => file.endsWith('.css'))].map(file => readFileSync(path.join(root, file), 'utf8')).join('\n').replace(/\/\*[\s\S]*?\*\//g, '');
 const declared = new Set([...css.matchAll(/(--[\w-]+)\s*:/g)].map(match => match[1]));
 const referenced = new Set([...css.matchAll(/var\(\s*(--[\w-]+)/g)].map(match => match[1]));
