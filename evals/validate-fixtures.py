@@ -349,7 +349,7 @@ if os.path.exists(_inv_path):
         _n_comp == _inv['contracts']['components'] == 50,
         f"{_n_comp} routes vs contract {_inv['contracts']['components']}")
     chk('inventory: template routes match the declared contract',
-        len(_by_cat['template']['routes']) == _inv['contracts']['templates'] == 19)
+        len(_by_cat['template']['routes']) == _inv['contracts']['templates'] == 21)
     chk('inventory: foundation routes match the declared contract',
         len(_by_cat['foundation']['routes']) == _inv['contracts']['foundations'] == 5)
     # Thoughts are listed one source per article, not as a group: the six have genuinely
@@ -695,10 +695,11 @@ if os.path.exists(_inv_path):
     # STRUCTURAL. They prove the manifests keep the shape a known-good dual-target plugin uses;
     # they do not by themselves prove Claude Code loads the plugin.
     #
-    # The Codex half is no longer merely structural, and this comment used to say it was: Codex
-    # publishes its contract locally in the plugin-creator system skill shipped with its CLI, and
-    # the `codex:` checks further down run against it. This repo's manifest passes Codex's own
-    # scripts/validate_plugin.py.
+    # The Codex half: Codex published its contract locally in the plugin-creator system skill,
+    # and the `codex:` checks further down were written against it; this repo's manifest passed
+    # its scripts/validate_plugin.py on 2026-08-28. Codex 0.160.1 no longer ships that skill, so
+    # these checks are now the last published contract, kept as repository policy - stricter than
+    # what Codex enforces today. evals/test-codex-discovery.py covers the runtime half.
     #
     # Evidence, re-fetched 2026-08-28 from tag v4.9.0 (the current release; this comment
     # previously cited 4.8.4, the locally installed copy, which had fallen a minor behind).
@@ -748,8 +749,8 @@ if os.path.exists(_inv_path):
     # plugin-creator system skill that ships with its CLI
     # (~/.codex/skills/.system/plugin-creator/references/plugin-json-spec.md, "Repo/team plugin:
     # <repo-root>/.agents/plugins/marketplace.json"), and ponytail - installed and working as a
-    # Codex git marketplace - ships exactly this file. The repo's manifest passes Codex's own
-    # scripts/validate_plugin.py.
+    # Codex git marketplace - ships exactly this file. (validate_plugin.py, which the manifest
+    # passed on 2026-08-28, no longer ships with Codex; see test-codex-discovery.py.)
     _cx = json.load(open(os.path.join(ROOT, '.agents/plugins/marketplace.json'), encoding='utf-8'))
     chk('codex: the marketplace catalogue exists and names this plugin',
         _cx['name'] == 'dga-kit' and _cx['plugins'][0]['name'] == _xp['name'],
@@ -777,18 +778,18 @@ if os.path.exists(_inv_path):
         _pol_bad.append('category missing')
     chk('codex: policy values are inside their documented enumerations', not _pol_bad,
         str(_pol_bad))
-    # Every field Codex's validate_plugin.py requires. Pinned so a manifest edit cannot quietly
-    # drop one and break installation for every Codex user.
+    # Every field Codex's validate_plugin.py required while it shipped. Codex 0.160.1 installs
+    # without them, but the UI reads them, so they stay pinned as policy.
     _req_iface = ('displayName', 'shortDescription', 'longDescription', 'developerName',
                   'category', 'capabilities')
     _missing_iface = [k for k in _req_iface if not _xp.get('interface', {}).get(k)]
     chk('codex: the manifest carries every interface field the validator requires',
         not _missing_iface and (_xp['interface'].get('defaultPrompt')
                                 or _xp['interface'].get('default_prompt')),
-        str(_missing_iface) + ' (validate_plugin.py rejects a manifest missing any of these)')
+        str(_missing_iface) + ' (the last published Codex contract required all of these)')
     chk('codex: the manifest declares no agents key',
         'agents' not in _xp,
-        "Codex's plugin contract has no agents field and validate_plugin.py rejects unknown keys")
+        "Codex's published plugin contract has no agents field; its validator rejected unknown keys")
     # Keep automatic plugin loading distinct from the separate native-agent installer.
     _install_md = open(os.path.join(ROOT, 'INSTALL.md'), encoding='utf-8').read()
     chk('codex: INSTALL.md no longer claims there is no verified Codex path',
@@ -798,7 +799,7 @@ if os.path.exists(_inv_path):
         'the Codex plugin installs skills only; native agents need the separate installer')
 
     # --- per-skill Codex UI metadata -----------------------------------------
-    # `<skill>/agents/openai.yaml` is read by Codex's own validator at
+    # `<skill>/agents/openai.yaml` was read by Codex's own validator at
     # `skill_root / "agents" / "openai.yaml"` (validate_plugin.py:464). It is UI metadata and
     # invocation policy - NOT an agent definition, and NOT the repo-root agents/ directory. This
     # kit's docs conflated those two, so both halves are pinned: the files must exist and be
@@ -853,8 +854,9 @@ if os.path.exists(_inv_path):
                              f'left to the default the comment says it is pinning')
         elif not isinstance(_pol2['allow_implicit_invocation'], bool):
             _bad_yaml.append(f'{_sk}: policy.allow_implicit_invocation must be a boolean')
-        # Unknown keys. Codex's own validator rejects them, so a file could pass here and fail
-        # there - this check claimed a parity it did not have. Sets mirror validate_plugin.py.
+        # Unknown keys. Codex's validator rejected them while it shipped, so a file could pass
+        # here and fail there - this check once claimed a parity it did not have. Sets mirror the
+        # last published validate_plugin.py.
         _ROOT_OK = {'interface', 'policy', 'dependencies'}
         _IFACE_OK = {'display_name', 'short_description', 'icon_small', 'icon_large',
                      'brand_color', 'default_prompt'}
@@ -1719,6 +1721,248 @@ for _f in ('README.md', 'AGENTS.md', 'INSTALL.md'):
 chk('install docs: no unqualified never-deletes/never-overwrites claim', not _claims,
     str(_claims) + ' - --force adopts an unclaimed dga-* path and --clean-legacy deletes '
     'pre-0.5 paths after a typed DELETE; name the exception beside the claim')
+
+
+# =============================================================================================
+# Claim-CLASS guards. Earlier rounds fixed "exactly six RTL places" and a Hijri "requirement" in
+# one file each, with guards that matched the old phrase - and the same claims came back in
+# sibling files as "only four places", "only two places", "only six places" and "must supply
+# Hijri". These match the CLASS of claim, across everything that ships or is scored.
+# =============================================================================================
+def _scan_files():
+    _out = []
+    for _base in ('skills', 'agents', 'codex-agents', 'evals'):
+        for _d, _ds, _fs in os.walk(os.path.join(ROOT, _base)):
+            _ds[:] = [x for x in _ds if x != '__pycache__']
+            for _f in _fs:
+                if _f.endswith(('.md', '.toml', '.json')):
+                    _out.append(os.path.join(_d, _f))
+    for _f in ('README.md', 'COVERAGE.md', 'INSTALL.md'):
+        _out.append(os.path.join(ROOT, _f))
+    return _out
+
+
+def _sentences_of(text):
+    flat = ' '.join(text.split())
+    return re.split(r'(?<=[.!?])\s+(?=[A-Z*`"(])', flat)
+
+
+_SCAN = _scan_files()
+_SELF = os.path.abspath(__file__)
+
+# --- interaction states: a vocabulary, never a universal per-component requirement -----------
+# DGA's component pages list their OWN states - inputs/tabs/menus five with no Selected, file
+# uploader three, pagination four, breadcrumbs seven. Stating all six as a universal rule made
+# review skills and the reviewer agent flag compliant components, and two eval fixtures SCORED it.
+_UNIVERSAL_STATES = re.compile(
+    r'six states,?\s+always'
+    r'|ship all six states'
+    r'|requires six states'
+    r'|specifies fewer is incomplete'
+    r'|all six states specified'
+    r'|six states including focused'
+    r'|anatomy,\s*six states'
+    r'|(?:defines|specifies|requires)\s+six\s+(?:interaction\s+)?states'
+    r'|for every interactive component', re.I)
+_univ = []
+for _fp in _SCAN:
+    if os.path.abspath(_fp) == _SELF:
+        continue
+    for _s in _sentences_of(open(_fp, encoding='utf-8').read()):
+        if _UNIVERSAL_STATES.search(_s):
+            _univ.append(os.path.relpath(_fp, ROOT).replace(os.sep, '/') + ': ' + _s[:90])
+chk('states: no universal six-state requirement in shipped or scored text', not _univ,
+    str(_univ) + ' - each component page lists its own states; cite that page')
+chk('states: the detector matches the phrasings that actually shipped',
+    all(_UNIVERSAL_STATES.search(x) for x in (
+        'Six states, always. DGA specifies Default, Hovered, Pressed, Selected, Focused and',
+        'Ship all six states. Default, Hovered, Pressed, Selected, Focused, Disabled.',
+        'DGA requires six states: Default, Hovered, Pressed, Selected, Focused, Disabled.',
+        'A design that specifies fewer is incomplete, not compliant',
+        'all six states specified on the form inputs',
+        'also: six states including Focused, 44px targets')),
+    'the guard would not catch a reintroduced universal claim')
+# Per-component six-state facts ARE legitimate (Chip, Radio, navigation drawer list six).
+chk('states: per-component six-state facts are not flagged',
+    not any(_UNIVERSAL_STATES.search(x) for x in (
+        'Six states including Selected. Dismissable chips need role',
+        '**Variants** — Unselected · Selected. **States** — all six.')),
+    'the guard is over-broad and would flag correct per-component specs')
+# The vocabulary note must exist, and the per-component lists must still be there to point at.
+_comp_txt = open(os.path.join(ROOT, 'skills/dga-design-system/references/components.md'),
+                 encoding='utf-8').read()
+_state_lines = re.findall(r'^\*\*States\*\* — (.+)$', _comp_txt, re.M)
+chk('states: components.md still carries per-component state lists', len(_state_lines) >= 10,
+    f'found {len(_state_lines)} - the guidance points readers at these')
+chk('states: at least one component page lists five states without Selected',
+    any('Selected' not in _l and _l.count('·') == 4 for _l in _state_lines),
+    'the premise of the vocabulary note no longer holds - re-read the component pages')
+
+# --- RTL: never cite a total --------------------------------------------------------------
+# COVERAGE records the total as TODO(verify); rtl-rules.md says never cite one. The kit still
+# published three different totals - two, four and six - in four places.
+_RTL_TOTAL = re.compile(
+    r'\b(?:only|exactly)\s+(?:one|two|three|four|five|six|seven|eight|nine|ten|\d+)\s+'
+    r'(?:places|references|pages)\b', re.I)
+_totals = []
+for _fp in _SCAN:
+    if os.path.abspath(_fp) == _SELF:
+        continue
+    _txt = open(_fp, encoding='utf-8').read()
+    for _s in _sentences_of(_txt):
+        if _RTL_TOTAL.search(_s):
+            _totals.append(os.path.relpath(_fp, ROOT).replace(os.sep, '/') + ': ' + _s[:90])
+chk('rtl: no total of DGA\'s RTL statements is cited anywhere', not _totals,
+    str(_totals) + ' - cite the pages; the total is TODO(verify)')
+chk('rtl: the detector matches every total this kit has published',
+    all(_RTL_TOTAL.search(x) for x in (
+        'DGA speaks to RTL in exactly six places across 50 component pages',
+        'Only four places in the entire system.',
+        'One of only two places DGA explicitly addresses RTL.',
+        'Steps is one of only six places DGA speaks to RTL directly.')),
+    'the guard would not catch a reintroduced total')
+
+# --- Hijri: DGA states no calendar policy ---------------------------------------------------
+# Matched per CLAUSE, not per sentence. A sentence-level version merged table rows into one
+# "sentence" (false positives) and read "...itself.** Decide early." as one sentence, so the word
+# "Decide" exempted the very claim it was written to catch - its own self-test caught that.
+def _clauses(text):
+    t = re.sub(r'\n\s*(?:[-*+]|\d+\.)\s+', '\n\u00a7 ', text.replace('\r', ''))   # list items
+    t = ' '.join(t.replace('|', '\u00a7').split())                                   # table cells
+    return [c.strip() for c in re.split(r'\u00a7|(?<=[.!?])[*`)"\']*\s+', t) if c.strip()]
+
+
+_HIJRI_REQ = re.compile(r'(?:hijri.{0,60}?\b(?:must|required|requires|mandatory)\b'
+                        r'|\b(?:must|required|requires|mandatory)\b.{0,60}?hijri)', re.I)
+_COND = re.compile(r'\bif\b|unless|\bnot\b|\bno\b|neither|decision|decid|chose|choose|entity|'
+                   r'silent|optional', re.I)
+
+
+def _hijri_claims(text):
+    return [c for c in _clauses(text) if _HIJRI_REQ.search(c) and not _COND.search(c)]
+
+
+_hijri = []
+for _fp in _SCAN:
+    if os.path.abspath(_fp) == _SELF:
+        continue
+    for _c in _hijri_claims(open(_fp, encoding='utf-8').read()):
+        _hijri.append(os.path.relpath(_fp, ROOT).replace(os.sep, '/') + ': ' + _c[:90])
+chk('hijri: no unconditional Hijri requirement', not _hijri,
+    str(_hijri) + ' - DGA states no calendar policy; Hijri is the entity\'s decision')
+chk('hijri: the detector catches the sentence that shipped',
+    bool(_hijri_claims('For an Arabic-first Saudi government service this is a gap. '
+                       '**The project must supply Hijri support itself.** Decide early.')),
+    'the Hijri guard cannot fire')
+chk('hijri: the corrected, conditional wording passes',
+    not _hijri_claims('DGA states **no calendar policy** - it neither requires Hijri nor rules it '
+                      'out. **If that decision includes Hijri, nothing ships it** - so the project '
+                      'must supply it.'),
+    'the guard would flag the correct conditional guidance')
+
+# --- component inventories must equal the route contract ------------------------------------
+# components.md headed "45" over 47 rows against a 50-route contract; the ARIA table claimed
+# "all 50" over 49 rows; component-mapping claimed "All 50" over 53. Compare the SETS.
+_routes = json.load(open(os.path.join(ROOT, 'harvest/source-inventory.json'),
+                         encoding='utf-8'))['tierA']['bundle']['routes']['components']
+_norm = lambda x: re.sub(r'[^a-z0-9]', '', x.lower())
+_route_slugs = sorted(_norm(r.rstrip('/').split('/')[-1]) for r in _routes)
+
+
+def _covers(names):
+    """Route slugs that no name matches (prefix either way, after normalising)."""
+    nn = [_norm(re.sub(r'\(.*?\)', '', n)) for n in names]
+    return [s for s in _route_slugs if not any(n and (n.startswith(s) or s.startswith(n))
+                                               for n in nn)]
+
+
+def _section(text, start, end):
+    """text between two markers, or '' - never raise (see the note above)."""
+    a = text.find(start)
+    b = text.find(end, a + 1) if a >= 0 else -1
+    return text[a:b] if a >= 0 and b > a else ''
+
+
+_inv = _section(_comp_txt, '## Inventory', 'URL pattern')
+chk('inventory: components.md inventory table located', bool(_inv),
+    'markers "## Inventory" / "URL pattern" moved - every inventory check below is now blind')
+_inv_head = re.search(r'## Inventory — (\d+) components', _inv)
+_inv_counts = [int(x) for x in re.findall(r'\*\* \((\d+)\) \|', _inv)]
+_inv_items = [x.strip().rstrip('\\*').strip()
+              for m in re.finditer(r'\*\* \(\d+\) \| (.+?) \|', _inv) for x in m.group(1).split('·')]
+chk('inventory: components.md heading equals the route contract',
+    bool(_inv_head) and int(_inv_head.group(1)) == len(_routes),
+    f'heading {_inv_head.group(1) if _inv_head else None} vs {len(_routes)} routes')
+chk('inventory: category counts, listed items and the contract agree',
+    sum(_inv_counts) == len(_inv_items) == len(_routes),
+    f'counts sum {sum(_inv_counts)}, listed {len(_inv_items)}, routes {len(_routes)}')
+chk('inventory: every route appears in the components.md table', not _covers(_inv_items),
+    str(_covers(_inv_items)))
+
+_acc = open(os.path.join(ROOT, 'skills/dga-design-system/references/accessibility.md'),
+            encoding='utf-8').read()
+_acc_tbl = _section(_acc, 'Per-component ARIA', 'All 50 component pages')
+chk('inventory: accessibility.md ARIA table located', bool(_acc_tbl),
+    'markers moved - the ARIA row checks below are now blind')
+_acc_rows = re.findall(r'^\| \*\*(.+?)\*\* \|', _acc_tbl, re.M)
+chk('inventory: the ARIA table has one row per component', len(_acc_rows) == len(_routes),
+    f'{len(_acc_rows)} rows vs {len(_routes)} routes')
+chk('inventory: every route has an ARIA row', not _covers(_acc_rows), str(_covers(_acc_rows)))
+
+_map = open(os.path.join(ROOT, 'skills/dga-ui-adapter/references/component-mapping.md'),
+            encoding='utf-8').read()
+_cut = _map.find('### Not DGA components')
+# Absent marker: count the WHOLE file - the extras are then still in the tables, which is exactly
+# the defect, so the count check below fails rather than the script crashing.
+_map_comp = _map[:_cut] if _cut >= 0 else _map
+_map_rows = [re.sub(r'[*`]', '', l.split('|')[1]).strip() for l in _map_comp.split('\n')
+             if l.startswith('| ') and not l.startswith('| DGA')
+             and not re.match(r'^\|[-: |]+$', l)]
+chk('inventory: component-mapping maps exactly one row per component',
+    len(_map_rows) == len(_routes), f'{len(_map_rows)} rows vs {len(_routes)} routes')
+chk('inventory: every route has a mapping row', not _covers(_map_rows), str(_covers(_map_rows)))
+chk('inventory: no unsourced "45 DGA advertises" figure', '45 DGA advertises' not in _comp_txt,
+    'DGA\'s captured counter is 33+; no capture supports 45')
+
+# --- freshness: no green tick on a monitor that cannot run ------------------------------------
+_diag = os.path.join(ROOT, 'harvest/diagnostics/2026-08-31-freshness-timeout.md')
+_readme = open(os.path.join(ROOT, 'README.md'), encoding='utf-8').read()
+_fresh_row = next((l for l in _readme.split('\n') if l.startswith('| **Freshness monitoring**')), '')
+chk('freshness: the diagnostic report is published under harvest/', os.path.isfile(_diag))
+if os.path.isfile(_diag) and 'not resolved' in open(_diag, encoding='utf-8').read():
+    chk('freshness: README does not tick a monitor that is recorded as blocked',
+        '✅' not in _fresh_row and _fresh_row != '',
+        _fresh_row[:120] + ' - the diagnostic record says the blocker is not resolved')
+    chk('freshness: README links the evidence',
+        'harvest/diagnostics/2026-08-31-freshness-timeout.md' in _readme)
+chk('freshness: no orphaned memory/ directory is tracked',
+    not os.path.isdir(os.path.join(ROOT, 'memory')),
+    'published diagnostics belong in harvest/diagnostics/')
+
+# --- installer: update and adopt are separate ---------------------------------------------------
+_kit = open(os.path.join(ROOT, 'bin/dga-kit.mjs'), encoding='utf-8').read()
+chk('installer: --update exists as its own flag', "'--update'" in _kit and 'update: has(' in _kit)
+chk('installer: the self-check pins that --update never adopts',
+    '--update overwrote an unrecorded dga-* directory' in _kit,
+    'case 21 is the behavioural guard; without it --update could silently adopt')
+chk('installer: INSTALL.md documents --update as the upgrade path',
+    '`--update`' in open(os.path.join(ROOT, 'INSTALL.md'), encoding='utf-8').read())
+
+# --- prose: no accidentally duplicated adjacent line ----------------------------------------------
+_dups = []
+for _fp in _SCAN:
+    if not _fp.endswith('.md'):
+        continue
+    _ls = open(_fp, encoding='utf-8').read().split('\n')
+    _fence = False
+    for _i in range(1, len(_ls)):
+        if _ls[_i - 1].lstrip().startswith('```'):
+            _fence = not _fence
+        _a, _b = _ls[_i - 1].strip(), _ls[_i].strip()
+        if (not _fence and len(_a) > 40 and _a == _b and not _a.startswith('|')
+                and not set(_a) <= set('-=*_ ')):
+            _dups.append(f'{os.path.relpath(_fp, ROOT)}:{_i + 1}')
+chk('prose: no adjacent duplicated line', not _dups, str(_dups))
 
 
 print()

@@ -15,6 +15,11 @@ add a rule to `references/` and cite it.
 
 ## DGA source → owning skill
 
+> **Evidence limit, 2026-10-08.** After DGA's 2026 update the route inventory, the tokens, the two
+> new templates and `/contributing` were re-harvested. The 50 component pages and the 19 older
+> templates were re-checked only through their quoted passages and the token reconciliation, not
+> re-read in full; a wording change there that no quote covers would not have been seen.
+
 | DGA area | Pages | Extracted into | Owned by |
 |---|---|---|---|
 | Foundations — colour | 1 | `foundations.md`, `tokens.json`, `CONTRAST-AUDIT.md` | `dga-design-system` |
@@ -23,7 +28,7 @@ add a rule to `references/` and cite it.
 | Foundations — elevation | 1 | `foundations.md`, `tokens.json` | `dga-design-system` |
 | Foundations — iconography | 1 | `foundations.md` | `dga-design-system` |
 | Components | **50** | `components.md` | `dga-design-system` |
-| Templates | **19** | `patterns.md` | `dga-design-system` |
+| Templates | **21** routed (20 in DGA's nav; National Day 95 left it 2026-10-08) | `patterns.md` | `dga-design-system` |
 | Accessibility (per-component + Accessibility Ease) | 51 | `accessibility.md` | `dga-a11y` |
 | Design tokens (`/thoughts/designToken`) | 1 | `foundations.md` §Token architecture | `dga-tokens-sync` |
 | Local & global standards | 1 | `foundations.md` §Compliance context | `dga-launch-gate` |
@@ -47,7 +52,7 @@ add a rule to `references/` and cite it.
 
 | Skill | Owns | Explicitly does NOT |
 |---|---|---|
-| **dga-design-system** | The rules. Foundations, 50 components, 19 templates, content, tokens. Read by everything else. | Judge a design, write code, or run anything |
+| **dga-design-system** | The rules. Foundations, 50 components, 21 templates, content, tokens. Read by everything else. | Judge a design, write code, or run anything |
 | **dga-design-review** | Auditing a *design* against DGA. Seven fixed passes, severity rubric, verdict. | Audit code, or produce designs |
 | **dga-mockup** | *Producing* compliant screens from DGA templates, Arabic-first | Review its own output — that's design-review's job |
 | **dga-handoff** | The design→dev seam. Component inventory, token map, state matrix, bilingual copy | Design or build |
@@ -148,7 +153,7 @@ be exempted, but only as `route -> rationale` — a bare list would let a future
 with no justification, which is exactly how a dependency stops being monitored. An empty rationale
 fails. The exemption map is currently empty.
 
-The file also pins the **counts as a contract** (50 components, 19 templates, 5 foundations,
+The file also pins the **counts as a contract** (50 components, 21 templates, 5 foundations,
 6 Thoughts) and a **critical-facts watch list** — the published version, the four Mandatory
 assessment criteria, the unmatchable dark-theme selector, and `text.secondary`. Every one of
 those is asserted against the file it protects, so a stale watch-list entry fails rather than
@@ -182,9 +187,11 @@ not decide.
 
 ### It is cheaper and sees more than the plan assumed
 
-The SPA bundle is a static asset, and it **contains the route table** — all 50 component slugs,
-19 templates, 5 foundations, 6 Thoughts, plus one route per published release. So the counts
-contract and *"has DGA released?"* are answerable by `curl` after all. Only page **prose** needs
+The SPA bundle is a static asset, and it **contains the router table** — all 50 component slugs,
+21 templates, 5 foundations, 6 Thoughts — and names the small chunk that carries the release list.
+So the counts contract and *"has DGA released?"* are answerable by `curl` after all. The sentinel
+reads the router table rather than nav links: on 2026-10-08 DGA dropped a still-served page from
+its nav, and a link reader reported it removed. Only page **prose** needs
 a browser.
 
 The bundles are ~19 MB, too heavy to pull for nothing, so `--check` fetches the 4 KB shell first
@@ -195,8 +202,9 @@ read, about five.
 | What it detects | How |
 |---|---|
 | DGA deployed | Vite build hash on the CSS or JS asset |
-| A new release | a new `version-history-*` route in the bundle |
-| A route added, removed or renamed | route-set diff against the baseline |
+| A new release, or a release dropped | the version list in DGA's `releases-<hash>.js` chunk |
+| A route added, removed or renamed | router-table diff against the baseline |
+| A page leaving or joining the nav | nav links vs the router table, diffed against the baseline |
 | A count breaking the contract | live count vs `contracts` |
 | `text.secondary` recoloured | resolved through its `var()` reference, both levels recorded |
 | **The dark selector being fixed** | the highest-impact single change DGA could make |
@@ -232,6 +240,16 @@ Exhausted retries still return exit 2. A failed check means **freshness is unkno
 changed or that the recorded guidance is current. Its artifact contains only `sentinel.log`
 (stdout and stderr), never the previously committed `FRESHNESS.md`. Inspect the failing URL and
 network error before rerunning; retries cannot repair a persistently unreachable source.
+
+**That is the current situation.** GitHub-hosted runners cannot reach `design.dga.gov.sa`: every
+run of this workflow — the scheduled runs from 2026-08-31 to 2026-10-05 and the diagnostic
+dispatches — has failed at the sentinel step with exit 2. The diagnosed cause is a TCP 443
+timeout before TLS; the precise network policy behind it is unknown. Freshness is therefore
+**unknown** until the check runs somewhere that can reach DGA — a self-hosted runner is a
+security decision for a public repository, not a default. The last check that completed ran
+locally on 2026-10-08: it found a DGA update, which this kit then re-harvested. Evidence and next
+steps:
+[`harvest/diagnostics/2026-08-31-freshness-timeout.md`](harvest/diagnostics/2026-08-31-freshness-timeout.md).
 
 The issue has a full lifecycle, not just an open:
 
@@ -352,7 +370,7 @@ name it, and nothing else.
 ## Guarding against our own drift
 
 The monitoring in `dga-tokens-sync` watches **DGA** for changes. `evals/check-quote-fidelity.py`
-watches **us** — it compares the DGA quotes a capture actually covers (14 of 92 blockquotes
+watches **us** — it compares the DGA quotes a capture actually covers (16 of 97 blockquotes
 today; the rest are *unverifiable*, not verified) against the captured page text in
 `harvest/raw/`, and fails on a paragraph that reproduces a capture without matching it.
 

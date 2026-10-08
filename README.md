@@ -55,9 +55,10 @@ is published to npm, and there is no `npm install` step: `npx` fetches this repo
 it.
 
 Anything it cannot do, it names and tells you how to finish — it never half-installs and calls it
-done. A file you have edited is never overwritten **unless you pass `--force`** — and on the
-Codex side not even then, because a differing agent is always refused. `--uninstall`
-removes only what the installer wrote.
+done. To pick up a new release, re-run with **`--update`**: it refreshes what the installer
+recorded — including a recorded copy you edited — and never touches a `dga-*` path it did not
+write. Only **`--force`** adopts such a path. On the Codex side neither flag overrides a differing
+agent; it is always refused. `--uninstall` removes only what the installer wrote.
 
 Narrow it with one flag from each axis:
 
@@ -99,7 +100,7 @@ Then restart Claude Code, and start a new Codex session.
 
 | Skill | Use it for |
 |---|---|
-| `dga-design-system` | The rules. Foundations, 50 components, 19 templates, content, tokens. Everything else reads from it. |
+| `dga-design-system` | The rules. Foundations, 50 components, 21 templates, content, tokens. Everything else reads from it. |
 | `dga-ui-adapter` | **Building UI on any library.** Token wiring, all 50 components mapped, the compliance build list. |
 | `dga-react` | Building on DGA's own `platformscode-new-react` package. |
 | `dga-rtl-i18n` | Arabic-first RTL, bidi text, Arabic typography, Hijri dates, numerals, i18n wiring. |
@@ -191,18 +192,21 @@ scale, the `--colors-alpha-*` primitives behind it, and the `--button-*`, `--lin
 `--notification-*` and `--tag-*` role sets. Every one is listed in
 [harvest/RECONCILIATION.md](harvest/RECONCILIATION.md).
 
-The system is "Platforms Code", published version **1.0.3** (released 4 Nov 2025, per
-`/updates/change-log`). The nav badge and footer still read "Version 1.0" and the Figma files
-are still named `PC 1.0 …` — those are chrome and filenames, not the version. The harvest postdates 1.0.3, so the values are current.
+The system is "Platforms Code", published version **4.0.0** per `/updates/change-log`, read
+2026-10-08 — DGA publishes no release date, and in 2026 it renumbered the history the kit first
+recorded as 1.0.0–1.0.3. The Figma files are still named `PC 1.0 …`; that is a filename, not the
+version. The token values are current **because they were re-checked**, not because of any date:
+on 2026-10-08 every colour value in `tokens.json` was still declared in DGA's live stylesheet and the full
+reconciliation reproduced unchanged.
 
 | | |
 |---|---|
-| Harvest — 5 foundations, 50 components, **all 19 templates**, **303 token values** read from 1,052 CSS custom properties | ✅ Complete |
+| Harvest — 5 foundations, 50 components, **all 21 routed templates**, **303 token values** read from 1,052 CSS custom properties | ✅ Routes and tokens complete · ⚠️ **current prose review partial** — re-harvested 2026-10-08 after a DGA update; the 50 component and 19 older template pages were re-checked through their quoted passages and the token reconciliation, not re-read in full |
 | **Assessment Criteria** — the rubric a platform is actually scored against | ✅ Captured |
 | 11 skills, 6 agents | ✅ |
 | Contrast checker, self-tested — light **and dark** | ✅ |
-| **Freshness monitoring** — weekly, review-gated | ✅ See below |
-| **Codex plugin install path** | ✅ Verified 2026-08-28 — skills only; passes Codex's own `validate_plugin.py` |
+| **Freshness monitoring** — weekly, review-gated | ⚠️ **Built and tested, not running.** Every hosted run since 2026-08-31 has failed to reach DGA (exit 2). See below |
+| **Codex plugin install path** | ✅ Skills only. Verified 2026-10-08 on Windows with Codex CLI 0.160.1: a real install discovers all 11 skills. CI runs the same test on Linux (first run pending at this commit). Passed Codex's `validate_plugin.py` on 2026-08-28; Codex no longer ships it |
 | **Codex-native agents** | Six generated TOML definitions; separate installer with offline safety/parity checks. Confirm runtime discovery in your Codex session. |
 | **Designer sign-off** | ⚠️ **Outstanding** — values are exact, interpretation unverified |
 | **Figma-only values** (responsive radius/spacing, mobile kit specs) | ❌ Not public. Omitted, not guessed. |
@@ -233,14 +237,23 @@ bundle, `text.secondary`, the dark selector, sitemap and robots. It writes
 [harvest/FRESHNESS.md](harvest/FRESHNESS.md) and opens one rolling issue when something needs a
 decision.
 
+> ⚠️ **It cannot currently reach DGA.** GitHub-hosted runners time out connecting to
+> `design.dga.gov.sa` on port 443, so every scheduled run since 2026-08-31 has failed with exit 2
+> — the monitor reports that it could not check, rather than pretending all is well, which is the
+> intended behaviour. Until a runner that can reach DGA is in place, **freshness is unknown**
+> between manual runs: `FRESHNESS.md` describes the last check that completed — run locally on
+> 2026-10-08, after re-harvesting a DGA update — not a current one. Until that changes, the
+> maintainer runs the check locally about weekly, and before every release.
+> Evidence: [the diagnostic report](harvest/diagnostics/2026-08-31-freshness-timeout.md).
+
 **Are we still saying what DGA said?** That is the failure this repo has actually had — invalid
 CSS shipped from a token unit, a template count asserted at 19 when the harvest held 17, and a
 launch-gate quote that dropped DGA's word *"typically"*, turning "typically cannot proceed to
 deployment" into an unconditional block. No amount of watching DGA catches those.
 `evals/check-quote-fidelity.py` compares the DGA quotes it *can* — those whose source page has
 been captured — against that captured text, and fails on a quote that reproduces a capture
-without matching it. It found two real defects on its first run. Be clear about its reach: only
-**2 DGA pages are captured**, so 14 of 92 blockquotes are checkable and the other 78 are
+without matching it. It found two real defects on its first run. Be clear about its reach: raw
+captures cover **a minority of DGA's pages**, so 16 of 97 blockquotes are checkable and the other 81 are
 **unverifiable, not verified**. A quote fenced as DGA's own words with no capture behind it fails
 the run.
 
@@ -257,7 +270,7 @@ like a quiet week.
 skills/     the 11 skills; dga-design-system is the source of truth the rest read
 agents/     the 6 Claude Markdown agents — source of truth for both formats
 codex-agents/  generated native Codex TOML agents — installed separately
-bin/dga-kit.mjs  the one installer (npx); leaves what it did not write alone, except --force
+bin/dga-kit.mjs  the one installer (npx); --update refreshes its own files; only --force adopts
                  (adopts an unclaimed dga-* path) and --clean-legacy (deletes pre-0.5 paths
                  after you type DELETE)
 harvest/    the evidence behind every rule, and the monitoring that keeps it honest

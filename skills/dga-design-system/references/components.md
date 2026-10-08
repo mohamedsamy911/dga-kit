@@ -2,15 +2,19 @@
 
 **Source:** https://design.dga.gov.sa/guidelines/components/* · **Retrieved:** 2026-08-26
 **Status:** ✅ **COMPLETE — 50 of 50 component pages extracted.**
-The nav lists 47, not the 45 DGA advertises. Three more exist but are absent from the nav
-entirely: `ui-shell/footer`, `forms-and-inputs/textarea`, `forms-and-inputs/number-input`.
+DGA's nav lists 47. Three more exist but are absent from the nav entirely:
+`ui-shell/footer`, `forms-and-inputs/textarea`, `forms-and-inputs/number-input`. This kit cites
+**50**, the enumerable route count. DGA's homepage counter says **33+** — stale, and recorded as
+a contradiction rather than reconciled (see the coverage record).
 
 Implementation is **not** hand-built — DGA ships an official library. See
 `../../dga-react/references/official-packages.md` before writing any component code.
 
 ## Page template
 
-Every component page follows the same structure. When extracting one, expect all of:
+Component pages follow a common structure. When extracting one, expect most of these — but do
+not assume all: Menu has **no** Accessibility section, and Card's is Accordion's pasted in
+(both flagged below). A missing section is a finding to record, not a template to fill in:
 
 `Live Demo (Visual | Code)` → `Appearance` → `Types` → `Styles` → `Behaviors (States)` →
 `Anatomy` → `Tips (Do / Avoid pairs)` → `Accessibility`
@@ -24,13 +28,22 @@ Note: every page links a Storybook "complete demo", but Storybook is marked **"s
 
 ## Standard state set
 
-DGA defines six interaction states. A design that specifies fewer is incomplete, not compliant:
+DGA's state vocabulary has six names:
 
 `Default` · `Hovered` · `Pressed` · `Selected` · `Focused` · `Disabled`
 
+**It is a vocabulary, not a per-component requirement.** Each component page lists its own
+states, and most list fewer or different ones — inputs, tabs and menus have five with no
+`Selected`, file uploader three, pagination four (with *Current page*), breadcrumbs seven, and
+link and search box swap `Selected` for *Visited* or *Read-only*. A design must cover the states
+**its component's page lists** — see that component below. Do not report a component as
+non-compliant for lacking a state its own page does not list.
+
 `Focused` is called out explicitly as an accessibility requirement for keyboard navigation.
 
-## Inventory — 45 components in 9 categories
+## Inventory — 50 components in 9 categories
+
+*Starred entries are published but absent from DGA's own navigation.*
 
 | Category | Components |
 |---|---|
@@ -38,11 +51,11 @@ DGA defines six interaction states. A design that specifies fewer is incomplete,
 | **Content display** (8) | accordion · card · carousel · list · code-snippet · quote · divider · digital-stamp |
 | **Data display** (6) | avatar · metric · table · content-switcher · charts · structured-list |
 | **Feedback** (4) | notification · modal · tooltip · rating |
-| **Forms & inputs** (8) | checkbox · datepicker · input · file-uploader · radio · slider · steps · switch |
+| **Forms & inputs** (10) | checkbox · datepicker · input · file-uploader · radio · slider · steps · switch · textarea\* · number-input\* |
 | **Loading & status** (4) | loading · progress-bar · radial-stepper · skeleton |
 | **Navigational** (5) | breadcrumbs · menu · pagination · tabs · slide-out |
 | **Search & filters** (3) | search-box · tags · filtration |
-| **UI shell** (4) | navigation-header · navigation-drawer · table-of-content · second-nav-header |
+| **UI shell** (5) | navigation-header · navigation-drawer · table-of-content · second-nav-header · footer\* |
 
 URL pattern: `/guidelines/components/{category}/{name}`
 (`digital-stamp` and `floating-Button` — note DGA's capital B — are DGA-specific and have no
@@ -119,10 +132,12 @@ months, English day abbreviations, Sunday-start week. The guideline text never m
 Umm al-Qura, or dual-calendar display, and the official npm package contains no Hijri code
 (verified by exhaustive search — see `official-packages.md`).
 
-For an Arabic-first Saudi government service this is a gap DGA has not filled. **The
-project must supply Hijri support itself.** Decide early whether to wrap `dga-datepicker` or
-replace it — it affects every date field in the product. Raise with DS-DGA@dga.gov.sa first,
-in case it's on their roadmap.
+DGA states **no calendar policy** — it neither requires Hijri nor rules it out. Which calendar a
+service shows is the entity's decision, recorded in `../../dga-brand-overlay/SKILL.md`. **If that
+decision includes Hijri, nothing ships it** — not DGA's package, not any UI library — so the
+project must supply it. Decide early whether to wrap `dga-datepicker` or replace it; it affects
+every date field in the product. Raise with DS-DGA@dga.gov.sa first, in case it's on their
+roadmap. Do not report a Gregorian-only date field as a DGA finding.
 
 **Accessibility — DGA requirements**
 
@@ -285,8 +300,8 @@ Final step. DGA: the final step *"has no line on the right side (or the left sid
 - Completed / current / upcoming distinguished by more than colour — icons or text too
 - Visually-hidden text conveying each step's status for screen readers
 
-> ✅ **One of only two places DGA explicitly addresses RTL.** Cite it when arguing for
-> RTL-correct mirroring elsewhere.
+> ✅ **DGA explicitly addresses RTL here.** Cite it when arguing for RTL-correct mirroring
+> elsewhere. (How many places DGA does so in total is unverified — cite the page, not a count.)
 
 ---
 
@@ -910,7 +925,9 @@ numeral policy.
 
 ## Where DGA addresses RTL directly
 
-Only four places in the entire system. These are the citable rules:
+These are the component pages where the harvest found DGA speaking to RTL. ⚠️ **Cite the
+pages, never a total** — the overall count was not enumerated at capture time and is recorded
+as `TODO(verify)`; this kit has previously published three different totals for it.
 
 1. **Quote** — a dedicated "Support for Right-to-Left (RTL) Languages" accessibility section
 2. **Steps** — "progresses from left to right or right to left for RTL languages", and the final

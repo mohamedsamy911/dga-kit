@@ -167,8 +167,11 @@ actually changed.
 Exit 1 means review pending. What it can tell you without a browser:
 
 - **DGA deployed** — build hash moved
-- **A new release** — a new `version-history-*` route appeared. This is the definitive signal
-- **Routes added, removed or renamed**, and any count breaking the 50/19/5/6 contract
+- **A new release** — a new version in DGA's `releases-<hash>.js` chunk. This is the definitive
+  signal. A version that **disappears** from the list is reported too: DGA renumbered its whole
+  history once already
+- **Routes added, removed or renamed**, and any count breaking the 50/21/5/6 contract — read from
+  the router's own table, with pages that leave or join DGA's **nav** reported separately
 - **`text.secondary` recoloured** — resolved through its `var()` reference
 - 🚩 **The dark selector fixed** — if `[data-theme=dark] :root` becomes `:root[data-theme=dark]`,
   DGA's dark theme activates on every Platforms Code platform at once. `tokens.json role.dark`
@@ -190,14 +193,16 @@ python3 harvest/sources.py --baseline
 
 Quarterly, plus whenever `/updates/change-log` shows a release.
 
-**Current published version: 1.0.3, released 4 Nov 2025.** Releases so far — 1.0.0 (20 Feb 2025) ·
-1.0.1 (5 May 2025) · 1.0.2 (1 Sep 2025) · 1.0.3 (4 Nov 2025). Roughly one release every three to
-four months, which is what the quarterly cadence above is sized for.
+**Current published version: **4.0.0** per `/updates/change-log`, read 2026-10-08 — DGA publishes **no release date** for it.** DGA renumbered its history in 2026: the change log
+now lists eighteen releases from 1.0.0 to 4.0.0 with no dates, where on 2026-08-27 it listed
+1.0.0–1.0.3 with dates. Without dates there is no measured release cadence; the quarterly cadence
+above stands on its own.
 
-> Do not read the version off the nav badge or the footer — both still say `Version 1.0`. Do not
-> read it off the Figma file names either; `PC 1.0 Foundations` is a **file name**. The change log
-> is the only authority. Each release has its own route,
-> `/updates/change-log/version-history-1-0-3`, so diffing is cheap.
+> The change log is the only authority. The nav badge now reads `Version 4.0` and agrees, but it
+> read `Version 1.0` while the change log said 1.0.3, so it is chrome, not a source. The Figma
+> files are still named `PC 1.0 …` — a **file name**. The old per-release routes
+> (`/updates/change-log/version-history-1-0-3`) now all render the new list; the sentinel reads
+> the release list from the `assets/releases-<hash>.js` chunk instead.
 
 ## Known quirks to preserve
 

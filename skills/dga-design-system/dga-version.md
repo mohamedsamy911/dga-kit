@@ -6,10 +6,10 @@ changelog.
 | | |
 |---|---|
 | **Source** | https://design.dga.gov.sa/ |
-| **Published version** | **1.0.3**, released **4 Nov 2025** — per `/updates/change-log`, read 2026-08-27 |
-| **Why other numbers appear** | The nav badge and footer read `Version 1.0`; the Figma downloads are named `PC 1.0 Foundations`, `PC 1.0 Components – Desktop UI Kit` and so on. Those are site chrome and **file names**. They are not the version and must not be cited as one. |
-| **Does the harvest predate it?** | No. The 2026-08-26 extraction postdates 1.0.3 by nine months, so token values are current. |
-| **Harvested on** | 2026-08-26 |
+| **Published version** | **4.0.0** — per `/updates/change-log`, read 2026-10-08. DGA publishes **no release date** for it. |
+| **Why other numbers appear** | DGA **renumbered its release history** in 2026: on 2026-08-27 the change log listed 1.0.0–1.0.3 with dates, on 2026-10-08 it lists eighteen undated releases, 1.0.0–4.0.0, and nothing maps one numbering to the other. The nav badge now reads `Version 4.0` (it read `Version 1.0` against 1.0.3, so it is chrome, not a source). The Figma downloads are still named `PC 1.0 …` — **file names**. Cite only the change log. |
+| **Are the token values current?** | Re-checked rather than inferred from dates: on 2026-10-08 every colour value in `tokens.json` was still declared in the live stylesheet (build `CYyqM6kT`), and the full reconciliation of DGA's 1,126 custom properties reproduced unchanged. |
+| **Harvested on** | 2026-08-26 · re-harvested 2026-10-08 (DGA update) |
 | **Method** | Live DOM extraction of CSS custom properties — values verbatim, not transcribed |
 | **Corroborated by** | An independent extraction dated 2026-06-21 — 48/51 shared colour steps identical. See `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/CROSSREF-SECOND-EXTRACTION.md` in the dga-kit repository (not shipped with the installed skill) |
 | **Verified by** | — *(designer sign-off gate — still outstanding)* |
@@ -22,6 +22,7 @@ changelog.
 | 2026-08-26 | 1.0.3 | Cross-checked against an independent extraction. 3 values disputed, carried as `$meta.$disputed` in `tokens.json` |
 | 2026-08-27 | 1.0.3 | Harvested `hajj-template` |
 | 2026-08-27 | **1.0.3** | Route-table sweep. Harvested `rating-section` (templates genuinely complete at 19 — the previous "19" miscounted two sections as templates), `/designing-for-mobile`, `/contributing`, the three missing Thoughts articles, `/AssessmentCriteria`, `/about-platforms-code`, `/support`, `/updates/*`. **Version pin corrected: the published version is 1.0.3, released 4 Nov 2025**, not a bare 1.0. The 2026-08-26 token harvest postdates it, so token values are current. | — |
+| 2026-10-08 | **4.0.0** | **DGA update.** Change log renumbered (18 releases, no dates; the 1.0.x rows above are the old numbering). Harvested **National Day 96** and **Life Journeys**; National Day 95 left DGA's nav but is still served, so **21 templates** are routed. `/contributing` rewritten. Tokens, typography and iconography unchanged. The changelog's *"AI section"* was not found on any page. Evidence: `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-08-dga-update.md` in the dga-kit repository (not shipped with the installed skill). | — |
 
 ## Open at the next harvest
 

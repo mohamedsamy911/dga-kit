@@ -1,8 +1,10 @@
 # Patterns and page templates
 
-**Source:** https://design.dga.gov.sa/guidelines/templates/* · **Retrieved:** 2026-08-26
-**19 templates**, not the 13 the nav suggests. Six are reachable only from the templates index:
-e-Participation, About the Entity, Content Page, Cookies Banner, Chatbot, Rating Section.
+**Source:** https://design.dga.gov.sa/guidelines/templates/* · **Retrieved:** 2026-08-26, with
+National Day 96 and Life Journeys added and the route table re-read on 2026-10-08
+**21 templates are routed** in DGA's router as of 2026-10-08. DGA's navigation lists **20**:
+National Day 95 left the nav that day but is still served at `/guidelines/templates/national-day`.
+(On 2026-08-27 the nav showed 13 of the then 19; count the router, not the nav.)
 
 Each template page offers a live preview, the code, and a Figma file.
 
@@ -335,7 +337,33 @@ DGA's own wording:
 
 The only place **Saudi Font** is permitted — and headings only.
 
+### National Day 96
+`/guidelines/templates/national-day-96` · retrieved 2026-10-08 · in DGA's nav
+
+<!-- dga -->
+> This template is designed as part of the Saudi National Day 96 theme, featuring culturally
+> inspired illustrations that reinforce national identity and highlight the significance of the
+> occasion.
+<!-- /dga -->
+
+**Two section treatments:** Option 1 — traditional-pattern dividers between sections. Option 2 —
+the National Day 96 identity carried *"through the main section, decorative elements, and visual
+patterns distributed across the page"*.
+**Three hero variants:** Illustration (green, national motifs) · Photos (heritage backdrops and
+national messages) · **Animation** — *"Changes between different images and colors with each
+transition"*.
+Footer: **Dark Green** — the only footer the page shows.
+DGA credits the heroes and Saudi icons to community designers, winners of its National Day 96
+contribution competition.
+
+> ⚠️ **Not a re-skin of National Day 95.** 96 drops the Leaders Portrait hero and the Default
+> footer, and its Option 2 differs. Build from the 96 page, not from the 95 notes below.
+
 ### National Day 95
+`/guidelines/templates/national-day` · **removed from DGA's nav on 2026-10-08, still served** at
+its URL. Superseded for new work by National Day 96 above; kept because live platforms built on
+it remain.
+
 Culturally inspired illustrations reinforcing national identity. Two section treatments:
 traditional patterns as dividers, or traditional illustrations marking each title.
 **Four hero variants:** Leaders Portrait (formal) · Illustration (green, national motifs) ·
@@ -348,6 +376,21 @@ options; heroes: Historic Architecture · Expressive Imagery (horsemen, warm her
 Animated.
 **Ehsan element** — an optional floating button linking to the Ehsan platform, included because
 Founding Day 2026 coincides with Ramadan.
+
+### Life Journeys
+`/guidelines/templates/life-journeys` · retrieved 2026-10-08
+
+<!-- dga -->
+> The journey details page template is designed to provide users with comprehensive information
+> about a specific government journey. It typically includes an overview of the journey,
+> detailed steps and requirements, related journeys, and supporting information to help users
+> understand and complete the process.
+<!-- /dga -->
+
+Not an occasion template — it sits here only because it arrived with National Day 96. Everything
+else on the page is the shared guidance in *Rules that apply to EVERY template* above, word for
+word. The live preview (journey cards, onboarding steps, a details page with stages) is demo
+content: DGA states **no** rule for its layout, so do not cite the preview as one.
 
 ### Hajj 2026 template
 `/guidelines/templates/hajj-template` · retrieved 2026-08-27

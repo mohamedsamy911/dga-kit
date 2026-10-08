@@ -27,15 +27,19 @@ codex plugin add dga-kit@dga-kit
 
 That installs the **11 skills**. It does not install the agents — see below.
 
-**How this was established.** Codex publishes its own plugin contract locally, in the
-`plugin-creator` system skill that ships with the CLI
-(`~/.codex/skills/.system/plugin-creator/`). The manifest lives at `.codex-plugin/plugin.json`,
-and the repository's copy **passes Codex's own validator**:
+**How this is checked.** The manifest lives at `.codex-plugin/plugin.json`. Every CI run installs
+the working tree into a throwaway Codex profile with the pinned CLI and asserts that Codex
+discovers all 11 skills:
 
 ```
-$ python ~/.codex/skills/.system/plugin-creator/scripts/validate_plugin.py .
-Plugin validation passed
+$ python evals/test-codex-discovery.py
+codex discovery test passed: 11 skills discovered (codex-cli 0.160.1)
 ```
+
+That is a runtime test, not a manifest validator. On 2026-08-28 the manifest also passed Codex's
+own `validate_plugin.py`, from the `plugin-creator` system skill; Codex 0.160.1 no longer ships
+that script, so the claim can no longer be re-run. The schema checks written against it stay in
+`evals/validate-fixtures.py`.
 
 The catalogue Codex installs *from* is `.agents/plugins/marketplace.json` at the repository root —
 `codex plugin add` installs from a configured marketplace, never from a bare plugin manifest. This
@@ -44,21 +48,22 @@ used by [ponytail](https://github.com/DietrichGebert/ponytail), which is install
 Codex git marketplace.
 
 > ⚠️ **`"skills": "./skills/"` resolves from the plugin root — do not change it to `"../skills/"`.**
-> Confirmed four ways: Codex's spec, its `validate_plugin.py` (which requires the normalised value
-> `skills`), its scaffold generator, and ponytail's installed manifest. An external review once
-> recommended `"../skills/"`; it would resolve outside the repository and fail validation.
-> `evals/validate-fixtures.py` pins it.
+> Confirmed four ways on 2026-08-28: Codex's spec, its `validate_plugin.py` (which required the
+> normalised value `skills`), its scaffold generator, and ponytail's installed manifest. An
+> external review once recommended `"../skills/"`. Codex 0.160.1 does not reject it — it
+> **silently ignores** an out-of-root path and falls back to `skills/`, so the mistake would pass
+> every install. That is why `evals/validate-fixtures.py` pins the exact value.
 
 ### Install the six Codex agents separately
 
 `codex plugin add` installs this kit's **11 skills**. It does **not** register the six Markdown
 files in the repository-root `agents/` directory as Codex agents: Codex's plugin manifest has no
-top-level `agents` field — `validate_plugin.py` rejects unknown keys — and this kit declares only
-`"skills": "./skills/"`.
+top-level `agents` field — its published validator rejected unknown keys — and this kit declares
+only `"skills": "./skills/"`.
 
 > ⚠️ **Do not read that as "Codex has no `agents/` concept."** It does, and this kit uses it —
-> just for something else. A *skill* may carry `agents/openai.yaml`, which Codex's own validator
-> reads at `skill_root / "agents" / "openai.yaml"`, for **UI metadata and invocation policy**:
+> just for something else. A *skill* may carry `agents/openai.yaml`, which Codex's published
+> validator read at `skill_root / "agents" / "openai.yaml"`, for **UI metadata and invocation policy**:
 > display name, description, brand colour, starter prompt. All 11 skills here ship one. That is a
 > different thing from a repository-root `agents/` folder holding agent definitions, and an
 > earlier version of this page conflated the two.
@@ -136,9 +141,10 @@ below is the one to read.
 
 | | Codex agents | Claude skills & agents |
 |---|---|---|
-| An existing file that **differs** | **Always refused.** The install aborts; nothing is written. | Skipped with a note, unless `--force`. |
-| `--force` | **No effect.** There is no override — a differing Codex agent is never overwritten. | Overwrites, and adopts a `dga-*` path this kit did not record. Each is printed as `OVERWRITE`. |
-| How to update a changed file | Move yours aside, then rerun. | `--force`, or move yours aside and rerun. |
+| An existing file that **differs** | **Always refused.** The install aborts; nothing is written. | Skipped with a note, unless `--update` (recorded paths) or `--force`. |
+| `--update` | **No effect** on a differing agent. | Refreshes every path the manifest records, **including copies you edited**. Never adopts an unrecorded `dga-*` path. |
+| `--force` | **No effect.** There is no override — a differing Codex agent is never overwritten. | Does what `--update` does, **and** overwrites and adopts a `dga-*` path this kit did not record. Each adoption is printed as `OVERWRITE`. |
+| How to update to a new release | Move yours aside, then rerun. | `--update`. Use `--force` only to adopt an install this kit did not record. |
 | `--uninstall` | Removes only a **byte-identical** copy. An edited agent is kept and reported. | Removes a path only if it is in the manifest **and** on the fixed allowlist. |
 
 `--uninstall` obeys the same `--claude` / `--codex` / `--skills` / `--agents` selectors as an
@@ -146,7 +152,6 @@ install, and preserves the manifest entries it was told to leave.
 
 Uninstall does **not** remove the Codex skills plugin: that is Codex's to manage, with
 `codex plugin remove dga-kit@dga-kit`. Updating or uninstalling the skills plugin does **not**
-update or remove the separately copied agents. An interrupted copy can leave a partial install;
 update or remove the separately copied agents. An interrupted copy can leave a partial install;
 inspect the printed destination before retrying.
 
@@ -246,7 +251,8 @@ every project.
 npx github:mohamedsamy911/dga-kit --claude
 ```
 
-Flags: `--force` overwrites an existing install (and adopts one this kit did not record) ·
+Flags: `--update` refreshes what this kit recorded and never adopts · `--force` also overwrites and
+adopts a `dga-*` path it did not record ·
 `--uninstall` removes only what it installed · `--clean-legacy` removes pre-0.5 paths after you
 type DELETE · `--dry-run` prints the plan and writes nothing.
 

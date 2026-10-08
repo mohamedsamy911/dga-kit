@@ -3,7 +3,7 @@
 All 50 DGA component specs, the name your library probably uses, and — the column that matters —
 **the DGA-specific constraint your library will not give you for free.**
 
-Full DGA specs (anatomy, six states, ARIA, do/don't) live in
+Full DGA specs (anatomy, each component's listed states, ARIA, do/don't) live in
 `../../dga-design-system/references/components.md`. This file is the translation layer only.
 
 **How to read it.** Find the DGA component. If your library has an equivalent, use it and add the
@@ -70,7 +70,6 @@ states, 44px targets, no Arabic letter-spacing, logical properties.
 | Checkbox | `Checkbox` | `Checkbox` | `Checkbox` | `Checkbox` | DGA includes an **Indeterminate** state. |
 | Radio | `RadioGroup` | `RadioGroup` | `RadioGroup` | `Radio.Group` | `fieldset` + `legend`, roving tabindex, arrows move within the group. |
 | Switch | `Switch` | `Switch` | `Switch` | `Switch` | `role="switch"` + `aria-checked`. |
-| Select / Dropdown | `Select` | `Select` | `Select` | `Select` | Needs an error state and helper text — wrap in the library's field/form-item. |
 | Slider | `Slider` | `Slider` | `Slider` | `Slider` | ⚠️ **RTL: the value must increase toward the start edge.** Several libraries get this wrong — test it. |
 | File Uploader | `<input type=file>` | `FileUpload` | build | `Upload` | Enter **or Space** opens the dialog from the drop area. |
 | Steps | `Stepper` | `Steps` | build | `Steps` | ✅ DGA states RTL explicitly: progresses right-to-left, and the final step's connector moves to the **left**. 🚩 **Radial Stepper on mobile**, Progress Indicator on large screens — a required responsive swap, not a nicety. |
@@ -114,8 +113,17 @@ No component library ships a compliant government shell. This is the bulk of the
 | **Table of Contents** | **build** | Required on content-heavy pages. Activation must move **focus**, not just scroll. |
 | **Second Nav Header** | **build** | Contextual bar above the primary nav. `aria-live="polite"` on live values. |
 | **Footer** | **build** | 🚩 Must contain **Accessibility Tools** (font-size + contrast controls), **first in tab order**. `role="contentinfo"`. |
+
+### Not DGA components — but you will build them alongside
+
+The tables above map exactly the 50 component pages. These three are requirements or patterns
+from elsewhere in DGA's guidance, kept here because they land in the same build.
+
+| Item | Library | DGA constraint |
+|---|---|---|
+| Form select | `Select` (every library) | DGA has **no** form-select component page — the nearest is Dropdown under Actions. Needs an error state and helper text — wrap in the library's field/form-item. |
 | Skip link | usually **build** | Required on **every** page, first in the DOM inside the header. A handful of libraries ship one (Chakra's `SkipNavLink`); most do not. |
-| **Feedback section** | **build** | 🚩 "Was this page useful?" + Yes/No + reason options, on every page. Feeds the mandated performance-statistics page. |
+| **Feedback section** | **build** | 🚩 A **template**, not a component: "Was this page useful?" + Yes/No + reason options, on every page. Feeds the mandated performance-statistics page. |
 
 ## Mobile
 

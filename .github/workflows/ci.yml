@@ -9,6 +9,8 @@
 #   * checkout and setup actions fetch the repository and toolchains.
 #   * the check job and installer matrix install PyYAML for YAML/conversion tests.
 #   * "Tailwind preset actually builds" installs tailwindcss from npm.
+#   * "Codex discovers the plugin's skills" installs the pinned Codex CLI from npm. It contacts
+#     neither DGA nor OpenAI's model API: `codex debug prompt-input` renders locally, no login.
 # An earlier version of this header claimed "none of these touch the network" while the Tailwind
 # step ran `npm i`. If you add a networked step, amend this list rather than the claim.
 name: CI
@@ -57,8 +59,11 @@ jobs:
         run: python harvest/reconcile-tokens.py --test
 
       - name: Installer self-check leaves no scratch directories
-        # cleanScratch() is called from a finally, so a leak is invisible from inside the test
-        # itself - 49 fixture directories piled up in the temp folder before it was wired in.
+        # Symlink refusal and the agent-payload validation, which the end-to-end matrix below
+        # cannot easily reach - and the scratch directories it must clean up. cleanScratch() is
+        # called from a finally, so a leak is invisible from inside the test itself: 49 fixture
+        # directories piled up in the temp folder before it was wired in. (A second step ran the
+        # same self-check again; it was removed, as were two duplicated Codex-agent steps.)
         shell: bash
         run: |
           node bin/dga-kit.mjs --test
@@ -66,12 +71,6 @@ jobs:
           leaked=( "${RUNNER_TEMP:-/tmp}"/dga-kit-selftest-* )
           test "${#leaked[@]}" -eq 0             || { echo "self-check leaked ${#leaked[@]} scratch directories: ${leaked[*]}"; exit 1; }
           echo 'self-check left no scratch directories'
-
-      - name: Installer self-check
-        # Symlink refusal and the agent-payload validation, which the end-to-end matrix below
-        # cannot easily reach. These moved here from the Python installer's unittest suite when
-        # three installers became one.
-        run: node bin/dga-kit.mjs --test
 
       - name: Codex agents match their Markdown sources
         # codex-agents/*.toml is generated from agents/*.md. An agent edited in Markdown and not
@@ -87,12 +86,6 @@ jobs:
         # markdown and not regenerated is a case the runner never runs.
         run: python evals/build-evals-json.py --check
 
-      - name: Native Codex agents match the Claude sources
-        run: python evals/build-codex-agents.py --check
-
-      - name: Codex agent conversion and installer safety
-        run: python evals/test-codex-agents.py
-
       - name: Contrast maths self-check
         run: node skills/dga-design-system/assets/check-contrast.mjs --test
 
@@ -104,24 +97,15 @@ jobs:
           git diff --exit-code -- skills/dga-design-system/assets/tokens.css \
                                   skills/dga-design-system/assets/tailwind-preset.js
 
-      - name: Codex's own plugin validator
-        # The repo claims (README, INSTALL, CHANGELOG) that it passes Codex's validator. That
-        # claim was unguarded: our fixtures emulate the schema, and an emulation stays green when
-        # the real contract moves. The validator ships inside a Codex installation, which a
-        # runner does not have - so this locates it and reports plainly when it is absent rather
-        # than passing in silence. Locally it runs for real.
+      - name: Codex discovers the plugin's skills
+        # Replaces "Codex's own plugin validator", which looked for validate_plugin.py inside a
+        # Codex installation. Codex 0.160.1 no longer ships that script, so the step printed
+        # SKIPPED and passed on every run. This installs the working tree into a throwaway Codex
+        # profile and asserts the skills Codex actually discovers - a runtime test, not a manifest
+        # validator. It fails, rather than skips, if codex is missing.
         run: |
-          V=$(find "$HOME/.codex/skills/.system/plugin-creator/scripts" -name validate_plugin.py \
-                2>/dev/null | head -1 || true)
-          if [ -z "$V" ]; then
-            echo "SKIPPED: no Codex installation on this runner, so the official validator"
-            echo "could not run. The fixtures' emulation of the schema still ran."
-            echo "Run it locally before releasing:"
-            echo "  python ~/.codex/skills/.system/plugin-creator/scripts/validate_plugin.py ."
-            exit 0
-          fi
-          python -m pip install --quiet pyyaml
-          python "$V" .
+          npm install -g --no-fund --no-audit @openai/codex@0.160.1
+          python evals/test-codex-discovery.py
 
       - name: Installer parses and plans
         # Replaced `bash -n install-skills.sh`, which kept running for a full review round after
@@ -132,7 +116,8 @@ jobs:
       - name: Manifests are valid JSON
         run: |
           for f in .claude-plugin/plugin.json .claude-plugin/marketplace.json \
-                   .codex-plugin/plugin.json harvest/source-inventory.json \
+                   .codex-plugin/plugin.json .agents/plugins/marketplace.json \
+                   harvest/source-inventory.json \
                    skills/dga-design-system/assets/tokens.json; do
             python -c "import json,sys;json.load(open(sys.argv[1],encoding='utf-8'))" "$f"
           done

@@ -2,10 +2,10 @@
   "$meta": {
     "purpose": "Authoritative map of every design.dga.gov.sa page this kit depends on, which reference file owns it, and what a change would invalidate.",
     "source": "https://design.dga.gov.sa/",
-    "generated": "2026-08-27",
+    "generated": "2026-10-08",
     "generatedBy": "harvest/sources.py --baseline",
-    "publishedVersion": "1.0.3",
-    "publishedVersionDate": "2025-11-04",
+    "publishedVersion": "4.0.0",
+    "publishedVersionDate": null,
     "publishedVersionSource": "https://design.dga.gov.sa/updates/change-log"
   },
   "$ownershipScope": "owns[] lists the reference files that declare a DGA page as their SOURCE. Files derived from those references - dga-ui-adapter/references/component-mapping.md, token-wiring.md, dga-rtl-i18n/references/rtl-rules.md - are NOT listed: this kit's architecture is that rules live once in dga-design-system/references/, and those files read from it rather than from DGA. Follow the chain through the owning reference, not around it. Append-only records are also excluded: references/capture-log.md logs what was captured and when, so a DGA change does not make it wrong - it stays true as history. dga-version.md IS listed, because a release means the pin itself must change.",
@@ -25,7 +25,7 @@
       "responsive-design"
     ],
     "components": 50,
-    "templates": 19,
+    "templates": 21,
     "foundations": 5,
     "thoughts": 6,
     "note": "Asserted by evals/validate-fixtures.py. Both counts have been wrong in this repo before - the templates figure was published as 19 while the harvest held 17 - so they are machine-checked rather than trusted."
@@ -33,7 +33,7 @@
   "criticalFacts": [
     {
       "fact": "published version",
-      "value": "1.0.3",
+      "value": "4.0.0",
       "where": "/updates/change-log",
       "breaks": "skills/dga-design-system/dga-version.md and every \"current version\" claim"
     },
@@ -61,15 +61,15 @@
       "url": "https://design.dga.gov.sa/",
       "status": 200,
       "bytes": 4417,
-      "sha256": "0e37ad7480c5799f848bced09a5d24e3c7c416720b20d0946d59755a6efa3647",
+      "sha256": "4657e9972d506af737d8dbc6332c90b48cb9380823b4f581b126855902078c24",
       "note": "The SPA shell. Served for EVERY route, valid or not - see the module docstring. Its hash changes when DGA rebuilds, which is the same signal as the asset filename below, one request earlier."
     },
     "stylesheet": {
-      "url": "https://design.dga.gov.sa/assets/index-PDaQ7SHU.css",
+      "url": "https://design.dga.gov.sa/assets/index-CYyqM6kT.css",
       "status": 200,
-      "bytes": 4044922,
-      "sha256": "a1ccbe89c4c58f65f949f9c1775cee6f23835127b1f2e70d5bea3798489a9a9b",
-      "buildHash": "PDaQ7SHU",
+      "bytes": 4054470,
+      "sha256": "8e6eceb43957f5b575426f09fe3eb3ad976fca09f33eae54c23597df27a9d1f1",
+      "buildHash": "CYyqM6kT",
       "customProperties": 1126,
       "facts": {
         "text.secondary.declared": "var(--colors-secondary-gold-600-primary)",
@@ -81,11 +81,11 @@
       "note": "THE tripwire. The filename carries Vite's build hash, so it changes on every DGA deploy. This file also holds the whole token surface, including the 402 dark-theme declarations under the unmatchable [data-theme=dark] :root selector."
     },
     "bundle": {
-      "url": "https://design.dga.gov.sa/assets/index-cnrvMddo.js",
+      "url": "https://design.dga.gov.sa/assets/index-BO_6JOKP.js",
       "status": 200,
-      "bytes": 14779282,
-      "sha256": "f151faac81dcc54008e5cdfe51f1c4a2271f91688ca65a0ea2ee334cb7e3d8f2",
-      "buildHash": "cnrvMddo",
+      "bytes": 14860610,
+      "sha256": "4b8aa21d37ab66d281ec1a1ff2dacfe3e911b2d7296a9c5ea89e668c18af0340",
+      "buildHash": "BO_6JOKP",
       "routes": {
         "components": [
           "/guidelines/components/actions/buttons",
@@ -153,7 +153,9 @@
           "/guidelines/templates/hajj-template",
           "/guidelines/templates/help-page",
           "/guidelines/templates/home-page",
+          "/guidelines/templates/life-journeys",
           "/guidelines/templates/national-day",
+          "/guidelines/templates/national-day-96",
           "/guidelines/templates/page-not-found",
           "/guidelines/templates/rating-section",
           "/guidelines/templates/search-page",
@@ -175,21 +177,41 @@
           "/thoughts/localAndGlobal",
           "/thoughts/responsive-design"
         ],
+        "unlinked": [
+          "/guidelines/templates/national-day"
+        ],
+        "unrouted": [],
         "releases": [
           "1.0.0",
-          "1.0.1",
-          "1.0.2",
-          "1.0.3"
+          "1.1.0",
+          "1.2.0",
+          "2.0.0",
+          "2.1.0",
+          "2.2.0",
+          "2.3.0",
+          "2.4.0",
+          "2.5.0",
+          "2.6.0",
+          "3.0.0",
+          "3.1.0",
+          "3.2.0",
+          "3.3.0",
+          "3.4.0",
+          "3.5.0",
+          "3.6.0",
+          "4.0.0"
         ]
       },
       "counts": {
         "components": 50,
-        "templates": 19,
+        "templates": 21,
         "foundations": 5,
         "thoughts": 6,
-        "releases": 4
+        "unlinked": 1,
+        "unrouted": 0,
+        "releases": 18
       },
-      "note": "The SPA bundle carries the route table and one route per release. This is what makes the 50/19 contract and \"has DGA released?\" answerable without a browser. Only page prose still needs one."
+      "note": "The SPA bundle carries the router table, and names the releases chunk the release list is read from. This is what makes the route contract and \"has DGA released?\" answerable without a browser. Only page prose still needs one."
     },
     "sitemap": {
       "url": "https://design.dga.gov.sa/sitemap.xml",
@@ -434,14 +456,16 @@
         "hajj-template",
         "help-page",
         "home-page",
+        "life-journeys",
         "national-day",
+        "national-day-96",
         "page-not-found",
         "rating-section",
         "search-page",
         "service-page",
         "sitemap-page"
       ],
-      "expectedCount": 19,
+      "expectedCount": 21,
       "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it."
     },
     {
@@ -541,7 +565,7 @@
       "contentHash": null,
       "verified": null,
       "why": "SPA: the page text only exists after client-side navigation, so no curl can hash it.",
-      "watch": "A new /updates/change-log/version-history-* route is the definitive \"DGA released\" signal. Current published version: 1.0.3 (4 Nov 2025)."
+      "watch": "The release list is the assets/releases-<hash>.js chunk; a new version there is the definitive \"DGA released\" signal. DGA renumbered its history in 2026 and publishes no release dates."
     },
     {
       "url": "/updates/roadmap",

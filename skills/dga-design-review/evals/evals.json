@@ -71,7 +71,7 @@
       "id": 6,
       "name": "rtl-steps",
       "prompt": "Use the dga-design-review skill.\n\nArabic multi-step form. Steps run left-to-right, and the final step's connector line sits on\nits right side. Progress Indicator used at all breakpoints including mobile.",
-      "expected_output": "Steps is one of only six places DGA speaks to RTL directly. The reviewer should cite DGA here\nrather than falling back to generic bidi guidance — the citation is what makes the finding\nstick in a review meeting.",
+      "expected_output": "Steps is one of the few pages where DGA speaks to RTL directly (the total is unverified — never\ncite a count). The reviewer should cite DGA here\nrather than falling back to generic bidi guidance — the citation is what makes the finding\nstick in a review meeting.",
       "expectations": [
         "**Blocker** — under RTL, steps progress right-to-left, and the final step has no line on the **left** side. DGA states both explicitly.",
         "**Major** — DGA specifies **Radial Stepper on mobile and small screens**, Progress Indicator on large screens. Using one component at all breakpoints misses a required responsive swap.",
@@ -131,7 +131,7 @@
     {
       "id": 11,
       "name": "clean-screen",
-      "prompt": "Use the dga-design-review skill.\n\nA Contact Us page: DGA template structure, all colours on-token, type from the DGA scale,\n44px targets, skip link present, footer with Accessibility Tools and both last-modified dates,\nfeedback section with \"Was this page useful?\" plus reason options, ar and en at parity, RTL\ncorrect, all six states specified on the form inputs.",
+      "prompt": "Use the dga-design-review skill.\n\nA Contact Us page: DGA template structure, all colours on-token, type from the DGA scale,\n44px targets, skip link present, footer with Accessibility Tools and both last-modified dates,\nfeedback section with \"Was this page useful?\" plus reason options, ar and en at parity, RTL\ncorrect, the five states DGA lists for inputs (Default, Hovered, Pressed, Focused, Disabled) specified on\nthe form inputs.",
       "expected_output": "A reviewer that always finds something. The correct answer is that this one passes.",
       "expectations": [
         "verdict: **Ready for development**",

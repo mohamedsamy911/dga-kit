@@ -25,14 +25,14 @@ everything here, and each was verified against the live site on 2026-08-27:
    including the 402 dark-theme declarations.
 
 3. `sitemap.xml` exists and is fetchable, but it is STALE: it lists 34 components and 16
-   templates against the real 50 and 19, and its template set is exactly the Sep 2024 release.
-   It is a lower-bound signal - if it grows, something happened - and must never be used as the
-   route count.
+   templates against the real 50 and 19 (21 since 2026-10-08), and its template set is exactly
+   the Sep 2024 release. It is a lower-bound signal - if it grows, something happened - and must
+   never be used as the route count.
 
-4. The JS bundle is a static asset too, and it CONTAINS THE ROUTE TABLE - all 50 component
-   slugs, all 19 template slugs, the 5 foundations, the 6 Thoughts articles, and one route per
-   published release (`version-history-1-0-3`). So the route contract and "has DGA released?"
-   are answerable by curl after all. Only page PROSE needs a browser.
+4. The JS bundle is a static asset too, and it CONTAINS THE ROUTER TABLE - all 50 component
+   slugs, all 21 template slugs (2026-10-08), the 5 foundations, the 6 Thoughts articles - and
+   it names the `releases-<hash>.js` chunk that holds the release list. So the route contract
+   and "has DGA released?" are answerable by curl after all. Only page PROSE needs a browser.
 
    That is a better split than the plan assumed, and it is why `--check` can verify the counts.
    Thoughts routes are stored without a leading slash (`"thoughts/atomic-design"`); the
@@ -90,8 +90,9 @@ COMPONENTS = {
 }
 TEMPLATES = ['about-page', 'chatbot', 'contact-us-page', 'content-page', 'cookies-banner',
              'e-participation-page', 'faqs-page', 'feedback-section', 'form-page', 'founding-day',
-             'hajj-template', 'help-page', 'home-page', 'national-day', 'page-not-found',
-             'rating-section', 'search-page', 'service-page', 'sitemap-page']
+             'hajj-template', 'help-page', 'home-page', 'life-journeys', 'national-day',
+             'national-day-96', 'page-not-found', 'rating-section', 'search-page', 'service-page',
+             'sitemap-page']
 FOUNDATIONS = ['color-system', 'elevation', 'iconography', 'layout-and-spacing', 'typography']
 THOUGHTS = ['AccessibilityEase', 'atomic-design', 'consistency-and-unified-identity',
             'designToken', 'localAndGlobal', 'responsive-design']
@@ -168,7 +169,7 @@ def asset_problem(kind, status, body):
         if n < 100:
             return (f'stylesheet declares {n} custom properties; DGA publishes over a thousand, '
                     f'so this is not the token surface')
-    else:
+    elif kind == 'bundle':
         r = routes_from_js(body)
         empty = [g for g in ('components', 'templates', 'foundations') if not r[g]]
         if empty:
@@ -226,7 +227,7 @@ def tier_a_baselines():
     if not m:
         raise NotTheSite(
             'no /assets/index-<hash>.js link in the shell. Refusing to write a baseline with no '
-            'route table - the 50/19/5/6 contract would be unverifiable.')
+            'route table - the route contract would be unverifiable.')
     js_path = m.group(1).decode()
     status, js = fetch(BASE + js_path)
     bad = asset_problem('bundle', status, js)
@@ -234,16 +235,17 @@ def tier_a_baselines():
         raise NotTheSite(
             bad + f' ({BASE + js_path}, {len(js)} bytes). The shell was valid, so this is most '
             f'likely a proxy or maintenance response for the asset alone. Refusing to write a '
-            f'baseline with no route table - the 50/19/5/6 contract would be unverifiable.')
+            f'baseline with no route table - the route contract would be unverifiable.')
     r = routes_from_js(js)
+    r['releases'] = fetch_releases(js)
     out['bundle'] = {
         'url': BASE + js_path, 'status': status, 'bytes': len(js), 'sha256': sha(js),
         'buildHash': js_path.split('index-')[-1].split('.js')[0],
         'routes': r,
         'counts': {k: len(v) for k, v in r.items()},
-        'note': 'The SPA bundle carries the route table and one route per release. This is '
-                'what makes the 50/19 contract and "has DGA released?" answerable without a '
-                'browser. Only page prose still needs one.',
+        'note': 'The SPA bundle carries the router table, and names the releases chunk the '
+                'release list is read from. This is what makes the route contract and "has DGA '
+                'released?" answerable without a browser. Only page prose still needs one.',
     }
 
     if 'stylesheet' in out:
@@ -275,10 +277,26 @@ def tier_a_baselines():
     return out
 
 
-# Routes live in the JS bundle as quoted strings. Thoughts entries omit the leading slash, so
-# it is optional here - requiring it silently returned zero Thoughts routes on the first attempt.
+# Quoted route strings in the bundle. Thoughts entries omit the leading slash, so it is optional
+# here - requiring it silently returned zero Thoughts routes on the first attempt.
+#
+# These strings are mostly NAV LINKS, not the route table, and until 2026-10-08 they were the only
+# thing read. That day DGA dropped National Day 95 from its nav while still serving the page, and
+# the link reader reported it removed and counted 20 templates where 21 were routed. The router's
+# own table - `{basePath:"/guidelines/templates",routes:[{path:"home-page",...},...]}` - is now the
+# authority for what is published; link strings are kept only to report the nav separately. A
+# union of the two would hide exactly the case that matters: a page removed from the router whose
+# stale nav link survives.
 ROUTE_IN_JS = re.compile(rb'["\'`](/?(?:guidelines|thoughts|updates)/[A-Za-z0-9_./-]+)["\'`]')
-VERSION_ROUTE = re.compile(rb'version-history-([0-9-]+)')
+ROUTE_GROUP = re.compile(rb'basePath:"([^"]+)",routes:\[')
+# DGA renumbered its release history in 2026 - the 1.0.0-1.0.3 list became 18 releases ending
+# 4.0.0 - and every old `version-history-1-0-x` route now renders that same new list, so those
+# route strings stopped being a release signal. The list ships as its own small chunk, named in
+# the main bundle.
+RELEASES_CHUNK = re.compile(rb'assets/releases-[A-Za-z0-9_-]+\.js')
+RELEASE_VERSION = re.compile(rb'version:"(\d+\.\d+\.\d+)"')
+GROUPS = (('components', '/guidelines/components/', 4), ('templates', '/guidelines/templates/', 3),
+          ('foundations', '/guidelines/foundations/', 3), ('thoughts', '/thoughts/', 2))
 
 
 def version_key(v):
@@ -299,19 +317,80 @@ def version_key(v):
     return tuple(out)
 
 
+def route_table(js):
+    """Every `basePath + path` in the router's own table.
+
+    Bracket-matched and string-aware: each route entry carries a nested `__vite__mapDeps([...])`,
+    so a regex stopping at the first `]` would read one route per group and miss the rest.
+    """
+    out = set()
+    for m in ROUTE_GROUP.finditer(js):
+        i = j = m.end()
+        depth, quote = 1, None
+        while depth and j < len(js):
+            c = js[j:j + 1]
+            if quote:
+                if c == b'\\':
+                    j += 1
+                elif c == quote:
+                    quote = None
+            elif c in (b'"', b"'", b'`'):
+                quote = c
+            elif c == b'[':
+                depth += 1
+            elif c == b']':
+                depth -= 1
+            j += 1
+        base = m.group(1).decode().rstrip('/')
+        for p in re.findall(rb'path:"([^"]+)"', js[i:j - 1]):
+            out.add(base + '/' + p.decode().lstrip('/'))
+    return out
+
+
 def routes_from_js(js):
-    """The published route table, straight out of the SPA bundle."""
-    found = {('/' + m.decode().lstrip('/')) for m in ROUTE_IN_JS.findall(js)}
-    def group(prefix, depth):
+    """The published routes, from the router table, plus how the nav disagrees with it.
+
+    Each group lists ROUTED pages. Where a nav link spells a routed page differently only in case
+    (`steps` vs the router's `Steps`) the link's spelling is kept, so the baseline does not churn
+    on capitalisation. `unlinked` is routed but absent from the nav (National Day 95 since
+    2026-10-08); `unrouted` is linked from the nav but not routed - a dead link, or a removal the
+    nav has not caught up with.
+    """
+    links = {('/' + m.decode().lstrip('/')) for m in ROUTE_IN_JS.findall(js)}
+    by_lower = {r.lower(): r for r in links}
+    table = {by_lower.get(r.lower(), r) for r in route_table(js)}
+
+    def group(found, prefix, depth):
         return sorted(r for r in found if r.startswith(prefix) and r.count('/') >= depth)
-    return {
-        'components': group('/guidelines/components/', 4),
-        'templates': group('/guidelines/templates/', 3),
-        'foundations': group('/guidelines/foundations/', 3),
-        'thoughts': group('/thoughts/', 2),
-        'releases': sorted({m.decode().replace('-', '.') for m in VERSION_ROUTE.findall(js)},
-                           key=version_key),
-    }
+    out = {g: group(table, prefix, depth) for g, prefix, depth in GROUPS}
+    nav = set().union(*(group(links, prefix, depth) for _, prefix, depth in GROUPS))
+    routed = set().union(*(out[g] for g, _, _ in GROUPS))
+    out['unlinked'] = sorted(routed - nav)
+    out['unrouted'] = sorted(nav - routed)
+    return out
+
+
+def releases_from_chunk(chunk):
+    """Versions in DGA's `releases-<hash>.js` chunk, oldest first."""
+    return sorted({m.decode() for m in RELEASE_VERSION.findall(chunk)}, key=version_key)
+
+
+def fetch_releases(js):
+    """The release list, or NotTheSite: without it "has DGA released?" cannot be answered, and
+    that is the sentinel failing to complete (exit 2), not a finding about DGA."""
+    m = RELEASES_CHUNK.search(js)
+    if not m:
+        raise NotTheSite('the bundle names no assets/releases-<hash>.js chunk - the release '
+                         'list moved; update RELEASES_CHUNK in harvest/sources.py')
+    url = BASE + '/' + m.group(0).decode()
+    status, chunk = fetch(url)
+    bad = asset_problem('releases', status, chunk)
+    if bad:
+        raise NotTheSite(f'{bad} ({url})')
+    rel = releases_from_chunk(chunk)
+    if not rel:
+        raise NotTheSite(f'the releases chunk lists no version:"x.y.z" entries ({url})')
+    return rel
 
 
 def _declared(css, name):
@@ -377,7 +456,7 @@ def sources():
                'page", so a change to ANY component page can stale it.'),
         s('/guidelines/templates/{slug}', 'template',
           [DS + 'patterns.md', DS + 'brand.md', DS + 'content.md', DS + 'mobile.md'],
-          routes=TEMPLATES, expectedCount=19, why=why_b),
+          routes=TEMPLATES, expectedCount=21, why=why_b),
 
         # The six Thoughts articles have genuinely different dependants, so they are listed
         # individually rather than as one group with a single owner.
@@ -400,8 +479,9 @@ def sources():
         s('/updates/change-log', 'release',
           ['skills/dga-design-system/dga-version.md', 'skills/dga-tokens-sync/SKILL.md'],
           why=why_b,
-          watch='A new /updates/change-log/version-history-* route is the definitive "DGA '
-                'released" signal. Current published version: 1.0.3 (4 Nov 2025).'),
+          watch='The release list is the assets/releases-<hash>.js chunk; a new version there is '
+                'the definitive "DGA released" signal. DGA renumbered its history in 2026 and '
+                'publishes no release dates.'),
         s('/updates/roadmap', 'release', ['skills/dga-tokens-sync/references/library-migration.md'],
           why=why_b,
           watch='Dates here disagree with the change log by a year. Cite the change log.'),
@@ -452,6 +532,7 @@ def _carry_accepted(fresh):
 def build():
     print('fetching Tier A baselines...')
     tier_a = tier_a_baselines()
+    latest = max(tier_a['bundle']['routes']['releases'], key=version_key)
     doc = {
         '$meta': {
             'purpose': 'Authoritative map of every design.dga.gov.sa page this kit depends on, '
@@ -459,8 +540,9 @@ def build():
             'source': BASE + '/',
             'generated': date.today().isoformat(),
             'generatedBy': 'harvest/sources.py --baseline',
-            'publishedVersion': '1.0.3',
-            'publishedVersionDate': '2025-11-04',
+            'publishedVersion': latest,
+            # DGA's renumbered change log (2026) publishes no release dates. Do not fill one in.
+            'publishedVersionDate': None,
             'publishedVersionSource': BASE + '/updates/change-log',
         },
         '$ownershipScope':
@@ -486,7 +568,7 @@ def build():
         'contracts': {
             'thoughtsRoutes': THOUGHTS,
             'components': 50,
-            'templates': 19,
+            'templates': 21,
             'foundations': 5,
             'thoughts': 6,
             'note': 'Asserted by evals/validate-fixtures.py. Both counts have been wrong in this '
@@ -494,7 +576,7 @@ def build():
                     'held 17 - so they are machine-checked rather than trusted.',
         },
         'criticalFacts': [
-            {'fact': 'published version', 'value': '1.0.3',
+            {'fact': 'published version', 'value': latest,
              'where': '/updates/change-log',
              'breaks': 'skills/dga-design-system/dga-version.md and every "current version" claim'},
             {'fact': 'mandatory assessment criteria', 'value': 4,
@@ -570,10 +652,21 @@ def compare(base, obs, contracts):
                 out.append((f'{group} routes changed',
                             f'+{sorted(set(got) - was)} -{sorted(was - set(got))}'))
 
+        for key, title in (('unlinked', 'routed pages missing from the nav changed'),
+                           ('unrouted', 'nav links to unrouted pages changed')):
+            was = set((base.get('bundle') or {}).get('routes', {}).get(key) or [])
+            got = set(routes.get(key) or [])
+            if got != was:
+                out.append((title, f'+{sorted(got - was)} -{sorted(was - got)}'))
+
         was_rel = set((base.get('bundle') or {}).get('routes', {}).get('releases') or [])
-        new_rel = sorted(set(routes.get('releases') or []) - was_rel, key=version_key)
+        live_rel = set(routes.get('releases') or [])
+        new_rel = sorted(live_rel - was_rel, key=version_key)
         if new_rel:
             out.append(('NEW RELEASE published', ', '.join(new_rel)))
+        gone_rel = sorted(was_rel - live_rel, key=version_key)
+        if live_rel and gone_rel:
+            out.append(('RELEASES NO LONGER LISTED', ', '.join(gone_rel)))
 
     for k, was_v in ((base.get('stylesheet') or {}).get('facts') or {}).items():
         if obs.get('facts') is None:
@@ -666,6 +759,7 @@ def check():
         else:
             obs['deepRead'] = True
             live_routes = routes_from_js(js)
+            live_routes['releases'] = fetch_releases(js)
             obs['routes'] = live_routes
             obs['counts'] = {k: len(v) for k, v in live_routes.items()}
             obs['releases'] = live_routes['releases']
@@ -701,7 +795,7 @@ def write_freshness(inv, obs, findings, notes):
         return f'`{live}`' if live == was else f'`{live}` ⚠️ **was** `{was}`'
 
     ver = max(obs['releases'], key=version_key) if obs.get('releases') else None
-    ver_row = (f'**{ver}** (observed in the bundle this run)' if ver else
+    ver_row = (f'**{ver}** (observed in the releases chunk this run)' if ver else
                f'{inv["$meta"]["publishedVersion"]} — *baseline value; releases not read this run*')
 
     L = [
@@ -727,8 +821,12 @@ def write_freshness(inv, obs, findings, notes):
             live = obs['counts'].get(g, '—')
             want = inv['contracts'].get(g, '—')
             L.append(f'| {g} | **{live}** | {want} | {"✅" if live == want else "🚩"} |')
-        L += ['', '> Counts come from the route table inside the SPA bundle, not from '
-              '`sitemap.xml`,', '> which is stale and is a lower-bound signal only.', '']
+        L += ['', '> Counts come from the router table inside the SPA bundle, not from nav links',
+              '> or `sitemap.xml`, which is stale and is a lower-bound signal only.', '']
+        for key, label in (('unlinked', 'Routed but not in DGA\'s nav'),
+                           ('unrouted', 'In DGA\'s nav but not routed')):
+            if (obs.get('routes') or {}).get(key):
+                L += [f'{label}: ' + ', '.join(f'`{r}`' for r in obs['routes'][key]), '']
     else:
         L += ['**Not observed this run.** The bundles were not downloaded, so no live count was',
               'taken. Last recorded values, from the baseline of '

@@ -392,31 +392,33 @@ being invented — and to price it. See `dga-frontend-architect` decision 8.
 
 ## Contributing back to DGA
 
-**Source:** /contributing · retrieved 2026-08-27 · also /support
+**Source:** /contributing · retrieved 2026-10-08 (page rewritten since the 2026-08-27 capture) ·
+also /support
 
 Where to send a defect found in DGA's published documentation — this kit has a list of seven in
 `capture-log.md`.
 
-**Is it worth contributing?** DGA's four tests: **Relevance** (fixes an issue or meaningfully
-enhances the platform) · **Broad impact** (benefits the majority, not niche cases) · **Minor
-enhancements** (bug fixes, new icons — *"always valuable"*) · **Major additions** (new components
-need thorough evaluation).
+**What DGA asks a contribution to be** — its five principles: **Consistent** (aligned with the
+Platforms Code principles, components and visual language) · **Reusable** (built for reuse, not
+one use case) · **Accessible** · **User-Centered** · **Well Documented** (clear guidance, usage
+recommendations, examples).
 
-**The four steps, and their real status:**
+**What it accepts:** icons & illustrations · components · patterns · templates & sections ·
+documentation & guidance · accessibility improvements.
 
-| # | Step | Status on 2026-08-27 |
-|---|---|---|
-| 1 | Familiarize yourself with core principles and components | live |
-| 2 | Join the community — forums, community meetings | **"soon"** |
-| 3 | Follow contribution guidelines on the GitHub page | **"soon"** |
-| 4 | Submit contributions via GitHub with a clear description | Submit |
+**The five steps:** Explore → Create → **Submit** (*"Share your contribution with the Platforms
+Code team for review"*) → Review (*"quality, usability, consistency, accessibility, and alignment
+with the Platforms Code"*) → Share (approved work can become part of the Platforms Code).
 
-Types accepted: **design**, **code**, **documentation**.
+> **Where Submit goes.** On 2026-10-08 the page's Submit button opens a club page on
+> **hawi.gov.sa**; it is a button with no link text naming a process, and the page mentions no
+> GitHub repository. That is where the button points today, not a documented submission
+> procedure — and the earlier *"soon"* GitHub route is gone, so do not tell anyone to open a pull
+> request. **DS-DGA@dga.gov.sa** remains DGA's published contact.
 
-> 🚩 **There is no published GitHub URL and no published contribution guideline.** Steps 2 and 3
-> are both marked *"soon"*, and the page names no repository. Until that changes, the only working
-> route is **DS-DGA@dga.gov.sa**. Do not tell anyone to open a pull request against a repository
-> this kit cannot name.
+DGA now showcases accepted community work: the National Day 96 hero sections and Saudi icons
+(see `patterns.md`) came from its National Day 96 contribution competition, each with a case-study
+page under `/contributing/`. Those pages are narrative, not rules.
 
 > `/support` describes a **"beem community"** as a support channel and a **Storybook** for
 > developers. Neither is live — Storybook is marked "soon" on every component page. Several

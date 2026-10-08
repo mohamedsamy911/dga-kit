@@ -294,7 +294,13 @@ _GOOD_SHELL = (b'<!doctype html><html><head>'
                b'</head><body><div id="root"></div></body></html>')
 _GOOD_CSS = b':root{' + b''.join(b'--tok-%d:#000;' % i for i in range(300)) + b'}'
 _GOOD_JS = (b'"/guidelines/components/actions/buttons","/guidelines/templates/home-page",'
-            b'"/guidelines/foundations/color-system","/thoughts/atomic-design"')
+            b'"/guidelines/foundations/color-system","/thoughts/atomic-design",'
+            b'{basePath:"/guidelines/components/actions",routes:[{path:"buttons"}]},'
+            b'{basePath:"/guidelines/templates",routes:[{path:"home-page"}]},'
+            b'{basePath:"/guidelines/foundations",routes:[{path:"color-system"}]},'
+            b'{basePath:"/",routes:[{path:"thoughts/atomic-design"}]},'
+            b'"assets/releases-r1.js"')
+_RELEASES = b'const r=[{version:"4.0.0",type:"major"},{version:"1.0.0",type:"major"}];'
 _PROXY = b'<!DOCTYPE html><html><head><title>Sign in</title></head><body>SSO</body></html>'
 
 
@@ -302,6 +308,8 @@ def _serve(css_body, css_status, js_body, js_status):
     def _f(url, timeout=45):
         if url.endswith('.css'):
             return css_status, css_body
+        if '/assets/releases-' in url:
+            return 200, _RELEASES
         if url.endswith('.js'):
             return js_status, js_body
         if url.endswith('.xml'):
@@ -357,6 +365,75 @@ except sources.NotTheSite:
     _refused = True
 sources.fetch = _saved
 chk('C. a non-200 shell is refused as a baseline', _refused)
+
+# --- E. the router table is the authority, the nav is reported beside it (2026-10-08) --------
+# DGA dropped National Day 95 from its nav but kept serving it. Reading link strings alone
+# reported the page removed and 20 templates where 21 were routed.
+_TABLE_JS = (b'"/guidelines/templates/home-page","/guidelines/templates/gone-page",'
+             b'"/guidelines/components/forms-and-inputs/steps",'
+             b'{basePath:"/guidelines/templates",routes:[{path:"home-page",Component:C.lazy(()=>'
+             b'K(()=>import("./a.js"),__vite__mapDeps([1,2])))},{path:"national-day",Component:'
+             b'C.lazy(()=>K(()=>import("./b.js"),__vite__mapDeps([3])))}]},'
+             b'{basePath:"/guidelines/components/forms-and-inputs",routes:[{path:"Steps"}]}')
+_r = sources.routes_from_js(_TABLE_JS)
+chk('E. a routed template missing from the nav is still counted',
+    '/guidelines/templates/national-day' in _r['templates'], str(_r['templates']))
+chk('E. routes after a nested __vite__mapDeps([...]) are not cut off',
+    len(_r['templates']) == 2, str(_r['templates']))
+chk('E. a nav link to a page the router no longer has is NOT counted as published',
+    '/guidelines/templates/gone-page' not in _r['templates']
+    and _r['unrouted'] == ['/guidelines/templates/gone-page'], str(_r))
+chk('E. the nav gap is reported, not hidden',
+    _r['unlinked'] == ['/guidelines/templates/national-day'], str(_r['unlinked']))
+chk('E. link and router spellings that differ only in case count once, as the link spells it',
+    _r['components'] == ['/guidelines/components/forms-and-inputs/steps'], str(_r['components']))
+_o = observed()
+_o['routes']['unlinked'] = ['/guidelines/templates/national-day']
+chk('E. a page dropping out of the nav is a finding',
+    has(sources.compare(BASE, _o, CONTRACTS), 'missing from the nav'))
+
+# --- F. releases come from the releases chunk ---------------------------------------------
+# The old version-history-1-0-x routes now all render DGA's renumbered list, so they say nothing.
+chk('F. versions are read from the releases chunk, ordered numerically',
+    sources.releases_from_chunk(b'[{version:"4.0.0"},{version:"3.10.0"},{version:"3.9.0"}]')
+    == ['3.9.0', '3.10.0', '4.0.0'])
+_o = observed()
+_o['routes']['releases'] = ['1.0.0']
+_f = sources.compare(BASE, _o, CONTRACTS)
+chk('F. a release that disappears from the list is a finding',
+    has(_f, 'NO LONGER LISTED') and any('1.0.3' in d for t, d in _f if 'LISTED' in t), str(_f))
+
+
+def _refuses(serve, call):
+    sources.fetch = serve
+    try:
+        call()
+        return False
+    except sources.NotTheSite:
+        return True
+    finally:
+        sources.fetch = _saved
+
+
+chk('F. a bundle naming no releases chunk cannot complete (exit 2), it is not a finding',
+    _refuses(_serve(_GOOD_CSS, 200, _GOOD_JS, 200),
+             lambda: sources.fetch_releases(b'"/guidelines/templates/home-page"')))
+
+
+def _serve_rel(body, status):
+    inner = _serve(_GOOD_CSS, 200, _GOOD_JS, 200)
+    return lambda url, timeout=45: (status, body) if '/assets/releases-' in url else inner(url)
+
+
+chk('F. a releases chunk answered by a proxy page cannot complete',
+    _refuses(_serve_rel(_PROXY, 200), lambda: sources.fetch_releases(_GOOD_JS)))
+chk('F. a releases chunk with no versions cannot complete',
+    _refuses(_serve_rel(b'export{};', 200), lambda: sources.fetch_releases(_GOOD_JS)))
+chk('F. a healthy bundle and releases chunk still build a baseline',
+    not _refuses(_serve(_GOOD_CSS, 200, _GOOD_JS, 200), sources.tier_a_baselines))
+chk('F. a baseline with no release list is refused',
+    _refuses(_serve(_GOOD_CSS, 200, _GOOD_JS.replace(b',"assets/releases-r1.js"', b''), 200),
+             sources.tier_a_baselines))
 
 # --- 6. a contradiction is reported, never resolved ---------------------------
 # (a) live vs contract. The sentinel must report the disagreement and NOT adopt the live number:

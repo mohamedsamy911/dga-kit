@@ -67,8 +67,10 @@ disallowed text/background pair fails at build time, not at design review.
 
 **Never letter-space Arabic.** DGA's Display 2xl–md carry −2% tracking. Scope it to Latin.
 
-**Ship all six states.** Default, Hovered, Pressed, Selected, Focused, Disabled. Focused is an
-accessibility requirement, not a nicety.
+**Ship the states the component's page lists.** DGA's vocabulary is Default, Hovered, Pressed,
+Selected, Focused, Disabled, but each component specifies its own subset (inputs and tabs list
+five, no Selected) — check its spec in `../dga-design-system/references/components.md`. Focused
+is an accessibility requirement, not a nicety.
 
 **Semantic HTML, per DGA.** `<button>` for actions — never `<div>`. `<fieldset>`/`<legend>` for
 radio groups. `<ol>` for steps. `<nav aria-label="Breadcrumb">`. Per-component requirements in

@@ -3,8 +3,8 @@
 
 WHAT TIER B IS ACTUALLY FOR
 ---------------------------
-Less than the plan assumed. The SPA bundle turned out to carry the route table and the release
-list, so `sources.py --check` already verifies the 50/19/5/6 contract and detects releases by
+Less than the plan assumed. The SPA bundle turned out to carry the route table and to name the
+small chunk holding the release list, so `sources.py --check` already verifies the 50/21/5/6 contract and detects releases by
 plain GET. What is left for a browser is the readable PROSE of a page - a wording change that
 ships without a rebuild is invisible to Tier A, and prose is what every reference file quotes.
 

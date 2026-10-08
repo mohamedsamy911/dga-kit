@@ -9,9 +9,110 @@ claim is the more important entry, because someone may have shipped against it.
 This project does not follow semantic versioning strictly. A minor bump means new coverage; a
 patch means corrections. Nothing here is a DGA release — see
 `skills/dga-design-system/dga-version.md` for the Platforms Code version this kit is pinned to
-(currently **PC 1.0.3**, released 4 Nov 2025).
+(currently **4.0.0** per DGA's change log, read 2026-10-08; DGA publishes no release date).
 
-## Unreleased
+## 0.8.0 — 2026-10-08
+
+### Corrected — read these first
+
+- **"Six states" is DGA's vocabulary, not a per-component requirement.** The kit said DGA
+  specifies Default, Hovered, Pressed, Selected, Focused and Disabled *"for every interactive
+  component"*, and that a design specifying fewer *"is incomplete, not compliant"* — the latter
+  the kit's own gloss, in no capture. DGA's component pages list their own states: inputs, tabs
+  and menus five with no Selected, file uploader three, pagination four, breadcrumbs seven. The
+  universal rule reached `dga-ui-adapter`, `dga-react`, `dga-design-system`, `dga-brand-overlay`
+  and the `dga-code-reviewer` agent, which would flag compliant components — and two eval
+  fixtures **scored** it. Guidance now says: build the states that component's page lists.
+- **No total of DGA's RTL statements.** The kit had published three different totals — two,
+  four and six — in four places, while recording the count as unverified. Cite the pages.
+- **Hijri is not a requirement.** `components.md` said the project *"must supply Hijri
+  support"*; DGA states no calendar policy. It is now conditional on the entity's decision.
+- **The component inventory said 45** over a table of 47, against 50 published routes, and
+  attributed the 45 to DGA with no source (DGA's captured counter is 33+). The table now lists
+  all 50, marking the three absent from DGA's own navigation. The accessibility ARIA table
+  ("all 50", 49 rows) gains `List`; the component mapping ("All 50", 53 rows) moves its form
+  select, skip link and feedback-section template into a separate table.
+- **The freshness monitor was shown as working.** README gave it a ✅ while every hosted run
+  since 2026-08-31 — including each weekly schedule through 2026-10-05 — failed to reach DGA
+  (exit 2). It is now marked as built but not running, freshness is stated as unknown, and the
+  diagnostic report moved from an unreferenced `memory/` directory to `harvest/diagnostics/`.
+
+### Added — `--update`
+
+- `bin/dga-kit.mjs --update` refreshes what the installer recorded and **never** adopts. Updating
+  previously required `--force`, which also overwrote any unrecorded `dga-*` directory, so pulling
+  a release meant authorising the destruction of a same-named skill of your own. `--force` keeps
+  its behaviour. Pinned by self-check case 21.
+
+### Added — claim-class guards
+
+- The RTL-total and Hijri corrections had been made before, in one file each, with guards that
+  matched the old phrase; the same claims came back in sibling files with new numbers. The new
+  guards in `validate-fixtures.py` match the **class** of claim across skills, agents, generated
+  agents, eval fixtures and the root docs, and compare all three component tables with the route
+  contract as sets. Each was break-tested by restoring the original defect from `HEAD`.
+
+### Re-harvested — DGA's 2026 update
+
+A local sentinel run on 2026-10-08 found DGA had deployed. Re-captured through a rendered browser
+in English, and every fenced passage checked byte-for-byte against DGA's own JS bundle and its 167
+chunks: `harvest/raw/2026-10-08-dga-update.md`.
+
+- **Two new templates.** `national-day-96` and `life-journeys` are documented in `patterns.md`.
+  National Day 96 is not a re-skin of 95: three heroes (no Leaders Portrait), Dark Green footer
+  only. Life Journeys adds a description; the rest of its page is the shared template guidance
+  the kit already carried, and its preview is demo content, so no layout rule is cited from it.
+- **21 templates are routed, 20 are in DGA's nav.** National Day 95 left the nav but is still
+  served, and stays documented as superseded for new work.
+- **DGA renumbered its release history.** The change log now lists eighteen undated releases,
+  1.0.0–4.0.0, where it listed 1.0.0–1.0.3 with dates on 2026-08-27, and nothing maps the old
+  numbers to the new. The kit's pin is now **4.0.0, release date not published**; the 2026-08-27
+  table survives in `library-migration.md` as dated history for its two migration traps.
+- **`/contributing` was rewritten** — five principles, six contribution types, five steps. Its
+  Submit button now opens a club page on hawi.gov.sa, and the GitHub route the kit had flagged as
+  *"soon"* is gone.
+- **Unchanged, and checked rather than assumed:** every colour value in `tokens.json` is still
+  declared in the live stylesheet, the full reconciliation of 1,126 custom properties reproduces
+  exactly, and 93 of the 114 sentences fenced as DGA text in earlier captures are still verbatim on
+  the site (the rest are the replaced change log and three elided FAQ lines that are still live).
+- **Recorded, not turned into rules:** the 4.0.0 notes announce an *"AI section"* that no page
+  carries, and a *"Migration to the Saudi font across the system"* that the typography page
+  contradicts — it still limits Saudi Font to occasion headings, and the site's body font is still
+  IBM Plex Sans Arabic. The typography rule stands.
+
+### Fixed — the sentinel read nav links, not the router
+
+- `harvest/sources.py` counted templates from link strings in the bundle. When DGA dropped a
+  still-served page from its nav, it reported the page **removed** and 20 templates where 21 were
+  routed. It now reads the router's own table as the authority and reports the nav separately —
+  a page leaving the nav, and a nav link to a page the router no longer has, are each findings.
+  Nav links are not unioned in: that would hide a removed page whose stale link survives.
+- It read releases from `version-history-*` route strings, which all render the renumbered list
+  now, so its "DGA version 1.0.3" row was stale. It reads the `releases-<hash>.js` chunk instead,
+  reports versions that **disappear** as well as new ones, and a missing or malformed release list
+  is exit 2 (could not complete), never a quiet empty list.
+- `source-inventory.json` no longer carries an invented release date: DGA publishes none.
+- Thirteen new offline scenarios in `evals/test-automation.py`, each break-tested.
+
+### Fixed — a CI step that could never run
+
+- CI's *"Codex's own plugin validator"* step looked for `validate_plugin.py` inside a Codex
+  installation. Codex 0.160.1 no longer ships it, so the step printed SKIPPED and passed on every
+  run while README and INSTALL said the repo passes it. Replaced by
+  `evals/test-codex-discovery.py`: CI installs the pinned Codex CLI, installs the working tree into
+  a throwaway profile, and asserts Codex discovers all 11 skills. It fails without Codex rather
+  than skipping. It is a runtime test, not a manifest validator — Codex 0.160.1 accepts unknown
+  keys and silently ignores an out-of-root skills path — so the stricter schema checks stay.
+
+### Changed — CI and release hygiene
+
+- The npm install of the Codex CLI now shows its output, and the discovery test asserts the
+  pinned version: Codex discovery behaviour is version-specific.
+- Removed three duplicated CI steps (the installer self-check, and the two Codex-agent checks,
+  each ran twice) and added `.agents/plugins/marketplace.json` to the JSON validity check.
+- Freshness: until a hosted runner can reach DGA, the maintainer runs the sentinel locally about
+  weekly, and a release needs a completed check no more than 14 days old (`AGENTS.md`). Not a CI
+  gate, by design.
 
 ### Fixed — freshness failure diagnostics
 
@@ -572,7 +673,7 @@ if you installed that version.
   has no `agents` field. Converting them to Codex's TOML agent format is unstarted.
 - **`interface.capabilities` is `["Skills"]`, unattested.** Schema-valid, but no local
   enumeration says what Codex does with a given capability label.
-- **Quote coverage**: only 2 DGA pages are captured, so 78 of 92 blockquotes cannot be checked
+- **Quote coverage**: only 2 DGA pages are captured, so 81 of 97 blockquotes cannot be checked
   against a source. Raising this needs a capture run, never an edit to a reference.
 
 ## 0.6.0

@@ -15,8 +15,8 @@ date it was retrieved. Where DGA is silent, say so and name the fallback (usuall
 than no tool — a team ships believing it is compliant and fails an assessment. If you cannot cite
 it, do not write it.
 
-The same applies to coverage claims. State what the harvest actually holds — all 19 templates as
-of 2026-08-27 — and never round a partial harvest up.
+The same applies to coverage claims. State what the harvest actually holds — all 21 routed templates as
+of 2026-10-08 — and never round a partial harvest up.
 
 ## Before you commit
 
@@ -27,6 +27,7 @@ python evals/check-quote-fidelity.py --ci        # must exit 0
 python evals/build-evals-json.py --check          # "evals.json is current for both suites"
 python evals/build-codex-agents.py --check         # six native agents match their Markdown sources
 python evals/test-codex-agents.py                 # conversion and isolated installer regressions
+python evals/test-codex-discovery.py              # Codex installs the tree and discovers all 11 skills
 python harvest/reconcile-tokens.py --test         # "reconcile self-check passed" (offline)
 node skills/dga-design-system/assets/check-contrast.mjs --test   # "self-check passed"
 node skills/dga-design-system/assets/generate-tokens.mjs          # then `git diff` must be empty
@@ -40,13 +41,21 @@ workflow keeps the job green on `1` and fails it on `>1`. Python exits `1` on an
 exception, so every new failure path must be routed through `check_main()` and return `2` — a
 broken monitor that reports `1` files a review issue weekly while knowing nothing.
 
-**Before a release, also run Codex's own plugin validator.** It ships with a Codex installation,
-so CI cannot rely on it — CI reports SKIPPED when absent rather than passing quietly. Three
-documents claim this repo passes it, which makes it a claim someone has to actually check:
+**Until hosted monitoring can reach DGA, the maintainer runs the sentinel.** GitHub-hosted runners
+cannot reach design.dga.gov.sa (`harvest/diagnostics/`). Run `python harvest/sources.py --check`
+locally about weekly and commit the regenerated `FRESHNESS.md` only after a run that completed
+(exit 0 or 1); exit 2 means unknown. **Before tagging a release**, a completed local check must be
+no more than 14 days old, and any finding resolved — accept with `--baseline` only after the
+guidance is updated. This is deliberately not a CI gate: one missed week must not turn every
+contributor's PR red. A self-hosted runner is not the fix for a public repository.
 
-```bash
-python ~/.codex/skills/.system/plugin-creator/scripts/validate_plugin.py .
-```
+**`test-codex-discovery.py` needs the Codex CLI** (`npm install -g @openai/codex@0.160.1`) and
+fails without it. It replaced a release step that ran Codex's `validate_plugin.py`: that script
+no longer ships with Codex (gone by 0.160.1), and the CI step looking for it printed SKIPPED on
+every run. The new gate tests what a user gets — skill discovery after a real install — and is
+**not** a manifest validator. Codex 0.160.1 accepts unknown manifest keys and silently ignores an
+out-of-root skills path, so the stricter schema checks in `validate-fixtures.py` stay, as the last
+published contract.
 
 This list must match `.github/workflows/ci.yml`. It drifted once — the file named two gates while
 CI ran six — so a contributor running "the gates" was checking a third of what the pipeline
@@ -114,7 +123,8 @@ user's own skill.
 
 `bin/dga-kit.mjs` leaves anything it did not write alone, with two announced exceptions: `--force`
 adopts and overwrites an unclaimed `dga-*` path, and `--clean-legacy` deletes pre-0.5 paths after
-you type DELETE. It takes an explicit project
+you type DELETE. `--update` is the release-upgrade path and must **never** adopt — that
+separation is the reason it exists, and the self-check (case 21) pins it. It takes an explicit project
 or user scope, preflights every file, and refuses conflicting or linked destinations. Test it
 in scratch directories, never by modifying the maintainer's real Codex profile.
 

@@ -1,6 +1,6 @@
 {
   "name": "dga-kit",
-  "version": "0.7.2",
+  "version": "0.8.0",
   "description": "Unofficial Saudi DGA \"Platforms Code\" guidance as Claude Code and Codex skills and agents. Not affiliated with or endorsed by the Digital Government Authority.",
   "bin": {
     "dga-kit": "bin/dga-kit.mjs"

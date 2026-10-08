@@ -5,6 +5,10 @@ __pycache__/
 # Local command output and diagnostics
 *.log
 
+# Local agent scratch. Published diagnostics live in harvest/diagnostics/ instead.
+memory/
+.claude/constraints/
+
 # Editor / OS noise
 .DS_Store
 Thumbs.db

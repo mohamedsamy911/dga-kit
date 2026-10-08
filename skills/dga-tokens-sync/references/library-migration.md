@@ -30,13 +30,18 @@ diff the component inventory before and after, and check anything that didn't up
 
 ## Version history DGA publishes
 
-Current published version: **1.0.3**, released **4 Nov 2025**. The Figma downloads are named
+Current published version: **4.0.0** per `/updates/change-log`, read 2026-10-08 — DGA publishes **no release date** for it. The Figma downloads are named
 `PC 1.0 …` regardless — that is a file name, not a version.
+
+> ⚠️ **DGA renumbered its release history in 2026.** On 2026-08-27 the change log listed four
+> releases, 1.0.0 to 1.0.3, each dated. On 2026-10-08 it lists eighteen, 1.0.0 to 4.0.0, with
+> titles only and no dates, and the old per-version pages render the new list. Nothing on the site
+> maps an old number to a new one. The table below is the **2026-08-27 record**, kept because its
+> two migration traps still matter; its version numbers and dates are no longer shown by DGA.
 
 The migration page carries only one entry of its own, **May 2024 — General Enhancement**, covering
 Labels, Textarea and Tabs (clarity, contrast, font size; resize behaviour and padding; layout,
-transitions and keyboard navigation). The real record is `/updates/change-log`, captured
-2026-08-27:
+transitions and keyboard navigation). The change log as captured 2026-08-27:
 
 | Version | Date | What shipped |
 |---|---|---|
@@ -50,18 +55,19 @@ transitions and keyboard navigation). The real record is `/updates/change-log`, 
 > label-to-field padding changed from 4px to 8px**, so any value taken from a Figma file older than
 > 20 Feb 2025 is wrong.
 
-> ⚠️ `/updates/roadmap` dates 1.0.0 to Feb **2024** and the templates release to Sep **2024** —
-> a year earlier than the change log dates the same versions. Cite the change log. Recorded in
-> `https://github.com/mohamedsamy911/dga-kit/blob/master/COVERAGE.md`.
+> ⚠️ On 2026-08-27 `/updates/roadmap` dated 1.0.0 to Feb **2024** and the templates release to
+> Sep **2024** — a year earlier than the change log of the time. On 2026-10-08 both pages carry the
+> same eighteen undated releases, so that conflict is moot; there is no date left to cite.
 
 Watch `/updates/change-log` and `/updates/roadmap` for releases.
 
 ## Contributing back
 
-DGA accepts design, code and documentation contributions via GitHub. Criteria: relevance, broad
-impact over niche cases, minor fixes always welcome, major additions (new components) get
-thorough evaluation. Community forums and published contribution guidelines are both marked
-**"soon"**. Contact: DS-DGA@dga.gov.sa.
+DGA's `/contributing` page (rewritten; read 2026-10-08) accepts icons, components, patterns,
+templates, documentation and accessibility improvements, through five steps — Explore, Create,
+Submit, Review, Share. Its Submit button opens a club page on hawi.gov.sa; the page no longer
+mentions GitHub. Contact: DS-DGA@dga.gov.sa. Details in
+`../../dga-design-system/references/foundations.md`.
 
 **Worth doing:** the 11 documentation defects in `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/CAPTURE-LOG.md` are exactly the kind of
 minor contribution DGA says it wants.

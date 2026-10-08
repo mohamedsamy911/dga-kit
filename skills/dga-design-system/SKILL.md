@@ -11,7 +11,7 @@ reads from here rather than carrying its own copy of the rules.
 > ## Harvest complete — interpretation unverified
 >
 > **Populated and citable:** all 8 reference files. 5 foundations, **50 component pages**,
-> **all 19 templates**, and **303 token values** taken verbatim from the live site's CSS custom
+> **all 21 routed templates** (re-harvested 2026-10-08), and **303 token values** taken verbatim from the live site's CSS custom
 > properties, plus **67** dark values held for audit only. Every rule carries a source URL and
 > retrieval date.
 >
@@ -37,8 +37,9 @@ reads from here rather than carrying its own copy of the rules.
 > deliberately not generated into `tokens.css`. Never hand a caller these values as a working
 > dark theme: five `*-light` status surfaces have no dark tint anywhere, measuring **1.05:1**.
 >
-> **Version:** the published system is **PC 1.0.3**, released 4 Nov 2025. The 2026-08-26 token
-> harvest postdates it. See `dga-version.md`.
+> **Version:** the published system is **4.0.0** per DGA's change log (read 2026-10-08; no release
+> date published). Token values were re-verified against the live stylesheet on 2026-10-08. See
+> `dga-version.md`.
 >
 > ⚠️ **No designer sign-off yet.** Values are exact; interpretation is not verified.
 
@@ -96,7 +97,8 @@ Everything here is cited in `references/`.
 12. **Target size ≥44×44px**
 
 **Components**
-13. Six states: **Default · Hovered · Pressed · Selected · Focused · Disabled**
+13. State vocabulary: **Default · Hovered · Pressed · Selected · Focused · Disabled** — each
+    component page lists **its own** subset; follow that page, not all six (`components.md`)
 14. Icons: 10/14/16 XS · 18/20 S · **24 standard** · 28/32 L. Avatars: 24/32 S · **40/48 M** ·
     64/80/120 L
 15. **Content switcher takes 2–4 options only** — use Tabs beyond four

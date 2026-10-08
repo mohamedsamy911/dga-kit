@@ -42,9 +42,10 @@ retrieval date. If you cannot follow a claim here back to a quote there, do not 
   Accessibility Tools in the footer → `../dga-design-system/references/patterns.md` (the two
   last-modified dates) and `references/components.md` (*"Accessibility Tools" is part of DGA's
   required footer anatomy*)
-- **Component anatomy and the six interaction states** —
-  `../dga-design-system/references/components.md`. ⚠️ Six is the general rule; **inputs use
-  five** (no Selected state). Do not report a five-state input as non-compliant.
+- **Component anatomy and each component's listed states** —
+  `../dga-design-system/references/components.md`. ⚠️ The six-name state set is a vocabulary;
+  each component page lists its own subset (inputs and tabs use five, no Selected). Do not report
+  a component as non-compliant for lacking a state its own page does not list.
 - **The colour roles themselves.** An entity may supply brand colours; it may not repoint
   `text.default` at one that fails contrast. Run
   `../dga-design-system/assets/check-contrast.mjs` against any override before adopting it. →

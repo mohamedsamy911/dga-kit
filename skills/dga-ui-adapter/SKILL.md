@@ -93,10 +93,13 @@ Eight rules. Each is library-independent, and each one has burned somebody.
    connected script — tracking breaks the joins. Scope `letter-spacing` to Latin, or zero it
    under `[dir="rtl"]`.
 
-4. **Six states, always.** DGA specifies Default, Hovered, Pressed, Selected, Focused and
-   Disabled for every interactive component. A component with no visible focus state is not
-   compliant — focus is an accessibility requirement, not polish. Most libraries give you five
-   and let focus fall back to the browser default; check rather than assume.
+4. **The states each component's page lists.** DGA's vocabulary is Default, Hovered, Pressed,
+   Selected, Focused and Disabled, but each component page specifies its own subset — inputs and
+   tabs list five with no Selected. Build what that component's spec in
+   `../dga-design-system/references/components.md` lists; never require Selected where it does
+   not. A keyboard-operable control with no visible focus state is not compliant — focus is an
+   accessibility requirement, not polish. Most libraries let focus fall back to the browser
+   default; check rather than assume.
 
 5. **44 x 44 px minimum touch target**, on every interactive element. Most libraries' small-size
    controls are under it. This is DGA-stated, and stricter than WCAG 2.1 AA (2.5.5 is AAA).

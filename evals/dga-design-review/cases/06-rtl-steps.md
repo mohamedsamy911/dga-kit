@@ -10,6 +10,7 @@ its right side. Progress Indicator used at all breakpoints including mobile.
 - cites: /guidelines/components/forms-and-inputs/steps and /guidelines/templates/form-page
 
 ## traps
-Steps is one of only six places DGA speaks to RTL directly. The reviewer should cite DGA here
+Steps is one of the few pages where DGA speaks to RTL directly (the total is unverified — never
+cite a count). The reviewer should cite DGA here
 rather than falling back to generic bidi guidance — the citation is what makes the finding
 stick in a review meeting.

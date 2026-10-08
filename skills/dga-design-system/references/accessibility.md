@@ -125,6 +125,7 @@ Extracted from each component's Accessibility section. Full detail in `component
 | **Divider** | `role="separator"` | must not take focus |
 | **Quote** | `role="blockquote"` + semantic `<blockquote>`; marks `aria-hidden` | n/a |
 | **Code snippet** | `aria-live="polite"` on copy; line numbers `aria-hidden` | Tab, Enter/Space |
+| **List** | `aria-labelledby` tying the group to its heading; `aria-current="page"` on navigational lists. ⚠️ DGA's intro says "link components" — a copy-paste artefact | keyboard traversal with visible focus |
 | **Textarea** | Native `<textarea>` + `<label for>`; `aria-describedby` | Tab; DGA recommends `resize: vertical` |
 | **Number input** | `role="spinbutton"`; `aria-valuemin/max/now`; `aria-invalid` | **Up/Down arrows** increment/decrement |
 | **Digital stamp** | `role="status"`; labelled icons | Keyboard-operable expander |
@@ -149,10 +150,11 @@ DGA publishes no guidance on these. A skill must say so rather than implying a D
   expectation, not merely a WCAG fallback.
 - **Screen-reader behaviour in Arabic** — no guidance on Arabic pronunciation, `lang`
   switching for mixed-language content, or bidi announcement order
-- **Focus order under RTL** — DGA addresses RTL in only four places: **Quote** (a dedicated RTL
-  accessibility section), **Steps** (direction of progression and the final connector line),
-  **Buttons** (icon placement follows "interface directionality"), and Pagination in the shipped
-  code. Everywhere else RTL is the consuming team's responsibility.
+- **Focus order under RTL** — DGA speaks to RTL on a few component pages, among them **Quote**
+  (a dedicated RTL accessibility section), **Steps** (direction of progression and the final
+  connector line), **Buttons** (icon placement follows "interface directionality"), and
+  Pagination in the shipped code. The total is unverified — cite these pages, not a count. Focus
+  order under RTL is not among them; it is the consuming team's responsibility.
 - **Cognitive accessibility specifics** — named as an area, but with no testable criteria
 - **Accessibility statement page** — not covered in the design system; likely lives in the
   separate DGA digital-government standards. `TODO(harvest)`

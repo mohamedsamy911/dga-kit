@@ -1,8 +1,21 @@
 # Debug report: hosted freshness checks cannot connect to DGA
 
+> **Status update, 2026-10-08.** The report below is the 2026-08-31 record, kept as written apart
+> from one bracketed correction. Since then the diagnostic changes were merged to `master`
+> (`568b051`). **The blocker is not resolved:** every scheduled run from 2026-09-07 to 2026-10-05
+> failed at the *Run the sentinel* step and took the could-not-complete path (exit 2), per the
+> public Actions API. Those later runs are consistent with the TCP 443 timeout diagnosed below;
+> their individual logs were not re-examined for this update.
+>
+> The same day, `python harvest/sources.py --check` **completed locally**, exit 1: DGA had
+> deployed an update. The kit was re-harvested and re-baselined from it, and a local
+> `--check --deep` then completed with exit 0. That shows the sentinel completes where DGA is
+> reachable. It says nothing about why hosted runners cannot reach it.
+
 - **Status: BLOCKED on hosted network reachability.** Reporting fixes are verified, but the
   source remains unreachable from the tested GitHub-hosted runners. The diagnostic branch is
-  not a completed connectivity fix and has not been merged into `master`.
+  not a completed connectivity fix and has not been merged into `master`. *[2026-10-08: since
+  merged as `568b051` — see the status update above.]*
 - **Symptom:** the [scheduled run](https://github.com/mohamedsamy911/dga-kit/actions/runs/33393214364)
   exited 2 after its first request timed out. Rerunning its failed job also failed.
 - **Root cause established:** the runner cannot establish TCP port 443 to `design.dga.gov.sa`.

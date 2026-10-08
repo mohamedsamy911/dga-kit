@@ -5,7 +5,8 @@
 //   npx github:mohamedsamy911/dga-kit --claude   Claude only
 //   npx github:mohamedsamy911/dga-kit --codex    Codex agents only
 //   ... --project PATH                           Codex agents into PATH/.codex/agents
-//   ... --force                                  overwrite/adopt a dga-* path not in the manifest
+//   ... --update                                 refresh paths the manifest records; never adopt
+//   ... --force                                  --update, plus overwrite/adopt unrecorded dga-* paths
 //   ... --uninstall                              remove only what this installer recorded,
 //                                                honouring the same --claude/--codex/--skills/--agents
 //   ... --clean-legacy                           remove pre-0.5 paths, after typing DELETE
@@ -66,7 +67,10 @@ Claude Code skills + agents, and Codex skills + agents.
                                           (DGA_KIT_HOME and CODEX_HOME override the destinations)
 
   OTHER               --dry-run           print the plan, write nothing
-                      --force             overwrite/adopt a dga-* path not in the manifest
+                      --update            refresh what this installer recorded; never adopts
+                                          a dga-* path it did not write
+                      --force             --update, AND overwrite/adopt a dga-* path not in the
+                                          manifest
                       --uninstall         remove only what this installer wrote; obeys the
                                           same tool/kind selectors as an install
                       --clean-legacy      remove pre-0.5 paths, after typing DELETE
@@ -75,8 +79,9 @@ Claude Code skills + agents, and Codex skills + agents.
 
 Codex SKILLS go through \`codex plugin add\`, because Codex serves plugin skills from its own
 cache plus config.toml rather than a directory anything else can write. Everything else is a
-file copy. A file you edited is never overwritten unless you pass --force - and a differing
-Codex agent is refused even then.`
+file copy. To pick up a new release, re-run with --update: it refreshes only paths this
+installer recorded. A dga-* path it did not record is never touched unless you pass --force -
+and a differing Codex agent is refused even then.`
 
 let DRY = false
 const out = []
@@ -375,7 +380,7 @@ function legacyNotice(home) {
   if (found) say('          Nothing was deleted. Review, then use --clean-legacy or remove by hand.')
 }
 
-function installClaude(home, { force, skills = true, agents = true }) {
+function installClaude(home, { force, update = false, skills = true, agents = true }) {
   const src = join(ROOT, 'skills')
   const asrc = join(ROOT, 'agents')
   if (!existsSync(src)) fail(`skills/ not found at ${src}`)
@@ -397,10 +402,10 @@ function installClaude(home, { force, skills = true, agents = true }) {
       if (force) say(`OVERWRITE ${n} - not in manifest, --force given`)
       else {
         say(`SKIPPED   ${n} - exists and is not in our manifest. Left untouched.`)
-        say('          If it is an older dga-kit, re-run with --force to adopt it.')
+        say('          If it is an older dga-kit, re-run with --force to adopt it (--update never adopts).')
         continue
       }
-    } else if (present(d) && !force) { say(`exists    ${n} (use --force)`); continue }
+    } else if (present(d) && !force && !update) { say(`exists    ${n} (use --update to refresh)`); continue }
     // Guard the LEAF too: the parents were checked, this is the one that gets replaced.
     plainPath(d)
     if (!DRY) { rmSync(d, { recursive: true, force: true }); cpSync(join(src, n), d, { recursive: true }) }
@@ -424,10 +429,10 @@ function installClaude(home, { force, skills = true, agents = true }) {
       if (force) say(`OVERWRITE ${a} - not in manifest, --force given`)
       else {
         say(`SKIPPED   ${a} - exists and is not in our manifest. Left untouched.`)
-        say('          If it is an older dga-kit, re-run with --force to adopt it.')
+        say('          If it is an older dga-kit, re-run with --force to adopt it (--update never adopts).')
         continue
       }
-    } else if (present(d) && !force) { say(`exists    ${a} (use --force)`); continue }
+    } else if (present(d) && !force && !update) { say(`exists    ${a} (use --update to refresh)`); continue }
     plainPath(d)
     if (!DRY) cpSync(join(asrc, a + '.md'), d)
     try {
@@ -1117,6 +1122,32 @@ function runSelfTest() {
     }
   }
 
+  // 21. --update refreshes what the manifest records and NEVER adopts. Before it existed the only
+  //     update path was --force, which also overwrote an unrecorded dga-* directory - so pulling
+  //     a new release meant authorising the destruction of a same-named skill of your own.
+  const tmp10 = scratchDir('update')
+  const realLog10 = console.log
+  console.log = () => {}   // exercising, not installing - same pattern as case 2
+  try {
+  installClaude(tmp10, { force: false, skills: true, agents: false })
+  const ownedFile = join(tmp10, '.claude', 'skills', SKILLS[0], 'SKILL.md')
+  const shipped = readFileSync(join(ROOT, 'skills', SKILLS[0], 'SKILL.md'))
+  writeFileSync(ownedFile, 'stale copy from an older release')
+  // An unrecorded dga-* directory that is the user's, not ours: drop it from the manifest.
+  const foreign = join(tmp10, '.claude', 'skills', SKILLS[1])
+  writeFileSync(manifestPath(tmp10),
+    (readManifest(tmp10) || []).filter((p) => p !== foreign).join('\n') + '\n')
+  writeFileSync(join(foreign, 'SKILL.md'), 'a skill of my own')
+  installClaude(tmp10, { force: false, update: false, skills: true, agents: false })
+  assert(readFileSync(ownedFile, 'utf8') === 'stale copy from an older release',
+    'a plain re-run overwrote an owned skill without --update')
+  installClaude(tmp10, { force: false, update: true, skills: true, agents: false })
+  assert(readFileSync(ownedFile).equals(shipped), '--update did not refresh a skill this installer recorded')
+  assert(readFileSync(join(foreign, 'SKILL.md'), 'utf8') === 'a skill of my own',
+    '--update overwrote an unrecorded dga-* directory - it must never adopt')
+  assert(!(readManifest(tmp10) || []).includes(foreign), '--update claimed a path it did not write')
+  } finally { console.log = realLog10 }
+
   const skips = [linked ? null : 'directory links', fileLinked ? null : 'file symlinks']
     .filter(Boolean)
   console.log('installer self-check passed'
@@ -1124,7 +1155,7 @@ function runSelfTest() {
   return 0
 }
 
-const FLAGS = new Set(['--claude', '--codex', '--skills', '--agents', '--project', '--force',
+const FLAGS = new Set(['--claude', '--codex', '--skills', '--agents', '--project', '--force', '--update',
   '--uninstall', '--clean-legacy', '--dry-run', '--test', '--help', '-h'])
 
 /** Reject anything unrecognised BEFORE a single byte is written.
@@ -1173,7 +1204,7 @@ async function main(argv) {
   const has = (f) => argv.includes(f)
   DRY = has('--dry-run')
   const pi = argv.indexOf('--project')
-  const opts = { project: pi >= 0 ? argv[pi + 1] : null, force: has('--force') }
+  const opts = { project: pi >= 0 ? argv[pi + 1] : null, force: has('--force'), update: has('--update') }
   if (pi >= 0 && (!opts.project || opts.project.startsWith('--'))) fail('--project needs a path')
   const home = process.env.DGA_KIT_HOME || homedir()
 

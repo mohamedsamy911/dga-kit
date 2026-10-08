@@ -3,8 +3,9 @@
 Evidence trail for every DGA rule this kit asserts.
 
 **Source:** https://design.dga.gov.sa/ — "Platforms Code", National Design System of Saudi Arabia
-**Site footer version:** © 2025 · **Design kit version:** **PC 1.0.3**, released 4 Nov 2025
-(per `/updates/change-log`, captured 2026-08-27 — earlier notes in this kit said bare "PC 1.0")
+**Site footer version:** © 2025 · **Design kit version:** **4.0.0** per `/updates/change-log`,
+read 2026-10-08, no release date published. Recorded as **PC 1.0.3** (4 Nov 2025) on 2026-08-27;
+DGA has since renumbered its release history, and nothing maps the old number to the new one.
 **Captured by:** Claude, via Claude-in-Chrome on `mohamed-samy`
 **Method:** live page text + CSS custom-property extraction from the DOM. Token values are
 verbatim from the running site, not transcribed from screenshots.
@@ -40,6 +41,7 @@ verbatim from the running site, not transcribed from screenshots.
 | Other | Support + 15 FAQs | `/support` | 2026-08-27 |
 | Other | Roadmap | `/updates/roadmap` | 2026-08-27 |
 | Other | Change log + 4 version pages | `/updates/change-log`, `/updates/change-log/version-history-1-0-{0,1,2,3}` | 2026-08-27 |
+| Re-harvest | **DGA update** — renumbered change log (18 releases, 4.0.0), **national-day-96**, **life-journeys**, National Day 95 left the nav (still served), rewritten `/contributing`, typography and iconography re-read, tokens re-reconciled | raw evidence: `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-08-dga-update.md` | 2026-10-08 |
 
 **Tokens:** 1,052 CSS custom properties extracted from `:root`, covering 41 colour families,
 spacing, radius, shadow, width, container, and per-component role tokens.

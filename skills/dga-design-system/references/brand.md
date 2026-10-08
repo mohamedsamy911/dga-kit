@@ -108,8 +108,14 @@ DGA's three stated reasons are about the citizen, not about tidiness:
 National Day, Founding Day. It is licensed separately from the Ministry of Culture. Never in
 paragraph or long-form text.
 
-Occasion templates carry their own visual identity — National Day 95 illustrations, Founding Day
-Najdi architecture motifs — applied through DGA's supplied templates rather than invented.
+Occasion templates carry their own visual identity — National Day 96 illustrations (95 left
+DGA's nav on 2026-10-08 but is still served), Founding Day Najdi architecture motifs — applied
+through DGA's supplied templates rather than invented.
+
+> DGA's change log lists *"Migration to the Saudi font across the system"* under 4.0.0. The
+> typography page, re-read 2026-10-08, still restricts Saudi Font to national and seasonal
+> occasions and main headings only, and the live site's body font is still IBM Plex Sans Arabic.
+> The rule above stands; do not read the change-log line as permission to set body text in it.
 
 ## Entity overlay — decisions to record here
 
