@@ -206,7 +206,7 @@ reconciliation reproduced unchanged.
 | 11 skills, 6 agents | ✅ |
 | Contrast checker, self-tested — light **and dark** | ✅ |
 | **Freshness monitoring** — weekly, review-gated | ⚠️ **Built and tested, not running.** Every hosted run since 2026-08-31 has failed to reach DGA (exit 2). See below |
-| **Codex plugin install path** | ✅ Skills only. Verified 2026-10-08 on Windows with Codex CLI 0.160.1: a real install discovers all 11 skills. CI runs the same test on Linux (first run pending at this commit). Passed Codex's `validate_plugin.py` on 2026-08-28; Codex no longer ships it |
+| **Codex plugin install path** | ✅ Skills only. Codex CLI 0.160.1 installs the tree and discovers all 11 skills — verified 2026-10-08 on Windows and on every CI run (Linux). Passed Codex's `validate_plugin.py` on 2026-08-28; Codex no longer ships it |
 | **Codex-native agents** | Six generated TOML definitions; separate installer with offline safety/parity checks. Confirm runtime discovery in your Codex session. |
 | **Designer sign-off** | ⚠️ **Outstanding** — values are exact, interpretation unverified |
 | **Figma-only values** (responsive radius/spacing, mobile kit specs) | ❌ Not public. Omitted, not guessed. |
