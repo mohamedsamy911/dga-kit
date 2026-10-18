@@ -23,18 +23,24 @@ language and missing in the other as a defect, not a content backlog item.
 
 ## Copy DGA gives
 
-Mostly as examples (*"such as"*, *"like"*) — the wording is DGA's suggestion unless noted:
+Mostly as examples (*"such as"*, *"like"*) — the wording is DGA's suggestion unless noted. The
+Arabic column is **DGA's own Arabic**, from the same guidance on its Arabic pages (confirmed
+displayed 2026-10-18; https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-18-arabic-copy.md). Use it rather than
+translating the English back.
 
-| Where | Content |
-|---|---|
-| Feedback section — *DGA template guidance, advisory* | **"Was this page useful?"** with **Yes / No**, plus reason options |
-| 404 page | A friendly message — DGA's example: *"Sorry! We can't find the page you're looking for."* Plus a CTA: "Back to the homepage" / "Back To Home" |
-| Chatbot opening | Brief friendly introduction — DGA's example: *"Hello! How can I help you today?"* |
-| Chatbot close | *"Was this helpful? [Yes/No]"* |
-| Search, no results | **"No Data Found"** |
-| Filter reset | **"Clear Filter"** or **"Reset Filter"** |
-| Show more content | **"View All"** or **"Show All"** |
-| FAQ categories (optional) | When used, DGA: *"The 'All' category must be added."* |
+| Where | English (DGA) | Arabic (DGA) |
+|---|---|---|
+| Feedback section — *DGA template guidance, advisory* | **"Was this page useful?"** with **"Yes"** / **"No"**, plus reason options | «هل كانت هذه الصفحة مفيدة؟» مع «نعم» / «لا» |
+| 404 page — acceptable titles | "404 - Page Not Found" or "Something Went Wrong" | «404 - الصفحة غير موجودة» أو «حدث خطأ ما» |
+| 404 page — friendlier message | *"Sorry! We can't find the page you're looking for."* | «عذرًا! لم نستطع إيجاد الصفحة التي تبحث عنها.» |
+| 404 page — CTA | "Back to the homepage" / "Back To Home"; optional "Go Back" | «العودة إلى الصفحة الرئيسية» / «الرجوع للرئيسية»؛ اختياري «الرجوع للصفحة السابقة» |
+| Chatbot opening | *"Hello! How can I help you today?"* | «مرحبًا! كيف يمكنني مساعدتك اليوم؟» |
+| Chatbot close | *"Was this helpful? [Yes/No]"* | «هل كان هذا مفيدًا؟ [نعم/لا].» |
+| Search, no results | **"No Data Found"** | *DGA's Arabic page describes the message without quoting one* |
+| Filter reset | **"Clear Filter"** or **"Reset Filter"** | «إزالة التصفية» أو «إعادة تعيين التصفية» |
+| Show more content | **"View All"** or **"Show All"** | «عرض الكل» أو «إظهار الكل» |
+| Error text (with colour) | "Invalid selection", "Required field" | «اختيار غير صحيح»، «الحقل المطلوب» |
+| FAQ categories (optional) | When used: *"The 'All' category must be added."* | «يجب إضافة تصنيف الكل.» |
 
 ## Tone
 

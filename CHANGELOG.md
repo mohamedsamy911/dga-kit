@@ -11,6 +11,38 @@ patch means corrections. Nothing here is a DGA release — see
 `skills/dga-design-system/dga-version.md` for the Platforms Code version this kit is pinned to
 (currently **4.0.0** per DGA's change log, read 2026-10-08; DGA publishes no release date).
 
+## 0.8.3 — 2026-10-18
+
+### Added — DGA's own Arabic copy
+
+The kit is Arabic-first, but it quoted DGA's example strings only in English. Teams then
+translated "Was this page useful?" back into Arabic themselves. DGA's bundle carries an Arabic
+twin of its text table (6,182 keys in common with the English). The "Copy DGA gives" tables in
+`content.md` and the content-writer agent now give DGA's own Arabic beside the English, for
+example «هل كانت هذه الصفحة مفيدة؟», «الرجوع للرئيسية» and «إزالة التصفية». Every string was
+confirmed on the rendered Arabic page (`harvest/raw/2026-10-18-arabic-copy.md`). One exception:
+DGA's Arabic Search page describes the empty-result message without quoting one, so the kit
+says so rather than supplying one.
+
+Also corrected: the content-writer agent still called the FAQ "All" category **mandatory**. DGA
+says it *"must be added"* only when categories are used, and categories are optional.
+
+### Added — the weekly freshness check can run from GitHub
+
+design.dga.gov.sa answers only from Saudi Arabia. `dga-freshness.yml` now sends the check
+through an authenticated forward proxy in Saudi Arabia when the `DGA_HTTPS_PROXY` secret is set.
+Setup, a 12-line Squid config locked to `CONNECT design.dga.gov.sa:443`:
+`harvest/KSA-PROXY.md`. Without the secret, the run is visibly labelled *not checked* instead of
+failing weekly on a timeout. The secret reaches only the sentinel step. Proxy failures stay exit
+`2` (unknown), never `0`. This was tested locally through an authenticated CONNECT proxy:
+- right password: `0`;
+- wrong password: `2` (407);
+- dead proxy: `2`;
+- no password in the log.
+
+Four new `validate-fixtures.py` checks guard the wiring, each break-tested. Codex and agy both
+ranked this route first, ahead of Tailscale, a cron job, and self-hosted runners.
+
 ## 0.8.2 — 2026-10-18
 
 ### Corrected — rules the kit attributed to DGA without a source

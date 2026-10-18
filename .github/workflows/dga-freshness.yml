@@ -30,7 +30,32 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # design.dga.gov.sa answers only from Saudi Arabia; GitHub-hosted runners time out on TCP 443
+  # (harvest/diagnostics/). The check runs through an authenticated KSA forward proxy whose URL is
+  # the DGA_HTTPS_PROXY secret - setup in harvest/KSA-PROXY.md. Without it the run says so, visibly,
+  # instead of failing every week on a timeout that carries no information.
+  configured:
+    runs-on: ubuntu-latest
+    outputs:
+      proxy: ${{ steps.probe.outputs.proxy }}
+    steps:
+      - name: Is the KSA proxy configured
+        id: probe
+        env:
+          DGA_HTTPS_PROXY: ${{ secrets.DGA_HTTPS_PROXY }}
+        run: |
+          if [ -n "$DGA_HTTPS_PROXY" ]; then
+            echo "proxy=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "proxy=false" >> "$GITHUB_OUTPUT"
+          msg='DGA freshness NOT CHECKED - the DGA_HTTPS_PROXY secret is not set (harvest/KSA-PROXY.md). Freshness is unknown; run python harvest/sources.py --check from Saudi Arabia.'
+          echo "::warning::$msg"
+          { echo "### DGA freshness: not configured"; echo; echo "$msg"; } >> "$GITHUB_STEP_SUMMARY"
+
   check:
+    needs: configured
+    if: needs.configured.outputs.proxy == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -42,6 +67,11 @@ jobs:
 
       - name: Run the sentinel
         id: sentinel
+        # urllib reads the proxy from the environment; TLS to DGA stays end-to-end through CONNECT.
+        # Set on this step only, so no other step can send traffic through it.
+        env:
+          HTTPS_PROXY: ${{ secrets.DGA_HTTPS_PROXY }}
+          https_proxy: ${{ secrets.DGA_HTTPS_PROXY }}
         run: |
           set +e
           python harvest/sources.py --check ${{ inputs.deep && '--deep' || '' }} 2>&1 | tee sentinel.log

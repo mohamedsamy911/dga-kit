@@ -41,15 +41,18 @@ asks you to avoid others.
 
 ## Copy DGA gives — mostly as examples (*\"such as\"*, *\"like\"*)
 
-| Where | Content |
-|---|---|
-| Feedback section — DGA template guidance, advisory | \"Was this page useful?\" with Yes / No, plus reason options |
-| 404 | Friendly, non-technical. DGA's example: \"Sorry! We can't find the page you're looking for.\" plus a \"Back to the homepage\" CTA |
-| Search, no results | \"No Data Found\" |
-| Filter reset | \"Clear Filter\" or \"Reset Filter\" |
-| Show more | \"View All\" or \"Show All\" |
-| FAQ categories | An \"All\" category is **mandatory** |
-| Chatbot open / close | \"Hello! How can I help you today?\" / \"Was this helpful? [Yes/No]\" |
+The Arabic is **DGA's own**, from its Arabic pages — use it rather than translating the English.
+
+| Where | English (DGA) | Arabic (DGA) |
+|---|---|---|
+| Feedback section — DGA template guidance, advisory | \"Was this page useful?\" with \"Yes\" / \"No\", plus reason options | «هل كانت هذه الصفحة مفيدة؟» مع «نعم» / «لا» |
+| 404 | Friendly, non-technical. DGA's example: \"Sorry! We can't find the page you're looking for.\" plus a \"Back to the homepage\" CTA | «عذرًا! لم نستطع إيجاد الصفحة التي تبحث عنها.» و«العودة إلى الصفحة الرئيسية» |
+| Search, no results | \"No Data Found\" | DGA gives no Arabic string — write one, flag it at the checkpoint |
+| Filter reset | \"Clear Filter\" or \"Reset Filter\" | «إزالة التصفية» أو «إعادة تعيين التصفية» |
+| Show more | \"View All\" or \"Show All\" | «عرض الكل» أو «إظهار الكل» |
+| FAQ categories (optional) | When used: \"The 'All' category must be added.\" | «يجب إضافة تصنيف الكل.» |
+| Chatbot open / close | \"Hello! How can I help you today?\" / \"Was this helpful? [Yes/No]\" | «مرحبًا! كيف يمكنني مساعدتك اليوم؟» / «هل كان هذا مفيدًا؟ [نعم/لا].» |
+| Errors | \"Invalid selection\", \"Required field\" | «اختيار غير صحيح»، «الحقل المطلوب» |
 
 **Avoid** \"click here\" and \"go to\" as link text — DGA: *\"Avoid vague phrases such as \"click here\"
 or \"go to.\"* Link text describes its destination.

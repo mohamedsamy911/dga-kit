@@ -1,5 +1,10 @@
 # Debug report: hosted freshness checks cannot connect to DGA
 
+> **Status update, 2026-10-18.** The owner reports the site is reachable only from Saudi Arabia.
+> The workflow now routes the check through an authenticated KSA forward proxy when the
+> `DGA_HTTPS_PROXY` secret is set, and otherwise labels the run *not checked* instead of failing
+> on the timeout. Setup: `harvest/KSA-PROXY.md`.
+
 > **Status update, 2026-10-08.** The report below is the 2026-08-31 record, kept as written apart
 > from one bracketed correction. Since then the diagnostic changes were merged to `master`
 > (`568b051`). **The blocker is not resolved:** every scheduled run from 2026-09-07 to 2026-10-05

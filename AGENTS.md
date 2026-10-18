@@ -41,9 +41,11 @@ workflow keeps the job green on `1` and fails it on `>1`. Python exits `1` on an
 exception, so every new failure path must be routed through `check_main()` and return `2` — a
 broken monitor that reports `1` files a review issue weekly while knowing nothing.
 
-**Until hosted monitoring can reach DGA, the maintainer runs the sentinel.** GitHub-hosted runners
-cannot reach design.dga.gov.sa (`harvest/diagnostics/`). Run `python harvest/sources.py --check`
-locally about weekly and commit the regenerated `FRESHNESS.md` only after a run that completed
+**Until hosted monitoring can reach DGA, the maintainer runs the sentinel.** design.dga.gov.sa
+answers only from Saudi Arabia, so GitHub-hosted runners cannot reach it (`harvest/diagnostics/`).
+The weekly workflow runs through an authenticated KSA forward proxy once the `DGA_HTTPS_PROXY`
+secret is set (`harvest/KSA-PROXY.md`); without it each run is labelled *not checked*. Until then,
+run `python harvest/sources.py --check` from Saudi Arabia about weekly and commit the regenerated `FRESHNESS.md` only after a run that completed
 (exit 0 or 1); exit 2 means unknown. **Before tagging a release**, a completed local check must be
 no more than 14 days old, and any finding resolved — accept with `--baseline` only after the
 guidance is updated. This is deliberately not a CI gate: one missed week must not turn every

@@ -572,6 +572,20 @@ if os.path.exists(_inv_path):
         chk('workflow: both arms of the lifecycle are present',
             _w.count("steps.sentinel.outputs.exit_code == '1'") >= 1
             and _w.count("steps.sentinel.outputs.exit_code == '0'") >= 1)
+        # DGA answers only from Saudi Arabia, so the check runs through a KSA proxy secret. The
+        # secret must reach the sentinel step and nothing else, and a missing secret must say
+        # "not checked" out loud rather than pass quietly or fail on a meaningless timeout.
+        _sent_step = _w.split('- name: Run the sentinel', 1)[-1].split('\n      - name:', 1)[0]
+        chk('workflow: the KSA proxy reaches the sentinel step',
+            'HTTPS_PROXY: ${{ secrets.DGA_HTTPS_PROXY }}' in _sent_step
+            and 'https_proxy: ${{ secrets.DGA_HTTPS_PROXY }}' in _sent_step)
+        chk('workflow: the proxy secret is used by the probe and the sentinel only',
+            _w.count('secrets.DGA_HTTPS_PROXY') == 3, 'every other step must not see it')
+        chk('workflow: the check job runs only when the proxy is configured',
+            "if: needs.configured.outputs.proxy == 'true'" in _w and 'needs: configured' in _w)
+        chk('workflow: an unconfigured run is labelled NOT CHECKED',
+            '::warning::' in _w and 'NOT CHECKED' in _w and 'GITHUB_STEP_SUMMARY' in
+            _w.split('check:\n', 1)[0])
         chk('workflow: the close only targets its own labelled issue',
             _w.split('gh issue close')[0].rsplit('gh issue list', 1)[-1].count('dga-freshness') >= 1,
             'closing an issue this workflow did not open would be someone else\'s ticket')
