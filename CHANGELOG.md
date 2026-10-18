@@ -11,6 +11,16 @@ patch means corrections. Nothing here is a DGA release — see
 `skills/dga-design-system/dga-version.md` for the Platforms Code version this kit is pinned to
 (currently **4.0.0** per DGA's change log, read 2026-10-08; DGA publishes no release date).
 
+## 0.8.4 — 2026-10-18
+
+### Fixed — 0.8.3's freshness workflow was an invalid file
+
+It set both `HTTPS_PROXY` and `https_proxy` on the sentinel step. GitHub Actions treats env keys
+case-insensitively and rejected the file (*"'https_proxy' is already defined"*). Every local
+gate passed, because none of them parsed the workflow the way Actions does. The step now sets
+`HTTPS_PROXY` only, which Python's `urllib` reads on Linux. `validate-fixtures.py` now fails on
+any env key repeated in another case, in every workflow, and was break-tested on the 0.8.3 line.
+
 ## 0.8.3 — 2026-10-18
 
 ### Added — DGA's own Arabic copy

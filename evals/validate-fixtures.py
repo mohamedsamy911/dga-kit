@@ -577,10 +577,9 @@ if os.path.exists(_inv_path):
         # "not checked" out loud rather than pass quietly or fail on a meaningless timeout.
         _sent_step = _w.split('- name: Run the sentinel', 1)[-1].split('\n      - name:', 1)[0]
         chk('workflow: the KSA proxy reaches the sentinel step',
-            'HTTPS_PROXY: ${{ secrets.DGA_HTTPS_PROXY }}' in _sent_step
-            and 'https_proxy: ${{ secrets.DGA_HTTPS_PROXY }}' in _sent_step)
+            'HTTPS_PROXY: ${{ secrets.DGA_HTTPS_PROXY }}' in _sent_step)
         chk('workflow: the proxy secret is used by the probe and the sentinel only',
-            _w.count('secrets.DGA_HTTPS_PROXY') == 3, 'every other step must not see it')
+            _w.count('secrets.DGA_HTTPS_PROXY') == 2, 'every other step must not see it')
         chk('workflow: the check job runs only when the proxy is configured',
             "if: needs.configured.outputs.proxy == 'true'" in _w and 'needs: configured' in _w)
         chk('workflow: an unconfigured run is labelled NOT CHECKED',
@@ -599,6 +598,31 @@ if os.path.exists(_inv_path):
         chk('workflow: CI does not reach the network',
             'sources.py --check' not in _c and 'sources.py --baseline' not in _c,
             'the offline suite must stay runnable without design.dga.gov.sa')
+
+    # Actions treats env keys case-insensitively: HTTPS_PROXY beside https_proxy made 0.8.3's
+    # freshness workflow invalid, and every local gate still passed. Check every env block.
+    def _env_dupes(text):
+        out, lines = [], text.splitlines()
+        for _i, _l in enumerate(lines):
+            if _l.strip() != 'env:':
+                continue
+            _ind, _seen = len(_l) - len(_l.lstrip()), set()
+            for _k in lines[_i + 1:]:
+                if _k.strip() and len(_k) - len(_k.lstrip()) <= _ind:
+                    break
+                _m = re.match(r'\s*([A-Za-z_][\w-]*)\s*:', _k)
+                if _m and _m.group(1).lower() in _seen:
+                    out.append(_m.group(1))
+                elif _m:
+                    _seen.add(_m.group(1).lower())
+        return out
+    _dupes = [f'{_f}: {_d}' for _f in sorted(os.listdir(_wf_dir)) if _f.endswith('.yml')
+              for _d in _env_dupes(open(os.path.join(_wf_dir, _f), encoding='utf-8').read())]
+    chk('workflow: no env key repeated in another case (Actions rejects the file)', not _dupes,
+        str(_dupes))
+    chk('workflow: the env-key check catches HTTPS_PROXY beside https_proxy',
+        _env_dupes('      env:\n        HTTPS_PROXY: a\n        https_proxy: a\n      run: x\n')
+        == ['https_proxy'])
 
     # --- tier B: the deep harvest ----------------------------------------------
     sys.path.insert(0, os.path.join(ROOT, 'harvest'))

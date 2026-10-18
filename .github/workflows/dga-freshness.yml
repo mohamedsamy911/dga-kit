@@ -68,10 +68,10 @@ jobs:
       - name: Run the sentinel
         id: sentinel
         # urllib reads the proxy from the environment; TLS to DGA stays end-to-end through CONNECT.
-        # Set on this step only, so no other step can send traffic through it.
+        # Set on this step only, so no other step can send traffic through it. One spelling only:
+        # Actions env keys are case-insensitive, and https_proxy beside it is an invalid workflow.
         env:
           HTTPS_PROXY: ${{ secrets.DGA_HTTPS_PROXY }}
-          https_proxy: ${{ secrets.DGA_HTTPS_PROXY }}
         run: |
           set +e
           python harvest/sources.py --check ${{ inputs.deep && '--deep' || '' }} 2>&1 | tee sentinel.log
