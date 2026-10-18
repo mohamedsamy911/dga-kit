@@ -95,9 +95,10 @@ Each of these passes a build, a type check and a casual review.
 3. **Nothing in DGA — or in any UI library — provides Hijri dates.** DGA's own datepicker demo is
    Gregorian and its official package contains no Hijri code. That wrapper is yours to build; a
    tested `Intl` implementation ships at `dga-react/assets/reference-impl/dga-date.ts`.
-4. **The footer must contain Accessibility Tools** (font-size and contrast controls) and they must
-   come **first in tab order**. A feature, not styling — and not a WCAG requirement, so no
-   automated tool will catch its absence.
+4. **The footer must contain Accessibility Tools** — DGA's examples are font size adjustment and
+   contrast settings. A feature, not styling — and not a WCAG requirement, so no automated tool
+   will catch its absence. DGA's Chatbot template adds that they should be **first in tab order**
+   (template guidance).
 5. **A skip-to-content link is required on every page.**
 6. **Build the feedback section** (\"Was this page useful?\" + Yes/No + reason options) and **two**
    last-modified dates, page and platform, into every page — DGA template guidance, worded as

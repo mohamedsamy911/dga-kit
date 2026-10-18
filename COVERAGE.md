@@ -128,7 +128,7 @@ file so nobody rebuilds a monitor on a false premise:
 |---|---|
 | Every route returns the same 4,417-byte SPA shell with **HTTP 200 — including routes that do not exist** | HTTP status can never detect a removed or renamed page, and a per-route content hash is identical for every route. A monitor built on either is permanently green and proves nothing. |
 | The shell links `/assets/index-<vite-hash>.css` | The filename carries the build hash, so it changes on every DGA deploy. Cheapest exact "DGA shipped something" signal, and the file holds the whole token surface. |
-| `sitemap.xml` is fetchable but **stale** — 34 components and 16 templates against the real 50 and 19 | A lower-bound signal only. Never a count. Its template set is exactly the Sep 2024 release. |
+| `sitemap.xml` is fetchable but **stale** — 34 components and 16 templates against the real 50 and 19 (21 routed since 2026-10-08) | A lower-bound signal only. Never a count. Its template set is exactly the Sep 2024 release. |
 
 So monitoring is two tiers, and every source carries which applies:
 

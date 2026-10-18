@@ -6,7 +6,7 @@ DGA-compliant?"
 - answers for the library actually in use, or states plainly that PrimeVue is not one of the four
   named in `component-mapping.md` and gives the **DGA rule** so it can be mapped onto whatever
   PrimeVue calls the component
-- the DGA rule: a horizontal tablist **never scrolls and never wraps** — overflow goes to a
+- the DGA rule: a horizontal tablist does **not scroll or wrap**; DGA recommends an overflow
   "More" button. Most libraries default to scrolling
 - also: the states DGA lists for tabs (five, including Focused — no Selected), 44px targets,
   RTL mirroring

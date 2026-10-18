@@ -36,8 +36,9 @@ are open questions, not omissions; list them in §7.
 ### 4 · Accessibility annotations
 Per component, the ARIA and keyboard contract from
 `../dga-design-system/references/accessibility.md`: roles, required attributes, keyboard model,
-focus behaviour. Include the two DGA requirements teams miss — **skip-to-content** and
-**Accessibility Tools first in tab order**.
+focus behaviour. Include the two DGA requirements teams miss — **skip-to-content** and **Accessibility Tools**
+in the footer — and, as DGA template guidance from its Chatbot page, the tools **first in tab
+order**.
 
 ### 5 · Bilingual copy table
 `ar` and `en` side by side for every string, including button labels, helper text, error

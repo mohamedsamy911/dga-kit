@@ -109,8 +109,8 @@ Everything here is cited in `references/`.
 20. **Links are underlined** by default, and DGA says to avoid "click here" / "go to" as link text
 
 **Two things DGA requires that teams routinely miss**
-- The **footer must contain Accessibility Tools** — font size and contrast controls. A feature,
-  not styling.
+- The **footer must contain Accessibility Tools** — DGA's examples: font size and contrast
+  settings. A feature, not styling.
 - A **skip-to-content link** at the start of every page.
 
 **And one it doesn't provide**

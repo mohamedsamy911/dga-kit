@@ -17,10 +17,10 @@ Tickable form of `SKILL.md`. Attach the completed copy to the go-live approval.
 - [ ] *Advisory — DGA template guidance:* Feedback "Was this page useful?" + Yes/No; reason options
 - [ ] *Advisory — DGA template guidance:* Last modified date — page, and platform
 - [ ] Skip-to-content link at the start of the header
-- [ ] Accessibility Tools in the footer (font size, contrast)
-- [ ] Accessibility Tools **first in tab order**
+- [ ] Accessibility Tools in the footer (DGA's examples: font size, contrast)
+- [ ] *Advisory — DGA template guidance:* Accessibility Tools reachable **first in tab order** (DGA's Chatbot template)
 - [ ] Header and footer, if detached: original structure and style kept — colours and fonts unchanged
-- [ ] Page exists in **both** `ar` and `en`
+- [ ] Page exists in **both** `ar` and `en` (*kit policy* — DGA states no parity rule)
 - [ ] Language toggle reloads every element, interactive content included
 
 ## 2 · Required pages

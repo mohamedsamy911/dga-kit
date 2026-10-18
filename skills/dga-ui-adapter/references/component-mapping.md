@@ -72,7 +72,7 @@ states, 44px targets, no Arabic letter-spacing, logical properties.
 | Switch | `Switch` | `Switch` | `Switch` | `Switch` | `role="switch"` + `aria-checked`. |
 | Slider | `Slider` | `Slider` | `Slider` | `Slider` | ⚠️ **RTL: the value must increase toward the start edge.** Several libraries get this wrong — test it. |
 | File Uploader | `<input type=file>` | `FileUpload` | build | `Upload` | Enter **or Space** opens the dialog from the drop area. |
-| Steps | `Stepper` | `Steps` | build | `Steps` | ✅ DGA states RTL explicitly: progresses right-to-left, and the final step's connector moves to the **left**. 🚩 **Radial Stepper on mobile**, Progress Indicator on large screens — a required responsive swap, not a nicety. |
+| Steps | `Stepper` | `Steps` | build | `Steps` | ✅ DGA states RTL explicitly: progresses right-to-left, and the final step has *"no line on the right side (or the left side if it is RTL)"*. DGA's form template uses a **Radial Stepper on mobile** and small screens. |
 | **Date Picker** | `DatePicker` (X) | `DatePicker` | `Calendar`+`Popover` | `DatePicker` | 🚩 **Gregorian only, everywhere.** No library and no DGA package supplies Hijri. Use `../../dga-react/assets/reference-impl/dga-date.ts` (Umm al-Qura, tested, framework-free) and wrap. **Decide wrap-or-replace before the first date field ships.** |
 
 ## Loading and status
@@ -90,15 +90,15 @@ states, 44px targets, no Arabic letter-spacing, logical properties.
 |---|---|---|---|---|---|
 | Breadcrumbs | `Breadcrumbs` | `Breadcrumb` | `Breadcrumb` | `Breadcrumb` | Truncate past **5** items. 🚩 **Mobile shows back-arrow + previous page only.** Separators mirror in RTL and need `aria-hidden`. |
 | Menu | `Menu` | `Menu` | `DropdownMenu` | `Menu` | 🚩 DGA publishes **no accessibility section at all** for Menu. Apply the WAI-ARIA menu pattern and state that DGA is silent. |
-| Pagination | `Pagination` | `Pagination` | `Pagination` | `Pagination` | Appears after **10** items. Prev/next arrows mirror in RTL. |
-| Tabs | `Tabs` | `Tabs` | `Tabs` | `Tabs` | 🚩 A horizontal tablist **never scrolls and never wraps** — overflow goes to a More button. Most libraries default to scrolling; turn it off. |
+| Pagination | `Pagination` | `Pagination` | `Pagination` | `Pagination` | *"(optional)"* on Search and FAQ pages; when used there, after **10** items. Prev/next arrows mirror in RTL. |
+| Tabs | `Tabs` | `Tabs` | `Tabs` | `Tabs` | 🚩 A horizontal tablist does **not scroll or wrap**; DGA recommends an overflow "More" button. Most libraries default to scrolling; turn it off. |
 | Slide-out Menu | `Drawer` | `Drawer` | `Sheet` | `Drawer` | Focus trap, Esc closes. **Opens from the opposite side in RTL.** |
 
 ## Search and filters
 
 | DGA | MUI | Chakra v3 | shadcn/Radix | Ant | DGA constraint to add |
 |---|---|---|---|---|---|
-| Search Box | `Autocomplete` | `Combobox` | `Command` | `AutoComplete` | 🚩 Requires **autocomplete with real-time suggestions**, a keyboard-accessible clear button, and the query **retained after search**. A bare text input does not satisfy this. |
+| Search Box | `Autocomplete` | `Combobox` | `Command` | `AutoComplete` | 🚩 DGA's templates ask for **autocomplete with real-time suggestions** and a keyboard-accessible clear button; its Search page keeps the query **in the field after the search**. A bare text input does not satisfy this. |
 | Tags | `Chip` | `Tag`/`TagsInput` | `Badge` | `Tag` | Interactive tags must be `<button>`, never `<span>`. |
 | Filtration | composite | composite | composite | composite | Build from Popover + Checkbox + RadioGroup + Slider + Tag + DatePicker. ✅ The only DGA page that mentions `prefers-reduced-motion`. |
 
@@ -110,9 +110,9 @@ No component library ships a compliant government shell. This is the bulk of the
 |---|---|---|
 | **Navigation Header** | **build** | DGA-specific anatomy: brand logo, nav links, header actions in 4 layouts, sub-menu items in 4 variants. `role="banner"` + `role="navigation"`. |
 | Navigation Drawer | `Drawer`/`Sheet` | Focus moves to the submenu's first item on expand and returns to the parent on collapse. |
-| **Table of Contents** | **build** | Required on content-heavy pages. Activation must move **focus**, not just scroll. |
-| **Second Nav Header** | **build** | Contextual bar above the primary nav. `aria-live="polite"` on live values. |
-| **Footer** | **build** | 🚩 Must contain **Accessibility Tools** (font-size + contrast controls), **first in tab order**. `role="contentinfo"`. |
+| **Table of Contents** | **build** | DGA's heavy content page template *"offering a Table of Contents"*. Activation must move **focus**, not just scroll. |
+| **Second Nav Header** *(DGA: "Is optional")* | **build** | Contextual bar above the primary nav. `aria-live="polite"` on live values. |
+| **Footer** | **build** | 🚩 Must contain **Accessibility Tools** (DGA's examples: font size, contrast). First in tab order is DGA template guidance (Chatbot page). `role="contentinfo"`. |
 
 ### Not DGA components — but you will build them alongside
 

@@ -175,12 +175,14 @@ many.
 - *"Support multiple languages if available. And provide text-to-speech or speech-to-text for
   users with disabilities."*
 
-**🚩 Accessibility Tools must come FIRST in the tab order.**
+**🚩 Accessibility Tools first in the tab order** — DGA: *"the correct approach is to ensure
+that accessibility tools and options are placed at the beginning of the tab order."*
 > Users relying on assistive technologies need quick access to essential tools without tabbing
 > through the entire page… Use the `tabindex` attribute strategically.
 
-This pairs with the footer's Accessibility Tools requirement: the controls live in the footer but
-must be **reachable first by keyboard**.
+This pairs with the footer's Accessibility Tools: the controls live in the footer but should be
+**reachable first by keyboard**. It is stated on this page only, so the kit checks it as DGA
+template guidance (advisory), not as a launch requirement.
 
 **Floating button placement:** must not cover important content, including on mobile; must
 contrast against its background (add a shadow or white border if the colour can't change); with
@@ -424,9 +426,10 @@ Guests of Allah, and DGA's stated framing of the Kingdom's role in serving pilgr
 the Ehsan platform during the Hajj season. Same component as the Founding Day one above; the
 floating-button rules below apply unchanged.
 
-> The page repeats the **Saudi Font** rules verbatim: download from the Ministry of Culture,
-> national and seasonal occasions only, **main headings only**, never paragraph or long-form
-> text. See `brand.md` — this page is a second source for the same rule, not a new one.
+> The page repeats the **Saudi Font** rules — download from the Ministry of Culture, national and
+> seasonal occasions only, **main headings only** — in stronger words than the typography page:
+> *"The font must not be used in paragraph text or long-form content"* (typography: *"not
+> recommended"*). See `brand.md`.
 
 **Floating-button rules (shared with Chatbot):** must not cover important content, including on
 mobile; must contrast with its background (add shadow or white outline if the colour is fixed);

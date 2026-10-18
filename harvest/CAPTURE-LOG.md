@@ -41,6 +41,7 @@ verbatim from the running site, not transcribed from screenshots.
 | Other | Support + 15 FAQs | `/support` | 2026-08-27 |
 | Other | Roadmap | `/updates/roadmap` | 2026-08-27 |
 | Other | Change log + 4 version pages | `/updates/change-log`, `/updates/change-log/version-history-1-0-{0,1,2,3}` | 2026-08-27 |
+| Reverse audit | **Kit claim → DGA source** — every rule the agents, skill entry files and eval answers attribute to DGA, traced to DGA's text; ~30 corrections, each confirmed on the rendered page | raw evidence: `harvest/raw/2026-10-18-reverse-audit.md` | 2026-10-18 |
 | Re-read | **Full prose re-read** — every component, template and guidance page's text compared with the kit; ~40 corrections, each confirmed on the rendered page; Loading, Radial stepper and Skeleton given their own sections | raw evidence: `harvest/raw/2026-10-18-reread.md` | 2026-10-18 |
 | Re-harvest | **DGA update** — renumbered change log (18 releases, 4.0.0), **national-day-96**, **life-journeys**, National Day 95 left the nav (still served), rewritten `/contributing`, typography and iconography re-read, tokens re-reconciled | raw evidence: `harvest/raw/2026-10-08-dga-update.md` | 2026-10-08 |
 

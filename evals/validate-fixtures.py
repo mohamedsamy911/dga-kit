@@ -1987,6 +1987,17 @@ _STRENGTH = [
      re.compile(r'notification|auto-?dismiss', re.I),
      re.compile(r'no timeout|\u2265\s*5\s*s|at least 5 seconds|5s or longer', re.I),
      re.compile(r'typically|consider', re.I)),
+    # 2026-10-18 reverse audit: stated only on DGA's Chatbot template, yet required in 12 places.
+    ('Accessibility Tools "first in tab order" stated as a requirement (Chatbot template guidance)',
+     re.compile(r'(?:first|beginning|start) (?:in|of|at) (?:the )?(?:tab|focus|keyboard) order|'
+                r'(?:keyboard )?focus first', re.I),
+     re.compile(r'\bmust\b|\brequired?\b|\brequires\b|\bblocker\b|\bmandat', re.I),
+     re.compile(r'template guidance|advisory', re.I)),
+    ('route parity stated as a DGA compliance rule (DGA states none)',
+     re.compile(r'parity|both locales|bilingual gap|in one (?:language|locale)', re.I),
+     re.compile(r'compliance (?:failure|requirement|rule|violation)|\bblocker\b|\bmandat|'
+                r'required for (?:DGA )?compliance', re.I),
+     re.compile(r'kit polic|no parity rule', re.I)),
 ]
 
 
@@ -2015,13 +2026,23 @@ for _bad in ('6. **Every page needs the feedback section** and **two** last-modi
              'Notifications: no timeout on critical; **\u22655s** if auto-dismissing',
              'DGA template guidance requires the feedback section on every page.',
              '"Go to" is forbidden as link text.',
-             'Every page needs "Was this page useful?" and **two** dates \u2014 page and platform.'):
+             'Every page needs "Was this page useful?" and **two** dates \u2014 page and platform.',
+             'Accessibility Tools **first in tab order** is required on every page.',
+             '**\U0001f6a9 Accessibility Tools must come FIRST in the tab order.**',
+             'A page present in one language and missing in the other is a compliance failure.',
+             'A 404 in one language and a page in the other is a bilingual-parity **blocker**.',
+             '- **Parity is a compliance requirement.** Every route must exist in both locales.',
+             'Accessibility Tools must receive keyboard focus first, per DGA\'s Chatbot page.',
+             'Both locales are required for DGA compliance.',
+             '- Bilingual gap: content present in one locale and absent in the other is a Blocker.'):
     chk('strength: the detector catches "' + _bad[:40] + '"', bool(_strength_hits(_bad)),
         'the source-strength guard cannot fire on a shipped wording')
 for _good in ('Feedback section and two last-modified dates are DGA template guidance (advisory).',
               'DGA says to avoid "click here" and "go to" as link text.',
               'Notifications: "consider not having a timeout" on critical; "typically at least 5 seconds".',
-              'Kit policy: we require reason options on every page.'):
+              'Kit policy: we require reason options on every page.',
+              'Accessibility Tools first in tab order is required by DGA\'s Chatbot template guidance.',
+              'Parity — kit policy; DGA states no parity rule. A missing locale is a blocker.'):
     chk('strength: the hedged wording passes: "' + _good[:40] + '"', not _strength_hits(_good),
         'the guard would flag correct, hedged guidance')
 

@@ -25,9 +25,11 @@ the two pages carrying the transparency mandate. Full detail in
 
 ### 2 · Required on every page
 - [ ] **Skip-to-content link** at the start of the header
-- [ ] **Accessibility Tools** in the footer — font size and contrast controls, **first in tab order**
+- [ ] **Accessibility Tools** in the footer — DGA: *"may include features like font size
+  adjustment or contrast settings"*
 - [ ] Header and footer, if detached: original structure and style kept — colours and fonts unchanged
-- [ ] Both locales exist; language toggle reloads **every** element including interactive content
+- [ ] Both locales exist (*kit policy* — DGA states no parity rule); language toggle reloads
+  **every** element including interactive content
 
 ### 2b · DGA template guidance on every page — advisory
 DGA repeats these on every template page but words them as benefits, not obligations. Check for
@@ -37,6 +39,8 @@ Blocker, or a reason a launch fails.
   element"*); reason options, which DGA says *"helps"*. Its results feed the e-Participation
   statistics page
 - [ ] **Last modified date for the page** and **for the platform** — DGA explains why each helps
+- [ ] **Accessibility Tools first in tab order** (advisory) — DGA's Chatbot template: *"the correct approach
+  is to ensure that accessibility tools and options are placed at the beginning of the tab order"*
 
 ### 3 · Required pages
 - [ ] Home · Contact us · Help & Support · FAQs · Sitemap · **404** · Search · Content

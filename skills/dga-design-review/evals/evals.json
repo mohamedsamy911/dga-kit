@@ -23,9 +23,9 @@
       "expected_output": "Half the usage is correct. A reviewer that flags the whole page, or passes the whole page,\nboth fail.",
       "expectations": [
         "heading: **compliant** — Saudi Font is permitted on occasion templates, headings only",
-        "body copy: **Blocker** — DGA restricts Saudi Font to main headings and states paragraph or long-form use is not recommended, for readability",
-        "cites: /guidelines/foundations/typography",
-        "must also note: Saudi Font requires a Ministry of Culture licence",
+        "body copy: **Blocker** — DGA restricts Saudi Font to main headings; the typography page calls paragraph or long-form use *\"not recommended\"*, the Hajj template says it *\"must not be used\"*, and the stricter reading applies",
+        "cites: /guidelines/foundations/typography and /guidelines/templates/hajj-template",
+        "must also note: DGA says Saudi Font is available under a Ministry of Culture licence agreement",
         "Cites DGA for every rule it asserts, and does not invent one: a rule attributed to DGA that DGA does not publish fails this case regardless of what else the answer gets right."
       ]
     },
@@ -51,7 +51,7 @@
         "**Blocker** — **Accessibility Tools** are missing. DGA lists them in required footer anatomy: \"buttons or links designed to improve usability for people with disabilities… font size adjustment or contrast settings\"",
         "cites: /guidelines/components/ui-shell/footer",
         "must note: it is a **feature to build**, not styling, and is not a WCAG requirement — so standard accessibility tooling will not catch it",
-        "should cross-reference: Chatbot page requires accessibility tools **first in tab order**",
+        "should cross-reference: DGA's Chatbot template places accessibility tools **first in tab order** (template guidance, advisory)",
         "Cites DGA for every rule it asserts, and does not invent one: a rule attributed to DGA that DGA does not publish fails this case regardless of what else the answer gets right."
       ]
     },
@@ -74,7 +74,7 @@
       "expected_output": "Steps is one of the few pages where DGA speaks to RTL directly (the total is unverified — never\ncite a count). The reviewer should cite DGA here\nrather than falling back to generic bidi guidance — the citation is what makes the finding\nstick in a review meeting.",
       "expectations": [
         "**Blocker** — under RTL, steps progress right-to-left, and the final step has no line on the **left** side. DGA states both explicitly.",
-        "**Major** — DGA specifies **Radial Stepper on mobile and small screens**, Progress Indicator on large screens. Using one component at all breakpoints misses a required responsive swap.",
+        "**Major** — DGA's form template uses the **Radial Stepper on mobile devices and small screens**. Using the full stepper at every breakpoint ignores that guidance.",
         "cites: /guidelines/components/forms-and-inputs/steps and /guidelines/templates/form-page",
         "Cites DGA for every rule it asserts, and does not invent one: a rule attributed to DGA that DGA does not publish fails this case regardless of what else the answer gets right."
       ]

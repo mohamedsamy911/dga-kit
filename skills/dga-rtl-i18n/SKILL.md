@@ -18,8 +18,8 @@ with Arabic poured into it is the single most common failure and it never fully 
 
 ## What DGA actually says about RTL
 
-The harvest is complete, and the answer is: **very little.** Across 50 component pages and 19
-templates, these are the statements the harvest found. ⚠️ **Cite them, never a count** — the
+The harvest is complete, and the answer is: **very little.** Across 50 component pages and 21
+routed templates, these are the statements the harvest found. ⚠️ **Cite them, never a count** — the
 total has not been verified against the live site, and the repo carries it as
 `TODO(verify)` in [the coverage record](https://github.com/mohamedsamy911/dga-kit/blob/master/COVERAGE.md). Item 6 is library code, not guidance, which is exactly the kind of conflation a
 number hides.

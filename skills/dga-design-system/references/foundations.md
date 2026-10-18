@@ -59,8 +59,10 @@ own palette.
 | **IBM Plex Sans** | Everything | Regular, Medium, Semibold, Bold |
 | **Saudi Font** (Ministry of Culture) | National and seasonal occasions **only** — National Day, Founding Day. **Main headings only.** | Regular, Bold |
 
-DGA is explicit that Saudi Font must not be used for paragraph or long-form text. It requires
-a licence from the Ministry of Culture.
+DGA restricts Saudi Font to main headings. On paragraph or long-form text the typography page
+says *"not recommended"* and the Hajj template *"must not be used"* — apply the stricter. DGA:
+*"available under a license agreement from the Ministry of Culture"*; download it from the
+Ministry of Culture website.
 
 ⚠️ **Open question — no Arabic typeface is specified for body text.** The page names "IBM Plex
 Sans… developed by IBM in collaboration with Bold Monday, released 2017," which is the Latin
@@ -232,7 +234,7 @@ change or underline — for users who don't perceive depth.
 
 ## Iconography
 
-**Platforms Code Icons** is the mandated set. For designers it ships as a Figma icon library
+**Platforms Code Icons** is DGA's icon set (*"We use the Platforms Code Icons set"*). For designers it ships as a Figma icon library
 and SVG assets; for developers it is **included by default in all DGA packages — no separate
 install**.
 

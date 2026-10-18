@@ -101,8 +101,8 @@ Eight rules. Each is library-independent, and each one has burned somebody.
    accessibility requirement, not polish. Most libraries let focus fall back to the browser
    default; check rather than assume.
 
-5. **44 x 44 px minimum touch target**, on every interactive element. Most libraries' small-size
-   controls are under it. This is DGA-stated, and stricter than WCAG 2.1 AA (2.5.5 is AAA).
+5. **44 x 44 px touch targets** on every interactive element — DGA's *"recommended minimum"*.
+   Most libraries' small-size controls are under it. Stricter than WCAG 2.1 AA (2.5.5 is AAA).
 
 6. **A skip-to-content link on every page**, first in the DOM inside the header.
 
@@ -122,30 +122,30 @@ states the **DGA-specific constraint your library will not give you for free**. 
 
 - Links are **underlined by default**; DGA says to avoid "click here" and "go to" as link text
 - Content Switcher is capped at **2-4 options** — beyond four it must become Tabs
-- A horizontal tablist **never scrolls or wraps**; overflow goes to a "More" button
+- A horizontal tablist does **not scroll or wrap**; DGA recommends an overflow "More" button
 - Pie charts **max 6 segments**; line and bar **max 3 series**
 - Breadcrumbs truncate past **5** items, and on mobile show back-arrow plus previous page only
-- Pagination appears after **10** items
+- Pagination is *"(optional)"* on Search and FAQ pages; when used there, after **10** items
 - Critical notifications: DGA says *"consider not having a timeout"*; anything auto-dismissing
   stays *"typically at least 5 seconds"*
 - Sliders in RTL increase toward the **start** edge
-- Steps in RTL progress right-to-left, and swap to a Radial Stepper on mobile
+- Steps in RTL progress right-to-left; DGA's form template uses a Radial Stepper on mobile
 
 ## Step 4 — build the things no library ships
 
-This is the compliance gap. Four of these are government-mandated rather than stylistic, so no
-component library and no automated accessibility tool will tell you they are missing.
+This is the compliance gap: no component library and no automated accessibility tool will tell
+you they are missing.
 
 | Must build | Why it matters |
 |---|---|
 | **Digital Stamp** 🚩 | Verifies the site is a registered `.gov.sa` platform. Needs the entity's DGA registration number and License Number — a **procurement dependency, start early**. |
-| **Footer with Accessibility Tools** 🚩 | DGA lists font-size and contrast controls as required footer anatomy, and they come **first in tab order**. A feature to build, not styling. Not a WCAG requirement, so nothing automated catches its absence. |
+| **Footer with Accessibility Tools** 🚩 | Part of DGA's footer anatomy; its examples are font size and contrast settings. DGA's Chatbot template adds **first in tab order** (template guidance). A feature to build, not styling. Not a WCAG requirement, so nothing automated catches its absence. |
 | **Feedback section** 🚩 | "Was this page useful?" plus Yes/No and reason options — DGA template guidance on every template page. Its results feed the performance-statistics page. |
-| **Navigation Header / Second Nav Header** | DGA-specific anatomy and layouts. `role="banner"` plus `role="navigation"`. |
-| **Table of Contents** | Required on content-heavy pages. Activation must move **focus**, not just scroll. |
+| **Navigation Header** (and the Second Nav Header, which DGA marks *"optional"*) | DGA-specific anatomy and layouts. `role="banner"` plus `role="navigation"`. |
+| **Table of Contents** | DGA's heavy content page template offers one. Activation must move **focus**, not just scroll. |
 | **Two last-modified dates** | Page *and* platform — DGA template guidance, worded as benefits. |
 
-Plus, if you display dates: **a Hijri wrapper**. Nothing in DGA and nothing in any UI library
+Plus, if the project decides on Hijri: **a Hijri wrapper**. Nothing in DGA and nothing in any UI library
 provides one — DGA's own datepicker demo is Gregorian and its official package contains no Hijri
 code. A tested `Intl`-based implementation ships at
 `../dga-react/assets/reference-impl/dga-date.ts`; it has no framework dependency, so it drops

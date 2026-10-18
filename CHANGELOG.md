@@ -11,6 +11,45 @@ patch means corrections. Nothing here is a DGA release — see
 `skills/dga-design-system/dga-version.md` for the Platforms Code version this kit is pinned to
 (currently **4.0.0** per DGA's change log, read 2026-10-08; DGA publishes no release date).
 
+## 0.8.2 — 2026-10-18
+
+### Corrected — rules the kit attributed to DGA without a source
+
+0.8.1 read DGA's text against the reference files. This pass ran the other way: every rule that
+the agents, the skill entry files and the eval answers attribute to DGA, traced back to DGA's
+text, with each change confirmed on the rendered page (`harvest/raw/2026-10-18-reverse-audit.md`).
+
+- **Accessibility Tools "first in tab order"** was a launch requirement in 12 places. DGA says it
+  once, on the Chatbot template. The footer's Accessibility Tools stay required (footer anatomy);
+  first-in-tab-order joins the advisory *DGA template guidance* tier. Their contents are DGA's
+  examples — it says the tools *"may include"* font size and contrast settings.
+- **Bilingual route parity** was "a compliance failure" / "compliance requirement" / "blocker".
+  DGA states no parity rule; the check stays, labelled kit policy.
+- **Saudi Font:** the typography page calls body use *"not recommended"*, but the Hajj template
+  says it *"must not be used"* — the kit now cites both and applies the stricter. The font is
+  *"available under a license agreement"* from the Ministry of Culture, not "licensed separately".
+- **Steps in RTL:** the final step has *"no line on the right side (or the left side if it is
+  RTL)"* — three files said its connector moves to the left.
+- The design-review example "20px isn't on the scale" was wrong (20px is `2xl`). Also: 44×44 as
+  *"recommended minimum"* in the UI adapter; Tabs *"do not scroll or wrap"* with an overflow button
+  *recommended*, not required; the Second Nav Header *"Is optional"*; Hijri only if the project
+  decides on it; pagination optional on Search/FAQ; links *"should be underlined"*; body line height
+  *"WCAG suggests"*; `rel="noopener"` is DGA's, `noreferrer` the kit's; no DGA glossary exists;
+  no "mandated" icon set; template count 21, not 19; DGA's dark values ship in its CSS (not only
+  Figma); example copy is DGA's *example*, not prescribed wording; Arabic letter-spacing is kit
+  guidance, not a DGA rule.
+
+**Rejected:** "Heavy content pages require a side in-page menu" is filler text inside DGA's live
+template demo, not guidance; the guideline page says a heavy content page *"with TOC"* offers one.
+"Left/Right arrow keys" for the Content Switcher is in DGA's text table but not on the page, which
+says left/right for horizontal and up/down for vertical.
+
+### Added — two more source-strength classes
+
+`validate-fixtures.py` now also fails on "first in tab order" stated as a requirement without the
+Chatbot / template-guidance label, and on route parity called a compliance failure or blocker
+without the kit-policy label. Break-tested: the original wording of 8 changed files trips them.
+
 ## 0.8.1 — 2026-10-18
 
 ### Corrected — the kit had hardened DGA's wording

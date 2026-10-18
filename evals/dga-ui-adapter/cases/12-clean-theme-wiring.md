@@ -16,8 +16,9 @@ measured: `subtle` brand.50, `muted` brand.100, `emphasized` brand.200, `solid` 
 brand.700 and brand.800 (6.60:1 and 8.56:1 against white); brand.500 is explicitly excluded as a
 fill because white on it is 3.88:1.
 
-**Dark mode.** No `_dark` slot is emitted and no colour-mode toggle is exposed. DGA publishes dark
-values only in the PC 1.0 Figma collections, so there is nothing legitimate to put in a slot; an
+**Dark mode.** No `_dark` slot is emitted and no colour-mode toggle is exposed. DGA's dark values
+ship in its public CSS under a selector that can never match, so they are audit-only and there is
+nothing legitimate to put in a slot; an
 empty-but-present slot filled with the light value would ship a light theme labelled dark. The
 gap is recorded in `dga-brand-overlay`.
 
@@ -34,8 +35,8 @@ an unknown key cannot silently no-op. Documented as **DGA's four bands under thr
 mobile 0–599, tablet 600–959, desktop 960–1279, xl 1280+ — with a comment noting that DGA
 "desktop" is Chakra `md`.
 
-**Spacing.** Wired in rem rather than DGA's published px, recorded as a deliberate decision: DGA
-mandates a footer font-size control, and px spacing would scale the text without scaling the boxes
+**Spacing.** Wired in rem rather than DGA's published px, recorded as a deliberate decision: DGA's footer
+Accessibility Tools may include a font-size control, and px spacing would scale the text without scaling the boxes
 around it. Computed values match DGA's scale at the default root size.
 
 **Controls.** 44px minimum applied per element type, not blanket: directly on `IconButton`,

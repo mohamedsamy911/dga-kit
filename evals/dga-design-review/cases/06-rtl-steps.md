@@ -5,8 +5,8 @@ its right side. Progress Indicator used at all breakpoints including mobile.
 ## expect
 - **Blocker** — under RTL, steps progress right-to-left, and the final step has no line on the
   **left** side. DGA states both explicitly.
-- **Major** — DGA specifies **Radial Stepper on mobile and small screens**, Progress Indicator
-  on large screens. Using one component at all breakpoints misses a required responsive swap.
+- **Major** — DGA's form template uses the **Radial Stepper on mobile devices and small
+  screens**. Using the full stepper at every breakpoint ignores that guidance.
 - cites: /guidelines/components/forms-and-inputs/steps and /guidelines/templates/form-page
 
 ## traps

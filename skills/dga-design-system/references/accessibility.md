@@ -35,7 +35,7 @@ From `/thoughts/AccessibilityEase`:
 | Graphical / UI component contrast | **3:1** | colour-system |
 | AAA (aspirational) | 7:1 normal, 4.5:1 large | typography |
 | **Touch / target size** | **44 × 44 px** | layout-and-spacing, iconography, buttons |
-| **Body line height** | **≥ 1.5 × font size** | layout-and-spacing |
+| **Body line height** | **≥ 1.5 × font size** — *"WCAG suggests"* | layout-and-spacing |
 | Auto-dismissing notification duration | **≥ 5 seconds** | notification |
 
 ⚠️ **DGA contradicts itself on the large-text boundary** — the colour page says 24px, the

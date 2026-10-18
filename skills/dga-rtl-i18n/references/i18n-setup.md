@@ -25,8 +25,8 @@ export default async function RootLayout({ children, params }) {
 ```
 
 - `ar` is the default locale. An unprefixed URL resolves to Arabic.
-- Every route must exist in both locales. A 404 in one language and a page in the other is a
-  bilingual-parity **blocker**, not a content gap.
+- Every route must exist in both locales. By kit policy (DGA states no parity rule), a 404 in one
+  language and a page in the other is a **blocker**, not a content gap.
 
 ## Messages
 

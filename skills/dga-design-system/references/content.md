@@ -7,10 +7,6 @@ https://design.dga.gov.sa/guidelines/foundations/* · **Retrieved:** 2026-08-26
 > page set above and cites its specific page inline. Where DGA is silent that is stated, not
 > filled in.
 
-DGA publishes no standalone content style guide. The rules below are gathered from where they
-actually appear — template guidance and component pages. Where DGA is silent, that is recorded
-rather than filled in.
-
 ## Bilingual operation
 
 **Language switching** — with two languages (Arabic and English), a **direct toggle button**,
@@ -21,12 +17,13 @@ languages, a **dropdown**.
 
 The site itself ships in Arabic and English (`العربية` toggle).
 
-**Parity:** every route must exist in both locales. A page present in one language and missing
-in the other is a compliance failure, not a content backlog item.
+**Parity — kit policy:** every route must exist in both locales. DGA states no parity rule; it
+only says the toggle updates *all* elements of the page. The kit treats a page present in one
+language and missing in the other as a defect, not a content backlog item.
 
-## Required copy
+## Copy DGA gives
 
-Some strings are effectively prescribed by DGA:
+Mostly as examples (*"such as"*, *"like"*) — the wording is DGA's suggestion unless noted:
 
 | Where | Content |
 |---|---|
@@ -37,7 +34,7 @@ Some strings are effectively prescribed by DGA:
 | Search, no results | **"No Data Found"** |
 | Filter reset | **"Clear Filter"** or **"Reset Filter"** |
 | Show more content | **"View All"** or **"Show All"** |
-| FAQ categories | An **"All"** category is mandatory |
+| FAQ categories (optional) | When used, DGA: *"The 'All' category must be added."* |
 
 ## Tone
 
@@ -70,13 +67,13 @@ across screens is worse than either option.
 - **External links** carry an icon marking them off-platform
 - **File links** carry an icon chosen by file type, or show the extension in the label
 - New-tab links must announce that behaviour, with visually hidden text for screen readers, and
-  carry `rel="noopener noreferrer"`
+  carry `rel="noopener"` (DGA; `noreferrer` too is the kit's suggestion)
 
 ## Content limits DGA states
 
 | Limit | Value |
 |---|---|
-| Search / FAQ pagination | after **10** items |
+| Search / FAQ pagination *(optional)* | after **10** items |
 | Statistics support tables | max **10 rows × 10 columns** |
 | Content switcher options | **2–4** (use Tabs beyond) |
 | Pie chart segments | max **6** |

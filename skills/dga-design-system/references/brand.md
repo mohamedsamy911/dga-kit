@@ -105,8 +105,9 @@ DGA's three stated reasons are about the citizen, not about tidiness:
 ## Seasonal identities
 
 **Saudi Font is permitted only for national and seasonal occasions, main headings only** —
-National Day, Founding Day. It is licensed separately from the Ministry of Culture. Never in
-paragraph or long-form text.
+National Day, Founding Day. DGA: *"available under a license agreement from the Ministry of
+Culture"*. Never in paragraph or long-form text (Hajj template: *"must not be used"*;
+typography: *"not recommended"*).
 
 Occasion templates carry their own visual identity — National Day 96 illustrations (95 left
 DGA's nav on 2026-10-08 but is still served), Founding Day Najdi architecture motifs — applied

@@ -37,8 +37,8 @@ Fixed order, every run. A free-form review returns different findings each time 
 Before the cosmetic passes — RTL errors are structural and invalidate what follows.
 - Genuinely mirrored layout, not an LTR layout with Arabic poured in
 - Reading order, alignment, icon mirroring — `dga-rtl-i18n/references/rtl-rules.md`
-- **Steps** progress right-to-left, and the final step's connector line is on the *left*
-  (DGA states both explicitly)
+- **Steps** progress right-to-left, and the final step has *"no line on the right side (or the
+  left side if it is RTL)"* (DGA states both explicitly)
 - **Breadcrumb separators** and the mobile back arrow mirror
 - **Brand logo does not mirror**
 - Latin runs and numerals inside Arabic text are isolated
@@ -59,13 +59,14 @@ Before the cosmetic passes — RTL errors are structural and invalidate what fol
 ### 4 · Typography
 - **IBM Plex Sans** only. **Saudi Font** is restricted to national and seasonal occasions
   (National Day, Founding Day), **main headings only** — never body or long-form. Saudi Font
-  in paragraph text is a Blocker.
+  in paragraph text is a Blocker: the typography page calls it *"not recommended"*, the Hajj
+  template says it *"must not be used"*, and the stricter reading applies.
 - Sizes on the DGA scale — Display 2xl/xl/lg/md/sm/xs (72/60/48/36/30/24) and Text
   xl/lg/md/sm/xs/2xs (20/18/16/14/12/10), with DGA's paired line heights
 - Display styles for headings only, never body copy
 - Line height **≥1.5×** font size for body text
 - **Tracking −2% on Display 2xl–md must not apply to Arabic** — letter-spacing breaks the
-  connected script. Blocker on Arabic text. Note: CSS `letter-spacing` does not accept
+  connected script. Blocker on Arabic text — kit guidance; DGA says nothing about tracking Arabic. Note: CSS `letter-spacing` does not accept
   percentages (proposed in css-text-4, never shipped); the CSS value is `-0.02em`.
 - Text 2xs (10px) used for anything a user must read — Major
 - Heading hierarchy sequential
@@ -83,10 +84,11 @@ Before the cosmetic passes — RTL errors are structural and invalidate what fol
   auto-dismissing
 - **Content switcher with more than 4 options — Major.** DGA caps it at 2–4; use Tabs instead.
 - **Charts over the caps — Major.** Pie max 6 segments; line and bar max 3 series.
-- **Tabs that scroll or wrap — Major.** DGA requires a More/overflow button.
+- **Tabs that scroll or wrap — Major.** DGA: horizontal tabs *"do not scroll or wrap"*; it
+  recommends an overflow menu button.
 - Avatar sizes from the DGA bands: 24/32 S · 40/48 M · 64/80/120 L
-- **Footer without Accessibility Tools — Blocker.** DGA lists font-size and contrast controls as
-  required footer anatomy. It is a feature to build, not styling.
+- **Footer without Accessibility Tools — Blocker.** DGA lists Accessibility Tools in the footer
+  anatomy (its examples: font size, contrast). It is a feature to build, not styling.
 - **Government site without the Digital Stamp — Blocker.** Needs the entity's DGA registration number
   and License Number; confirm early, it's a registration dependency.
 
@@ -99,7 +101,7 @@ Before the cosmetic passes — RTL errors are structural and invalidate what fol
 - Error states associated to their fields (`aria-describedby`, `aria-invalid`)
 - Loading, empty and error states shown
 - **Links underlined** by default, and DGA says to *avoid* "click here" or "go to" as link text
-- **Reduced motion respected.** DGA requires `prefers-reduced-motion` support in three places
+- **Reduced motion respected.** DGA asks for `prefers-reduced-motion` on three pages
   (Filtration, Loading, Skeleton) and caps flashing at three per second.
 - Loading indicators carry text, use `role="status"`, and are **not focusable**
 - Card and Menu: DGA publishes no accessibility guidance for either (Card's section is
@@ -119,7 +121,7 @@ Before the cosmetic passes — RTL errors are structural and invalidate what fol
   still raise it — label it `House` and say plainly it is not a DGA requirement.
 - **Where DGA contradicts itself, say so and apply the stricter reading.** Known: the large-text
   contrast boundary (24px on the colour page vs 18.5 Bold / 24 Regular on typography).
-- **Give the fix with the token.** "20px isn't on the scale — use 24px (`3xl`)" beats "spacing
+- **Give the fix with the token.** "34px isn't on the scale — use 32px (`4xl`)" beats "spacing
   is inconsistent."
 - **One finding per issue, not per instance** — eleven wrong greys is one finding with a count.
 - **Don't invent measurements.** Can't measure it from the artefact? `Note — needs measurement`.

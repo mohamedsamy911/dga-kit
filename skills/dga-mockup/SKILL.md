@@ -13,7 +13,7 @@ canvas mechanics; this one supplies the DGA constraints.
 
 ## Before drawing
 
-1. **Which template?** DGA publishes 19. Start from the closest — home, service, form, content,
+1. **Which template?** DGA routes 21 (as of 2026-10-08). Start from the closest — home, service, form, content,
    search, FAQs, contact, help, sitemap, 404, e-Participation, About the Entity. Inventing a
    layout when a DGA template exists is the most common mockup failure. See
    `../dga-design-system/references/patterns.md`.

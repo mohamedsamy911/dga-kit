@@ -11,7 +11,8 @@ Ships non-compliant, or ships broken for a real user.
 - RTL is structurally wrong — mirrored layout missing, reading order broken
 - A component invented where a DGA component exists for the job
 - Missing a state the screen cannot function without (form with no error state)
-- Bilingual gap: content or a feature present in one locale and absent in the other
+- Bilingual gap: content or a feature present in one locale and absent in the other (kit policy —
+  DGA states no parity rule)
 
 **Blockers stop the handoff.** Any blocker means the verdict is "not ready".
 
@@ -23,7 +24,7 @@ Compliant on paper, wrong in practice. Fix before build.
 - Heading hierarchy skipped
 - Icon mirrored that shouldn't be, or not mirrored that should
 - Wrong date, numeral, or currency format for the locale
-- Terminology off the DGA glossary
+- Terminology off the project's glossary (DGA publishes none)
 - Focus indicator present but low-visibility on this specific background
 
 ## Minor

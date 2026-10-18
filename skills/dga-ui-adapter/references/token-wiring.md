@@ -147,7 +147,7 @@ export const dgaTheme = createTheme({
   components: {
     MuiButton:     { styleOverrides: { root: { minHeight: 44, minWidth: 44 } } },
     MuiIconButton: { styleOverrides: { root: { minHeight: 44, minWidth: 44 } } },
-    MuiLink:       { defaultProps: { underline: 'always' } },   // DGA requires underlined links
+    MuiLink:       { defaultProps: { underline: 'always' } },   // DGA: links "should be underlined by default"
   },
 })
 ```
@@ -177,7 +177,7 @@ export const system = createSystem(defaultConfig, defineConfig({
       fonts: {
         heading: { value: '"IBM Plex Sans", system-ui, sans-serif' },
         body:    { value: '"IBM Plex Sans", system-ui, sans-serif' },
-        // National/seasonal occasions, MAIN HEADINGS ONLY. Ministry of Culture licence.
+        // National/seasonal occasions, MAIN HEADINGS ONLY. Ministry of Culture licence agreement.
         occasion:{ value: '"Saudi Font", "IBM Plex Sans", system-ui, sans-serif' },
       },
     },
@@ -263,8 +263,9 @@ framework-free and works in a shadow root if you attach it to `:host` as well as
 ## Typography, whatever the library
 
 **IBM Plex Sans** for everything. **Saudi Font** only on national and seasonal occasion pages,
-**main headings only** — DGA states paragraph use is not recommended, and it requires a Ministry
-of Culture licence. `tokens.css` ships `--dga-font-sans` only; if you need Saudi Font, declare it
+**main headings only** — DGA calls paragraph use "not recommended" (typography) and says it
+"must not be used" (Hajj template); it is "available under a license agreement" from the Ministry
+of Culture. `tokens.css` ships `--dga-font-sans` only; if you need Saudi Font, declare it
 yourself under a name that cannot be reached by accident (`fonts.occasion`,
 `--dga-font-occasion`) and never as a body fallback.
 

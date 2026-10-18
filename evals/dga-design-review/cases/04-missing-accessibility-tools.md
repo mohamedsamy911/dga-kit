@@ -9,7 +9,8 @@ last-modified dates. Passes contrast and keyboard checks.
 - cites: /guidelines/components/ui-shell/footer
 - must note: it is a **feature to build**, not styling, and is not a WCAG requirement — so
   standard accessibility tooling will not catch it
-- should cross-reference: Chatbot page requires accessibility tools **first in tab order**
+- should cross-reference: DGA's Chatbot template places accessibility tools **first in tab
+  order** (template guidance, advisory)
 
 ## traps
 The footer is otherwise exemplary and passes every automated check. This is the highest-value

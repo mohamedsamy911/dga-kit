@@ -4,8 +4,8 @@ copyright, and the platform's last-modified date. Their axe-core run is clean an
 accessibility score is 100. They ask whether the footer is done.
 
 ## expect
-- finds: the footer is **missing Accessibility Tools** — DGA lists font-size and contrast controls
-  as required footer anatomy, and they must come **first in tab order**
+- finds: the footer is **missing Accessibility Tools** — part of DGA's footer anatomy, with font
+  size adjustment and contrast settings as DGA's examples
 - names why the tooling missed it: this is a **DGA requirement, not a WCAG one**, so no automated
   accessibility tool will ever flag its absence. A clean axe run is not evidence here
 - also finds: only one last-modified date. DGA's template guidance shows **two** — page *and*

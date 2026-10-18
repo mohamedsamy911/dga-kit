@@ -36,12 +36,12 @@ retrieval date. If you cannot follow a claim here back to a quote there, do not 
 - **The Digital Stamp** and its verification content →
   `../dga-design-system/references/components.md`, *Digital stamp*
 - **Typography** — IBM Plex Sans, *"the unified font for all platforms in the Kingdom of Saudi
-  Arabia"*. Saudi Font only on occasion templates, headings only, with a Ministry of Culture
-  licence → `../dga-design-system/references/brand.md`, *Typeface identity*
+  Arabia"*. Saudi Font only on occasion templates, headings only, under DGA's stated Ministry of
+  Culture licence agreement → `../dga-design-system/references/brand.md`, *Typeface identity*
 - **The page furniture** — skip link and Accessibility Tools in the footer (required); feedback
   section and both last-modified dates (DGA template guidance, advisory) → `../dga-design-system/references/patterns.md` (the two
   last-modified dates) and `references/components.md` (*"Accessibility Tools" is part of DGA's
-  required footer anatomy*)
+  footer anatomy*)
 - **Component anatomy and each component's listed states** —
   `../dga-design-system/references/components.md`. ⚠️ The six-name state set is a vocabulary;
   each component page lists its own subset (inputs and tabs use five, no Selected). Do not report

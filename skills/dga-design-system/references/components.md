@@ -646,7 +646,7 @@ operable including the expandable section; `aria-hidden="true"` on decorative ic
 **Anatomy** — Group labels · Footer links · Social media icons · **Accessibility Tools** ·
 Link · Legal text · Company logo.
 
-> 🚩 **"Accessibility Tools" is part of DGA's required footer anatomy** — "buttons or links
+> 🚩 **"Accessibility Tools" is part of DGA's footer anatomy** (the kit checks it as required) — "buttons or links
 > designed to improve usability for people with disabilities, which may include font size
 > adjustment or contrast settings." This is a *feature* the entity must build, not just styling.
 > Most teams miss it because it isn't a WCAG requirement. `dga-launch-gate` checks for it.
@@ -971,7 +971,7 @@ as `TODO(verify)`; this kit has previously published three different totals for 
 
 1. **Quote** — a dedicated "Support for Right-to-Left (RTL) Languages" accessibility section
 2. **Steps** — "progresses from left to right or right to left for RTL languages", and the final
-   step's connector line moves to the left side in RTL
+   step has "no line on the right side (or the left side if it is RTL)"
 3. **Buttons** — icon placement varies with "interface directionality"
 4. **Pagination** — the shipped library mirrors the arrows via `[dir=rtl]` (implementation, not guideline)
 
