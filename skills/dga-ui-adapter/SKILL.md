@@ -120,13 +120,14 @@ Eight rules. Each is library-independent, and each one has burned somebody.
 gives the name in MUI, Chakra v3, shadcn/Radix and Ant Design, and — the part that matters —
 states the **DGA-specific constraint your library will not give you for free**. A sample:
 
-- Links are **underlined by default**; "click here" and "go to" are forbidden as link text
+- Links are **underlined by default**; DGA says to avoid "click here" and "go to" as link text
 - Content Switcher is capped at **2-4 options** — beyond four it must become Tabs
 - A horizontal tablist **never scrolls or wraps**; overflow goes to a "More" button
 - Pie charts **max 6 segments**; line and bar **max 3 series**
 - Breadcrumbs truncate past **5** items, and on mobile show back-arrow plus previous page only
 - Pagination appears after **10** items
-- Critical notifications **never auto-dismiss**; anything that does waits 5s or longer
+- Critical notifications: DGA says *"consider not having a timeout"*; anything auto-dismissing
+  stays *"typically at least 5 seconds"*
 - Sliders in RTL increase toward the **start** edge
 - Steps in RTL progress right-to-left, and swap to a Radial Stepper on mobile
 
@@ -139,10 +140,10 @@ component library and no automated accessibility tool will tell you they are mis
 |---|---|
 | **Digital Stamp** 🚩 | Verifies the site is a registered `.gov.sa` platform. Needs the entity's DGA registration number and License Number — a **procurement dependency, start early**. |
 | **Footer with Accessibility Tools** 🚩 | DGA lists font-size and contrast controls as required footer anatomy, and they come **first in tab order**. A feature to build, not styling. Not a WCAG requirement, so nothing automated catches its absence. |
-| **Feedback section** 🚩 | "Was this page useful?" plus Yes/No and reason options, on **every page**. Its results feed the mandated performance-statistics page. |
+| **Feedback section** 🚩 | "Was this page useful?" plus Yes/No and reason options — DGA template guidance on every template page. Its results feed the performance-statistics page. |
 | **Navigation Header / Second Nav Header** | DGA-specific anatomy and layouts. `role="banner"` plus `role="navigation"`. |
 | **Table of Contents** | Required on content-heavy pages. Activation must move **focus**, not just scroll. |
-| **Two last-modified dates** | Page *and* platform. Both, on every page. |
+| **Two last-modified dates** | Page *and* platform — DGA template guidance, worded as benefits. |
 
 Plus, if you display dates: **a Hijri wrapper**. Nothing in DGA and nothing in any UI library
 provides one — DGA's own datepicker demo is Gregorian and its official package contains no Hijri

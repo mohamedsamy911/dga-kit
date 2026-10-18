@@ -10,24 +10,26 @@ Each template page offers a live preview, the code, and a Figma file.
 
 ---
 
-## Rules that apply to EVERY template
+## Guidance repeated on every template page
 
-These repeat verbatim across all templates. Treat them as global requirements — a page missing
-any of them fails review regardless of which template it follows.
+These repeat verbatim across the template pages, so they apply whichever template a page follows.
+DGA words most of them as recommendations and benefits, not as pass/fail rules — keep its
+wording when you report against them.
 
-### Feedback section — required
+### Feedback section
 > The most important element in the feedback section is the **"Was this page useful?"** question
 > with **"Yes" and "No"** buttons. Including options for specific reasons why the page was or
 > wasn't useful helps in pinpointing exact issues or strengths.
 
-Not optional, and not just the yes/no — the follow-up reason options are part of the requirement.
-Their results feed the performance-statistics page (below).
+DGA calls the yes/no question *"the most important element"*; the reason options are what it
+says *"helps"*. Their results feed the performance-statistics page (below).
 
-### Two last-modified dates — required
+### Two last-modified dates
 - **Last modified date for the page** — so users can judge whether the content is current
 - **Last modified date for the platform** — signalling the platform is actively maintained
 
-Both. Most teams ship only the first.
+DGA describes why each helps (*"Displaying the last modified date helps build user trust"*); it
+does not call them mandatory. Most teams show only the first.
 
 ### Nav header and footer — do not restyle
 > When detaching the nav-header **adhere strictly to the original structure and style. Do not
@@ -85,8 +87,8 @@ stacked vertically on mobile**.
 
 - **Service description** — concise, covering the essentials of the service process
 - **Steps to obtain the service** — clearly **numbered**, each easy to follow
-- **Service card** must carry: target audience · service duration · channels · cost · contact
-  details · a link to the FAQs
+- **Service card**: target audience · service duration · channels · cost. Contact details and
+  the FAQ link *"should be easy to access and interact with"* — DGA does not place them in the card
 
 ---
 
@@ -98,7 +100,8 @@ Built for **multi-step** forms.
   **short description** giving specific instructions
 - **Large screens: Progress Indicator. Mobile and small screens: Radial Stepper** — a specific
   responsive component swap, not a styling choice
-- Required fields use the text input's built-in required-information feature
+- For required information, DGA notes *"You can activate a feature on the text input that
+  provides required information"*
 
 ---
 
@@ -112,8 +115,8 @@ Built for **multi-step** forms.
 
 ## Search page
 
-- **Pagination** after **10 items**, at the bottom of the list. Current page clearly highlighted;
-  Next/Previous arrows included.
+- **Pagination** — *"(optional)"* on search pages; when used: after **10 items**, at the bottom of
+  the list, current page clearly highlighted, Next/Previous arrows included.
 - **"Clear Filter" button** near the filter options, labelled plainly ("Clear Filter" / "Reset
   Filter")
 - **Mobile filtering uses a dropdown** to avoid clutter
@@ -154,7 +157,8 @@ many.
 - **A "Privacy Policy" link** to the full policy
 - **Actions:** Accept All · **Reject All** (where regulations require) · **Manage Preferences**
   (where regulations require)
-- **Manage cookies modal:** Strictly Necessary cookies are **always enabled and uneditable**;
+- **Manage cookies modal** — DGA: *"Is optional."* When offered: Strictly Necessary cookies are
+  **always enabled and uneditable**;
   every optional category individually toggleable. Actions: Confirm Choices · Reject All ·
   Close (without saving).
 - Optional: confirmation message with **Undo**, and an error state when preferences fail to save
@@ -168,7 +172,8 @@ many.
   users to departments
 - **End-of-session feedback** — "Was this helpful? [Yes/No]"
 - **Escalation to a human**, with response times stated when no one is available
-- Multiple languages; **text-to-speech and speech-to-text**
+- *"Support multiple languages if available. And provide text-to-speech or speech-to-text for
+  users with disabilities."*
 
 **🚩 Accessibility Tools must come FIRST in the tab order.**
 > Users relying on assistive technologies need quick access to essential tools without tabbing
@@ -178,8 +183,9 @@ This pairs with the footer's Accessibility Tools requirement: the controls live 
 must be **reachable first by keyboard**.
 
 **Floating button placement:** must not cover important content, including on mobile; must
-contrast against its background (add a shadow or white border if the colour can't change); two
-buttons stack vertically; more than two go into an expandable menu.
+contrast against its background (add a shadow or white border if the colour can't change); with
+two buttons *"it is preferable to arrange them vertically"*; more than two go into an expandable
+menu.
 
 ---
 
@@ -205,7 +211,7 @@ reflected in the sitemap, visible on the homepage, and reachable from the top na
   Portal Performance Statistics`
 - Previous year's data from **1 January**, sourced from **Google Analytics**; filter by year if
   segmented
-- **"Was this page useful?" results as a pie chart** — percentage on hover *and* shown below the
+- **"Was this page useful?" results** — DGA: *"a pie chart is ideal"* — percentage on hover *and* shown below the
   chart without interaction; totals and counts for both answers and for each reason category
 - Optional: downloadable data file (stating that clicking downloads directly), and supporting
   tables **capped at 10 rows × 10 columns**
@@ -234,7 +240,8 @@ Policy** · **Freedom of Information Policy** · **Data Sharing Policy** · **Op
 
 **Budget and expenditures** — **current plus the last five budgets**, each linked to the Ministry
 of Finance National Budget page *and* to the corresponding open dataset. Archived marked
-`[Archived]`.
+`[Archived]`. *"For newly established entities, all approved budgets from the past five years
+should be published."*
 
 **Tenders and procurements** — via **Etimad**, covering planned, open and completed, each with
 step-by-step instructions and images for reaching them.
@@ -265,7 +272,7 @@ and `… > Contact us`, both reflected in the sitemap.
 - **Categories** — optional, but preferred above 20 questions across different fields.
   **The "All" category is mandatory.** On mobile, **no more than five** categories before
   switching to a dropdown.
-- **Pagination** after 10 items
+- **Pagination** — *"(optional)"* on FAQ pages; when used, after 10 items
 - **Answer evaluation** (optional) below the answer, with a confirmation message once rated
 
 ---
@@ -387,10 +394,13 @@ Founding Day 2026 coincides with Ramadan.
 > understand and complete the process.
 <!-- /dga -->
 
-Not an occasion template — it sits here only because it arrived with National Day 96. Everything
-else on the page is the shared guidance in *Rules that apply to EVERY template* above, word for
-word. The live preview (journey cards, onboarding steps, a details page with stages) is demo
-content: DGA states **no** rule for its layout, so do not cite the preview as one.
+Not an occasion template — it sits here only because it arrived with National Day 96. Most of the
+page is the shared guidance in *Guidance repeated on every template page* above. It adds a
+**Digital Stamp** section: the stamp type follows the site's domain (`gov.sa`, `med.sa`,
+`edu.sa`/`sch.sa`, `org.sa`, `sa` — see the Digital Stamp component), and *"After adding the
+digital stamp at the top of the page, the stamp in the footer should be removed."* The live
+preview (journey cards, onboarding steps, a details page with stages) is demo content: DGA states
+no rule for its layout, so do not cite the preview as one.
 
 ### Hajj 2026 template
 `/guidelines/templates/hajj-template` · retrieved 2026-08-27

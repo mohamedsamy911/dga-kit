@@ -13,7 +13,8 @@ rather than filled in.
 
 ## Bilingual operation
 
-**Language switching** — with two languages (Arabic and English), a **direct toggle button**.
+**Language switching** — with two languages (Arabic and English), a **direct toggle button**,
+which DGA calls *"the simplest and most effective way"*.
 On press the page updates or reloads immediately with **all** elements in the new language:
 text, menus, instructions, and interactive content including buttons. With more than two
 languages, a **dropdown**.
@@ -27,9 +28,9 @@ in the other is a compliance failure, not a content backlog item.
 
 Some strings are effectively prescribed by DGA:
 
-| Where | Required content |
+| Where | Content |
 |---|---|
-| Feedback section, **every page** | **"Was this page useful?"** with **Yes / No**, plus reason options |
+| Feedback section — *DGA template guidance, advisory* | **"Was this page useful?"** with **Yes / No**, plus reason options |
 | 404 page | A friendly message — DGA's example: *"Sorry! We can't find the page you're looking for."* Plus a CTA: "Back to the homepage" / "Back To Home" |
 | Chatbot opening | Brief friendly introduction — DGA's example: *"Hello! How can I help you today?"* |
 | Chatbot close | *"Was this helpful? [Yes/No]"* |
@@ -41,7 +42,7 @@ Some strings are effectively prescribed by DGA:
 ## Tone
 
 - **404s:** avoid overly technical language; be friendly and concise
-- **Links:** descriptive text. **"Click here" and "go to" are explicitly forbidden.**
+- **Links:** descriptive text. DGA: *"Avoid vague phrases such as "click here" or "go to.""*
 - **Tags:** words that describe a state or status; **avoid labels that will truncate**
 - **Errors:** indicate by colour **and** text — e.g. "Invalid selection", "Required field"
 - **Form steps:** each has a clear title stating what is required, then a short direct
@@ -49,7 +50,8 @@ Some strings are effectively prescribed by DGA:
 
 ## Dates and freshness
 
-Every page carries **two** last-modified dates — one for the page, one for the platform.
+DGA's template guidance shows **two** last-modified dates on every page — one for the page, one
+for the platform — and explains why each helps; it does not call them mandatory.
 
 ⚠️ **Calendar:** DGA's own demos are **Gregorian** ("August 2026", "21 Jan 2024") and no
 guideline anywhere mentions Hijri, Umm al-Qura, or dual-calendar display. For a Saudi government

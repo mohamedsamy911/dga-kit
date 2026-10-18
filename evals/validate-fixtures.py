@@ -1965,6 +1965,67 @@ for _fp in _SCAN:
 chk('prose: no adjacent duplicated line', not _dups, str(_dups))
 
 
+# --- source strength: DGA's hedges must not come back as obligations --------------------------
+# The 2026-10-18 re-read found the kit had hardened DGA's own wording in ~15 files: "helps" became
+# "required", "consider not having a timeout" became "no timeout", "avoid" became "forbidden".
+# Each class below records what DGA actually says (harvest/raw/2026-10-18-reread.md) and fails
+# when a source file states the subject as an obligation without the hedge or an explicit
+# "template guidance"/"advisory" label. Generated files (codex-agents, evals.json) are covered by
+# their --check gates, so they are skipped here.
+_STRENGTH = [
+    ('feedback section / last-modified dates stated as a DGA obligation',
+     re.compile(r'reason options|last[- ]modified dates?|page and platform|feedback (?:section|component)', re.I),
+     re.compile(r'\brequired\b|\brequires?\b|\bmust\b|\bmandatory\b|\bmandated\b|\bblocker\b|'
+                r'both, not one|\bneeds\b', re.I),
+     re.compile(r'advisory|kit polic|helps|benefit|does not call|never as|not as non-?compliance',
+                re.I)),
+    ('"click here" / "go to" stated as forbidden (DGA says avoid)',
+     re.compile(r'click here|"go to"', re.I),
+     re.compile(r'forbid|\bnever\b|prohibit', re.I),
+     re.compile(r'\bavoid\b', re.I)),
+    ('notification timeouts stated without DGA\'s "consider" / "typically"',
+     re.compile(r'notification|auto-?dismiss', re.I),
+     re.compile(r'no timeout|\u2265\s*5\s*s|at least 5 seconds|5s or longer', re.I),
+     re.compile(r'typically|consider', re.I)),
+]
+
+
+def _strength_hits(text):
+    hits = []
+    # `"Was this page useful?"` must not end the clause, or the claim around it goes unseen.
+    for _c in _clauses(text.replace('*', '').replace('?"', '"')):
+        for _name, _subj, _ob, _ok in _STRENGTH:
+            if _subj.search(_c) and _ob.search(_c) and not _ok.search(_c):
+                hits.append(_name + ': ' + _c[:90])
+    return hits
+
+
+_strong = []
+for _fp in _SCAN:
+    _rel = os.path.relpath(_fp, ROOT).replace(os.sep, '/')
+    if os.path.abspath(_fp) == _SELF or _rel.startswith('codex-agents/') or _fp.endswith('.json'):
+        continue
+    _strong += [_rel + ': ' + h for h in _strength_hits(open(_fp, encoding='utf-8').read())]
+chk('strength: no DGA hedge restated as an obligation', not _strong, str(_strong[:6]))
+for _bad in ('6. **Every page needs the feedback section** and **two** last-modified dates.',
+             'also finds: only one last-modified date. DGA requires **two** — page *and* platform',
+             'Reason options are mandatory on every page.',
+             'A missing feedback section is a Blocker.',
+             '"Click here" and "go to" are explicitly forbidden.',
+             'Notifications: no timeout on critical; **\u22655s** if auto-dismissing',
+             'DGA template guidance requires the feedback section on every page.',
+             '"Go to" is forbidden as link text.',
+             'Every page needs "Was this page useful?" and **two** dates \u2014 page and platform.'):
+    chk('strength: the detector catches "' + _bad[:40] + '"', bool(_strength_hits(_bad)),
+        'the source-strength guard cannot fire on a shipped wording')
+for _good in ('Feedback section and two last-modified dates are DGA template guidance (advisory).',
+              'DGA says to avoid "click here" and "go to" as link text.',
+              'Notifications: "consider not having a timeout" on critical; "typically at least 5 seconds".',
+              'Kit policy: we require reason options on every page.'):
+    chk('strength: the hedged wording passes: "' + _good[:40] + '"', not _strength_hits(_good),
+        'the guard would flag correct, hedged guidance')
+
+
 print()
 if failures:
     print(f'{len(failures)} FAILING — fixtures disagree with tokens.json')

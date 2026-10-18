@@ -14,13 +14,12 @@ Tickable form of `SKILL.md`. Attach the completed copy to the go-live approval.
 
 ## 1 · On every page
 
-- [ ] Feedback: "Was this page useful?" + Yes/No + **reason options**
-- [ ] Last modified date — **page**
-- [ ] Last modified date — **platform**
+- [ ] *Advisory — DGA template guidance:* Feedback "Was this page useful?" + Yes/No; reason options
+- [ ] *Advisory — DGA template guidance:* Last modified date — page, and platform
 - [ ] Skip-to-content link at the start of the header
 - [ ] Accessibility Tools in the footer (font size, contrast)
 - [ ] Accessibility Tools **first in tab order**
-- [ ] Header and footer unmodified — original structure, colours, fonts
+- [ ] Header and footer, if detached: original structure and style kept — colours and fonts unchanged
 - [ ] Page exists in **both** `ar` and `en`
 - [ ] Language toggle reloads every element, interactive content included
 
@@ -30,10 +29,11 @@ Tickable form of `SKILL.md`. Attach the completed copy to the go-live approval.
 - [ ] 404 with friendly message + "Back to homepage" CTA
 - [ ] Search · [ ] Content
 - [ ] About the Entity (§3) · [ ] e-Participation (§4)
-- [ ] Cookies banner — message, Privacy Policy link, Accept All, Reject All, Manage Preferences
-- [ ] Cookies: Strictly Necessary always on and uneditable
+- [ ] Cookies banner — message, Privacy Policy link, Accept All; Reject All and Manage Preferences
+  *"if required by regulations"*
+- [ ] Cookies: if a Manage Cookies view is offered (DGA: optional), Strictly Necessary always on and uneditable
 - [ ] Nav path `Homepage > About the Entity > e-Participation` reflected in the sitemap
-- [ ] Nav path `Homepage > About the Entity > Contact us` reflected in the sitemap
+- [ ] Nav path `Homepage > About the Ministry/Authority/Platform > Contact us` reflected in the sitemap
 
 ## 3 · About the Entity — transparency mandate
 

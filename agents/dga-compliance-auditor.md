@@ -32,9 +32,11 @@ populated with both, correct domain for the entity type, HTTPS verifiable throug
 🚩 **The registration number is procurement, not engineering.** If it is not in hand, that is the
 finding — say it first and say it loudly, whatever else is on the list.
 
-**2 · Required on every page.** Feedback section; **two** last-modified dates (page and
-platform); skip link; Accessibility Tools in the footer, first in tab order; header and footer
-unmodified; both locales present, with the toggle reloading *every* element.
+**2 · Required on every page.** Skip link; Accessibility Tools in the footer, first in tab order;
+header and footer kept to their original structure and style if detached; both locales present,
+with the toggle reloading *every* element. **Advisory, separately:** the feedback section and the
+two last-modified dates are DGA template guidance worded as benefits — report a miss as "does not
+follow DGA's template guidance", never as a Blocker or non-compliance.
 
 **3 · Required pages.** Home, Contact us, Help & Support, FAQs, Sitemap, 404, Search, Content,
 About the Entity, e-Participation, cookies banner with Accept All / Reject All / Manage
@@ -68,8 +70,9 @@ had passed.
 
 ## How to audit
 
-- **Check the rendered artefact where you can**, not just the source. A feedback component that
-  exists in the repo but is not mounted on the actual pages is a Blocker, not a Pass.
+- **Check the rendered artefact where you can**, not just the source. A component that exists in
+  the repo but is not mounted on the actual pages is not present — e.g. an unmounted skip link
+  fails, an unmounted feedback section is an advisory miss.
 - **Sample deliberately.** Home, one deep content page, a form page, 404, and both locales. Say
   what you sampled — an audit that hides its sample is not reproducible.
 - **Distinguish "not built" from "not yet populated".** They have different owners and very

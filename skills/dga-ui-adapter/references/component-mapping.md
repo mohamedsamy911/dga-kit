@@ -23,7 +23,7 @@ states, 44px targets, no Arabic letter-spacing, logical properties.
 |---|---|---|---|---|---|
 | Buttons | `Button` | `Button` | `Button` | `Button` | 4 types (standard, destructive, menu, icon) x 3 emphasis levels. Map emphasis to variant, type to colour. Icon-only needs an accessible name. |
 | Floating Button | `Fab` | `IconButton`+`Float` | build | `FloatButton` | Must not cover content; must contrast with whatever is behind it; two may stack vertically; **3 or more go in an expandable menu**. |
-| Link | `Link` | `Link` | `<a>` + class | `Typography.Link` | 🚩 **Underlined by default** — most libraries are not. "Click here" and "go to" are **forbidden** as link text. |
+| Link | `Link` | `Link` | `<a>` + class | `Typography.Link` | 🚩 **Underlined by default** — most libraries are not. DGA says to avoid "click here" and "go to" as link text. |
 | Chip | `Chip` | `Tag` | `Badge` | `Tag` | Six states including Selected. Dismissable chips need `role="button"` and `aria-label="Dismiss …"`. |
 | Dropdown (action) | `Menu` | `Menu` | `DropdownMenu` | `Dropdown` | See Menu under Navigational — DGA publishes **no** accessibility section for it. |
 
@@ -55,7 +55,7 @@ states, 44px targets, no Arabic letter-spacing, logical properties.
 
 | DGA | MUI | Chakra v3 | shadcn/Radix | Ant | DGA constraint to add |
 |---|---|---|---|---|---|
-| Notification | `Alert` / `Snackbar` | `Alert` / toaster | `Alert` / `Sonner` | `Alert` / `notification` | 3 variants x 5 tones **including Neutral** (most libraries lack a neutral tone — add it). 🚩 **No timeout on critical.** Anything auto-dismissing waits 5s or longer. |
+| Notification | `Alert` / `Snackbar` | `Alert` / toaster | `Alert` / `Sonner` | `Alert` / `notification` | 3 variants x 5 tones **including Neutral** (most libraries lack a neutral tone — add it). 🚩 Critical: DGA says *consider* no timeout. Auto-dismissing: *typically* at least 5 seconds. |
 | Modal | `Dialog` | `Dialog` | `Dialog` | `Modal` | Focus trap, Esc closes, focus returns to the opener, background `aria-hidden`. |
 | Tooltip | `Tooltip` | `Tooltip` | `Tooltip` | `Tooltip` | Shows on **focus** as well as hover; Esc dismisses; **avoid auto-hide**. Left/Right beak positions are physical — map them to logical start/end. |
 | Rating | `Rating` | `RatingGroup` | build | `Rate` | DGA adds a **half-star** state. |
@@ -123,7 +123,7 @@ from elsewhere in DGA's guidance, kept here because they land in the same build.
 |---|---|---|
 | Form select | `Select` (every library) | DGA has **no** form-select component page — the nearest is Dropdown under Actions. Needs an error state and helper text — wrap in the library's field/form-item. |
 | Skip link | usually **build** | Required on **every** page, first in the DOM inside the header. A handful of libraries ship one (Chakra's `SkipNavLink`); most do not. |
-| **Feedback section** | **build** | 🚩 A **template**, not a component: "Was this page useful?" + Yes/No + reason options, on every page. Feeds the mandated performance-statistics page. |
+| **Feedback section** | **build** | 🚩 A **template**, not a component: "Was this page useful?" + Yes/No + reason options — DGA template guidance on every template page. Feeds the performance-statistics page. |
 
 ## Mobile
 
@@ -138,7 +138,7 @@ Ordered by compliance risk, not effort. This is the same list whatever your libr
 
 1. **Digital Stamp** — blocked on the entity's DGA registration + License Number (procurement)
 2. **Footer with Accessibility Tools** — a feature; no automated tool catches its absence
-3. **Feedback section** — every page; feeds the mandated statistics page
+3. **Feedback section** — DGA template guidance on every page; feeds the statistics page
 4. **Navigation Header** + **Second Nav Header**
 5. **Skip link**, if your library has none
 6. **Table of Contents**

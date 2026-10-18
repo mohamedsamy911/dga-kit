@@ -15,10 +15,12 @@ add a rule to `references/` and cite it.
 
 ## DGA source → owning skill
 
-> **Evidence limit, 2026-10-08.** After DGA's 2026 update the route inventory, the tokens, the two
-> new templates and `/contributing` were re-harvested. The 50 component pages and the 19 older
-> templates were re-checked only through their quoted passages and the token reconciliation, not
-> re-read in full; a wording change there that no quote covers would not have been seen.
+> **Evidence, 2026-10-18.** After DGA's 2026 update (re-harvested 2026-10-08), the full English
+> text of every component, template and guidance page — taken verbatim from DGA's live bundle —
+> was compared with the kit by two independent reviewers, and every resulting change was confirmed
+> on the rendered page (`harvest/raw/2026-10-18-reread.md`). DGA's text table also holds strings
+> its pages never display; those were not used. What this cannot see: code samples and live
+> previews, which live outside that table.
 
 | DGA area | Pages | Extracted into | Owned by |
 |---|---|---|---|

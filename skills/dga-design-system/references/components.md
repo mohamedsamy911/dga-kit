@@ -101,7 +101,7 @@ the right.
 - Always use the `<button>` element. Non-semantic `<div>` must not be used for actions.
 - An `<a>` used as a button must actually navigate and must have a valid `href`.
 - Contrast of label text or icon against the button background: **at least 4.5:1**.
-- Minimum touch target **44×44px**.
+- Touch target: DGA gives **44×44px** as *"a recommended minimum"*.
 - `aria-label` required on any button whose visible content doesn't describe its function —
   icon buttons especially: `<button aria-label="Close"><img src="icon.svg" alt=""></button>`
 - Buttons must be focusable; `<button>` is by default.
@@ -236,7 +236,7 @@ Helper text · Prefix · Suffix.
 **Anatomy** — Switch (off by default) · Label · Helper text · Alert message.
 
 **Accessibility — DGA requirements**
-- Implement on `<input type="checkbox">`
+- DGA: it *"can be implemented using"* `<input type="checkbox">`
 - `role="switch"` plus `aria-checked="true|false"`
 - `<label>` or `aria-label`; `aria-labelledby` where state text is dynamic
 - Spacebar toggles; focusable with Tab
@@ -321,8 +321,9 @@ buttons) · Featured icon / Feedback icon · Link · Close button (optional).
 **Accessibility — DGA requirements**
 - `role="alert"` for important alerts needing immediate attention (implies `aria-live="assertive"`)
 - `aria-live="polite"` for less urgent notifications
-- Give users enough time to read; **no timeout at all** for persistent or critical information
-- Auto-dismissing notifications stay **at least 5 seconds**
+- Give users enough time to read; for persistent or critical information, *"consider not having a
+  timeout"*
+- Auto-dismissing notifications stay *"an adequate duration, typically at least 5 seconds"*
 - A clear dismiss mechanism, keyboard accessible
 - Modal alerts: move focus in, trap it, and return focus on dismiss
 
@@ -353,7 +354,7 @@ buttons) · Featured icon / Feedback icon · Link · Close button (optional).
 `/guidelines/components/navigational/breadcrumbs` · retrieved 2026-08-26
 
 **States** — seven: enabled, hover, active, focus, **visited**, disabled, read-only.
-*(The only component with a visited state — it contains links.)*
+*(Visited, because it contains links — the Link page lists a Visited state too.)*
 
 **Truncation** — up to **five** items by default; beyond that, first and last with an ellipsis
 that expands on click. Wraps to a second line when it exceeds the width.
@@ -436,7 +437,8 @@ Feedback icon · Actions · Avatar · Checkbox · Custom.
 
 **Variants** — Horizontal (default) · Vertical.
 **Overflow rule:** a horizontal tablist is confined to the container width and **does not
-scroll or wrap** — DGA requires an overflow menu button ("More", three dots) instead.
+scroll or wrap** — for more tabs DGA says *"it is recommended to incorporate an overflow menu button"* ("More", three
+dots).
 **States** — Default · Hovered · Pressed · Focused · Disabled.
 **Anatomy** — Container · Tab title · Icon · Selection indicator · More button · Divider.
 
@@ -484,7 +486,8 @@ Top · Bottom · Left · Right.
 - Slight delay before show/hide, but open long enough to read
 - Must not cover other interactive elements
 - High contrast, readable text size, not cramped
-- **Esc dismisses** without triggering the underlying element
+- **Esc dismisses** without triggering the underlying element — DGA: *"via an Esc key event
+  handler if the tooltip captures focus"*
 - Interactive tooltips (containing links or buttons) must be treated as modal dialogs
 - **Avoid auto-hide** — problematic for slow readers; prefer click-to-dismiss or persist while
   the trigger has focus
@@ -565,12 +568,13 @@ icon** (microphone).
 
 **Accessibility — DGA requirements**
 - Tab focuses; Enter activates (Space too, for links that act as buttons)
-- **Descriptive link text — DGA explicitly forbids "click here" and "go to"**
+- **Descriptive link text — DGA: *"Avoid vague phrases such as "click here" or "go to.""***
 - `title` attribute for extra context on generic text like "read more"
 - `aria-label` where the text can't describe the destination
 - **Links underlined by default** so they don't rely on colour alone — colour-blind users
 - Contrast **≥4.5:1**
-- External links: **`rel="noopener noreferrer"`** with `target="_blank"`
+- Links opening in a new tab: DGA says *"always include `rel="noopener"`"*. (`noreferrer` too
+  is the kit's suggestion, not DGA's.)
 - **Indicate new-tab behaviour**, with visually hidden text for screen readers
 
 > ✅ The underline rule and the "no click here" rule are concrete, checkable review items.
@@ -591,7 +595,7 @@ icon** (microphone).
 - **Focus management on expand/collapse** — when a submenu opens, focus moves to its first
   item; when it collapses, focus returns to the parent
 - Visible focus indicator
-- **"Skip to content" links** so users can bypass a long drawer
+- **"Skip to content" links** to bypass the drawer *"if it is very long"*
 - Sufficient contrast
 
 > ⚠️ **RTL:** the drawer opens from the opposite side, and chevron direction mirrors for
@@ -776,9 +780,10 @@ options**; logical tab order through to Apply/Clear; arrows for sliders, Enter/S
 checkboxes and radios; visible selection states using more than colour; loading indicator with
 `role="status"`; larger touch targets on mobile.
 
-> ✅ **The only page in the entire design system that mentions `prefers-reduced-motion`** —
-> "ensure they are subtle or allow users to disable them based on system settings." Cite this
-> when arguing for reduced-motion support elsewhere; it is DGA's sole statement on motion.
+> ✅ **One of DGA's statements on motion** — "ensure they are subtle or allow users to disable
+> them based on system settings." The Loading page also asks you to respect
+> `prefers-reduced-motion`, and the Skeleton page to offer a way to pause or disable animation.
+> Cite those pages, not a count.
 
 ---
 
@@ -817,6 +822,40 @@ for success and error **communicated to screen readers too**; sufficient contras
 
 ---
 
+## Loading
+
+`/guidelines/components/loading-and-status/loading` · retrieved 2026-10-18
+
+**Variants** — seven sizes: XX-Small · X-Small · Small · Medium · Large · X-Large · XX-Large.
+**Anatomy** — Circular Progress Bar.
+**Accessibility** — `role="status"` (or `"alert"`), `aria-live="polite"`, always include text,
+not focusable (see `accessibility.md`). Also: *"do not flash more than three times per
+second"*; respect `prefers-reduced-motion`; and *"if possible"* say how long the process takes
+or let users cancel it if it takes too long.
+
+## Radial stepper
+
+`/guidelines/components/loading-and-status/radial-stepper` · retrieved 2026-10-18
+
+**Variants** — Primary (brand colour) · Neutral (subdued).
+**Anatomy** — Circular progress indicator · Current step indicator inside it (e.g. "1 of 4") ·
+step labels and descriptions.
+**Accessibility** — `role="progressbar"`, `aria-valuemin/max/now`, `aria-live="polite"` on step
+change. DGA: *"Ensure that the current step, total steps, and step names are clearly displayed
+visually."* The Form template uses it on mobile in place of the Progress Indicator.
+
+## Skeleton
+
+`/guidelines/components/loading-and-status/skeleton` · retrieved 2026-10-18
+
+**Variants** — Circle and Square (*"between 24px to 240px"*) · Rectangle (large, medium, small;
+short or long) · Line (small, large).
+**Accessibility** — `role="status"`; `tabindex="-1"` so it is skipped; removed from the
+accessibility tree once content loads; *"If animations are used, provide an option to pause them
+or disable them entirely."*
+
+---
+
 ## Remaining components — condensed
 
 The nine below follow the standard template; only what is distinctive is recorded.
@@ -828,8 +867,8 @@ Enter/Space activates; **avoid overuse — DGA cites cognitive load**; avoid ver
 
 ### Floating button · `/actions/floating-Button`
 Circular, floats above the UI, for the single most important action. Anatomy: container · icon ·
-optional label. **A11y:** `aria-label` describing the *action* (`"Create new item"`), not
-"Floating Action Button"; Tab + Enter/Space; large hit area; **placement must not obstruct
+optional label. **A11y:** DGA's examples are `aria-label="Floating Action Button"` and the more
+descriptive `aria-label="Create new item"`; prefer the one naming the action. Tab + Enter/Space; large hit area; **placement must not obstruct
 other content**. ⚠️ **RTL:** its corner flips — anchor with `inset-inline-end`.
 
 ### Avatar · `/data-display/avatar`
@@ -853,12 +892,13 @@ can each be shown or hidden.
 
 > ⚠️ **Inconsistency worth reporting:** the *non-interactive* Structured List gets a full table
 > ARIA specification, while the actual **Table** page says use ARIA "only as a last resort" and
-> names no roles at all. Apply Structured List's role set to Table too.
+> names no roles at all. *Kit suggestion, not DGA's:* where native table markup cannot carry the
+> structure, Structured List's role set is a reasonable reference.
 
 ### Content switcher · `/data-display/content-switcher`
 States: normal · hovered · selected · focused.
-🚩 **Hard limit: 2–4 options.** DGA states fewer than two is useless and more than four clutters —
-**use Tabs beyond four.** A checkable review rule.
+🚩 **2–4 options.** DGA: fewer than two *"would render a content switcher useless"*, more than
+four *"could clutter"*, and *"Tabs are a better choice for managing larger amounts of options"*.
 **A11y:** `role="tablist"`/`"tab"`/`"tabpanel"`; `aria-controls`, `aria-selected`;
 **arrow keys change selection** (left/right horizontal, up/down vertical) while Tab moves in and
 out; `aria-hidden` + `hidden` toggled on inactive panels.
@@ -916,8 +956,8 @@ States: default · hovered · pressed · focused · **read-only** · disabled.
 States: default · hovered · pressed · focused · read-only · disabled. Anatomy: label · input ·
 increment (+) · decrement (−) · placeholder · helper text.
 **A11y:** `role="spinbutton"`; `aria-valuemin`/`max`/`now`; **Up/Down arrows increment and
-decrement**; `aria-invalid="true"` out of range; `aria-describedby` to the error; larger touch
-targets for the +/− buttons.
+decrement**; Enter confirms manual input *"if required"*; `aria-invalid="true"` out of range;
+`aria-describedby` to the error; larger touch targets for the +/− buttons.
 ⚠️ **RTL:** +/− button order mirrors; keep the numeral run LTR and consistent with the product's
 numeral policy.
 

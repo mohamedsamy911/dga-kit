@@ -59,10 +59,10 @@ flexible) and anything else (familiar, but every DGA spec must be re-expressed a
 match DGA\"* becomes a judgement). If the library is already fixed, say which DGA components it
 cannot give you — that list is the build backlog, not a footnote.
 
-**3 · The compliance build backlog.** No component library ships these, and four are
-government-mandated: Digital Stamp, footer with Accessibility Tools, feedback section on every
-page, Navigation Header and Second Nav Header, Table of Contents, two last-modified dates, skip
-link, Hijri date wrapper. **Digital Stamp is blocked on the entity's DGA registration and License
+**3 · The compliance build backlog.** No component library ships these: Digital Stamp, footer
+with Accessibility Tools, Navigation Header and Second Nav Header, Table of Contents, skip link,
+and a Hijri date wrapper if the entity decides on Hijri — plus the feedback section and two
+last-modified dates that DGA's template guidance shows on every page (advisory). **Digital Stamp is blocked on the entity's DGA registration and License
 Number — a procurement dependency. Flag it in week one or it blocks launch.**
 
 **4 · RTL and i18n strategy.** Arabic-first, not Arabic-added. Decide: the direction mechanism

@@ -28,7 +28,7 @@ no matching rule, cite WCAG and **say explicitly that DGA is silent**.
 | Modal focus trap, Esc, focus return to opener | Requires interaction |
 | Radio-group roving tabindex + arrow keys | Requires keyboard interaction |
 | Date picker grid keyboard model | Arrows/Enter/Esc, focus starting on the selected date |
-| Notification timing — ≥5s, none for critical | Timing, not markup |
+| Notification timing — typically ≥5s; consider none for critical | Timing, not markup |
 | Screen reader in Arabic | Pronunciation, `lang` switching on mixed content, bidi order |
 | Skip-to-content link works | Presence is checkable; that it lands correctly is not |
 | Target size ≥44×44px | Computed size, often only wrong at one breakpoint |
@@ -40,7 +40,8 @@ no matching rule, cite WCAG and **say explicitly that DGA is silent**.
 - Text contrast **4.5:1** small, **3:1** large, **3:1** UI components and graphics
 - Target size **44×44px**
 - Body line height **≥1.5×** font size
-- Auto-dismissing notifications **≥5s**; no timeout on critical
+- Auto-dismissing notifications *"typically at least 5 seconds"*; for critical ones, *"consider not
+  having a timeout"*
 - Skip-to-content link at the start of every header
 - Reading order matches visual order; landmark elements present
 - Nothing conveyed by colour alone; elevation paired with borders or outlines

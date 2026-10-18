@@ -11,6 +11,48 @@ patch means corrections. Nothing here is a DGA release — see
 `skills/dga-design-system/dga-version.md` for the Platforms Code version this kit is pinned to
 (currently **4.0.0** per DGA's change log, read 2026-10-08; DGA publishes no release date).
 
+## 0.8.1 — 2026-10-18
+
+### Corrected — the kit had hardened DGA's wording
+
+A full re-read of DGA's text (every component, template and guidance page, taken verbatim from its
+live bundle) by two independent reviewers, with every change confirmed on the rendered page:
+`harvest/raw/2026-10-18-reread.md`. Most findings were one class of error — DGA's hedge dropped,
+so a recommendation read as a rule:
+
+- **"Required on every page" was the kit's word, not DGA's.** The feedback section's reason
+  options (*"helps"*) and the two last-modified dates (DGA explains why each helps) are now an
+  **advisory tier** — *DGA template guidance* — in the launch gate, checklist and all agents. A miss
+  is "does not follow DGA's template guidance", never non-compliance or a Blocker.
+- Notifications: *"consider not having a timeout"* for critical ones, *"typically at least 5
+  seconds"* otherwise — not "no timeout" and a hard 5 s. Links: DGA says *avoid* "click here", not
+  "forbidden"; it asks for `rel="noopener"` (the kit's `noreferrer` is now labelled as the kit's).
+- Also restored: the 44×44 touch target as *"recommended"* / *"WCAG suggests"*; the tabs overflow
+  menu as *"recommended"*; Tabs as *"a better choice"* past four switcher options; tooltip Esc *"if
+  the tooltip captures focus"*; divider, table-of-contents and nav-drawer conditions; Manage
+  Cookies *"Is optional"*; search and FAQ pagination *"(optional)"*; chatbot *"if available"* and
+  *"or"*; the e-Participation pie chart as *"ideal"*; the 12-column grid as *"for instance"*.
+- Wrong outright: Breadcrumbs is not the only component with a Visited state (Link has one); the
+  Filtration page is not DGA's only statement on reduced motion (Loading and Skeleton too); the
+  service card does not carry contact details and the FAQ link; DGA states no focus rule for the
+  progress bar; the Assessment Criteria score is 1–10, not 1–100; DGA's palette sentence says
+  *"twelve color grades — Black, White, and ten shades"* (its own CSS ramps carry 11–13 steps).
+- Added: Loading, Radial stepper and Skeleton sections; About the Entity's budgets rule for newly
+  established entities; Life Journeys' Digital Stamp section.
+
+**Rejected, and why it matters:** DGA's text table holds strings its pages never display — a
+"Selected" state for Input, Switch and Textarea; "one primary button per page"; button and tab
+sizes; per-level percentage bands on the Assessment Criteria page. The reviewers proposed all of
+them; none is cited, because none is published.
+
+### Added — a source-strength guard
+
+`validate-fixtures.py` now fails when a skill, agent or eval case states the feedback section,
+the two dates, notification timeouts or "click here" as an obligation without DGA's hedge or an
+explicit *advisory* label. Break-tested against the original wording of five files and nine
+sentences, including the shapes a final review found it missed. It reads clauses, so a table
+header such as "Required content" above an advisory row is outside its reach.
+
 ## 0.8.0 — 2026-10-08
 
 ### Corrected — read these first

@@ -145,7 +145,7 @@ DGA's own advice on preparing it:
 
 ## Scoring
 
-Scored 1–100 and reported as a 1–10 grade:
+DGA's *Compliance Score* is reported on a 1–10 scale with these level descriptions:
 
 | Grade | Band |
 |---|---|
@@ -180,7 +180,7 @@ mandatory criteria?"*. There is no section of the page with this heading.
 > `cite or omit` exists to prevent.
 
 So the defensible reading: **the mandatory criteria are the ones that normally decide whether a
-project ships; the 1–100 score is a quality grade on top.** Report an unmet mandatory criterion as
+project ships; the 1–10 compliance score is a quality grade on top.** Report an unmet mandatory criterion as
 *"DGA states this typically blocks deployment"* — never as *"this blocks deployment."* And do not
 quote a target score; DGA has not set one.
 

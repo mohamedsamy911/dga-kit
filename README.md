@@ -201,7 +201,7 @@ reconciliation reproduced unchanged.
 
 | | |
 |---|---|
-| Harvest — 5 foundations, 50 components, **all 21 routed templates**, **303 token values** read from 1,052 CSS custom properties | ✅ Routes and tokens complete · ⚠️ **current prose review partial** — re-harvested 2026-10-08 after a DGA update; the 50 component and 19 older template pages were re-checked through their quoted passages and the token reconciliation, not re-read in full |
+| Harvest — 5 foundations, 50 components, **all 21 routed templates**, **303 token values** read from 1,052 CSS custom properties | ✅ Complete — re-harvested 2026-10-08 after a DGA update; every component and template page's text re-read against the kit on 2026-10-18, each change confirmed on the rendered page |
 | **Assessment Criteria** — the rubric a platform is actually scored against | ✅ Captured |
 | 11 skills, 6 agents | ✅ |
 | Contrast checker, self-tested — light **and dark** | ✅ |

@@ -38,8 +38,8 @@ retrieval date. If you cannot follow a claim here back to a quote there, do not 
 - **Typography** — IBM Plex Sans, *"the unified font for all platforms in the Kingdom of Saudi
   Arabia"*. Saudi Font only on occasion templates, headings only, with a Ministry of Culture
   licence → `../dga-design-system/references/brand.md`, *Typeface identity*
-- **The required page furniture** — feedback section, both last-modified dates, skip link,
-  Accessibility Tools in the footer → `../dga-design-system/references/patterns.md` (the two
+- **The page furniture** — skip link and Accessibility Tools in the footer (required); feedback
+  section and both last-modified dates (DGA template guidance, advisory) → `../dga-design-system/references/patterns.md` (the two
   last-modified dates) and `references/components.md` (*"Accessibility Tools" is part of DGA's
   required footer anatomy*)
 - **Component anatomy and each component's listed states** —

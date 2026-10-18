@@ -19,7 +19,9 @@ to symbolise "growth, prosperity, unity, cooperation, and national solidarity."
 
 Three palette groups: **neutral**, **primary**, **semantic**. Secondary is split into **gold**
 (richness, prestige, emphasis) and **lavender** (calm, accent, contrast). Semantic: red=error,
-yellow=warning, blue=info, green=success. Twelve grades per hue, plus black and white.
+yellow=warning, blue=info, green=success. DGA's wording: *"twelve color grades — Black, White,
+and ten shades for each hue"* — but its own stylesheet ramps run 25–950 with 11 to 13 steps per hue.
+Use the values in `tokens.json`, not the count in the sentence.
 
 DGA's stated contrast requirements:
 
@@ -112,7 +114,8 @@ readable body sizes, and keep spacing consistent.
 
 ## Layout and spacing
 
-**Grid:** 12 columns on desktop, reducing to 2–4 on smaller aspect ratios. Columns, margins
+**Grid:** DGA's example — *"For instance, websites often employ a 12-column grid for desktop
+views, reducing to 2-4 columns for smaller aspect ratios."* Columns, margins
 (outer edge to content) and gutters (between columns).
 
 **Breakpoints:**
@@ -155,7 +158,7 @@ Report these to DS-DGA@dga.gov.sa.
 
 - Reading order must match visual order; use landmark elements (`header`/`nav`/`main`/`footer`)
 - Group related items with spacing, borders, fieldsets, ARIA roles
-- **Minimum target size 44×44px** for interactive elements
+- Target size: *"WCAG suggests a minimum target size of 44x44 pixels"* for interactive elements
 - Text contrast at least 4.5:1
 - **Line height at least 1.5× font size** for body text
 - Layout must be responsive across sizes and orientations

@@ -23,9 +23,9 @@ forbids others outright.
 
 ## What DGA prescribes — use these words
 
-| Where | Required content |
+| Where | Content |
 |---|---|
-| Feedback section, **every page** | "Was this page useful?" with Yes / No, plus reason options |
+| Feedback section — DGA template guidance, advisory | "Was this page useful?" with Yes / No, plus reason options |
 | 404 | Friendly, non-technical. DGA's example: "Sorry! We can't find the page you're looking for." plus a "Back to the homepage" CTA |
 | Search, no results | "No Data Found" |
 | Filter reset | "Clear Filter" or "Reset Filter" |
@@ -33,8 +33,8 @@ forbids others outright.
 | FAQ categories | An "All" category is **mandatory** |
 | Chatbot open / close | "Hello! How can I help you today?" / "Was this helpful? [Yes/No]" |
 
-**Forbidden:** "click here" and "go to" as link text. DGA states this explicitly. Link text
-describes its destination.
+**Avoid** "click here" and "go to" as link text — DGA: *"Avoid vague phrases such as "click here"
+or "go to."* Link text describes its destination.
 
 **Errors must carry meaning in text, not colour alone** — "Invalid selection", "Required field".
 

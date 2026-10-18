@@ -53,14 +53,14 @@ Each of these passes a build, a type check and a casual review.
 | **Letter-spacing reaching Arabic** | Grep `letterSpacing`/`letter-spacing`/`tracking-`. DGA's display scale carries -0.02em tracking (design spec says -2%, but CSS `letter-spacing` does not accept percentages — they are silently dropped). Arabic is connected and tracking breaks the joins. It must be Latin-scoped or zeroed under `[dir="rtl"]`. Also flag any surviving `-2%` values — those are invalid CSS. |
 | **Physical CSS properties** | Grep `margin-left`, `margin-right`, `padding-left`, `padding-right`, `left:`, `right:`, `ml-`, `mr-`, `pl-`, `pr-`, `text-align: left`. Each is an RTL bug. Then check `transform`, `box-shadow` and gradients — those are *not* logical and need an explicit RTL override. |
 | **Missing focus state** | A keyboard-operable control needs a visible focus state — DGA calls Focused out as an accessibility requirement. Grep for `outline: none` / `outline-none` without a replacement `:focus-visible`. Judge other states against the states **that component's page lists** (inputs and tabs list five, no Selected); never flag a missing Selected the spec does not list. |
-| **Touch target under 44 x 44 px** | DGA's minimum, stricter than WCAG AA. Small-size controls from most libraries are under it. |
+| **Touch target under 44 x 44 px** | DGA's Buttons page calls 44 x 44 *"a recommended minimum"* (its layout page: *"WCAG suggests"*) — stricter than WCAG AA. Small-size controls from most libraries are under it. |
 | **Missing skip link** | Required on **every** page, first in the DOM inside the header. |
-| **Missing feedback section / last-modified dates** | Every page needs "Was this page useful?" and **two** dates — page and platform. |
+| **Missing feedback section / last-modified dates** | Advisory: DGA template guidance shows "Was this page useful?" and **two** dates — page and platform. Report as not following DGA's template guidance, not as non-compliance. |
 | **Footer without Accessibility Tools** | Font-size and contrast controls, **first in tab order**. Not a WCAG requirement, so nothing automated catches it. |
 | **Icon-only control with no accessible name** | `aria-label` or visually-hidden text. |
-| **Component cap exceeded** | Content Switcher **2-4 options**; pie chart **max 6 segments**; line/bar **max 3 series**; breadcrumbs truncate past **5**; pagination after **10**; a horizontal tablist **never scrolls or wraps**. |
-| **Link not underlined, or "click here"** | DGA requires underlined-by-default links and forbids "click here" and "go to". |
-| **Critical notification that auto-dismisses** | DGA: no timeout on critical; anything auto-dismissing waits 5s or longer. |
+| **Component cap exceeded** | Content Switcher **2-4 options**; pie chart **max 6 segments**; line/bar **max 3 series**; breadcrumbs truncate past **5**; pagination after **10**; a horizontal tablist does not scroll or wrap (DGA recommends an overflow menu). |
+| **Link not underlined, or "click here"** | DGA: links *"should be underlined by default"*; *"Avoid vague phrases such as "click here" or "go to."* |
+| **Critical notification that auto-dismisses** | DGA: for critical information *"consider not having a timeout"*; auto-dismissing ones stay *"typically at least 5 seconds"*. |
 | **Hijri assumed to exist** | Nothing in DGA or in any UI library provides it. If a date is displayed and the project chose Hijri, there must be a wrapper. |
 
 ## Accessibility pass

@@ -81,9 +81,11 @@ Each of these passes a build, a type check and a casual review.
    come **first in tab order**. A feature, not styling — and not a WCAG requirement, so no
    automated tool will catch its absence.
 5. **A skip-to-content link is required on every page.**
-6. **Every page needs the feedback section** ("Was this page useful?" + Yes/No + reason options)
-   and **two** last-modified dates: page and platform.
-7. **44 x 44 px minimum touch target** on every interactive element — stricter than WCAG AA.
+6. **Build the feedback section** ("Was this page useful?" + Yes/No + reason options) and **two**
+   last-modified dates, page and platform, into every page — DGA template guidance, worded as
+   benefits rather than obligations.
+7. **44 x 44 px touch targets** on every interactive element — DGA's *"recommended minimum"*,
+   stricter than WCAG AA.
 8. **Logical CSS properties only.** `margin-inline-start`, never `margin-left`. `transform`,
    `box-shadow` and gradients are not logical and need an explicit `[dir="rtl"]` override.
 

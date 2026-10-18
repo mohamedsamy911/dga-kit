@@ -24,12 +24,19 @@ the two pages carrying the transparency mandate. Full detail in
 > 🚩 The registration number is a procurement dependency, not a build task. Chase it in week one.
 
 ### 2 · Required on every page
-- [ ] **Feedback section** — "Was this page useful?" with Yes/No **and** reason options
-- [ ] **Last modified date for the page** *and* **for the platform** (both, not one)
 - [ ] **Skip-to-content link** at the start of the header
 - [ ] **Accessibility Tools** in the footer — font size and contrast controls, **first in tab order**
-- [ ] Header and footer unmodified — original structure, colours and fonts
+- [ ] Header and footer, if detached: original structure and style kept — colours and fonts unchanged
 - [ ] Both locales exist; language toggle reloads **every** element including interactive content
+
+### 2b · DGA template guidance on every page — advisory
+DGA repeats these on every template page but words them as benefits, not obligations. Check for
+them; report a miss as **"does not follow DGA's template guidance"** — never as non-compliant, a
+Blocker, or a reason a launch fails.
+- [ ] **Feedback section** — "Was this page useful?" with Yes/No (DGA: *"the most important
+  element"*); reason options, which DGA says *"helps"*. Its results feed the e-Participation
+  statistics page
+- [ ] **Last modified date for the page** and **for the platform** — DGA explains why each helps
 
 ### 3 · Required pages
 - [ ] Home · Contact us · Help & Support · FAQs · Sitemap · **404** · Search · Content

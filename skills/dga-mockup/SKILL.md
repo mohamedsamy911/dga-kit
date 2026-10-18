@@ -33,11 +33,11 @@ canvas mechanics; this one supplies the DGA constraints.
 - Show the states the screen actually needs, not just default
 - Icons at 24 unless the context calls for another band
 
-## Every mockup includes, because DGA requires them
+## Every mockup includes — required page furniture, plus DGA template guidance
 
 - Header with **skip-to-content**
-- **Feedback section** — "Was this page useful?" with Yes/No and reason options
-- Footer with **Accessibility Tools** and **both** last-modified dates
+- **Feedback section** — "Was this page useful?" with Yes/No and reason options (DGA template guidance)
+- Footer with **Accessibility Tools**, and both last-modified dates (DGA template guidance)
 - The **Digital Stamp**, on any public government page
 - Language toggle (direct button) — **only if the platform ships two languages.** DGA's rule is
   conditional: *given* Arabic and English, use a direct toggle rather than a dropdown. It does not

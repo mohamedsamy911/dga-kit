@@ -104,9 +104,9 @@ Everything here is cited in `references/`.
 15. **Content switcher takes 2–4 options only** — use Tabs beyond four
 16. **Charts: pie max 6 segments, line and bar max 3 series**
 17. Breadcrumbs truncate past **five** items; mobile shows back arrow + previous page only
-18. Tabs never scroll or wrap — **overflow goes to a More button**
-19. Notifications: **no timeout on critical**, **≥5s** if auto-dismissing
-20. **Links are underlined**, and "click here" / "go to" are forbidden as link text
+18. Tabs don't scroll or wrap — DGA **recommends** an overflow More button
+19. Notifications: *"consider not having a timeout"* on critical; *"typically at least 5 seconds"* if auto-dismissing
+20. **Links are underlined** by default, and DGA says to avoid "click here" / "go to" as link text
 
 **Two things DGA requires that teams routinely miss**
 - The **footer must contain Accessibility Tools** — font size and contrast controls. A feature,

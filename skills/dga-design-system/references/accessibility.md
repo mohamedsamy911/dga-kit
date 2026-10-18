@@ -96,7 +96,7 @@ Extracted from each component's Accessibility section. Full detail in `component
 | **Steps** | `<ol aria-label="Progress">`; `aria-current="step"`; non-nav steps not focusable | Enter/Space if navigational |
 | **Date picker** | `role="dialog"` popup; `role="application"` grid; `grid`/`gridcell`/`row`/`columnheader`; `aria-selected`; `aria-live` | Arrows navigate, Enter selects, **Esc closes**; focus starts on selected date |
 | **Modal** | `role="dialog"` + `aria-modal="true"` + `aria-labelledby`; background `aria-hidden="true"` | **Focus trapped**; Esc closes; focus returns to opener |
-| **Notification** | `role="alert"` (urgent) or `aria-live="polite"`; no timeout for critical | Dismissable by keyboard |
+| **Notification** | `role="alert"` (urgent) or `aria-live="polite"`; consider no timeout for critical | Dismissable by keyboard |
 | **Breadcrumbs** | `<nav aria-label="Breadcrumb">` + `<ul>`; `aria-current="page"`; separators `aria-hidden="true"` | Tab through links |
 | **Navigation header** | `role="banner"`; `role="navigation"`; labels on search and menu toggles | Skip link; Enter/Space activates |
 | **Navigation drawer** | `role="navigation"`; `aria-expanded`; skip links | Tab/Enter/arrows; focus into submenu on expand, back to parent on collapse |
@@ -106,31 +106,31 @@ Extracted from each component's Accessibility section. Full detail in `component
 | **Accordion** | `role="button"` header; `aria-expanded`, `aria-controls`, `aria-disabled` | Tab, **Enter/Space** toggles |
 | **Tooltip** | `role="tooltip"`; `aria-describedby` added only while visible | Shows on **focus**, **Esc** dismisses; no auto-hide |
 | **Search box** | `role="search"`; `aria-label`; labelled icons | **Esc clears**, **Enter submits** |
-| **Link** | Descriptive text (never "click here"); **underlined**; `rel="noopener noreferrer"` on `target="_blank"`; announce new tab | Tab, Enter |
-| **Table** | DGA names no roles — apply Structured List's set instead | Interactive cells keyboard-reachable |
+| **Link** | Descriptive text (avoid "click here"); **underlined**; `rel="noopener"` on `target="_blank"`; announce new tab | Tab, Enter |
+| **Table** | Native table markup; DGA: ARIA *"only as a last resort"*, and names no roles | Interactive cells keyboard-reachable |
 | **Structured list** | `role="list"/"listitem"`, and when tabular `"table"/"row"/"columnheader"/"rowheader"/"cell"/"checkbox"` | Traverse rows, columns, controls |
 | **Content switcher** | `role="tablist"/"tab"/"tabpanel"`; `aria-controls`, `aria-selected`; `aria-hidden`+`hidden` on inactive panels | **Arrows** change selection; Tab in/out |
 | **Rating** | `role="radiogroup"` + `role="radio"` per star; `aria-checked`; labels "1 star", "2 stars" | **Arrows** select; Tab enters/leaves the group |
 | **Slide-out menu** | `role="menu"/"menuitem"`; `aria-label="Close menu"` | **Focus trap**; **Esc** closes |
 | **Carousel** | `role="listbox"/"option"`; `aria-roledescription`; `aria-live` when auto-rotating | Tab/Enter/Space/arrows |
 | **Chip** | `role="button"` when dismissable; `aria-label="Dismiss [name]"` | Tab, Enter/Space |
-| **Floating button** | `aria-label` naming the action, not the component | Tab, Enter/Space |
+| **Floating button** | `aria-label` — DGA shows `"Floating Action Button"` and `"Create new item"`; prefer naming the action | Tab, Enter/Space |
 | **Avatar** | `alt` carries the user's name; `role="img"` optional | n/a |
 | **Metric** | `aria-live="polite"` on updating values; labelled icons | Tab to CTA |
 | **Charts** | `role="img"`; `aria-label` summarising insight; `aria-describedby` for trends | Tab/arrows between data points |
-| **Progress bar** | `role="progressbar"`; `aria-valuemin/max/now` | not focusable |
-| **Radial stepper** | `role="progressbar"`; `aria-valuemin/max/now`; `aria-live="polite"` on step change | Tab; Enter/Space if steps are interactive |
-| **Loading** | `role="status"` (or `"alert"`); `aria-live="polite"`; **always include text** | **Must not be focusable** |
-| **Skeleton** | `role="status"`; `aria-label="Content loading, please wait"`; removed from a11y tree when done | `tabindex="-1"` |
-| **Divider** | `role="separator"` | must not take focus |
+| **Progress bar** | `role="progressbar"`; `aria-valuemin/max/now` | — (DGA states no focus rule) |
+| **Radial stepper** | `role="progressbar"`; `aria-valuemin/max/now`; `aria-live="polite"` on step change; current step, total and step names shown visually | Tab; Enter/Space if steps are interactive |
+| **Loading** | `role="status"` (or `"alert"`); `aria-live="polite"`; **always include text**; ≤3 flashes/second; respect reduced motion | **Must not be focusable** |
+| **Skeleton** | `role="status"`; `aria-label="Content loading, please wait"`; removed from a11y tree when done; a way to pause or disable animation | `tabindex="-1"` |
+| **Divider** | `role="separator"` | no focus *"unless they serve an interactive purpose or contain additional information"* |
 | **Quote** | `role="blockquote"` + semantic `<blockquote>`; marks `aria-hidden` | n/a |
 | **Code snippet** | `aria-live="polite"` on copy; line numbers `aria-hidden` | Tab, Enter/Space |
 | **List** | `aria-labelledby` tying the group to its heading; `aria-current="page"` on navigational lists. ⚠️ DGA's intro says "link components" — a copy-paste artefact | keyboard traversal with visible focus |
 | **Textarea** | Native `<textarea>` + `<label for>`; `aria-describedby` | Tab; DGA recommends `resize: vertical` |
-| **Number input** | `role="spinbutton"`; `aria-valuemin/max/now`; `aria-invalid` | **Up/Down arrows** increment/decrement |
+| **Number input** | `role="spinbutton"`; `aria-valuemin/max/now`; `aria-invalid` | **Up/Down arrows** increment/decrement; Enter confirms *"if required"* |
 | **Digital stamp** | `role="status"`; labelled icons | Keyboard-operable expander |
 | **Footer** | `role="contentinfo"` | Tab through links |
-| **Table of contents** | `role="navigation"` + `aria-label`; `aria-current="page"` | Tab; activation must move focus, not just scroll |
+| **Table of contents** | `role="navigation"` + `aria-label`; DGA: *"you can use"* `aria-current="page"` for the active section | Tab; activation must move focus, not just scroll |
 | **Second nav header** | `aria-label="Second Navigation Header"`; `aria-live="polite"` on live values | Tab, Enter/Space |
 | **Filtration** | `role="listbox"/"menu"`; `aria-expanded`; `aria-live`; `aria-hidden` on collapsed options | Tab to Apply/Clear; arrows for sliders |
 | **Tags** | `<span>` static, **`<button>` interactive**; `aria-live` on add/remove | Arrows across a collection |

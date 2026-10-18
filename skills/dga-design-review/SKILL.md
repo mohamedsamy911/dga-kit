@@ -79,7 +79,8 @@ Before the cosmetic passes — RTL errors are structural and invalidate what fol
 - Anatomy matches the documented parts for that component (`components.md`)
 - Icon sizes from the DGA bands: 10/14/16 XS · 18/20 S · **24 standard** · 28/32 L
 - Breadcrumbs truncate past **five** items; mobile shows back arrow + previous page only
-- Notifications: no timeout on critical; **≥5s** if auto-dismissing
+- Notifications: *"consider not having a timeout"* for critical; *"typically at least 5 seconds"* if
+  auto-dismissing
 - **Content switcher with more than 4 options — Major.** DGA caps it at 2–4; use Tabs instead.
 - **Charts over the caps — Major.** Pie max 6 segments; line and bar max 3 series.
 - **Tabs that scroll or wrap — Major.** DGA requires a More/overflow button.
@@ -97,7 +98,7 @@ Before the cosmetic passes — RTL errors are structural and invalidate what fol
   tabindex and arrow keys, `aria-current="page"` on breadcrumbs, `role="banner"`/`"navigation"`
 - Error states associated to their fields (`aria-describedby`, `aria-invalid`)
 - Loading, empty and error states shown
-- **Links underlined** and never labelled "click here" or "go to" — both are stated DGA rules
+- **Links underlined** by default, and DGA says to *avoid* "click here" or "go to" as link text
 - **Reduced motion respected.** DGA requires `prefers-reduced-motion` support in three places
   (Filtration, Loading, Skeleton) and caps flashing at three per second.
 - Loading indicators carry text, use `role="status"`, and are **not focusable**
