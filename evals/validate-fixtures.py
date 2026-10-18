@@ -1480,6 +1480,29 @@ _all_n = _leaves(t)
 chk('counts: $meta.carriedDarkValues is the real role.dark leaf count',
     t['$meta'].get('carriedDarkValues') == _dark_n,
     f"$meta says {t['$meta'].get('carriedDarkValues')}, tokens.json holds {_dark_n}")
+# color.alpha is DGA's transparency scale, verbatim. DGA encodes N% as floor(N * 2.55) in the
+# alpha byte (10% -> 19, 30% -> 4c, 70% -> b2) and 100% as the bare 6-digit hex. A value that
+# breaks that pattern is a transcription error, caught here without the network.
+def _alpha_errors(fam):
+    _out = []
+    for _k, _v in fam.items():
+        if _k.startswith('$'):
+            continue
+        _m = re.fullmatch(r'(.+)-(\d+)', _k)
+        if not _m:
+            _out.append(f'{_k}: not a <name>-<percent> key')
+            continue
+        _n = int(_m.group(2))
+        _a = '' if _n == 100 else format(_n * 255 // 100, '02x')
+        if not re.fullmatch(r'#[0-9a-f]{6}' + _a, _v):
+            _out.append(f'{_k}: {_v}')
+    return _out
+chk('alpha: every color.alpha value carries the alpha byte DGA uses for its percentage',
+    'alpha' in t['color'] and not _alpha_errors(t['color']['alpha']),
+    str(_alpha_errors(t['color'].get('alpha', {}))))
+chk('alpha: the check catches a mistyped alpha byte',
+    _alpha_errors({'white-30': '#ffffff4d', 'black-100': '#16161600'}) ==
+    ['white-30: #ffffff4d', 'black-100: #16161600'])
 chk('counts: $meta.carriedValues is the real non-dark leaf count',
     t['$meta'].get('carriedValues') == _all_n - _dark_n,
     f"$meta says {t['$meta'].get('carriedValues')}, tokens.json holds {_all_n - _dark_n}"
@@ -1602,7 +1625,8 @@ if _rec:
     # them - composites of carried values, and unresolved expressions - are NOT evidence of a
     # missing value; they are broken out precisely so they stop inflating the gap.
     _BUCKETS = ('notCarriedGenericRamp', 'notCarriedDgaNamespaced', 'notCarriedUnknownFamily',
-                'notCarriedCompositeOfCarried', 'notCarriedUnresolved')
+                'notCarriedCompositeOfCarried', 'notCarriedUnresolved', 'notCarriedDarkInert',
+                'notCarriedExcludedByName')
     chk('reconciliation: the split adds up',
         sum(_rec[b] for b in _BUCKETS) == _rec['notCarried'],
         ' + '.join(f'{_rec[b]}' for b in _BUCKETS) + f" != {_rec['notCarried']}")
@@ -1653,8 +1677,14 @@ if _rec:
           'skills/dga-design-system/references/foundations.md']),
     ]
     _wrong, _seen = [], {}
+    # Past CHANGELOG entries are dated history ("154 go to triage" was true on 2026-08-31) and
+    # keep their numbers. The newest entry is still checked: it describes the release shipping.
     for _f in _PROSE:
-        _txt = re.sub(r'\s+', ' ', ''.join(l for _, l in _unfenced(_f)))
+        _lines = [l for _, l in _unfenced(_f)]
+        if _f == 'CHANGELOG.md':
+            _h = [i for i, l in enumerate(_lines) if l.startswith('## ')]
+            _lines = _lines[:_h[1]] if len(_h) > 1 else _lines
+        _txt = re.sub(r'\s+', ' ', ''.join(_lines))
         for _key, _pats, _req in _CLAIMS:
             for _pat in _pats:
                 for _m in re.finditer(_pat, _txt):

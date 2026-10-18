@@ -169,7 +169,7 @@ out loud, [where DGA itself is silent or self-contradictory](COVERAGE.md#where-d
 ## Status, honestly
 
 Token values were **extracted from the live site's CSS custom properties**, not transcribed, on
-2026-08-26. `tokens.json` carries **303** values a project consumes, plus **67** dark values held
+2026-08-26. `tokens.json` carries **345** values a project consumes, plus **67** dark values held
 for audit only. DGA's stylesheet declares **1,126** custom properties — 1,065 on `:root`, 402
 under the dark selector, 61 elsewhere.
 
@@ -181,15 +181,17 @@ The rest are aliases and per-component role vars resolving to values already hel
 ```
 
 [`harvest/reconcile-tokens.py`](harvest/reconcile-tokens.py) settled it declaration by
-declaration against the live stylesheet: **412 resolve to values `tokens.json` does not hold.**
-Of those, **246 are the generic ramp** — the upstream Untitled-UI palette DGA ships in CSS but
+declaration against the live stylesheet (build `CYyqM6kT`, re-run 2026-10-18): **293 resolve to
+values `tokens.json` does not hold.** Of those, **246 are the generic ramp** — the upstream Untitled-UI palette DGA ships in CSS but
 does not publish as a Platforms Code colour, a deliberate exclusion that had simply never been
 *stated*. Another **12 are gradients** whose every colour component the kit already holds: what
-is missing there is the gradient *definition*, not a value. The remaining **154 go to triage**:
-129 DGA-namespaced values the kit does not hold, plus 25 whose family is unrecognised and are
-left for review rather than quietly excluded. That covers the entire `--alpha-*` transparency
-scale, the `--colors-alpha-*` primitives behind it, and the `--button-*`, `--link-*`,
-`--notification-*` and `--tag-*` role sets. Every one is listed in
+is missing there is the gradient *definition*, not a value. **26** sit under DGA's dark selector,
+which can never match, and are excluded by policy. The last **9** are excluded by name, each with
+its evidence: three Untitled-UI values one channel step from DGA's own error and warning steps,
+two bare HSL fragments, and a 70% white the kit already carries. That leaves **0 DGA-namespaced**
+values the kit does not hold, and **0 left to triage**. The gap that mattered was DGA's
+transparency scale, the overlays behind its `--button-*`, `--link-*`, `--notification-*` and
+`--tag-*` states. It is now carried as `color.alpha` (42 values). Every one is listed in
 [harvest/RECONCILIATION.md](harvest/RECONCILIATION.md).
 
 The system is "Platforms Code", published version **4.0.0** per `/updates/change-log`, read
@@ -201,7 +203,7 @@ reconciliation reproduced unchanged.
 
 | | |
 |---|---|
-| Harvest — 5 foundations, 50 components, **all 21 routed templates**, **303 token values** read from 1,052 CSS custom properties | ✅ Complete — re-harvested 2026-10-08 after a DGA update; every component and template page's text re-read against the kit on 2026-10-18, each change confirmed on the rendered page |
+| Harvest — 5 foundations, 50 components, **all 21 routed templates**, **345 token values** read from 1,052 CSS custom properties | ✅ Complete — re-harvested 2026-10-08 after a DGA update; every component and template page's text re-read against the kit on 2026-10-18, each change confirmed on the rendered page |
 | **Assessment Criteria** — the rubric a platform is actually scored against | ✅ Captured |
 | 11 skills, 6 agents | ✅ |
 | Contrast checker, self-tested — light **and dark** | ✅ |

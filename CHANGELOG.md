@@ -11,6 +11,52 @@ patch means corrections. Nothing here is a DGA release — see
 `skills/dga-design-system/dga-version.md` for the Platforms Code version this kit is pinned to
 (currently **4.0.0** per DGA's change log, read 2026-10-08; DGA publishes no release date).
 
+## 0.9.0 — 2026-10-18
+
+### Added — DGA's transparency scale, `color.alpha` (42 values)
+
+The token triage that had stood open since 2026-08-31 (154 values) is closed. The gap that
+mattered was DGA's transparency scale, the overlays its own transparent, on-colour and pressed
+component states are built from. It is now carried verbatim from build `CYyqM6kT` as
+`color.alpha`:
+- black and white at 0–100%;
+- green at 10–90%;
+- error, info, primary, success and warning at 10% and 20%;
+- the flag green at 10%.
+
+The generator emits these as `--dga-color-alpha-*` and Tailwind `alpha-*`. For example,
+`--button-background-transparent-hovered` resolves to `--dga-color-alpha-white-20` (`#ffffff33`).
+`tokens.json` now carries **345** values, up from 303. In declaration terms: 119 of the 154
+open declarations now resolve to one of the 42 new values, and the other 35 are excluded below.
+
+The rest of the 154 is now an explicit exclusion instead of an open list:
+- **26** sit under DGA's dark selector, which can never match. They are excluded by policy, and
+  `role.dark` stays the audit-only subset.
+- **9** are excluded by name, each with its evidence:
+  - `#7a2619`, `#fca19b` and `#93370c`: Untitled-UI red-900, red-300 and yellow-800, which DGA's
+    danger-pressed and warning-tag roles use. Each is one channel step from DGA's own
+    `error.900`, `error.300` and `warning.800`, which the kit carries.
+  - Two bare HSL fragments (`0deg 0% 0%`).
+  - `--colors-text-secondary_on-brand`, a 70% white the kit already carries as
+    `text.oncolor-tertiary`.
+
+`reconcile-tokens.py` now names these categories, and its self-check fails if a dark row or a
+named exclusion lands in triage. Both cases were break-tested. Component-role *names*
+(`--button-*`, `--link-*`, ...) are still not carried, only their values; the docs say so.
+
+### Fixed
+
+- `$meta.$reconciliation` named the stylesheet build `PDaQ7SHU` and the counts from 2026-08-31.
+  It now records `CYyqM6kT` and today's split. The count-claim fixture no longer reads
+  `CHANGELOG.md`, whose dated entries keep their own numbers. A stale count in the README
+  still fails it; break-tested.
+- New offline check: every `color.alpha` value must carry the alpha byte DGA uses for its
+  percentage (10% → `19`, 70% → `b2`). Break-tested on a mistyped byte.
+
+Codex recommended carrying the values, and agy recommended an explicit exclusion list. Both
+did the work: the values DGA's own components need are carried, and everything else is
+excluded with the evidence agy found.
+
 ## 0.8.5 — 2026-10-18
 
 ### Added — where DGA's Arabic pages say something different

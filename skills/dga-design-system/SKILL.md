@@ -11,17 +11,20 @@ reads from here rather than carrying its own copy of the rules.
 > ## Harvest complete — interpretation unverified
 >
 > **Populated and citable:** all 8 reference files. 5 foundations, **50 component pages**,
-> **all 21 routed templates** (re-harvested 2026-10-08), and **303 token values** taken verbatim from the live site's CSS custom
+> **all 21 routed templates** (re-harvested 2026-10-08), and **345 token values** taken verbatim from the live site's CSS custom
 > properties, plus **67** dark values held for audit only. Every rule carries a source URL and
 > retrieval date.
 >
-> **⚠️ 154 values are NOT carried and need triage.** DGA's stylesheet declares 1,126 custom
-> properties; a declaration-by-declaration reconciliation found 412 resolving to values
-> `tokens.json` does not hold — **246 the generic ramp** DGA ships but does not publish (a stated
-> exclusion), **12 gradients** whose colour components are all already carried, and **154 to
-> triage**: the whole `--alpha-*` transparency scale, its `--colors-alpha-*` primitives,
-> `--button-*` interaction states, `--link-*`, `--notification-*`, `--tag-*`, `--border-*`,
-> `--controls-*`, `--featuredicons-*`, `--form-*`. **Never tell a caller a value is absent
+> **Token reconciliation: 0 left to triage.** DGA's stylesheet declares 1,126 custom
+> properties; a declaration-by-declaration reconciliation found 293 resolving to values
+> `tokens.json` does not hold:
+> - **246 the generic ramp** DGA ships but does not publish (a stated exclusion);
+> - **12 gradients** whose colour components are all already carried;
+> - 26 under DGA's inert dark selector;
+> - 9 excluded by name, with evidence.
+>
+> DGA's transparency scale is carried as `color.alpha`. Component-role *names* (`--button-*`,
+> `--link-*`, `--tag-*`, ...) are not carried, only their values. **Never tell a caller a value is absent
 > from DGA because it is absent from `tokens.json`.** Read it off the live `:root`. See
 > `$meta.$reconciliation`.
 >

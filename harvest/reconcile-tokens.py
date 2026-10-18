@@ -127,6 +127,30 @@ GENERIC_RAMPS = frozenset("""
 """.split())
 
 
+# Triaged 2026-10-18 and excluded BY NAME, each with its evidence. Same rule as GENERIC_RAMPS:
+# an exclusion must be stated per property, never inferred, or it hides a real gap.
+_RED900 = ('Untitled-UI red-900 #7a2619; DGA\'s own error.900 is #7a271a, one channel step '
+           'apart. The kit carries error.900')
+_YEL800 = 'Untitled-UI yellow-800 #93370c; DGA\'s own warning.800 is #93370d. The kit carries warning.800'
+# Each entry is (the resolved value the evidence is about, the evidence). If DGA changes the
+# value, the old evidence no longer applies and the row goes back to triage.
+EXCLUDED = {
+    '--button-background-danger-primary-pressed': ('#7a2619', _RED900),
+    '--link-danger-pressed': ('#7a2619', _RED900),
+    '--link-icon-danger-pressed': ('#7a2619', _RED900),
+    '--button-label-danger-primary-hovered-oncolor': ('#fca19b',
+        'Untitled-UI red-300 #fca19b; DGA\'s own error.300 is #fda29b. The kit carries error.300'),
+    '--tag-icon-warning': ('#93370c', _YEL800),
+    '--tag-text-warning': ('#93370c', _YEL800),
+    '--colors-alpha-black': ('0deg 0% 0%',
+        'a bare HSL triplet (0deg 0% 0%) - a fragment for hsla(), not a colour'),
+    '--colors-alpha-white': ('0deg 0% 100%',
+        'a bare HSL triplet (0deg 0% 100%) - a fragment for hsla(), not a colour'),
+    '--colors-text-secondary_on-brand': ('hsla(0deg 0% 100% / 70%)',
+        'hsla(white / 70%) - the 70% white the kit carries as role.text.oncolor-tertiary (#ffffffb2)'),
+}
+
+
 def palette_class(name, sem):
     """'generic' (evidenced exclusion), 'semantic' (a DGA family), or 'review' (unknown)."""
     m = re.fullmatch(r'--colors-(.+?)-(\d+|primary|white|black|alpha-\d+)', name)
@@ -264,6 +288,12 @@ def gap_class(row, sem):
         return 'unresolved'
     if row['components_carried']:
         return 'composite-covered'
+    if row['scope'] == 'dark':
+        # DGA's dark selector can never match (foundations.md), and the kit ships no dark CSS;
+        # role.dark is an audit-only subset. Excluded by policy, counted on its own line.
+        return 'dark'
+    if row['name'] in EXCLUDED and norm(row['resolved']) == norm(EXCLUDED[row['name']][0]):
+        return 'excluded'
     return palette_class(row['name'], sem)
 
 
@@ -286,6 +316,8 @@ def bucket(gap, sem):
         'review': of('review'),
         'unresolved': of('unresolved'),
         'composite': of('composite-covered'),
+        'dark': of('dark'),
+        'excluded': of('excluded'),
         'triage': of('semantic', 'review'),
     }
 
@@ -314,8 +346,9 @@ def closing_note(triage, unresolved, excluded):
     if excluded:
         return ['No triage entries or unresolved expressions remain. %d declaration(s) still do'
                 % excluded,
-                'not match a carried value - the generic ramp and the composite definitions',
-                'listed below - and those are excluded by decision, not by omission.']
+                'not match a carried value - the generic ramp, the composite definitions, the',
+                'inert dark declarations and the named exclusions counted above - and those are',
+                'excluded by decision, not by omission.']
     return ['Nothing outstanding: every declaration DGA publishes resolves to a value this kit',
             'already carries.']
 
@@ -359,9 +392,20 @@ def self_test():
     everything = collide + [_row('light', '--colors-blue-500'),
                             _row('light', '--u', unresolved=True, resolved='var(--nope)')]
     b2 = bucket(everything, sem)
-    counted = sum(len(b2[k]) for k in ('generic', 'semantic', 'review', 'unresolved', 'composite'))
+    everything += [_row('dark', '--alpha-black-0'),
+                   _row('light', '--tag-text-warning', resolved='#93370c')]
+    b2 = bucket(everything, sem)
+    counted = sum(len(b2[k]) for k in ('generic', 'semantic', 'review', 'unresolved', 'composite',
+                                        'dark', 'excluded'))
     assert counted == len(everything), f'buckets cover {counted} of {len(everything)}'
     assert len(b2['triage']) == len(b2['semantic']) + len(b2['review']), 'triage is not the sum'
+    assert everything[-2] in b2['dark'] and everything[-1] in b2['excluded'], \
+        'a dark row or a named exclusion landed in triage'
+    assert _row('light', '--tag-x') in bucket([_row('light', '--tag-x')], sem)['semantic'], \
+        'an exclusion was inferred instead of named'
+    _moved = _row('light', '--tag-text-warning', resolved='#b54708')
+    assert _moved in bucket([_moved], sem)['semantic'], \
+        'a named exclusion survived DGA changing the value its evidence is about'
 
     # 4. An unresolved expression is never reported as a confirmed missing value.
     assert b2['unresolved'] and everything[3] not in b2['semantic'], \
@@ -452,6 +496,8 @@ def main():
     print('  unresolved expression:                     %d  (not a missing value)'
           % len(unresolved))
     print('  generic UI-kit ramp, evidenced exclusion:  %d' % len(generic))
+    print('  dark selector (inert), excluded by policy: %d' % len(_b['dark']))
+    print('  excluded by name, with evidence:           %d' % len(_b['excluded']))
     print('  DGA-namespaced, a real gap:                %d' % len(_b['semantic']))
     print('  unknown family, left for review:           %d' % len(review))
     print('  -> to triage (real gap + review):          %d' % len(triage))
@@ -520,6 +566,9 @@ def write_report(build, names, light, dark, other, rows, tok):
          'what is absent is the gradient *definition*', composite, False),
         ('Unresolved expression — still holds a `var()` nothing declares. Not evidence of a '
          'missing value', unresolved, False),
+        ("Under DGA's dark selector, which can never match. The kit ships no dark CSS; "
+         '`role.dark` is an audit-only subset', _b['dark'], False),
+        ('Excluded by name, each with its evidence (listed below)', _b['excluded'], False),
         ('**DGA-namespaced values this kit does not hold**', _b['semantic'], True),
         ('Unknown family, left for review rather than excluded', review, False),
     ]
@@ -560,8 +609,17 @@ def write_report(build, names, light, dark, other, rows, tok):
             add('| %s | `%s` | `%s` | `%s` |'
                 % (r['scope'], r['name'], r['declared'][:48], r['resolved']))
     else:
-        for _l in closing_note(triage, unresolved, len(generic) + len(composite)):
+        for _l in closing_note(triage, unresolved, len(generic) + len(composite)
+                               + len(_b['dark']) + len(_b['excluded'])):
             add(_l)
+
+    if _b['excluded']:
+        add('')
+        add('### The %d excluded by name\n' % len(_b['excluded']))
+        add('| Custom property | Resolves to | Why it is not carried |')
+        add('|---|---|---|')
+        for r in sorted(_b['excluded'], key=lambda r: r['name']):
+            add('| `%s` | `%s` | %s |' % (r['name'], r['resolved'], EXCLUDED[r['name']][1]))
 
     if composite:
         add('')

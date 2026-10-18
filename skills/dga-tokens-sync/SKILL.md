@@ -11,9 +11,9 @@ Turns a DGA update into a reviewable diff instead of an archaeology project.
 
 Not transcribed from swatches — **extracted from the live site's own CSS custom properties**.
 design.dga.gov.sa exposes **1,052 variables on `:root`**, which is the authoritative machine-
-readable source. `tokens.json` carries **303** of them. The remainder is **not** all aliasing —
-[the reconciler](https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/reconcile-tokens.py) settled it and found 154 values the kit does not
-hold and needs to triage; re-harvesting should close those. Re-run the same extraction:
+readable source. `tokens.json` carries **345** of them. The remainder is **not** all aliasing —
+[the reconciler](https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/reconcile-tokens.py) settled it, and since the 2026-10-18 triage there are **0 left to
+triage**: every uncarried declaration is a stated exclusion or a gradient of carried colours. Re-run it after every re-harvest. Re-run the same extraction:
 
 ```js
 const rs = getComputedStyle(document.documentElement);
