@@ -11,6 +11,34 @@ patch means corrections. Nothing here is a DGA release — see
 `skills/dga-design-system/dga-version.md` for the Platforms Code version this kit is pinned to
 (currently **4.0.0** per DGA's change log, read 2026-10-08; DGA publishes no release date).
 
+## 0.8.5 — 2026-10-18
+
+### Added — where DGA's Arabic pages say something different
+
+The kit cites DGA's English pages, but Arabic-first teams read the Arabic, and it is not always
+a faithful translation. All 6,182 text keys DGA publishes in both languages were compared number
+by number. Codex and agy also read all 743 sentences with a normative English word in both
+languages. Nine differences were confirmed on both rendered pages
+(`harvest/raw/2026-10-18-en-ar-differences.md`). They are now a table in `content.md`, with
+inline notes where the kit states the rule:
+
+- **Skeleton** circle/square sizes: English *"24px to 240px"*, Arabic «24px إلى 48px». Unresolved.
+- **Search pagination**: the Arabic page gives no "10 items" count and adds pagination at the
+  **top** for very long lists.
+- **Saudi Font** in body text: the Arabic typography page says «يُحظر» (prohibited). This is a
+  third source for the kit's Blocker.
+- **Dropdown** focus on open: English *"should typically"*, Arabic «يجب» (must).
+- **Source errors on the Arabic pages:**
+  - Tooltip names `aria-description`, and its hover/focus rule is replaced by a delay sentence.
+  - Input names `"aria-describe"`, which is not an ARIA attribute.
+  - Tags loses the `<button>` element name.
+  - Breadcrumbs lists six of its "seven" states.
+
+  The kit keeps the English rule for each of these and says why.
+
+Rejected from the reviews: a "two weeks before review" rule the kit already carries, and a kit
+quote ("one primary per page") that does not exist in the kit.
+
 ## 0.8.4 — 2026-10-18
 
 ### Fixed — 0.8.3's freshness workflow was an invalid file

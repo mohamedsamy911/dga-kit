@@ -126,6 +126,7 @@ states the **DGA-specific constraint your library will not give you for free**. 
 - Pie charts **max 6 segments**; line and bar **max 3 series**
 - Breadcrumbs truncate past **5** items, and on mobile show back-arrow plus previous page only
 - Pagination is *"(optional)"* on Search and FAQ pages; when used there, after **10** items
+  (Search: English only — DGA's Arabic page gives no count and allows it at the top too)
 - Critical notifications: DGA says *"consider not having a timeout"*; anything auto-dismissing
   stays *"typically at least 5 seconds"*
 - Sliders in RTL increase toward the **start** edge

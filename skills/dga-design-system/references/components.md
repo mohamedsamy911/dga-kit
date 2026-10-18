@@ -513,7 +513,8 @@ Helper text and error helper text as with Input.
 - `aria-labelledby` or `aria-label` for the accessible name
 - Keyboard: Tab in/out · **Arrow keys open and navigate** · Enter/Space selects and closes ·
   **Esc closes without changing selection**
-- On open, focus moves to the selected option, or the first if none
+- On open, focus moves to the selected option, or the first if none (English: *"should
+  typically"*; Arabic: «يجب», must)
 - Errors indicated by **both colour and text** ("Invalid selection", "Required field")
 
 ---
@@ -848,7 +849,8 @@ visually."* The Form template uses it on mobile in place of the Progress Indicat
 
 `/guidelines/components/loading-and-status/skeleton` · retrieved 2026-10-18
 
-**Variants** — Circle and Square (*"between 24px to 240px"*) · Rectangle (large, medium, small;
+**Variants** — Circle and Square (English: *"between 24px to 240px"*; DGA's Arabic page:
+«بين 24px إلى 48px» — the two disagree, confirm with DS-DGA@dga.gov.sa) · Rectangle (large, medium, small;
 short or long) · Line (small, large).
 **Accessibility** — `role="status"`; `tabindex="-1"` so it is skipped; removed from the
 accessibility tree once content loads; *"If animations are used, provide an option to pause them

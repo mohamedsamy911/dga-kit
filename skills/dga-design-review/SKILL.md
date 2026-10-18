@@ -59,8 +59,9 @@ Before the cosmetic passes — RTL errors are structural and invalidate what fol
 ### 4 · Typography
 - **IBM Plex Sans** only. **Saudi Font** is restricted to national and seasonal occasions
   (National Day, Founding Day), **main headings only** — never body or long-form. Saudi Font
-  in paragraph text is a Blocker: the typography page calls it *"not recommended"*, the Hajj
-  template says it *"must not be used"*, and the stricter reading applies.
+  in paragraph text is a Blocker: the English typography page calls it *"not recommended"*, its
+  Arabic version «يُحظر» (prohibited), the Hajj template *"must not be used"* — the stricter
+  reading applies.
 - Sizes on the DGA scale — Display 2xl/xl/lg/md/sm/xs (72/60/48/36/30/24) and Text
   xl/lg/md/sm/xs/2xs (20/18/16/14/12/10), with DGA's paired line heights
 - Display styles for headings only, never body copy

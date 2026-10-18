@@ -58,7 +58,7 @@ Each of these passes a build, a type check and a casual review.
 | **Missing feedback section / last-modified dates** | Advisory: DGA template guidance shows "Was this page useful?" and **two** dates — page and platform. Report as not following DGA's template guidance, not as non-compliance. |
 | **Footer without Accessibility Tools** | DGA's footer anatomy; its examples are font size and contrast settings. Not a WCAG requirement, so nothing automated catches it. Tools not first in tab order: advisory — DGA's Chatbot template guidance. |
 | **Icon-only control with no accessible name** | `aria-label` or visually-hidden text. |
-| **Component cap exceeded** | Content Switcher **2-4 options**; pie chart **max 6 segments**; line/bar **max 3 series**; breadcrumbs truncate past **5**; pagination after **10**; a horizontal tablist does not scroll or wrap (DGA recommends an overflow menu). |
+| **Component cap exceeded** | Content Switcher **2-4 options**; pie chart **max 6 segments**; line/bar **max 3 series**; breadcrumbs truncate past **5**; pagination after **10** (FAQ; Search in DGA's English only — its Arabic page gives no count); a horizontal tablist does not scroll or wrap (DGA recommends an overflow menu). |
 | **Link not underlined, or "click here"** | DGA: links *"should be underlined by default"*; *"Avoid vague phrases such as "click here" or "go to."* |
 | **Critical notification that auto-dismisses** | DGA: for critical information *"consider not having a timeout"*; auto-dismissing ones stay *"typically at least 5 seconds"*. |
 | **Hijri assumed to exist** | Nothing in DGA or in any UI library provides it. If a date is displayed and the project chose Hijri, there must be a wrapper. |

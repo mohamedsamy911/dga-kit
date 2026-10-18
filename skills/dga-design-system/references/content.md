@@ -21,6 +21,24 @@ The site itself ships in Arabic and English (`العربية` toggle).
 only says the toggle updates *all* elements of the page. The kit treats a page present in one
 language and missing in the other as a defect, not a content backlog item.
 
+### Where DGA's Arabic pages differ from its English
+
+DGA's Arabic pages are not always a faithful translation, and Arabic-first teams read them. Each
+row below was confirmed on both rendered pages on 2026-10-18 (evidence: https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-18-en-ar-differences.md).
+The kit cites the English unless the row says otherwise.
+
+| Page | English | Arabic | Use |
+|---|---|---|---|
+| Skeleton — circle/square sizes | *"between 24px to 240px"* | «بين 24px إلى 48px» | Unresolved — ask DS-DGA@dga.gov.sa |
+| Search — pagination | after *"the 10 available items"*; bottom of the list | no count; bottom, *and* «في أعلى الصفحة إذا كانت القائمة طويلة جدًا» | Both are DGA guidance; top placement appears only on the Arabic page |
+| Typography — Saudi Font in body text | *"not recommended"* | «يُحظر» (prohibited) | The stricter — never in body text |
+| Dropdown — focus on open | *"should typically be moved"* to the selected option | «يجب» (must) | Move it |
+| Tooltip — trigger ARIA | `aria-describedby` on the trigger | `aria-description` | `aria-describedby`, as the English page says |
+| Tooltip — when it shows | only on hover or focus; hides when both are removed | replaced by a delay sentence («تأخير طفيف») | Keep the English rule |
+| Input — helper/error text | `aria-describedby` | `"aria-describe"` (not an ARIA attribute) | `aria-describedby` |
+| Tags — interactive markup | marked up as `<button>` when they perform an action | the element name is missing from the sentence | `<button>` |
+| Breadcrumbs — states | seven, listed | «سبع حالات», but lists six (no *active*) | All seven |
+
 ## Copy DGA gives
 
 Mostly as examples (*"such as"*, *"like"*) — the wording is DGA's suggestion unless noted. The
@@ -79,7 +97,7 @@ across screens is worse than either option.
 
 | Limit | Value |
 |---|---|
-| Search / FAQ pagination *(optional)* | after **10** items |
+| Search / FAQ pagination *(optional)* | after **10** items (Search: English page only — see below) |
 | Statistics support tables | max **10 rows × 10 columns** |
 | Content switcher options | **2–4** (use Tabs beyond) |
 | Pie chart segments | max **6** |

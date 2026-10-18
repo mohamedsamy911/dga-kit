@@ -41,6 +41,7 @@ verbatim from the running site, not transcribed from screenshots.
 | Other | Support + 15 FAQs | `/support` | 2026-08-27 |
 | Other | Roadmap | `/updates/roadmap` | 2026-08-27 |
 | Other | Change log + 4 version pages | `/updates/change-log`, `/updates/change-log/version-history-1-0-{0,1,2,3}` | 2026-08-27 |
+| Arabic vs English | **Where DGA's two languages disagree** — all 6,182 shared text keys compared number by number, and all 743 normative sentences read in both languages; 9 differences confirmed on both rendered pages | raw evidence: `harvest/raw/2026-10-18-en-ar-differences.md` | 2026-10-18 |
 | Arabic copy | **DGA's own Arabic** for every string in the "Copy DGA gives" table, taken from the Arabic twin of DGA's text table and confirmed on the rendered Arabic pages | raw evidence: `harvest/raw/2026-10-18-arabic-copy.md` | 2026-10-18 |
 | Reverse audit | **Kit claim → DGA source** — every rule the agents, skill entry files and eval answers attribute to DGA, traced to DGA's text; ~30 corrections, each confirmed on the rendered page | raw evidence: `harvest/raw/2026-10-18-reverse-audit.md` | 2026-10-18 |
 | Re-read | **Full prose re-read** — every component, template and guidance page's text compared with the kit; ~40 corrections, each confirmed on the rendered page; Loading, Radial stepper and Skeleton given their own sections | raw evidence: `harvest/raw/2026-10-18-reread.md` | 2026-10-18 |

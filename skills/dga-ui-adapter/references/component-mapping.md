@@ -90,7 +90,7 @@ states, 44px targets, no Arabic letter-spacing, logical properties.
 |---|---|---|---|---|---|
 | Breadcrumbs | `Breadcrumbs` | `Breadcrumb` | `Breadcrumb` | `Breadcrumb` | Truncate past **5** items. 🚩 **Mobile shows back-arrow + previous page only.** Separators mirror in RTL and need `aria-hidden`. |
 | Menu | `Menu` | `Menu` | `DropdownMenu` | `Menu` | 🚩 DGA publishes **no accessibility section at all** for Menu. Apply the WAI-ARIA menu pattern and state that DGA is silent. |
-| Pagination | `Pagination` | `Pagination` | `Pagination` | `Pagination` | *"(optional)"* on Search and FAQ pages; when used there, after **10** items. Prev/next arrows mirror in RTL. |
+| Pagination | `Pagination` | `Pagination` | `Pagination` | `Pagination` | *"(optional)"* on Search and FAQ pages; when used there, after **10** items (Search: English only — the Arabic page gives no count and allows top placement). Prev/next arrows mirror in RTL. |
 | Tabs | `Tabs` | `Tabs` | `Tabs` | `Tabs` | 🚩 A horizontal tablist does **not scroll or wrap**; DGA recommends an overflow "More" button. Most libraries default to scrolling; turn it off. |
 | Slide-out Menu | `Drawer` | `Drawer` | `Sheet` | `Drawer` | Focus trap, Esc closes. **Opens from the opposite side in RTL.** |
 

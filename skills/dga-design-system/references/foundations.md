@@ -59,8 +59,9 @@ own palette.
 | **IBM Plex Sans** | Everything | Regular, Medium, Semibold, Bold |
 | **Saudi Font** (Ministry of Culture) | National and seasonal occasions **only** — National Day, Founding Day. **Main headings only.** | Regular, Bold |
 
-DGA restricts Saudi Font to main headings. On paragraph or long-form text the typography page
-says *"not recommended"* and the Hajj template *"must not be used"* — apply the stricter. DGA:
+DGA restricts Saudi Font to main headings. On paragraph or long-form text the English typography page
+says *"not recommended"*, its Arabic version «يُحظر» (prohibited), and the Hajj template *"must not
+be used"* — apply the stricter. DGA:
 *"available under a license agreement from the Ministry of Culture"*; download it from the
 Ministry of Culture website.
 

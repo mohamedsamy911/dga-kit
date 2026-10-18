@@ -116,7 +116,10 @@ Built for **multi-step** forms.
 ## Search page
 
 - **Pagination** — *"(optional)"* on search pages; when used: after **10 items**, at the bottom of
-  the list, current page clearly highlighted, Next/Previous arrows included.
+  the list, current page clearly highlighted, Next/Previous arrows included. DGA's **Arabic**
+  Search page differs: no count («بعد تصفح جميع العناصر المتاحة في الصفحة الحالية»), and it adds
+  that pagination can also go at the top when the list is very long («ويمكن أيضًا إضافة ترقيم
+  الصفحات في أعلى الصفحة إذا كانت القائمة طويلة جدًا»).
 - **"Clear Filter" button** near the filter options, labelled plainly ("Clear Filter" / "Reset
   Filter")
 - **Mobile filtering uses a dropdown** to avoid clutter
