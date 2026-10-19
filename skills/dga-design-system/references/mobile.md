@@ -6,7 +6,8 @@
 > ✅ **`/designing-for-mobile` WAS harvested** — 2026-08-27, recorded in `capture-log.md`. It
 > confirms the six Mobile UI Kit component names this file had assembled indirectly from the
 > template and component pages. The page is a Figma download landing page and carries **no
-> specs**, so the Figma-only gap below stands on its own evidence rather than on an absence.
+> specs**. The six mobile component specs remain Figma-only; the responsive token values are now
+captured (see *Responsive tokens* below).
 >
 > This note has now been wrong in both directions. It first cited the page as a source it had
 > never read; the correction then over-swung and said the page was still outstanding, which
@@ -48,7 +49,7 @@ Gathered from the templates and components, since there is no consolidated mobil
 
 ## Responsive tokens
 
-DGA's **radius and spacing semantic tokens resolve differently per breakpoint** (Desktop /
-Tablet / Mobile). Those values are not exposed as CSS variables — only in the PC 1.0 Foundations
-Figma variable collections. A React implementation treating them as constants is wrong on two of
-three breakpoints. `TODO(harvest)`
+On Mobile, 39 component spacing values and 36 typography values change from Desktop — most shrink,
+for example `card-lg-padding` 16px (32px on Desktop) and body `text-md` 12px (16px). Radius does
+not change. DGA's CSS switches the spacing at `max-width: 767px`. Values and the known CSS defect:
+`responsive-tokens.md`.

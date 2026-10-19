@@ -9,7 +9,7 @@
   never match, because `:root` is `<html>` and a descendant combinator needs an ancestor it does
   not have. Verified live: zero elements matched
 - warns that the set as a whole is **not safe to ship as a dark theme** — five `*-light` status
-  surfaces have no dark tint at all, so white text on them measures **1.05:1**
+  surfaces have no dark value in DGA's CSS, so white text on them measures **1.05:1**
 - says the values are deliberately **not** generated into `tokens.css`, and why: correcting the
   selector would activate those pairings for anyone already using `data-theme="dark"`
 - build the semantic layer with the dark slot **present**, filled from a project decision rather

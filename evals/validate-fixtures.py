@@ -302,16 +302,18 @@ chk('tailwind preset emits em, never %', '"letterSpacing": "-0.02em"' in _tw and
 
 # --- fixture must not contradict the guidance it tests -----------------------
 # Case 12 shipped three times with a defect a reviewer then correctly reported, and the rubric
-# scored them as a false positive. The specific trap: an Arabic-first font stack renders LATIN
-# out of the Arabic face's glyphs, so DGA's named face never renders. Assert the case agrees
-# with token-wiring.md rather than trusting prose on both sides.
+# scored them as a false positive. Assert the case's font stack agrees with token-wiring.md
+# rather than trusting prose on both sides. The order itself is kit policy, not a DGA rule:
+# DGA's Figma file sets IBM Plex Sans Arabic for all text (2026-10-19), so the guide must not
+# call Arabic-first wrong.
 _tw = open(os.path.join(ROOT, 'skills/dga-ui-adapter/references/token-wiring.md'), encoding='utf-8').read()
 _LATIN_FIRST = '"IBM Plex Sans", "IBM Plex Sans Arabic"'
 _ARABIC_FIRST = '"IBM Plex Sans Arabic", "IBM Plex Sans"'
 
 chk('guidance: token-wiring.md shows the Latin-first stack as correct', _LATIN_FIRST in _tw)
-chk('guidance: token-wiring.md shows the Arabic-first stack as the wrong one',
-    _ARABIC_FIRST in _tw and 'wrong:' in _tw)
+chk("guidance: token-wiring.md names Arabic-first as DGA Figma's choice, not a defect",
+    _ARABIC_FIRST in _tw and "DGA's Figma" in _tw
+    and 'wrong' not in _tw[max(0, _tw.find(_ARABIC_FIRST) - 200):_tw.find(_ARABIC_FIRST)].lower())
 chk('ui-12: case font stack is Latin-first', _LATIN_FIRST in _c12,
     'case still declares an Arabic-first stack, which a reviewer would correctly flag')
 # The wrong order may appear in the case only inside the traps commentary, never in the input.
@@ -2106,7 +2108,21 @@ _carried_light = _recm.carried_values(t)[0]
 
 
 def _cr_errors(roles, css, kit):
-    out, lines = [], dict(re.findall(r'(--dga-[\w-]+)\s*:\s*([^;]+);', css))
+    # The base :root holds the desktop row; each @media block holds that mode's rows only.
+    _base, _, _rest = css.partition('\n}\n')
+    out, lines = [], dict(re.findall(r'(--dga-[\w-]+)\s*:\s*([^;]+);', _base))
+    _media = {}
+    for _q, _body in re.findall(r'@media ([^{]+?) \{\s*:root \{([^}]*)\}', _rest):
+        _media[_q] = dict(re.findall(r'(--dga-[\w-]+)\s*:\s*([^;]+);', _body))
+    _want_media = {}
+    for _n, _r in roles.items():
+        for _mode, _o in _r.get('responsive', {}).items():
+            _want_media.setdefault(_cr['$meta']['responsive'][_mode], {})['--dga-' + _n[2:]] = (
+                f"var({_o['kitToken']})" if _o['kitToken'] else _o['resolved'])
+            if _recm.norm(_o['resolved']) not in _carried_light:
+                out.append(f"{_n} ({_mode}): resolves to {_o['resolved']}, which tokens.json does not carry")
+    if _media != _want_media:
+        out.append('the @media blocks do not match the JSON responsive rows')
     for _n, _r in roles.items():
         _want = f"var({_r['kitToken']})" if _r['kitToken'] else _r['resolved']
         if lines.get('--dga-' + _n[2:]) != _want:
@@ -2125,6 +2141,9 @@ def _cr_errors(roles, css, kit):
 
 chk('component roles: CSS, JSON and tokens agree', not _cr_errors(_cr['roles'], _cr_css, _kit_css),
     str(_cr_errors(_cr['roles'], _cr_css, _kit_css)[:5]))
+_tq = _cr['$meta']['responsive']['tablet']
+chk('component roles: the tablet query is bounded on both sides (no leak into mobile or desktop)',
+    'min-width' in _tq and 'max-width' in _tq and _tq in _cr_css, _tq)
 chk('component roles: the counts in $meta are the file\'s own',
     _cr['$meta']['totalRoles'] == len(_cr['roles'])
     and _cr['$meta']['linkedToKitToken'] == sum(1 for r in _cr['roles'].values() if r['kitToken']))

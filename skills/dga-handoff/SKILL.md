@@ -26,7 +26,8 @@ thing needing justification. See `../dga-design-system/references/foundations.md
 ### 2 · Token map
 Every colour, space, radius, type style and shadow as its **semantic** token name, never a hex.
 Where the design used something off-token, name the substitution made and why.
-Flag **responsive tokens** — DGA's radius and spacing resolve differently per breakpoint.
+Flag **responsive tokens** — 39 spacing and 36 typography values change between Desktop, Tablet
+and Mobile; radius does not (`../dga-design-system/references/responsive-tokens.md`).
 
 ### 3 · State matrix
 A row per interactive element, a column per DGA state — **Default · Hovered · Pressed ·

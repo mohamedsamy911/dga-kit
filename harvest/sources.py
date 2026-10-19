@@ -898,7 +898,8 @@ def write_freshness(inv, obs, findings, notes):
           'measurements (not public)',
           '- DGA documents on dga.gov.sa (registration controls, accessibility guideline, '
           'measurement reports): it challenges automated clients, so re-download them by hand',
-          '- PC 1.0 Figma files — responsive radius and spacing resolve per breakpoint there only',
+          "- DGA's Figma Foundations file — read once by hand (2026-10-19, needs a signed-in Figma "
+          'account); not monitored. Re-read it when its update notes change',
           '- The Arabic-language terminology harvest',
           '',
           '## What this check cannot see',

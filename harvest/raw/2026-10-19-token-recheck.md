@@ -27,6 +27,11 @@ name (`harvest/reconcile-tokens.py`). The independent extraction's values (`#6c7
 labelled `gray.500` / `gray.950` there) match `gray-neutral` exactly, so that is the likely source
 of the difference. Both hex values exist in the live stylesheet, under different names.
 
+> **Corrected the same day.** DGA's Figma Foundations file, read later on 2026-10-19, gives
+> `Neutral/500` as `#6c737f` and `Neutral/950` as `#0d121c` — an exact match for the independent
+> read under the *same* name. So the difference is between DGA's CSS and DGA's Figma, one unit
+> apart, not two names. See `2026-10-19-figma-foundations.md`.
+
 The Color System page shows its swatches as images and prints no hex codes, so the page itself
 cannot say which name a swatch uses.
 

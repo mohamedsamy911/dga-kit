@@ -92,21 +92,20 @@ L.push('')
 //      consumer already using `data-theme="dark"` - Chakra v3 does, out of the box - would
 //      silently activate it. That turns a harmless upstream bug into a live accessibility
 //      regression in someone else's product.
-//   3. It cannot be made safe from DGA's own values. `text.error` has a cited substitute
-//      (red.300 #fca19b, which DGA itself uses for notification.text-error in dark) and so does
-//      `text.primary` (sa-flag.300 #88d8ad). But the five `*-light` status surfaces have NONE:
-//      every dark variant DGA publishes for them - under notification-, tag- and featuredicons-
-//      - still resolves to the same near-white value. White text on them is 1.05:1. Inventing a
-//      dark tint would break `cite or omit`.
+//   3. DGA's CSS dark block is not safe as shipped. The five `*-light` status surfaces have no
+//      dark value in it (white text on them is 1.05:1), and it differs from DGA's own Figma dark
+//      theme in 80 roles (Figma Foundations file, read 2026-10-19). Each hazard has a cited
+//      substitute - see tokens.json role.dark.$verify - but choosing them is a theme decision.
 //
 // So: values retained for audit, stylesheet stays safe. An entity that wants dark mode owns the
-// remediation and records it in dga-brand-overlay. See tokens.json role.dark.$verify.
+// remediation and records it in dga-brand-overlay.
 L.push('/* Dark theme is NOT emitted here, on purpose.')
 L.push('   DGA publishes 402 dark values under `[data-theme=dark] :root` - a selector that can')
 L.push('   never match, so upstream the theme is inert. Emitting a corrected selector would')
 L.push('   activate it for anyone already using data-theme="dark" (Chakra v3 does), and it')
-L.push('   cannot be made safe: five *-light status surfaces have no dark tint anywhere in')
-L.push('   DGA\'s output, so white text on them measures 1.05:1.')
+L.push('   is not safe as shipped: five *-light status surfaces have no dark value in DGA\'s')
+L.push('   CSS, so white text on them measures 1.05:1, and the CSS dark block differs from')
+L.push('   DGA\'s own Figma dark theme in 80 roles.')
 L.push('   Values: tokens.json role.dark. Audit: node check-contrast.mjs --theme dark. */')
 writeFileSync(join(here, 'tokens.css'), L.join('\n') + '\n')
 

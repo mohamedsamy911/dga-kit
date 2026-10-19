@@ -275,22 +275,25 @@ yourself under a name that cannot be reached by accident (`fonts.occasion`,
 
 **The Arabic face is IBM Plex Sans Arabic.** The typography page names only the Latin IBM Plex
 Sans; DGA's Assessment Checklist (item 3) names the Arabic one: *"Use the approved font: IBM Plex
-Sans Arabic, as specified in the Platforms Code."* `tokens.css` ships both in `--dga-font-sans`.
+Sans Arabic, as specified in the Platforms Code."* DGA's Figma Foundations file sets IBM Plex Sans
+Arabic as both its display and text family (read 2026-10-19). `tokens.css` ships both faces in
+`--dga-font-sans`.
 
-**Order the stack Latin-first.** Font fallback resolves *per character*, not per string, so both
-faces get used regardless of order — but the order decides which one renders **Latin**:
+**The stack order is the kit's choice; DGA's sources point both ways.** Font fallback resolves
+*per character*: Arabic always renders in IBM Plex Sans Arabic, because IBM Plex Sans has no
+Arabic glyphs, and Latin renders in the first face in the list that has Latin glyphs:
 
 ```css
-/* right: Latin from the face DGA names, Arabic from the Arabic face */
+/* kit policy: Latin from IBM Plex Sans (the typography page's face), Arabic from the Arabic face */
 font-family: "IBM Plex Sans", "IBM Plex Sans Arabic", system-ui, sans-serif;
 
-/* wrong: IBM Plex Sans Arabic contains Latin glyphs, so it wins for Latin
-   and DGA's named face never renders anything */
+/* also defensible: IBM Plex Sans Arabic has Latin glyphs, so it renders all text - which is
+   what DGA's Figma file does. IBM Plex Sans then never renders */
 font-family: "IBM Plex Sans Arabic", "IBM Plex Sans", system-ui, sans-serif;
 ```
 
-Arabic-first *looks* like the Arabic-first principle applied to the font stack. It is not — it
-silently replaces the one typeface DGA actually specifies.
+Neither order breaks a DGA rule. Pick one per product, and make the Figma comps and the CSS
+agree, or Latin text will look different between design and build.
 
 ⚠️ **`letterSpacings` carry `-0.02em` on `display-2xl` … `display-md`** (design spec says −2%;
 CSS `letter-spacing` does not accept percentages). Never let that reach Arabic.

@@ -376,6 +376,7 @@
    DGA publishes 402 dark values under `[data-theme=dark] :root` - a selector that can
    never match, so upstream the theme is inert. Emitting a corrected selector would
    activate it for anyone already using data-theme="dark" (Chakra v3 does), and it
-   cannot be made safe: five *-light status surfaces have no dark tint anywhere in
-   DGA's output, so white text on them measures 1.05:1.
+   is not safe as shipped: five *-light status surfaces have no dark value in DGA's
+   CSS, so white text on them measures 1.05:1, and the CSS dark block differs from
+   DGA's own Figma dark theme in 80 roles.
    Values: tokens.json role.dark. Audit: node check-contrast.mjs --theme dark. */

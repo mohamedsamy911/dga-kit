@@ -212,7 +212,8 @@ reconciliation reproduced unchanged.
 | **Codex plugin install path** | ✅ Skills only. Codex CLI 0.160.1 installs the tree and discovers all 11 skills — verified 2026-10-08 on Windows and on every CI run (Linux). Passed Codex's `validate_plugin.py` on 2026-08-28; Codex no longer ships it |
 | **Codex-native agents** | Six generated TOML definitions; separate installer with offline safety/parity checks. Confirm runtime discovery in your Codex session. |
 | **Designer sign-off** | ⚠️ **Outstanding** — values are exact, interpretation unverified |
-| **Figma-only values** (responsive radius/spacing, mobile kit specs) | ❌ Not public. Omitted, not guessed. |
+| **Responsive spacing and type** (DGA's Figma Foundations file, read 2026-10-19) | ✅ `references/responsive-tokens.md`; radius does not change by size |
+| **Mobile kit component specs** | ❌ Figma-only. Omitted, not guessed. |
 
 **Dark theme: found, and broken upstream.** This kit used to list dark values as Figma-only. They
 are not — DGA ships **402 dark declarations** in its public CSS. But they sit under the selector
@@ -222,9 +223,10 @@ combinator needs an ancestor it does not have. Verified in the live page: zero e
 
 The values are carried in `tokens.json` for audit, and deliberately **not** generated into
 `tokens.css` — correcting the selector would activate it for anyone already using
-`data-theme="dark"` (Chakra v3 does, out of the box), and it cannot be made safe from DGA's own
-values: five `*-light` status surfaces have no dark tint anywhere, so white text on them measures
-**1.05:1**. Run `check-contrast.mjs --theme dark` for the full list.
+`data-theme="dark"` (Chakra v3 does, out of the box), and DGA's CSS dark block is not safe as
+shipped: five `*-light` status surfaces have no dark value in it, so white text on them measures
+**1.05:1**. DGA's Figma Foundations file has a fuller dark theme; it differs from the CSS in 80
+roles. Run `check-contrast.mjs --theme dark` for the full list.
 
 See [COVERAGE.md](COVERAGE.md) for what is and is not covered, and
 [harvest/CAPTURE-LOG.md](harvest/CAPTURE-LOG.md) for the evidence trail.
@@ -255,7 +257,7 @@ deployment" into an unconditional block. No amount of watching DGA catches those
 `evals/check-quote-fidelity.py` compares the DGA quotes it *can* — those whose source page has
 been captured — against that captured text, and fails on a quote that reproduces a capture
 without matching it. It found two real defects on its first run. Be clear about its reach: raw
-captures cover **a minority of DGA's pages**, so 45 of 137 blockquotes are checkable and the other 92 are
+captures cover **a minority of DGA's pages**, so 45 of 139 blockquotes are checkable and the other 94 are
 **unverifiable, not verified**. A quote fenced as DGA's own words with no capture behind it fails
 the run.
 

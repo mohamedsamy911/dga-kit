@@ -199,11 +199,12 @@ invisible to this script.
   `[data-theme=dark] :root`, which can never match. It is complete and unreachable. The values are
   held in `../dga-design-system/assets/tokens.json` under `role.dark` for audit, and deliberately
   never generated into `tokens.css`. Do not wire them in: five `*-light` status surfaces have no
-  dark tint at all, so white text on them measures **1.05:1**. Build components theme-aware from
+  dark value in DGA's CSS, so white text on them measures **1.05:1**. Build components theme-aware from
   day one with the dark slot ready and empty — retrofitting costs far more.
-- **No responsive radius or spacing.** DGA's *semantic* radius and spacing resolve differently on
-  Desktop, Tablet and Mobile. The public CSS exposes one value each, so treating them as
-  constants is wrong on two of three breakpoints. Figma-only.
+- **Responsive spacing and type are yours to wire.** 39 spacing and 36 typography values change
+  between Desktop, Tablet and Mobile; radius does not. `tokens.css` emits the Desktop values only.
+  Per-mode values, DGA's media-query widths and its block-order defect:
+  `../dga-design-system/references/responsive-tokens.md`.
 - **No component recipes.** Yours to author against the specs. Recipes for six different
   libraries would rot faster than they helped.
 - **Two DGA component pages are defective.** Card's accessibility section is Accordion's, pasted

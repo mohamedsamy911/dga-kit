@@ -68,9 +68,10 @@ prefixes: `colors` (479) · `link` · `background` · `button` · `tag` · `form
 
 Do not assume the extraction is complete coverage:
 
-- **Responsive radius and spacing.** DGA's semantic tokens resolve differently on desktop,
-  tablet and mobile. Those values live only in the **PC 1.0 Foundations Figma** variable
-  collections. `TODO(harvest)`
+- ~~**Responsive radius and spacing.**~~ **Read 2026-10-19** from DGA's Figma Foundations file:
+  radius is constant; 39 spacing and 36 typography values change per mode. Re-read the file's
+  variables when its update notes change — the plugin-API export method is in
+  https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-19-figma-foundations.md.
 - ~~**Dark theme values.**~~ **Found 2026-08-27.** All **402** are in the public CSS bundle in a
   single `[data-theme=dark] :root` rule — 390 are `var(--colors-*)` remaps of primitives already
   captured, 12 are literals. Extracted to `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-08-27-dark-theme-roles.json`; the

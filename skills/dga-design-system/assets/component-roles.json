@@ -28,6 +28,11 @@
     ],
     "totalRoles": 379,
     "linkedToKitToken": 275,
+    "responsive": {
+      "tablet": "(min-width: 768px) and (max-width: 1024px)",
+      "mobile": "(max-width: 767px)"
+    },
+    "responsiveRoles": 36,
     "generator": "https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/build-component-roles.py",
     "$note": "DGA's component token names, generated - do not edit. Keys are DGA's exact names; component-roles.css emits each as --dga-<name> (load it after tokens.css). kitToken follows DGA's own alias chain and is null where no hop names a kit token, never guessed from a shared value. These are stylesheet names DGA publishes, not component recipes."
   },
@@ -43,9 +48,21 @@
       "kitToken": "--dga-space-4"
     },
     "--accordion-md-header-gap": {
-      "declared": "var(--spacing-3)",
-      "resolved": "12px",
-      "kitToken": "--dga-space-3"
+      "declared": "var(--spacing-12)",
+      "resolved": "48px",
+      "kitToken": "--dga-space-12",
+      "responsive": {
+        "tablet": {
+          "declared": "var(--spacing-3)",
+          "resolved": "12px",
+          "kitToken": "--dga-space-3"
+        },
+        "mobile": {
+          "declared": "var(--spacing-3)",
+          "resolved": "12px",
+          "kitToken": "--dga-space-3"
+        }
+      }
     },
     "--accordion-md-header-padding": {
       "declared": "var(--spacing-3)",
@@ -428,9 +445,16 @@
       "kitToken": "--dga-space-2"
     },
     "--buttons-group-gap": {
-      "declared": "var(--spacing-1)",
-      "resolved": "4px",
-      "kitToken": "--dga-space-1"
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-1)",
+          "resolved": "4px",
+          "kitToken": "--dga-space-1"
+        }
+      }
     },
     "--buttons-lg-gap": {
       "declared": "var(--spacing-1)",
@@ -463,34 +487,101 @@
       "kitToken": "--dga-space-2"
     },
     "--card-lg-gap": {
-      "declared": "var(--spacing-4)",
-      "resolved": "16px",
-      "kitToken": "--dga-space-4"
+      "declared": "var(--spacing-6)",
+      "resolved": "24px",
+      "kitToken": "--dga-space-6",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-4)",
+          "resolved": "16px",
+          "kitToken": "--dga-space-4"
+        }
+      }
     },
     "--card-lg-padding": {
-      "declared": "var(--spacing-4)",
-      "resolved": "16px",
-      "kitToken": "--dga-space-4"
+      "declared": "var(--spacing-8)",
+      "resolved": "32px",
+      "kitToken": "--dga-space-8",
+      "responsive": {
+        "tablet": {
+          "declared": "var(--spacing-6)",
+          "resolved": "24px",
+          "kitToken": "--dga-space-6"
+        },
+        "mobile": {
+          "declared": "var(--spacing-4)",
+          "resolved": "16px",
+          "kitToken": "--dga-space-4"
+        }
+      }
     },
     "--card-md-gap": {
-      "declared": "var(--spacing-3)",
-      "resolved": "12px",
-      "kitToken": "--dga-space-3"
+      "declared": "var(--spacing-6)",
+      "resolved": "24px",
+      "kitToken": "--dga-space-6",
+      "responsive": {
+        "tablet": {
+          "declared": "var(--spacing-5)",
+          "resolved": "20px",
+          "kitToken": "--dga-space-5"
+        },
+        "mobile": {
+          "declared": "var(--spacing-3)",
+          "resolved": "12px",
+          "kitToken": "--dga-space-3"
+        }
+      }
     },
     "--card-md-padding": {
-      "declared": "var(--spacing-4)",
-      "resolved": "16px",
-      "kitToken": "--dga-space-4"
+      "declared": "var(--spacing-8)",
+      "resolved": "32px",
+      "kitToken": "--dga-space-8",
+      "responsive": {
+        "tablet": {
+          "declared": "var(--spacing-6)",
+          "resolved": "24px",
+          "kitToken": "--dga-space-6"
+        },
+        "mobile": {
+          "declared": "var(--spacing-4)",
+          "resolved": "16px",
+          "kitToken": "--dga-space-4"
+        }
+      }
     },
     "--card-sm-gap": {
-      "declared": "var(--spacing-3)",
-      "resolved": "12px",
-      "kitToken": "--dga-space-3"
+      "declared": "var(--spacing-6)",
+      "resolved": "24px",
+      "kitToken": "--dga-space-6",
+      "responsive": {
+        "tablet": {
+          "declared": "var(--spacing-5)",
+          "resolved": "20px",
+          "kitToken": "--dga-space-5"
+        },
+        "mobile": {
+          "declared": "var(--spacing-3)",
+          "resolved": "12px",
+          "kitToken": "--dga-space-3"
+        }
+      }
     },
     "--card-sm-padding": {
-      "declared": "var(--spacing-4)",
-      "resolved": "16px",
-      "kitToken": "--dga-space-4"
+      "declared": "var(--spacing-8)",
+      "resolved": "32px",
+      "kitToken": "--dga-space-8",
+      "responsive": {
+        "tablet": {
+          "declared": "var(--spacing-6)",
+          "resolved": "24px",
+          "kitToken": "--dga-space-6"
+        },
+        "mobile": {
+          "declared": "var(--spacing-4)",
+          "resolved": "16px",
+          "kitToken": "--dga-space-4"
+        }
+      }
     },
     "--components-card-radius": {
       "declared": "var(--spacing-4)",
@@ -508,9 +599,16 @@
       "kitToken": "--dga-space-12"
     },
     "--control-radio-error-icon-gap": {
-      "declared": "var(--spacing-12)",
-      "resolved": "48px",
-      "kitToken": "--dga-space-12"
+      "declared": "var(--spacing-4)",
+      "resolved": "16px",
+      "kitToken": "--dga-space-4",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-12)",
+          "resolved": "48px",
+          "kitToken": "--dga-space-12"
+        }
+      }
     },
     "--control-switch-description-padding": {
       "declared": "var(--spacing-16)",
@@ -518,14 +616,33 @@
       "kitToken": "--dga-space-16"
     },
     "--control-switch-error-icon-gap": {
-      "declared": "var(--spacing-1)",
-      "resolved": "4px",
-      "kitToken": "--dga-space-1"
-    },
-    "--control-title-error-gap": {
       "declared": "var(--spacing-2)",
       "resolved": "8px",
-      "kitToken": "--dga-space-2"
+      "kitToken": "--dga-space-2",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-1)",
+          "resolved": "4px",
+          "kitToken": "--dga-space-1"
+        }
+      }
+    },
+    "--control-title-error-gap": {
+      "declared": "var(--spacing-4)",
+      "resolved": "16px",
+      "kitToken": "--dga-space-4",
+      "responsive": {
+        "tablet": {
+          "declared": "var(--spacing-3)",
+          "resolved": "12px",
+          "kitToken": "--dga-space-3"
+        },
+        "mobile": {
+          "declared": "var(--spacing-2)",
+          "resolved": "8px",
+          "kitToken": "--dga-space-2"
+        }
+      }
     },
     "--control-vertical-gap": {
       "declared": "var(--spacing-1)",
@@ -1078,9 +1195,16 @@
       "kitToken": "--dga-color-tertiary-lavendar-50"
     },
     "--icon-text-gap": {
-      "declared": "var(--spacing-1)",
-      "resolved": "4px",
-      "kitToken": "--dga-space-1"
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-1)",
+          "resolved": "4px",
+          "kitToken": "--dga-space-1"
+        }
+      }
     },
     "--icon-warning": {
       "declared": "var(--colors-yellow-700)",
@@ -1203,14 +1327,28 @@
       "kitToken": "--dga-color-base-white"
     },
     "--link-links-group-gap": {
-      "declared": "var(--spacing-2)",
-      "resolved": "8px",
-      "kitToken": "--dga-space-2"
+      "declared": "var(--spacing-3)",
+      "resolved": "12px",
+      "kitToken": "--dga-space-3",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-2)",
+          "resolved": "8px",
+          "kitToken": "--dga-space-2"
+        }
+      }
     },
     "--link-md-gap": {
-      "declared": "var(--spacing-1)",
-      "resolved": "4px",
-      "kitToken": "--dga-space-1"
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-1)",
+          "resolved": "4px",
+          "kitToken": "--dga-space-1"
+        }
+      }
     },
     "--link-neutral": {
       "declared": "var(--colors-neutral-700)",
@@ -1348,24 +1486,52 @@
       "kitToken": "--dga-color-tertiary-lavendar-800"
     },
     "--model-content-bottom-padding": {
-      "declared": "var(--spacing-2)",
-      "resolved": "8px",
-      "kitToken": "--dga-space-2"
+      "declared": "var(--spacing-4)",
+      "resolved": "16px",
+      "kitToken": "--dga-space-4",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-2)",
+          "resolved": "8px",
+          "kitToken": "--dga-space-2"
+        }
+      }
     },
     "--model-gap": {
-      "declared": "var(--spacing-1)",
-      "resolved": "4px",
-      "kitToken": "--dga-space-1"
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-1)",
+          "resolved": "4px",
+          "kitToken": "--dga-space-1"
+        }
+      }
     },
     "--model-padding": {
-      "declared": "var(--spacing-4)",
-      "resolved": "16px",
-      "kitToken": "--dga-space-4"
+      "declared": "var(--spacing-6)",
+      "resolved": "24px",
+      "kitToken": "--dga-space-6",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-4)",
+          "resolved": "16px",
+          "kitToken": "--dga-space-4"
+        }
+      }
     },
     "--notification-alert-h-padding": {
-      "declared": "var(--spacing-4)",
-      "resolved": "16px",
-      "kitToken": "--dga-space-4"
+      "declared": "var(--spacing-6)",
+      "resolved": "24px",
+      "kitToken": "--dga-space-6",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-4)",
+          "resolved": "16px",
+          "kitToken": "--dga-space-4"
+        }
+      }
     },
     "--notification-alert-v-padding": {
       "declared": "var(--spacing-2)",
@@ -1463,19 +1629,40 @@
       "kitToken": null
     },
     "--notification-gap": {
-      "declared": "var(--spacing-2)",
-      "resolved": "8px",
-      "kitToken": "--dga-space-2"
-    },
-    "--notification-h-padding": {
       "declared": "var(--spacing-4)",
       "resolved": "16px",
-      "kitToken": "--dga-space-4"
+      "kitToken": "--dga-space-4",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-2)",
+          "resolved": "8px",
+          "kitToken": "--dga-space-2"
+        }
+      }
+    },
+    "--notification-h-padding": {
+      "declared": "var(--spacing-6)",
+      "resolved": "24px",
+      "kitToken": "--dga-space-6",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-4)",
+          "resolved": "16px",
+          "kitToken": "--dga-space-4"
+        }
+      }
     },
     "--notification-padding": {
-      "declared": "var(--spacing-3)",
-      "resolved": "12px",
-      "kitToken": "--dga-space-3"
+      "declared": "var(--spacing-4)",
+      "resolved": "16px",
+      "kitToken": "--dga-space-4",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-3)",
+          "resolved": "12px",
+          "kitToken": "--dga-space-3"
+        }
+      }
     },
     "--notification-text-brand": {
       "declared": "var(--text-primary)",
@@ -1503,9 +1690,16 @@
       "kitToken": "--dga-text-warning"
     },
     "--notification-toast-desktop-h-padding": {
-      "declared": "var(--spacing-4)",
-      "resolved": "16px",
-      "kitToken": "--dga-space-4"
+      "declared": "var(--spacing-6)",
+      "resolved": "24px",
+      "kitToken": "--dga-space-6",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-4)",
+          "resolved": "16px",
+          "kitToken": "--dga-space-4"
+        }
+      }
     },
     "--notification-toast-mobile-h-padding": {
       "declared": "var(--spacing-4)",
@@ -1513,9 +1707,16 @@
       "kitToken": "--dga-space-4"
     },
     "--notification-toast-v-padding": {
-      "declared": "var(--spacing-3)",
-      "resolved": "12px",
-      "kitToken": "--dga-space-3"
+      "declared": "var(--spacing-4)",
+      "resolved": "16px",
+      "kitToken": "--dga-space-4",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-3)",
+          "resolved": "12px",
+          "kitToken": "--dga-space-3"
+        }
+      }
     },
     "--pagination-item-lg-padding": {
       "declared": "var(--spacing-2)",
@@ -1533,19 +1734,40 @@
       "kitToken": "--dga-space-1"
     },
     "--pagination-items-padding": {
-      "declared": "var(--spacing-1)",
-      "resolved": "4px",
-      "kitToken": "--dga-space-1"
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-1)",
+          "resolved": "4px",
+          "kitToken": "--dga-space-1"
+        }
+      }
     },
     "--progressindicator-progress-indicator-gap": {
-      "declared": "var(--spacing-4)",
-      "resolved": "16px",
-      "kitToken": "--dga-space-4"
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-4)",
+          "resolved": "16px",
+          "kitToken": "--dga-space-4"
+        }
+      }
     },
     "--progressindicator-progress-text-content-side-padding": {
-      "declared": "var(--spacing-3)",
-      "resolved": "12px",
-      "kitToken": "--dga-space-3"
+      "declared": "var(--spacing-4)",
+      "resolved": "16px",
+      "kitToken": "--dga-space-4",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-3)",
+          "resolved": "12px",
+          "kitToken": "--dga-space-3"
+        }
+      }
     },
     "--stepper-button-background": {
       "declared": "var(--colors-base-white)",
@@ -1628,39 +1850,88 @@
       "kitToken": "--dga-space-1"
     },
     "--tab-horizontal-tab-md-button-h-padding": {
-      "declared": "var(--spacing-3)",
-      "resolved": "12px",
-      "kitToken": "--dga-space-3"
+      "declared": "var(--spacing-4)",
+      "resolved": "16px",
+      "kitToken": "--dga-space-4",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-3)",
+          "resolved": "12px",
+          "kitToken": "--dga-space-3"
+        }
+      }
     },
     "--tab-horizontal-tab-md-button-v-padding": {
-      "declared": "var(--spacing-2)",
-      "resolved": "8px",
-      "kitToken": "--dga-space-2"
+      "declared": "var(--spacing-3)",
+      "resolved": "12px",
+      "kitToken": "--dga-space-3",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-2)",
+          "resolved": "8px",
+          "kitToken": "--dga-space-2"
+        }
+      }
     },
     "--tab-horizontal-tab-sm-button-h-padding": {
-      "declared": "var(--spacing-2)",
-      "resolved": "8px",
-      "kitToken": "--dga-space-2"
+      "declared": "var(--spacing-3)",
+      "resolved": "12px",
+      "kitToken": "--dga-space-3",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-2)",
+          "resolved": "8px",
+          "kitToken": "--dga-space-2"
+        }
+      }
     },
     "--tab-horizontal-tab-sm-button-v-padding": {
-      "declared": "var(--spacing-1)",
-      "resolved": "4px",
-      "kitToken": "--dga-space-1"
-    },
-    "--tab-vertical-tab-md-button-h-padding": {
       "declared": "var(--spacing-2)",
       "resolved": "8px",
-      "kitToken": "--dga-space-2"
+      "kitToken": "--dga-space-2",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-1)",
+          "resolved": "4px",
+          "kitToken": "--dga-space-1"
+        }
+      }
+    },
+    "--tab-vertical-tab-md-button-h-padding": {
+      "declared": "var(--spacing-3)",
+      "resolved": "12px",
+      "kitToken": "--dga-space-3",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-2)",
+          "resolved": "8px",
+          "kitToken": "--dga-space-2"
+        }
+      }
     },
     "--tab-vertical-tab-md-button-v-padding": {
-      "declared": "var(--spacing-1)",
-      "resolved": "4px",
-      "kitToken": "--dga-space-1"
+      "declared": "var(--spacing-1-5)",
+      "resolved": "6px",
+      "kitToken": "--dga-space-1-5",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-1)",
+          "resolved": "4px",
+          "kitToken": "--dga-space-1"
+        }
+      }
     },
     "--tab-vertical-tab-sm-button-h-padding": {
-      "declared": "var(--spacing-1)",
-      "resolved": "4px",
-      "kitToken": "--dga-space-1"
+      "declared": "var(--spacing-1-5)",
+      "resolved": "6px",
+      "kitToken": "--dga-space-1-5",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-1)",
+          "resolved": "4px",
+          "kitToken": "--dga-space-1"
+        }
+      }
     },
     "--tab-vertical-tab-sm-button-v-padding": {
       "declared": "var(--spacing-0-5)",
@@ -1698,19 +1969,40 @@
       "kitToken": "--dga-color-base-black"
     },
     "--table-cell-gap": {
-      "declared": "var(--spacing-1)",
-      "resolved": "4px",
-      "kitToken": "--dga-space-1"
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-1)",
+          "resolved": "4px",
+          "kitToken": "--dga-space-1"
+        }
+      }
     },
     "--table-cell-h-padding": {
-      "declared": "var(--spacing-3)",
-      "resolved": "12px",
-      "kitToken": "--dga-space-3"
+      "declared": "var(--spacing-4)",
+      "resolved": "16px",
+      "kitToken": "--dga-space-4",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-3)",
+          "resolved": "12px",
+          "kitToken": "--dga-space-3"
+        }
+      }
     },
     "--table-cell-v-padding": {
-      "declared": "var(--spacing-1)",
-      "resolved": "4px",
-      "kitToken": "--dga-space-1"
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2",
+      "responsive": {
+        "mobile": {
+          "declared": "var(--spacing-1)",
+          "resolved": "4px",
+          "kitToken": "--dga-space-1"
+        }
+      }
     },
     "--table-text-body": {
       "declared": "var(--text-default)",

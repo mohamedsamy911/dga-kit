@@ -3,7 +3,7 @@
 :root {
   --dga-accordion-lg-header-gap: var(--dga-space-4);
   --dga-accordion-lg-header-padding: var(--dga-space-4);
-  --dga-accordion-md-header-gap: var(--dga-space-3);
+  --dga-accordion-md-header-gap: var(--dga-space-12);
   --dga-accordion-md-header-padding: var(--dga-space-3);
   --dga-accordion-sm-header-gap: var(--dga-space-2);
   --dga-accordion-sm-header-padding: var(--dga-space-2);
@@ -80,26 +80,26 @@
   --dga-button-menu-gap: var(--dga-space-2);
   --dga-button-menu-h-padding: var(--dga-space-2);
   --dga-button-menu-v-padding: var(--dga-space-2);
-  --dga-buttons-group-gap: var(--dga-space-1);
+  --dga-buttons-group-gap: var(--dga-space-2);
   --dga-buttons-lg-gap: var(--dga-space-1);
   --dga-buttons-lg-padding: var(--dga-space-4);
   --dga-buttons-md-gap: var(--dga-space-1);
   --dga-buttons-md-padding: var(--dga-space-3);
   --dga-buttons-sm-gap: var(--dga-space-1);
   --dga-buttons-sm-padding: var(--dga-space-2);
-  --dga-card-lg-gap: var(--dga-space-4);
-  --dga-card-lg-padding: var(--dga-space-4);
-  --dga-card-md-gap: var(--dga-space-3);
-  --dga-card-md-padding: var(--dga-space-4);
-  --dga-card-sm-gap: var(--dga-space-3);
-  --dga-card-sm-padding: var(--dga-space-4);
+  --dga-card-lg-gap: var(--dga-space-6);
+  --dga-card-lg-padding: var(--dga-space-8);
+  --dga-card-md-gap: var(--dga-space-6);
+  --dga-card-md-padding: var(--dga-space-8);
+  --dga-card-sm-gap: var(--dga-space-6);
+  --dga-card-sm-padding: var(--dga-space-8);
   --dga-components-card-radius: var(--dga-space-4);
   --dga-control-disabled: var(--dga-color-neutral-400);
   --dga-control-radio-description-padding: var(--dga-space-12);
-  --dga-control-radio-error-icon-gap: var(--dga-space-12);
+  --dga-control-radio-error-icon-gap: var(--dga-space-4);
   --dga-control-switch-description-padding: var(--dga-space-16);
-  --dga-control-switch-error-icon-gap: var(--dga-space-1);
-  --dga-control-title-error-gap: var(--dga-space-2);
+  --dga-control-switch-error-icon-gap: var(--dga-space-2);
+  --dga-control-title-error-gap: var(--dga-space-4);
   --dga-control-vertical-gap: var(--dga-space-1);
   --dga-controls-control-border: var(--dga-color-neutral-500);
   --dga-controls-control-icon-disabled: var(--dga-color-base-white);
@@ -210,7 +210,7 @@
   --dga-icon-success-light: #ecfdf3;
   --dga-icon-tertiary: #80519f;
   --dga-icon-tertiary-light: var(--dga-color-tertiary-lavendar-50);
-  --dga-icon-text-gap: var(--dga-space-1);
+  --dga-icon-text-gap: var(--dga-space-2);
   --dga-icon-warning: #b54707;
   --dga-icon-warning-light: #fffaeb;
   --dga-link-danger: #d92c20;
@@ -235,8 +235,8 @@
   --dga-link-icon-primary-pressed: var(--dga-color-primary-sa-flag-300);
   --dga-link-icon-primary-visited: var(--dga-color-primary-sa-flag-800);
   --dga-link-link-oncolor-focused: var(--dga-color-base-white);
-  --dga-link-links-group-gap: var(--dga-space-2);
-  --dga-link-md-gap: var(--dga-space-1);
+  --dga-link-links-group-gap: var(--dga-space-3);
+  --dga-link-md-gap: var(--dga-space-2);
   --dga-link-neutral: var(--dga-color-neutral-700);
   --dga-link-neutral-focused: var(--dga-color-neutral-700);
   --dga-link-neutral-hovered: var(--dga-color-neutral-500);
@@ -264,10 +264,10 @@
   --dga-link-tertiary-hovered: var(--dga-color-tertiary-lavendar-400);
   --dga-link-tertiary-pressed: var(--dga-color-tertiary-lavendar-300);
   --dga-link-tertiary-visited: var(--dga-color-tertiary-lavendar-800);
-  --dga-model-content-bottom-padding: var(--dga-space-2);
-  --dga-model-gap: var(--dga-space-1);
-  --dga-model-padding: var(--dga-space-4);
-  --dga-notification-alert-h-padding: var(--dga-space-4);
+  --dga-model-content-bottom-padding: var(--dga-space-4);
+  --dga-model-gap: var(--dga-space-2);
+  --dga-model-padding: var(--dga-space-6);
+  --dga-notification-alert-h-padding: var(--dga-space-6);
   --dga-notification-alert-v-padding: var(--dga-space-2);
   --dga-notification-background-brand-25: var(--dga-background-primary-25);
   --dga-notification-background-brand-50: var(--dga-color-primary-sa-flag-50);
@@ -287,23 +287,23 @@
   --dga-notification-background-warning-25: var(--dga-background-warning-25);
   --dga-notification-background-warning-50: var(--dga-background-warning-50);
   --dga-notification-background-warning-light: #fffaeb;
-  --dga-notification-gap: var(--dga-space-2);
-  --dga-notification-h-padding: var(--dga-space-4);
-  --dga-notification-padding: var(--dga-space-3);
+  --dga-notification-gap: var(--dga-space-4);
+  --dga-notification-h-padding: var(--dga-space-6);
+  --dga-notification-padding: var(--dga-space-4);
   --dga-notification-text-brand: var(--dga-text-primary);
   --dga-notification-text-error: var(--dga-text-error);
   --dga-notification-text-info: var(--dga-text-info);
   --dga-notification-text-success: var(--dga-text-success);
   --dga-notification-text-warning: var(--dga-text-warning);
-  --dga-notification-toast-desktop-h-padding: var(--dga-space-4);
+  --dga-notification-toast-desktop-h-padding: var(--dga-space-6);
   --dga-notification-toast-mobile-h-padding: var(--dga-space-4);
-  --dga-notification-toast-v-padding: var(--dga-space-3);
+  --dga-notification-toast-v-padding: var(--dga-space-4);
   --dga-pagination-item-lg-padding: var(--dga-space-2);
   --dga-pagination-item-md-padding: var(--dga-space-1-5);
   --dga-pagination-item-sm-padding: var(--dga-space-1);
-  --dga-pagination-items-padding: var(--dga-space-1);
-  --dga-progressindicator-progress-indicator-gap: var(--dga-space-4);
-  --dga-progressindicator-progress-text-content-side-padding: var(--dga-space-3);
+  --dga-pagination-items-padding: var(--dga-space-2);
+  --dga-progressindicator-progress-indicator-gap: var(--dga-space-2);
+  --dga-progressindicator-progress-text-content-side-padding: var(--dga-space-4);
   --dga-stepper-button-background: var(--dga-color-base-white);
   --dga-stepper-button-completed: #1b8354;
   --dga-stepper-button-completed-hovered: var(--dga-color-primary-sa-flag-700);
@@ -320,13 +320,13 @@
   --dga-stepper-text-secondary: var(--dga-text-primary-paragraph);
   --dga-stepper-text-tertiary: var(--dga-text-secondary-paragraph);
   --dga-tab-button-gap: var(--dga-space-1);
-  --dga-tab-horizontal-tab-md-button-h-padding: var(--dga-space-3);
-  --dga-tab-horizontal-tab-md-button-v-padding: var(--dga-space-2);
-  --dga-tab-horizontal-tab-sm-button-h-padding: var(--dga-space-2);
-  --dga-tab-horizontal-tab-sm-button-v-padding: var(--dga-space-1);
-  --dga-tab-vertical-tab-md-button-h-padding: var(--dga-space-2);
-  --dga-tab-vertical-tab-md-button-v-padding: var(--dga-space-1);
-  --dga-tab-vertical-tab-sm-button-h-padding: var(--dga-space-1);
+  --dga-tab-horizontal-tab-md-button-h-padding: var(--dga-space-4);
+  --dga-tab-horizontal-tab-md-button-v-padding: var(--dga-space-3);
+  --dga-tab-horizontal-tab-sm-button-h-padding: var(--dga-space-3);
+  --dga-tab-horizontal-tab-sm-button-v-padding: var(--dga-space-2);
+  --dga-tab-vertical-tab-md-button-h-padding: var(--dga-space-3);
+  --dga-tab-vertical-tab-md-button-v-padding: var(--dga-space-1-5);
+  --dga-tab-vertical-tab-sm-button-h-padding: var(--dga-space-1-5);
   --dga-tab-vertical-tab-sm-button-v-padding: var(--dga-space-0-5);
   --dga-table-background-disabled: var(--dga-background-disabled);
   --dga-table-background-header: var(--dga-color-neutral-100);
@@ -334,9 +334,9 @@
   --dga-table-background-row: var(--dga-color-neutral-50);
   --dga-table-cell-border: var(--dga-color-neutral-300);
   --dga-table-cell-border-inverse: var(--dga-color-base-black);
-  --dga-table-cell-gap: var(--dga-space-1);
-  --dga-table-cell-h-padding: var(--dga-space-3);
-  --dga-table-cell-v-padding: var(--dga-space-1);
+  --dga-table-cell-gap: var(--dga-space-2);
+  --dga-table-cell-h-padding: var(--dga-space-4);
+  --dga-table-cell-v-padding: var(--dga-space-2);
   --dga-table-text-body: var(--dga-text-default);
   --dga-table-text-head: var(--dga-color-neutral-700);
   --dga-tag-background-error: #d92c20;
@@ -380,4 +380,57 @@
   --dga-tooltip-text-heading-light: var(--dga-text-display);
   --dga-tooltip-text-paragraph-dark: var(--dga-color-neutral-100);
   --dga-tooltip-text-paragraph-light: var(--dga-text-primary-paragraph);
+}
+/* tablet: DGA's per-mode value. Desktop is the :root above. */
+@media (min-width: 768px) and (max-width: 1024px) {
+  :root {
+    --dga-accordion-md-header-gap: var(--dga-space-3);
+    --dga-card-lg-padding: var(--dga-space-6);
+    --dga-card-md-gap: var(--dga-space-5);
+    --dga-card-md-padding: var(--dga-space-6);
+    --dga-card-sm-gap: var(--dga-space-5);
+    --dga-card-sm-padding: var(--dga-space-6);
+    --dga-control-title-error-gap: var(--dga-space-3);
+  }
+}
+/* mobile: DGA's per-mode value. Desktop is the :root above. */
+@media (max-width: 767px) {
+  :root {
+    --dga-accordion-md-header-gap: var(--dga-space-3);
+    --dga-buttons-group-gap: var(--dga-space-1);
+    --dga-card-lg-gap: var(--dga-space-4);
+    --dga-card-lg-padding: var(--dga-space-4);
+    --dga-card-md-gap: var(--dga-space-3);
+    --dga-card-md-padding: var(--dga-space-4);
+    --dga-card-sm-gap: var(--dga-space-3);
+    --dga-card-sm-padding: var(--dga-space-4);
+    --dga-control-radio-error-icon-gap: var(--dga-space-12);
+    --dga-control-switch-error-icon-gap: var(--dga-space-1);
+    --dga-control-title-error-gap: var(--dga-space-2);
+    --dga-icon-text-gap: var(--dga-space-1);
+    --dga-link-links-group-gap: var(--dga-space-2);
+    --dga-link-md-gap: var(--dga-space-1);
+    --dga-model-content-bottom-padding: var(--dga-space-2);
+    --dga-model-gap: var(--dga-space-1);
+    --dga-model-padding: var(--dga-space-4);
+    --dga-notification-alert-h-padding: var(--dga-space-4);
+    --dga-notification-gap: var(--dga-space-2);
+    --dga-notification-h-padding: var(--dga-space-4);
+    --dga-notification-padding: var(--dga-space-3);
+    --dga-notification-toast-desktop-h-padding: var(--dga-space-4);
+    --dga-notification-toast-v-padding: var(--dga-space-3);
+    --dga-pagination-items-padding: var(--dga-space-1);
+    --dga-progressindicator-progress-indicator-gap: var(--dga-space-4);
+    --dga-progressindicator-progress-text-content-side-padding: var(--dga-space-3);
+    --dga-tab-horizontal-tab-md-button-h-padding: var(--dga-space-3);
+    --dga-tab-horizontal-tab-md-button-v-padding: var(--dga-space-2);
+    --dga-tab-horizontal-tab-sm-button-h-padding: var(--dga-space-2);
+    --dga-tab-horizontal-tab-sm-button-v-padding: var(--dga-space-1);
+    --dga-tab-vertical-tab-md-button-h-padding: var(--dga-space-2);
+    --dga-tab-vertical-tab-md-button-v-padding: var(--dga-space-1);
+    --dga-tab-vertical-tab-sm-button-h-padding: var(--dga-space-1);
+    --dga-table-cell-gap: var(--dga-space-1);
+    --dga-table-cell-h-padding: var(--dga-space-3);
+    --dga-table-cell-v-padding: var(--dga-space-1);
+  }
 }

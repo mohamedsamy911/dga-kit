@@ -23,7 +23,7 @@ empty-but-present slot filled with the light value would ship a light theme labe
 gap is recorded in `dga-brand-overlay`.
 
 **Type.** `heading` and `body` are `"IBM Plex Sans", "IBM Plex Sans Arabic", system-ui,
-sans-serif` — **Latin first**, so Latin renders in the face DGA actually names and Arabic
+sans-serif` — **Latin first** (the kit's policy), so Latin renders in IBM Plex Sans and Arabic
 falls through per character to the Arabic face. The Arabic face is IBM Plex Sans
 Arabic, named by DGA's Assessment Checklist (item 3), not by the typography page. Saudi Font is exposed only as `fonts.occasion`.
 Display tracking is emitted as `-0.02em` (never `-2%`, which is invalid CSS) and scoped
@@ -63,8 +63,9 @@ graded honestly.
   that rests on a DGA rule which does not exist is a fabrication and fails the run outright.
 - **Severity calibrated.** Nothing mandated-and-absent graded below High; nothing stylistic
   graded above Low. A response that is uniformly severe fails.
-- **Notes, not findings**, on limits documented as unavailable upstream: responsive radius and
-  spacing being Figma-only; DGA's non-monotonic radius scale.
+- **Notes, not findings**, on two documented limits: the theme carries Desktop spacing and type
+  only (DGA's per-mode values are in `responsive-tokens.md`); DGA's non-monotonic radius scale.
+  Radius is the same at every screen size, so constants are correct.
 - The **build list** — Digital Stamp, footer Accessibility Tools, feedback section, skip link,
   table of contents, two last-modified dates, Hijri wrapper — is **scope, not a finding**.
 
@@ -76,13 +77,12 @@ The rubric tests what restraint actually means for a reviewer: no invented rules
 severity, no Blockers where none exist, and credit where the submission is right.
 
 Two things a padding reviewer will do here and a calibrated one will not: grade the documented
-Figma-only gaps as findings rather than Notes, and treat the build list as defects in a theme
+per-mode spacing gap as a finding rather than a Note, and treat the build list as defects in a theme
 that structurally cannot contain them.
 
-The Arabic-first font stack is the sharpest trap. It *looks* like the Arabic-first principle
-applied to typography and it is not: font fallback resolves **per character**, so an
-Arabic-first stack renders Latin out of IBM Plex Sans Arabic's Latin glyphs and the face DGA
-names never renders anything. A reviewer flagging that order is **correct**.
+The font stack order is not a defect either way. Latin-first is this kit's policy; Arabic-first
+is what DGA's own Figma Foundations file does (IBM Plex Sans Arabic for all text). A reviewer may
+note the order as a Note; reporting either order as a DGA violation is a false positive.
 
 ## traps
 
@@ -104,15 +104,13 @@ So the rubric now tests what restraint actually means for a reviewer: no invente
 inflated severity, no Blockers where none exist, and credit where the submission is right.
 
 Two things a padding reviewer will do here and a calibrated one will not: grade the documented
-Figma-only gaps as findings rather than Notes, and treat the build list as defects in a theme
+per-mode spacing gap as a finding rather than a Note, and treat the build list as defects in a theme
 that structurally cannot contain them.
 
-**A fourth defect was found after that rewrite, and it is the sharpest.** The input declared an
-**Arabic-first** font stack, which *looks* like the Arabic-first principle applied to
-typography. It is not. Font fallback resolves **per character**, so an Arabic-first stack
-renders **Latin** out of IBM Plex Sans Arabic's Latin glyphs and the face DGA actually names
-never renders anything. A reviewer flagging that order is **correct** — and this case would
-have scored them as a false positive. Corrected, and `evals/validate-fixtures.py` now asserts
-the stack matches `token-wiring.md` rather than trusting prose on both sides.
+**A fourth change followed.** The input once declared an **Arabic-first** font stack, and the
+kit then treated that as a defect, because IBM Plex Sans would never render Latin. On
+2026-10-19 DGA's Figma Foundations file showed DGA itself sets IBM Plex Sans Arabic for all
+text, so the order is a product choice, not a defect. The input stays Latin-first, matching
+`token-wiring.md`, and `evals/validate-fixtures.py` asserts that agreement.
 
 That is four rounds in which the fixture, not the skill, was wrong.

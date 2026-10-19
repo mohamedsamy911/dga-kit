@@ -26,6 +26,6 @@ changelog.
 
 ## Open at the next harvest
 
-- No open token disputes from the second extraction. Settled 2026-10-19: `neutral.500` and `neutral.950` differ
-  because DGA declares two names (`neutral` and `gray-neutral`); `info.50` reads blue (`#eff8ff`)
-  in the live build. When DGA changed `info.50` cannot be established.
+- `neutral.500` and `neutral.950`: DGA's CSS and DGA's Figma Foundations file differ by one unit
+  (CSS `#6c727e`/`#0c111b`, Figma `#6c737f`/`#0d121c`). The kit keeps the rendered CSS values.
+- `info.50` reads blue (`#eff8ff`) in the live build. When DGA changed it cannot be established.

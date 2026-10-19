@@ -30,16 +30,15 @@ reads from here rather than carrying its own copy of the rules.
 > `$meta.$reconciliation`.
 >
 > **Known gaps, stated so no answer implies coverage it lacks:** the Digital Transformation and
-> Digital Experience Maturity indicators (published outside design.dga.gov.sa); the responsive
-> radius/spacing values (PC 1.0 Figma variable collections only); the six mobile-only component
-> specs; the Assessment Criteria **checklist file** (the rubric page itself is captured — see
+> Digital Experience Maturity indicators (published outside design.dga.gov.sa); the six mobile-only
+> component specs; the Assessment Criteria **checklist file** (the rubric page itself is captured — see
 > `../dga-launch-gate/references/assessment-criteria.md`).
 >
 > **Dark theme: published, and unusable.** Not Figma-only, as this kit used to say. DGA ships
 > **402 dark declarations** in its public CSS — under `[data-theme=dark] :root`, a selector that
 > can never match. Carried in `assets/tokens.json` under `role.dark` for **audit only**, and
 > deliberately not generated into `tokens.css`. Never hand a caller these values as a working
-> dark theme: five `*-light` status surfaces have no dark tint anywhere, measuring **1.05:1**.
+> dark theme: five `*-light` status surfaces have no dark value in DGA's CSS, measuring **1.05:1**.
 >
 > **Version:** the published system is **4.0.0** per DGA's change log (read 2026-10-08; no release
 > date published). Token values were re-verified against the live stylesheet on 2026-10-08. See
@@ -68,6 +67,7 @@ it in and that it isn't there.
 | Arabic-first rules, tone, glossary, numerals, date and currency formats | `references/content.md` |
 | Entity logo lockups, co-branding, clear space, favicons | `references/brand.md` |
 | Mobile — mobile-only components and responsive rules | `references/mobile.md` |
+| Spacing and type values per Desktop / Tablet / Mobile, and DGA's media-query widths | `references/responsive-tokens.md` |
 | Contrast pairings that pass and fail | `references/CONTRAST-AUDIT.md` |
 | Machine-readable values | `assets/tokens.json` · `assets/tokens.css` · `assets/tailwind-preset.js` |
 | What was captured, from where, and when | `references/capture-log.md` · `dga-version.md` |

@@ -11,6 +11,45 @@ patch means corrections. Nothing here is a DGA release — see
 `skills/dga-design-system/dga-version.md` for the Platforms Code version this kit is pinned to
 (currently **4.0.0** per DGA's change log, read 2026-10-08; DGA publishes no release date).
 
+## 0.15.0 — 2026-10-19
+
+### Added — DGA's Figma Foundations variables
+
+DGA's Figma file *Foundations - Platforms Code* (published by DGA's `@sdga` profile, CC BY 4.0,
+last updated 2 Jul 2025) was read in full: 784 variables in 7 collections, through Figma's plugin
+API on the owner's copy. The export and a capture with every table are in `harvest/raw/`
+(`2026-10-19-figma-foundations.md`).
+
+- **New reference `responsive-tokens.md`**: the 39 spacing and 36 typography values that change
+  between Desktop, Tablet and Mobile (37 shrink on Mobile, 2 grow), the widths DGA's CSS uses for those modes (767/768/1025px),
+  and three out-of-pattern values reported as published. Mobile text drops to 8px for `text-xs`
+  and `text-2xs`: not a WCAG failure, flagged as kit policy.
+- **DGA's CSS has a block-order defect.** Its `min-width: 768px` block comes after the
+  `min-width: 1025px` one, so wide screens get nine tablet spacing values. Measured on DGA's site
+  at 1400px: `--card-lg-padding` 24px where Desktop is 32px.
+
+### Fixed
+
+- **Radius does not change by screen size.** Six places said DGA's radius "resolves differently
+  per breakpoint" and that constants were "wrong on two of three breakpoints". In DGA's Figma all
+  eight radius values are identical in every mode.
+- **`component-roles.css` carried DGA's Mobile spacing as constants.** The builder folded DGA's
+  three `@media` blocks into one map, so the last (mobile) block won: `--dga-card-lg-padding` was
+  16px everywhere. It now reads each block on its own and emits Desktop in `:root`, then
+  `max-width: 1024px` and `max-width: 767px` overrides for the 36 roles that change. A fixture
+  checks the overrides against the JSON and was break-tested.
+- **`neutral.500` / `neutral.950`, corrected again.** Earlier the same day the kit attributed the
+  independent extraction's `#6c737f` to the CSS name `--colors-gray-neutral-500`. DGA's Figma
+  `Neutral/500` is `#6c737f` under the same name. DGA's CSS and Figma differ by one unit there and
+  in 20 other primitives; the kit keeps the rendered CSS values, status `disputed`.
+- **Dark theme claims narrowed to DGA's CSS.** "No dark tint anywhere" was wrong. DGA's CSS gives
+  the five `*-light` surfaces no dark value, but DGA's Figma defines the same five names with dark
+  tints, and remaps `text-primary` and `text-error`; `tokens.json` now cites those. The CSS dark block differs from Figma's in 80 roles. Dark is still not
+  generated: the selector problem stands.
+- **The font-stack order is kit policy, not a DGA rule.** The kit called an Arabic-first stack
+  wrong. DGA's Figma sets IBM Plex Sans Arabic for all text, which is Arabic-first. Latin-first
+  stays the kit's choice; `token-wiring.md`, `brand.md`, eval case 12 and its fixture say so.
+
 ## 0.14.0 — 2026-10-19
 
 ### Added — DGA's RTL statements, enumerated

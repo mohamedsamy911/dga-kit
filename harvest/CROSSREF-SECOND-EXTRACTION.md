@@ -60,9 +60,11 @@ It also means their `VERIFY` note is now resolved — worth telling them.
 
 One unit apart in two channels.
 
-> **Settled, 2026-10-19.** Both are DGA values, for two different names: `--colors-neutral-500`
-> is `#6c727e` (the kit's) and `--colors-gray-neutral-500` is `#6c737f`, in a generic grey ramp the
-> kit excludes. Their read matches the second name. Evidence: `harvest/raw/2026-10-19-token-recheck.md`.
+> **Explained, 2026-10-19 (corrected the same day).** DGA's Figma Foundations file gives
+> `Neutral/500` as `#6c737f`, exactly their read; DGA's CSS `--colors-neutral-500` is `#6c727e`. The
+> two DGA sources differ by one unit here and in 21 other primitives. A first note that day
+> attributed their value to the CSS name `--colors-gray-neutral-500` (which also holds `#6c737f`);
+> the Figma file is the more direct match. Evidence: `harvest/raw/2026-10-19-figma-foundations.md`.
 
 *Before the settlement (historical):* weak evidence for ours: the value appears twice in our extraction, as the `neutral.500`
 primitive *and* as the `text.secondary-paragraph` role, from two separate CSS custom properties
@@ -75,8 +77,8 @@ gold `text.secondary`. The recommendation does not move; only the fourth signifi
 
 ### 3 · `neutral.950` / their `gray.950`
 
-Ours `#0c111b`, theirs `#0d121c`. Same one-unit pattern. **Settled, 2026-10-19:**
-`--colors-neutral-950` is `#0c111b`, `--colors-gray-neutral-950` is `#0d121c`. No contrast
+Ours `#0c111b`, theirs `#0d121c`. Same one-unit pattern. **Explained, 2026-10-19:** DGA's Figma
+`Neutral/950` is `#0d121c`; its CSS `--colors-neutral-950` is `#0c111b`. No contrast
 consequence — nothing in DGA pairs text against it.
 
 ## Where their read fills a gap in ours
@@ -94,7 +96,7 @@ mislabelled role, it is the **primary step of a brand palette**, designated for 
 
 ## Actions
 
-- [x] Settle `neutral.500` and `neutral.950` — done 2026-10-19, two DGA names (see above)
+- [x] Explain `neutral.500` and `neutral.950` — DGA's CSS and Figma differ by one unit (see above)
 - [x] Confirm `info.50` is now blue — `#eff8ff` in the live build on 2026-10-19
 - [ ] Tell them their `info.50` `VERIFY` note is resolved
 - [ ] Record `gold 600` and `lavender 500` as **page-labelled palette steps**, not just semantic roles

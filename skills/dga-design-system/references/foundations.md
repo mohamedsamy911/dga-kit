@@ -291,7 +291,7 @@ spacing and radius scales. Never reference these directly in component code.
 | Collection | Structure |
 |---|---|
 | **Theme** | Per-component colour choices, each with **Light and Dark variants** |
-| **Radius** | Per-component, with **Desktop / Tablet / Mobile** variants |
+| **Radius** | Per-component, with **Desktop / Tablet / Mobile** variants — in DGA's Figma file all three hold the same values |
 | **Spacing & width** | Per-component, with **Desktop / Tablet / Mobile** variants |
 
 Two consequences worth planning around:
@@ -313,11 +313,12 @@ Two consequences worth planning around:
    > 🚩 **This kit does not ship a dark stylesheet either, and that is deliberate.** Upstream the
    > theme is inert, and inert is safe. Emitting the corrected selector would activate it for any
    > consumer already using `data-theme="dark"` — Chakra v3 does, out of the box — turning a
-   > harmless upstream bug into a live accessibility regression in someone else's product. It
-   > also cannot be made safe from DGA's own values: `text.error` and `text.primary` have cited
-   > substitutes, but the five `*-light` status surfaces have **none** — every dark variant DGA
-   > publishes for them, under `notification-`, `tag-` and `featuredicons-`, still resolves to the
-   > same near-white value. Inventing a dark tint would break cite-or-omit.
+   > harmless upstream bug into a live accessibility regression in someone else's product. And
+   > DGA's CSS dark block is not safe as shipped: the five `*-light` status surfaces have **no dark
+   > value in it**, and it differs from DGA's own Figma dark theme in 80 roles (read 2026-10-19).
+   > Each hazard now has a cited substitute from DGA's Figma Foundations file, which defines dark
+   > values for `text.error`, `text.primary` and the same five `*-light` names. Choosing them is
+   > the entity's theme decision; see `tokens.json role.dark.$verify`.
 
    > ⚠️ **Enabling dark is not a free win.** Five `*-light` status surfaces are not remapped, so
    > white text lands on a near-white background at **1.05:1**; `text.error` (#b42318) is
@@ -325,11 +326,11 @@ Two consequences worth planning around:
    > large text only. Meanwhile `text.secondary` — the light theme's failure — *passes* at
    > **7.64:1**. Run `node ../assets/check-contrast.mjs --theme dark` and read
    > `tokens.json role.dark.$verify` before shipping dark mode.
-2. **Radius and spacing are responsive tokens, not fixed values.** The same semantic token
-   resolves differently on desktop, tablet and mobile. A React implementation that treats
-   `radius-md` as a constant will be wrong on two of three breakpoints. `TODO(harvest)` — the
-   per-breakpoint values are in the Figma variable collections, not exposed as CSS variables on
-   the site. Get them from the "PC 1.0 Foundations" Figma file.
+2. **Spacing and type change by screen size; radius does not.** In DGA's Figma Foundations file
+   (read 2026-10-19), 39 component spacing values and 36 typography values differ between Desktop,
+   Tablet and Mobile; every radius value is the same in all three. DGA's CSS ships the spacing ones
+   in media queries, with a block-order defect that gives wide screens nine tablet values. Values,
+   widths and the fix: `responsive-tokens.md`.
 
 ---
 

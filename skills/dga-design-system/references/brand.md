@@ -81,10 +81,11 @@ DGA's four stated reasons:
 > `../../dga-launch-gate/references/assessment-checklist.md`. Saudi Font stays restricted to
 > national occasions, headings only.
 
-> The **Latin-first stack order** matters and is this kit's guidance, not DGA's:
-> `"IBM Plex Sans", "IBM Plex Sans Arabic", system-ui, sans-serif`. Reversing it makes the Arabic
-> face render Latin from its own Latin glyphs, so the face DGA actually names never renders.
-> See `../../dga-ui-adapter/references/token-wiring.md`.
+> The **Latin-first stack order** is this kit's policy, not DGA's:
+> `"IBM Plex Sans", "IBM Plex Sans Arabic", system-ui, sans-serif`, so Latin renders in IBM Plex
+> Sans, the face the typography page names. DGA's Figma Foundations file does the opposite: it
+> sets IBM Plex Sans Arabic for all text (read 2026-10-19). Both are defensible; match design and
+> build. See `../../dga-ui-adapter/references/token-wiring.md`.
 
 ## Why unification is mandated
 
