@@ -1,8 +1,8 @@
 import type { Localized } from './i18n';
 
-export const PLATFORM_UPDATED = '2026-09-01T09:00:00+03:00';
-export const PAGE_UPDATED = '2026-09-01T09:00:00+03:00';
-export const HARVEST_DATE = '2026-08-27T09:00:00+03:00';
+export const PLATFORM_UPDATED = '2026-10-19T09:00:00+03:00';
+export const PAGE_UPDATED = '2026-10-19T09:00:00+03:00';
+export const HARVEST_DATE = '2026-10-19T09:00:00+03:00';
 export const DEMO_REFERENCE = 'WASL-2026-1042';
 export const DEMO_ERROR_REFERENCE = 'DEMO-ERROR';
 export const DEMO_DELAY = 650;

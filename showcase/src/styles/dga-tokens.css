@@ -136,6 +136,49 @@
   --dga-color-info-950: #102a56;
   --dga-color-base-white: #ffffff;
   --dga-color-base-black: #161616;
+  /* alpha */
+  --dga-color-alpha-black-0: #16161600;
+  --dga-color-alpha-black-10: #16161619;
+  --dga-color-alpha-black-20: #16161633;
+  --dga-color-alpha-black-30: #1616164c;
+  --dga-color-alpha-black-40: #16161666;
+  --dga-color-alpha-black-50: #1616167f;
+  --dga-color-alpha-black-60: #16161699;
+  --dga-color-alpha-black-70: #161616b2;
+  --dga-color-alpha-black-80: #161616cc;
+  --dga-color-alpha-black-90: #161616e5;
+  --dga-color-alpha-black-100: #161616;
+  --dga-color-alpha-white-0: #ffffff00;
+  --dga-color-alpha-white-10: #ffffff19;
+  --dga-color-alpha-white-20: #ffffff33;
+  --dga-color-alpha-white-30: #ffffff4c;
+  --dga-color-alpha-white-40: #ffffff66;
+  --dga-color-alpha-white-50: #ffffff7f;
+  --dga-color-alpha-white-60: #ffffff99;
+  --dga-color-alpha-white-70: #ffffffb2;
+  --dga-color-alpha-white-80: #ffffffcc;
+  --dga-color-alpha-white-90: #ffffffe5;
+  --dga-color-alpha-white-100: #ffffff;
+  --dga-color-alpha-green-10: #1b835419;
+  --dga-color-alpha-green-20: #1b835433;
+  --dga-color-alpha-green-30: #1b83544c;
+  --dga-color-alpha-green-40: #1b835466;
+  --dga-color-alpha-green-50: #1b83547f;
+  --dga-color-alpha-green-60: #1b835499;
+  --dga-color-alpha-green-70: #1b8354b2;
+  --dga-color-alpha-green-80: #1b8354cc;
+  --dga-color-alpha-green-90: #1b8354e5;
+  --dga-color-alpha-error-10: #d92c2019;
+  --dga-color-alpha-error-20: #d92c2033;
+  --dga-color-alpha-info-10: #156fee19;
+  --dga-color-alpha-info-20: #156fee33;
+  --dga-color-alpha-primary-10: #1b835419;
+  --dga-color-alpha-primary-20: #1b835433;
+  --dga-color-alpha-success-10: #06945419;
+  --dga-color-alpha-success-20: #06945433;
+  --dga-color-alpha-warning-10: #dc680319;
+  --dga-color-alpha-warning-20: #dc680333;
+  --dga-color-alpha-sa-flag-500-alpha-10: #25935f19;
 
   /* --- semantic roles (reference these, not the primitives) --- */
   /* text */
@@ -291,8 +334,8 @@
   --dga-shadow-2xl: 0px 24px 48px -12px rgba(16, 24, 40, .18);
   --dga-shadow-3xl: 0px 32px 64px -12px rgba(16, 24, 40, .14);
 
-  /* --- typography: IBM Plex Sans. Arabic face TODO(verify) with DGA --- */
-  --dga-font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  /* --- typography: IBM Plex Sans; Arabic from IBM Plex Sans Arabic (DGA checklist item 3). Latin-first: see token-wiring.md --- */
+  --dga-font-sans: "IBM Plex Sans", "IBM Plex Sans Arabic", system-ui, sans-serif;
   --dga-text-display-2xl-size: 72px;
   --dga-text-display-2xl-line: 90px;
   --dga-text-display-2xl-tracking: -0.02em;

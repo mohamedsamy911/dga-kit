@@ -16,7 +16,7 @@ for (const locale of ['ar', 'en']) {
         await expect(page.locator('main h1')).toHaveCount(1)
         await page.evaluate(() => document.fonts.ready)
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1), route).toBe(true)
-        const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze()
+        const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze()
         expect(result.violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.map(n => n.target) })), route).toEqual([])
       }
     })
@@ -29,7 +29,7 @@ for (const locale of ['ar', 'en']) {
     await page.getByRole('button', { name: locale === 'ar' ? 'تكبير حجم الخط' : 'Increase text size', exact: true }).click()
     expect(await page.locator('html').evaluate(el => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThan(before)
     await page.getByRole('button', { name: locale === 'ar' ? 'تباين عالٍ' : 'High contrast', exact: true }).click()
-    const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze()
+    const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze()
     expect(result.violations).toEqual([])
     const firstFooterControl = page.locator('footer').locator('button:enabled, a[href], input:enabled').first()
     await expect(firstFooterControl).toHaveJSProperty('tagName', 'BUTTON')

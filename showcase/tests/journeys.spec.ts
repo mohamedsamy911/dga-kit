@@ -24,7 +24,7 @@ for (const locale of ['ar', 'en']) {
     await page.getByRole('button', { name: t('مراجعة الطلب', 'Review request'), exact: true }).click()
     await expect(page.locator('.error-summary')).toBeFocused()
     await expect(page.locator('[aria-invalid="true"]')).toHaveCount(3)
-    const invalidScan = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze()
+    const invalidScan = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze()
     expect(invalidScan.violations).toEqual([])
     await page.locator('.error-summary').getByRole('link').nth(1).click()
     await expect(page.getByLabel(t('بريد إلكتروني تجريبي', 'Demo email'))).toBeFocused()

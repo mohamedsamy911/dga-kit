@@ -41,7 +41,7 @@ and reloads without server rewrite rules. If the repository name or hosting path
 update the Vite base, browser test base and prefix expectations, audit URL, documentation links,
 and workflow repository guard together. Re-run the production checks before deploying.
 
-The vendored token stylesheet is a pinned dga-kit 0.7.2 snapshot, not an automatic link to the
+The vendored token stylesheet is a pinned dga-kit 0.13.0 snapshot, not an automatic link to the
 root harvest. A token upgrade must update the copied generated output, source snapshot, hash
 guard, and evidence together after review; never edit a generated token to fix app styling.
 

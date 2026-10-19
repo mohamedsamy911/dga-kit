@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Accessibility, ArrowUpRight, Check, Contrast, Globe2, Info, Menu, Minus, Moon, Plus, Sun, X } from 'lucide-react';
+import { Accessibility, Check, Contrast, Globe2, Info, Menu, Minus, Moon, Plus, Sun, X } from 'lucide-react';
 import { PAGE_UPDATED, PLATFORM_UPDATED } from '../data';
 import { useI18n } from '../i18n';
-import { Brand } from './ui';
+import { Brand, ExternalMark, FlowArrow } from './ui';
 
 export function Header({ route, onLanguage }: { route: string; onLanguage: () => void }) {
   const { locale, t } = useI18n();
@@ -15,7 +15,7 @@ export function Header({ route, onLanguage }: { route: string; onLanguage: () =>
   ];
   return <header className="site-header">
     <a className="skip-link" href="#main-content" onClick={event => { event.preventDefault(); document.getElementById('main-content')?.focus(); document.getElementById('main-content')?.scrollIntoView(); }}>{t('تجاوز إلى المحتوى الرئيسي', 'Skip to main content')}</a>
-    <div className="demo-banner"><div className="container demo-banner-inner"><span><Info size={15} aria-hidden="true" />{t('منصة خيالية لعرض قدرات إضافة dga-kit — ليست خدمة حكومية', 'A fictional showcase of the dga-kit plugin — not a government service')}</span><a href="#/about">{t('تعرّف على التجربة', 'Explore the showcase')}<ArrowUpRight size={14} aria-hidden="true" /></a></div></div>
+    <div className="demo-banner"><div className="container demo-banner-inner"><span><Info size={15} aria-hidden="true" />{t('منصة خيالية لعرض قدرات إضافة dga-kit — ليست خدمة حكومية', 'A fictional showcase of the dga-kit plugin — not a government service')}</span><a href="#/about">{t('تعرّف على التجربة', 'Explore the showcase')}<FlowArrow /></a></div></div>
     <div className="container header-main">
       <a className="brand-link" href="#/" aria-label={t('وصل — الرئيسية', 'WASL — Home')} onClick={() => setMenuOpen(false)}><Brand /></a>
       <nav className={`main-nav ${menuOpen ? 'is-open' : ''}`} id="main-navigation" aria-label={t('التنقل الرئيسي', 'Main navigation')}>
@@ -55,7 +55,7 @@ export function Footer({ fontScale, theme, contrast, onFontScale, onTheme, onCon
     </div>
     <div className="footer-main"><div className="footer-brand"><Brand compact /><p>{t('تفاصيل مدروسة. وصول أسهل. نموذج مفتوح لتجربة الخدمات الرقمية، مبني بإضافة dga-kit.', 'Thoughtful details. Easier access. An open digital services showcase, built with the dga-kit plugin.')}</p><span className="footer-demo-label">{t('نموذج تجريبي غير رسمي', 'Unofficial demonstration')}</span></div>
       <div className="footer-links"><h2>{t('استكشف وصل', 'Explore WASL')}</h2><a href="#/services">{t('جميع الخدمات', 'All services')}</a><a href="#/track">{t('متابعة طلب تجريبي', 'Track a demo request')}</a><a href="#/about">{t('كيف بُنيت التجربة', 'How the showcase was built')}</a></div>
-      <div className="footer-links"><h2>{t('معلومات تهمّك', 'Good to know')}</h2><a href="#/accessibility">{t('إمكانية الوصول', 'Accessibility')}</a><a href="#/privacy">{t('الخصوصية والبيانات', 'Privacy and data')}</a><a href="https://github.com/mohamedsamy911/dga-kit">{t('المشروع على GitHub', 'Project on GitHub')}<ArrowUpRight size={15} aria-hidden="true" /></a></div>
+      <div className="footer-links"><h2>{t('معلومات تهمّك', 'Good to know')}</h2><a href="#/accessibility">{t('إمكانية الوصول', 'Accessibility')}</a><a href="#/privacy">{t('الخصوصية والبيانات', 'Privacy and data')}</a><a href="https://github.com/mohamedsamy911/dga-kit">{t('المشروع على GitHub', 'Project on GitHub')}<ExternalMark /></a><a href="https://github.com/mohamedsamy911/dga-kit/issues">{t('الإبلاغ عن مشكلة في النموذج', 'Report a showcase issue')}<ExternalMark /></a></div>
     </div>
     <div className="footer-bottom"><p>{t('وصل © 2026 · صُنع لعرض ما تصنعه التفاصيل.', 'WASL © 2026 · A showcase of the details that matter.')}</p><div className="updated-dates"><span>{t('آخر تحديث للصفحة:', 'Page updated:')} <time dateTime={PAGE_UPDATED}>{date(PAGE_UPDATED)}</time></span><span>{t('آخر تحديث للمنصة:', 'Platform updated:')} <time dateTime={PLATFORM_UPDATED}>{date(PLATFORM_UPDATED)}</time></span></div></div>
   </div></footer>;

@@ -45,7 +45,8 @@
   --radius-lg: var(--dga-radius-xl);
   --radius-pill: var(--dga-radius-full);
   --shadow-card: var(--dga-shadow-xl);
-  --font-body: 'IBM Plex Sans', 'IBM Plex Sans Arabic', system-ui, sans-serif;
+  /* dga-kit 0.13.0: Latin-first in both directions; the Arabic face is named by DGA's checklist item 3. */
+  --font-body: var(--dga-font-sans);
   --font-arabic: 'IBM Plex Sans Arabic', 'IBM Plex Sans', system-ui, sans-serif;
   --page-max: 1280px;
 }

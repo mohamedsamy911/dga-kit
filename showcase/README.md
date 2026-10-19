@@ -1,6 +1,6 @@
 # وصل · Wasl
 
-An Arabic-first React showcase built with **dga-kit 0.7.2** and its **dga-frontend-dev** agent. A fictional digital-services portal that demonstrates the kit through usable screens, not a static component gallery.
+An Arabic-first React showcase built with **dga-kit 0.7.2** and its **dga-frontend-dev** agent, and brought in line with **dga-kit 0.13.0** on 2026-10-19. A fictional digital-services portal that demonstrates the kit through usable screens, not a static component gallery.
 
 **This is an unofficial demo. It is not affiliated with, endorsed by, or certified by the Saudi Digital Government Authority. It is not a government service or evidence of compliance.** All services, fees, processing times, and requests are fictional. Do not enter real personal information.
 
@@ -86,4 +86,4 @@ Run the checks from `showcase/`. The browser suite starts its own production pre
 - No fabricated Digital Stamp, registration number, government emblem, or official identity.
 - Dark and high-contrast modes are project-authored settings; they do **not** enable DGA's published, unusable dark theme.
 - Production use needs an entity-specific design review, privacy/security review, backend, appropriate registration/integrations, and manual assistive-technology testing.
-- Kit coverage is a dated harvest: **50 component specifications, all 19 templates, and 303 consumable token values, as of 2026-08-27**. It is not a claim that this app implements every component or that all live DGA material has been verified today.
+- Kit coverage is a dated harvest: **50 component specifications, all 21 routed templates, and 345 carried token values, as of 2026-10-19** (dga-kit 0.13.0). It is not a claim that this app implements every component or that all live DGA material has been verified today.

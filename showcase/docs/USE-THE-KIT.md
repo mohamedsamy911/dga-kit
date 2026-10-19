@@ -18,6 +18,9 @@ The showcase deliberately does not invoke every skill unnecessarily. `dga-react`
 
 ## Installation verified on the development machine
 
+This is the original 0.7.2 record. The showcase was updated against dga-kit 0.13.0 on 2026-10-19 from the repository itself; see `DESIGN-DECISIONS.md`.
+
+
 On 2026-08-31, `codex plugin list --json` reported:
 
 ```json

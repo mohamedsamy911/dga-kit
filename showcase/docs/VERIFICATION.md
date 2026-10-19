@@ -2,6 +2,23 @@
 
 Verified locally through 2026-09-01, Windows, Node.js 22.17.1 and Playwright Chromium. This is an engineering check of a fictional showcase, not DGA certification or a full WCAG conformance claim.
 
+## Kit 0.13.0 update — 2026-10-19
+
+Windows, Node.js 22.17.1, Playwright Chromium, production build under `/dga-kit/`:
+
+- `npm run build` and `npm run check:theme` pass (12 source files, 85 CSS references; the token
+  hash is the 0.13.0 output).
+- **38 Playwright tests pass.** axe scans now include `wcag22aa`. Ten new checks in
+  `tests/kit-guidance.spec.ts` (both languages) cover checklist items 7, 8 and 41, the external-link
+  icon (a Lucide stand-in for DGA's "Link Square" — a documented deviation), and the footer link
+  for reporting showcase issues. Each was break-tested: with its guidance reverted, all ten fail.
+- WCAG 2.2 criteria not covered by axe, reviewed by hand: no sticky header or footer can cover
+  focus (2.4.11); no drag interactions (2.5.7); targets stay at 44px or more (2.5.8); the demo offers no task help mechanism, so 3.2.6 has
+  nothing to keep consistent; editing a request keeps what was entered (3.3.7);
+  there is no sign-in (3.3.8). Not a conformance claim.
+
+The record below is the original 0.7.2 build.
+
 ## Build and theme
 
 - Clean dependency install and production TypeScript/Vite build completed in the delivered project.

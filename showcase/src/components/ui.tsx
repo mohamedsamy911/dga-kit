@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, Building2, CalendarDays, BriefcaseBusiness, Sparkles, HeartHandshake, FileCheck2, Clock3, CircleCheck, Search, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, SquareArrowOutUpRight, Building2, CalendarDays, BriefcaseBusiness, Sparkles, HeartHandshake, FileCheck2, Clock3, CircleCheck, Search, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useI18n } from '../i18n';
 import { categories, type Category, type Service } from '../data';
@@ -7,6 +7,12 @@ export function FlowArrow({ back = false }: { back?: boolean }) {
   const { locale } = useI18n();
   const Icon = (locale === 'ar') !== back ? ArrowLeft : ArrowRight;
   return <Icon size={20} aria-hidden="true" />;
+}
+
+// Checklist items 14/29 ask for an external-link icon ("Link Square"); this is Lucide's nearest match.
+export function ExternalMark() {
+  const { t } = useI18n();
+  return <><SquareArrowOutUpRight className="external-mark" size={15} aria-hidden="true" /><span className="sr-only">{t(' (رابط خارجي)', ' (external link)')}</span></>;
 }
 
 const serviceIcons = { building: Building2, calendar: CalendarDays, briefcase: BriefcaseBusiness, sparkles: Sparkles, heart: HeartHandshake, file: FileCheck2 };

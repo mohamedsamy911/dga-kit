@@ -7,8 +7,8 @@ import assert from 'node:assert/strict';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const generated = 'src/styles/dga-tokens.css';
 const theme = 'src/styles/theme.css';
-// dga-kit 0.7.2; original generated content, normalized only for checkout line endings.
-const tokenHash = 'ce1463638dc1f6be2b278360aad5f0109d34929a0d3d35266bf3a679bf5973a3';
+// dga-kit 0.13.0; original generated content, normalized only for checkout line endings.
+const tokenHash = '74e4d5ab18b18a0a11f4e3f1a5eda8ee42f6e332acecd3f4c0d2d2d754ae6429';
 
 function findings(source, file) {
   const clean = source.replace(/\/\*[\s\S]*?\*\//g, '');

@@ -27,7 +27,7 @@ for (const locale of ['ar', 'en']) {
         await expect(page.locator('main h1')).toHaveCount(1)
         await page.evaluate(() => document.fonts.ready)
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1), route).toBe(true)
-        const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze()
+        const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze()
         expect(result.violations.map(violation => ({ id: violation.id, impact: violation.impact, nodes: violation.nodes.map(node => node.target) })), route).toEqual([])
       }
     })

@@ -71,6 +71,6 @@ export function App() {
 
 function NotFound() {
   const { t } = useI18n();
-  return <div className="container not-found"><span className="icon-tile large"><Search size={32} aria-hidden="true" /></span><span className="eyebrow">404</span><h1>{t('عذرًا، لم نجد هذه الصفحة.', 'Sorry, we couldn’t find that page.')}</h1><p>{t('ربما تغيّر الرابط. يمكنك العودة إلى الرئيسية واستكشاف الخدمات.', 'The link may have changed. Return home to explore the available services.')}</p><a className="button primary" href="#/">{t('العودة إلى الرئيسية', 'Back to the homepage')}<FlowArrow /></a></div>;
+  return <div className="container not-found"><span className="icon-tile large"><Search size={32} aria-hidden="true" /></span><span className="eyebrow">404</span><h1>{t('عذرًا! لم نستطع إيجاد الصفحة التي تبحث عنها.', 'Sorry! We can’t find the page you’re looking for.')}</h1><p>{t('ربما تغيّر الرابط. يمكنك العودة إلى الرئيسية واستكشاف الخدمات.', 'The link may have changed. Return home to explore the available services.')}</p><a className="button primary" href="#/">{t('العودة إلى الصفحة الرئيسية', 'Back to the homepage')}<FlowArrow /></a></div>;
 }
 
