@@ -35,6 +35,18 @@ hit was checked on the rendered page: `harvest/raw/2026-10-19-rtl-statements.md`
 
 Skills still cite pages, never a total: the list holds for one DGA build.
 
+### Verified — DGA's numerals, and three stale TODOs
+
+- **Numerals** (`content.md`): DGA still states no policy, now checked across the site build and
+  DGA's own documents. What its Arabic text does is recorded as evidence, not a rule: Western
+  digits in 252 of 5,191 Arabic strings, Arabic-Indic in 15, and the FAQs template shows both on
+  one page (`harvest/raw/2026-10-19-numerals.md`). The choice stays the project's.
+- **`formats.md`** no longer waits on a "Phase 0" harvest that happened: DGA sets no calendar or
+  numeral policy. National-ID masking is labelled kit policy; neither DGA's guidance nor the
+  captured PDPL articles set a display rule.
+- **`i18n-setup.md`** loads the fonts DGA names (IBM Plex Sans and IBM Plex Sans Arabic, checklist
+  item 3) with `next/font`, Latin first, instead of a `TODO(harvest)` placeholder.
+
 ### Verified — the last open token values
 
 Every `TODO(verify)` in `tokens.json` is settled against the live stylesheet and the rendered page

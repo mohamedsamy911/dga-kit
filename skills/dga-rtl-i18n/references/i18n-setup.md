@@ -52,9 +52,27 @@ Load Arabic and Latin faces through `next/font` with explicit subsets, and give 
 fallback:
 
 ```ts
-import localFont from 'next/font/local'
-// Family and weights come from the DGA type scale — TODO(harvest)
+// app/fonts.ts — a layout file may not export these, so keep them here and import them
+import { IBM_Plex_Sans, IBM_Plex_Sans_Arabic } from 'next/font/google'
+
+// IBM Plex Sans: DGA's typography page. IBM Plex Sans Arabic: DGA's Assessment Checklist, item 3.
+// Regular, Medium, Semibold, Bold are DGA's listed weights for IBM Plex Sans; DGA lists none for
+// the Arabic face, so the same four are this kit's choice.
+// Inline the weight arrays: a shared `const` widens to string[] and fails next/font's types.
+export const plex = IBM_Plex_Sans({
+  subsets: ['latin'], weight: ['400', '500', '600', '700'], display: 'swap', variable: '--font-plex',
+})
+export const plexArabic = IBM_Plex_Sans_Arabic({
+  subsets: ['arabic'], weight: ['400', '500', '600', '700'], display: 'swap', variable: '--font-plex-arabic',
+})
 ```
+
+Import both into `app/[locale]/layout.tsx`, put their `.variable` classes on `<html>`, and keep
+the kit's **Latin-first** order:
+`--dga-font-sans: var(--font-plex), var(--font-plex-arabic), system-ui, sans-serif`. `next/font`
+renames the families, so the quoted names in `tokens.css` will not match a `next/font` load.
+`next/font/google` downloads the files at build time and serves them from your own domain; an
+offline build needs `next/font/local` with the same families and weights.
 
 - Subset aggressively. Unsubset Arabic faces are large, and the Arabic subset is the one on the
   critical path for the default locale.

@@ -83,10 +83,15 @@ See `../../dga-rtl-i18n/references/formats.md`.
 
 ## Numerals
 
-⚠️ **`TODO(verify)` — DGA states no numeral policy.** Nothing on the site specifies Arabic-Indic
-(٠١٢٣) versus Western (0123) digits. The site's own Arabic pages are the best available evidence;
-confirm with DS-DGA@dga.gov.sa. The choice must then be consistent product-wide — inconsistency
-across screens is worse than either option.
+⚠️ **No numeral policy found** in the design site's live build, DGA's Assessment Checklist or its
+registration controls (searched 2026-10-19). **DGA's own practice is Western digits (0123) in
+Arabic text**, with a few exceptions: of 5,191 Arabic strings in the live site build, 252 contain
+Western digits and 15 Arabic-Indic (٠١٢٣); the checklist and controls use Western only.
+
+DGA is not consistent itself. The FAQs page template shows both on one page: «أكثر من ٢٠ سؤال»
+and «عن 20 سؤال». So cite DGA's practice as evidence, never as a rule, and record the project's
+choice in `../../dga-brand-overlay/SKILL.md`. Then hold it product-wide — mixing systems across
+screens is worse than either option.
 
 ## Link conventions
 

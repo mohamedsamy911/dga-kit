@@ -71,7 +71,7 @@ choice.
 
 | Decision | Options | Recorded answer |
 |---|---|---|
-| **Numeral system** | Arabic-Indic (٠١٢٣) or Western (0123) | `TODO(entity)` |
+| **Numeral system** | Arabic-Indic (٠١٢٣) or Western (0123). No DGA rule found (2026-10-19); its own Arabic text mostly uses Western (`../dga-design-system/references/content.md`, *Numerals*) | `TODO(entity)` |
 | **Calendar** | Hijri, Gregorian, or both side by side | `TODO(entity)` |
 | **Locales shipped** | `ar` only, `ar` + `en`, others | `TODO(entity)` |
 | **Motion durations and easings** | DGA publishes none. `prefers-reduced-motion` **is** required in three places | `TODO(entity)` |

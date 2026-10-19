@@ -3,10 +3,11 @@
 Use the platform `Intl` APIs. Do not hand-roll formatting, and do not use a date library's
 own locale data when `Intl` covers it — `Intl` ships the CLDR data the OS and browser agree on.
 
-> **`TODO(harvest)`** — which calendar is primary, which numeral system, and the exact date
-> masks are DGA policy decisions, not engineering ones. They come from
-> `dga-design-system/references/content.md` once Phase 0 lands. Until then, state the
-> assumption you're making rather than silently picking one.
+> **No DGA policy was found** for the primary calendar, the numeral system or date masks, in the
+> design site, the Assessment Checklist or the registration controls. DGA's own Arabic text mostly
+> uses Western digits and its demos use the Gregorian calendar; that is practice, not
+> a rule (`../../dga-design-system/references/content.md`, *Numerals*). The project decides, and
+> records the decision in `../../dga-brand-overlay/SKILL.md`. Never pick one silently.
 
 ## Dates
 
@@ -64,12 +65,13 @@ Always wrap in `<bdi>` inside Arabic text — the `+` is a neutral character and
 
 ## National ID / Iqama
 
-Ten digits; `1` prefix for citizens, `2` for residents. Two rules:
+Ten digits; `1` prefix for citizens, `2` for residents. Two conventions:
 
 - **Wrap in `<bdi>`.** It's an LTR run and will otherwise break surrounding punctuation.
-- **Mask by default.** Show the last four only, and reveal on explicit user action. Full IDs
-  are personal data under PDPL — confirm the exact display and retention requirements against
-  the DGA standards harvest before shipping a screen that shows one. `TODO(harvest)`
+- **Mask by default** (kit policy). Show the last four only, and reveal on explicit user action.
+  Neither DGA's guidance nor the PDPL articles this kit captured (4, 5, 7, 11–13) set a display
+  rule; they cover collection, consent and notice. PDPL's implementing regulations were not
+  captured, so check them, and the entity's own data policy, before showing a full ID.
 
 ## Sorting
 
