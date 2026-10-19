@@ -32,12 +32,12 @@ Open [the production preview](http://127.0.0.1:4173/dga-kit/). The output is `sh
 ## Demo walkthrough
 
 1. Search and filter the service catalog. Try a query with no matches, then reset it.
-2. Open a service and read its requirements, steps, and fictional service information.
+2. Open a service and read its requirements, steps, and fictional service information At the bottom, rate the service with the stars.
 3. Start a demo request. Submit empty fields to see linked validation errors, then use fictional details to continue through review and confirmation.
 4. Track the demo reference **WASL-2026-1042**, or the reference generated during this session. Try an unknown reference as well.
 5. Switch Arabic/English, resize to a phone, navigate using Tab, and activate the skip link.
 6. Use the footer's text-size, dark-mode, and high-contrast controls and try page feedback.
-7. Open **About the kit** to see which skills inform the experience and where the kit's coverage stops.
+7. Open **About the kit** to see which skills inform the experience and where the kit's coverage stops. Open the **Sitemap** from the footer to see every page.
 
 Requests and feedback exist only in memory and disappear on refresh. Nothing is sent to a government agency or external service. No analytics or tracking SDK is included.
 
