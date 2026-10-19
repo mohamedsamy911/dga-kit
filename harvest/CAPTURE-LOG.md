@@ -41,6 +41,7 @@ verbatim from the running site, not transcribed from screenshots.
 | Other | Support + 15 FAQs | `/support` | 2026-08-27 |
 | Other | Roadmap | `/updates/roadmap` | 2026-08-27 |
 | Other | Change log + 4 version pages | `/updates/change-log`, `/updates/change-log/version-history-1-0-{0,1,2,3}` | 2026-08-27 |
+| Live-demo semantics | **What DGA's own components render** — roles, ARIA and native tags inside each `dga-*` demo host, shadow DOM included; 19 lack semantics DGA's guidance asks for | raw evidence: `harvest/raw/2026-10-19-live-demo-semantics.md` | 2026-10-19 |
 | Code samples | **Every component page's Code tab** — 50 samples byte-exact from DGA's chunks, each confirmed displayed; the "recommended, not mandatory" note; 9 import `platformscode-react`, 2 are Mongoose placeholders | raw evidence: `harvest/raw/2026-10-19-code-samples.md` | 2026-10-19 |
 | Arabic vs English | **Where DGA's two languages disagree** — all 6,182 shared text keys compared number by number, and all 743 normative sentences read in both languages; 9 differences confirmed on both rendered pages | raw evidence: `harvest/raw/2026-10-18-en-ar-differences.md` | 2026-10-18 |
 | Arabic copy | **DGA's own Arabic** for every string in the "Copy DGA gives" table, taken from the Arabic twin of DGA's text table and confirmed on the rendered Arabic pages | raw evidence: `harvest/raw/2026-10-18-arabic-copy.md` | 2026-10-18 |

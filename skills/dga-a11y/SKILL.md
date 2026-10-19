@@ -53,11 +53,19 @@ boundary is 24px on the colour page, "18.5 Bold or 24 Regular" on typography.
 measures 2.30:1 on white. Flag every use on a light surface as a Blocker even though it is a
 DGA token — see `../dga-design-system/references/CONTRAST-AUDIT.md`.
 
+## DGA's own components are not a pass
+
+A screen built on DGA's package still needs this audit. On 2026-10-19, 19 of DGA's live component
+demos rendered without semantics DGA's guidance asks for: tabs without tab roles, a switch that is
+a plain checkbox, a progress bar with no `progressbar` role. See
+`../dga-react/references/live-demo-semantics.md`. Audit the rendered output, never the component
+name.
+
 ## Where DGA is silent — name the fallback
 
-**Motion durations and easings** (none published — but `prefers-reduced-motion` support **is**
-required, on the Filtration, Loading and Skeleton pages, so cite it as a DGA rule rather than a
-WCAG fallback) · Arabic screen-reader behaviour ·
+**Motion durations and easings** (none published — but DGA asks for `prefers-reduced-motion`
+support on the Filtration, Loading and Skeleton pages, so cite DGA there rather than a WCAG
+fallback) · Arabic screen-reader behaviour ·
 focus order under RTL · testable cognitive criteria · the accessibility-statement page. For
 each, fall back to WCAG 2.1 AA and **say so in the report** rather than implying a DGA rule.
 

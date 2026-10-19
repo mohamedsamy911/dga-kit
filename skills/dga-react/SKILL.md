@@ -54,6 +54,11 @@ literal hexes, so do not copy that part.
 **DGA's own code samples** — what each component page's Code tab shows, element names and imports:
 `references/official-code-samples.md`. They are illustrative, not an API contract.
 
+**The package does not guarantee DGA's accessibility guidance.** On 2026-10-19, 19 of DGA's own live component demos
+rendered without semantics DGA's guidance asks for. For example, `dga-tabs` has no
+`tablist`/`tab` roles and `dga-switch` renders a plain checkbox. Inspect the rendered component
+and add what is missing: `references/live-demo-semantics.md`.
+
 **Reference semantic tokens, not primitives.** DGA separates them deliberately: primitives
 (`brand-600`) are raw; semantic (`text-primary`, `background-card`) carry intent and resolve
 per theme. Components use semantic tokens only.

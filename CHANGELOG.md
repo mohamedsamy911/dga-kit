@@ -11,6 +11,43 @@ patch means corrections. Nothing here is a DGA release — see
 `skills/dga-design-system/dga-version.md` for the Platforms Code version this kit is pinned to
 (currently **4.0.0** per DGA's change log, read 2026-10-08; DGA publishes no release date).
 
+## 0.11.0 — 2026-10-19
+
+### Added — what DGA's own components actually render
+
+Each DGA component page renders a live demo built from DGA's own `dga-*` web components. On
+2026-10-19 the 44 demos that render a single component element were inspected in a browser,
+inside each component's shadow DOM (its hidden internal markup). They were compared with the
+semantics DGA's accessibility text asks for (`harvest/raw/2026-10-19-live-demo-semantics.md`).
+Five pages had no single element to inspect, and the navigation drawer has no inline demo.
+
+**19 components rendered without them.** For example:
+- tabs and the content switcher have no `tablist`/`tab` roles;
+- the switch is a plain checkbox, not `role="switch"`;
+- the progress bar and radial stepper have no `progressbar` role, and the radial stepper carries
+  `aria-size`, which is not an ARIA attribute;
+- loading and skeleton have no `status` role;
+- pagination, search box and table of contents have no `nav`, `search` or `navigation`
+  landmark;
+- the accordion and dropdown have no `aria-expanded`.
+
+Checkbox, file uploader, slider, number input, table, structured list and modal (`<dialog>`)
+render the native element DGA's guidance implies; labels and values were not verified.
+Breadcrumbs render a `nav` with `aria-current="page"`. The link renders `rel="noopener"` as
+asked, plus `noreferrer`. The rest could not be determined, for two reasons:
+- some depend on an interaction or state the demo does not exercise;
+- some pages had no single element to inspect.
+
+- New `dga-react/references/live-demo-semantics.md`. It is labelled as an observation of DGA's
+  implementation on one date, not a DGA rule; native HTML semantics count.
+- `dga-react`, `dga-a11y` and the `dga-code-reviewer` agent now warn that the official package
+  does not make a screen meet DGA's own accessibility guidance. Inspect the rendered component.
+- `dga-a11y` said reduced-motion support "**is** required"; DGA's three pages *ask* for it.
+
+A component is listed as missing only where Codex and agy both classified it so.
+Interaction-dependent cases (tooltip, open dropdown, date picker popup, toast) stay "not
+determined". Scripted events did not open them, and that does not prove they lack semantics.
+
 ## 0.10.1 — 2026-10-19
 
 ### Added — DGA's code samples, read for the first time

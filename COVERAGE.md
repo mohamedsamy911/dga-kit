@@ -21,8 +21,8 @@ add a rule to `references/` and cite it.
 > on the rendered page (`harvest/raw/2026-10-18-reread.md`). DGA's text table also holds strings
 > its pages never display; those were not used. Those passages could not see the code samples,
 > which live outside that table. All 50 component Code tabs were read on 2026-10-19 instead
-> (`harvest/raw/2026-10-19-code-samples.md`). The live previews' rendered visuals are still not
-> compared.
+> (`harvest/raw/2026-10-19-code-samples.md`). The live demos' rendered semantics were inspected the
+> same day (`harvest/raw/2026-10-19-live-demo-semantics.md`); their visuals are still not compared.
 
 | DGA area | Pages | Extracted into | Owned by |
 |---|---|---|---|
@@ -374,7 +374,7 @@ name it, and nothing else.
 ## Guarding against our own drift
 
 The monitoring in `dga-tokens-sync` watches **DGA** for changes. `evals/check-quote-fidelity.py`
-watches **us** — it compares the DGA quotes a capture actually covers (17 of 99 blockquotes
+watches **us** — it compares the DGA quotes a capture actually covers (17 of 100 blockquotes
 today; the rest are *unverifiable*, not verified) against the captured page text in
 `harvest/raw/`, and fails on a paragraph that reproduces a capture without matching it.
 

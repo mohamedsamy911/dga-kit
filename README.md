@@ -254,7 +254,7 @@ deployment" into an unconditional block. No amount of watching DGA catches those
 `evals/check-quote-fidelity.py` compares the DGA quotes it *can* — those whose source page has
 been captured — against that captured text, and fails on a quote that reproduces a capture
 without matching it. It found two real defects on its first run. Be clear about its reach: raw
-captures cover **a minority of DGA's pages**, so 17 of 99 blockquotes are checkable and the other 82 are
+captures cover **a minority of DGA's pages**, so 17 of 100 blockquotes are checkable and the other 83 are
 **unverifiable, not verified**. A quote fenced as DGA's own words with no capture behind it fails
 the run.
 
