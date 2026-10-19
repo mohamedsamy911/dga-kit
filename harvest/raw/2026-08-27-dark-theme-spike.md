@@ -149,6 +149,13 @@ every dark surface. An error colour nobody can read is the most consequential de
 block, where every neighbouring surface resolves to `#0c111b`–`#1f2a37`. Looks like an oversight,
 but DGA may intend a white date cell. Recorded as `TODO(verify)`, not asserted as a defect.
 
+> **Resolved, 2026-10-19.** No rendered effect was found in the build inspected that day
+> (`index-CYyqM6kT.css`, `index-BO_6JOKP.js`). The light `:root` declares the same `#ffffff`; no
+> stylesheet, script or shadow style reads `var(--form-datecell-background-disabled)`; the date
+> cell dims disabled days with opacity (`.date-cell--disabled{opacity:0.5}`); and `dga-datepicker`
+> exposes no property that disables a day. Whether DGA intended the value is unknown.
+> `tokens.json` marks it `published-but-unactivatable`.
+
 The alpha primitives are **deliberately inverted** in the dark block — `--alpha-white-80` goes
 from `#ffffffcc` (light) to `#161616cc` (dark), and `--alpha-black-40` from `#16161666` to
 `#ffffff66`. That reads as intentional: a "light scrim" and a "dark scrim" swap roles relative to

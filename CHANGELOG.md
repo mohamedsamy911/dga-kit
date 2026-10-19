@@ -35,6 +35,14 @@ hit was checked on the rendered page: `harvest/raw/2026-10-19-rtl-statements.md`
 
 Skills still cite pages, never a total: the list holds for one DGA build.
 
+### Verified — the white date-cell value in DGA's dark block
+
+`form.datecell-background-disabled` is `#ffffff` in DGA's dark block, flagged in 2026-08 as a
+possible oversight. On the live build and the rendered Date Picker, nothing reads the variable: the
+date cell dims disabled days with opacity, and `dga-datepicker` exposes no way to disable a day.
+`tokens.json` now marks it `published-but-unactivatable`, value unchanged; whether DGA intended it
+is unknown.
+
 ### Fixed — the Arabic face was still called an open question
 
 0.13.0 cited IBM Plex Sans Arabic to the Assessment Checklist, item 3, in `brand.md` and the
