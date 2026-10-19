@@ -71,6 +71,9 @@ Each is captured with its URL, download date and sha256, and used under its own 
 
 - README listed freshness monitoring as "not running"; it has run weekly through the KSA proxy
   since 2026-10-18.
+- The installed-layout fixture let a repo path through when it followed a GitHub `/tree/` URL;
+  only the installer's own check (CI) caught it. The fixture now exempts a path only when a
+  `/blob/` or raw URL immediately precedes it. Break-tested.
 
 ### Observed in DGA's documents (for the owner's report to DGA)
 

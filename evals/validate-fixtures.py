@@ -1029,11 +1029,11 @@ for _dir, _, _files in os.walk(os.path.join(ROOT, 'skills')):
             continue
         _p = os.path.join(_dir, _f)
         _txt = _FENCE.sub('', open(_p, encoding='utf-8').read())
-        for _m in re.finditer(r'[`\[(\s]((?:harvest|evals)/[A-Za-z0-9_./-]+|COVERAGE\.md|README\.md|AGENTS\.md|SECURITY\.md|CHANGELOG\.md)', _txt):
+        for _m in re.finditer(r'[`\[(\s/]((?:harvest|evals)/[A-Za-z0-9_./-]+|COVERAGE\.md|README\.md|AGENTS\.md|SECURITY\.md|CHANGELOG\.md)', _txt):
             # Only a canonical GitHub URL exempts an occurrence, checked immediately before
             # THIS match. Anything looser - "preceded by a slash", "a URL somewhere in the file"
             # - waves through a dead /harvest/... path or a bare mention beside a good link.
-            if _OK_URL.search(_txt[:_m.start()]):
+            if _OK_URL.search(_txt[:_m.start(1)]):
                 continue
             _dangling.append(os.path.relpath(_p, ROOT).replace('\\', '/') + ' -> ' + _m.group(1).rstrip('.'))
 # --- quote-coverage figures in the docs must be the REAL ones ----------------
