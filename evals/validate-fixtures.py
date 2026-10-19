@@ -599,6 +599,19 @@ if os.path.exists(_inv_path):
             'sources.py --check' not in _c and 'sources.py --baseline' not in _c,
             'the offline suite must stay runnable without design.dga.gov.sa')
 
+    # Every third-party action is pinned to a full commit SHA with its version beside it: a tag
+    # can be moved under a public repo's CI, a SHA cannot. A bare `@v4` would pass every other gate.
+    def _unpinned(text):
+        return [l.strip() for l in text.splitlines()
+                if re.match(r'\s*(?:-\s*)?uses:', l)
+                and not re.search(r'uses:\s*[\w.-]+/[\w./-]+@[0-9a-f]{40}\s+#\s*v\d', l)]
+    _bare = [f'{_f}: {_u}' for _f in sorted(os.listdir(_wf_dir)) if _f.endswith('.yml')
+             for _u in _unpinned(open(os.path.join(_wf_dir, _f), encoding='utf-8').read())]
+    chk('workflow: every action is pinned to a commit SHA with its version noted', not _bare,
+        str(_bare))
+    chk('workflow: the pin check catches a tag-only reference',
+        _unpinned('      - uses: actions/checkout@v5\n') == ['- uses: actions/checkout@v5'])
+
     # Actions treats env keys case-insensitively: HTTPS_PROXY beside https_proxy made 0.8.3's
     # freshness workflow invalid, and every local gate still passed. Check every env block.
     def _env_dupes(text):

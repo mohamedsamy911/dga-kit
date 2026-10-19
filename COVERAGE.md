@@ -243,14 +243,14 @@ changed or that the recorded guidance is current. Its artifact contains only `se
 (stdout and stderr), never the previously committed `FRESHNESS.md`. Inspect the failing URL and
 network error before rerunning; retries cannot repair a persistently unreachable source.
 
-**That is the current situation.** GitHub-hosted runners cannot reach `design.dga.gov.sa`: every
-run of this workflow — the scheduled runs from 2026-08-31 to 2026-10-05 and the diagnostic
-dispatches — has failed at the sentinel step with exit 2. The diagnosed cause is a TCP 443
-timeout before TLS; the precise network policy behind it is unknown. Freshness is therefore
-**unknown** until the check runs somewhere that can reach DGA — a self-hosted runner is a
-security decision for a public repository, not a default. The last check that completed ran
-locally on 2026-10-08: it found a DGA update, which this kit then re-harvested. Evidence and next
-steps:
+**That was the situation from 2026-08-31 to 2026-10-18.** GitHub-hosted runners could not reach
+`design.dga.gov.sa`, which answers only from Saudi Arabia: every run failed at the sentinel step
+with exit 2, a TCP 443 timeout before TLS. Since 2026-10-18 the workflow runs through an
+authenticated forward proxy in Saudi Arabia, admitted only from GitHub Actions' IP ranges
+(`harvest/KSA-PROXY.md`). A self-hosted runner was rejected, because it is a security risk for a
+public repository. First completed hosted run:
+[39164824587](https://github.com/mohamedsamy911/dga-kit/actions/runs/39164824587), exit 0.
+History:
 [`harvest/diagnostics/2026-08-31-freshness-timeout.md`](harvest/diagnostics/2026-08-31-freshness-timeout.md).
 
 The issue has a full lifecycle, not just an open:

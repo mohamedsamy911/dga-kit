@@ -1,5 +1,10 @@
 # Debug report: hosted freshness checks cannot connect to DGA
 
+> **Resolved, 2026-10-18.** Hosted checks now reach DGA through an authenticated forward proxy in
+> Saudi Arabia (`harvest/KSA-PROXY.md`). First completed hosted run:
+> [39164824587](https://github.com/mohamedsamy911/dga-kit/actions/runs/39164824587), exit 0. The
+> blocker and "next decision" text below are the historical record.
+
 > **Status update, 2026-10-18.** The owner reports the site is reachable only from Saudi Arabia.
 > The workflow now routes the check through an authenticated KSA forward proxy when the
 > `DGA_HTTPS_PROXY` secret is set, and otherwise labels the run *not checked* instead of failing

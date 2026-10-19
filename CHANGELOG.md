@@ -11,6 +11,44 @@ patch means corrections. Nothing here is a DGA release — see
 `skills/dga-design-system/dga-version.md` for the Platforms Code version this kit is pinned to
 (currently **4.0.0** per DGA's change log, read 2026-10-08; DGA publishes no release date).
 
+## 0.9.1 — 2026-10-19
+
+### Changed — the weekly freshness check runs from GitHub
+
+The check now reaches design.dga.gov.sa through an authenticated forward proxy in Saudi Arabia.
+That proxy is an Oracle Linux 9 VM running Squid, and its firewall admits TCP 3128 only from
+GitHub Actions' IP ranges, refreshed daily from `api.github.com/meta`. The first completed
+hosted run was
+[39164824587](https://github.com/mohamedsamy911/dga-kit/actions/runs/39164824587), exit 0. It
+was the first hosted run to reach DGA since 2026-08-31.
+
+- `harvest/KSA-PROXY.md` describes the deployment that actually runs:
+  - the OL9 Squid setup, with Ubuntu as the alternative;
+  - the firewalld allowlist script;
+  - the repository-vs-environment secret trap.
+
+  It no longer says GitHub's ranges are too broad to allowlist. They are too many for a cloud
+  security list, but not for an on-instance set.
+- `AGENTS.md`: the release rule now accepts a completed hosted *or* local check no more than
+  14 days old. A local run is the fallback when a hosted run is missing or exits 2.
+- README, COVERAGE and the diagnostics note record the outage as history.
+
+### Changed — every action moved off Node 20
+
+GitHub deprecated Node 20 for actions. Each pin moved to the smallest major that runs on Node
+24, still pinned by full commit SHA:
+- `checkout` v5.1.0;
+- `setup-python` v6.3.0;
+- `upload-artifact` v6.0.0;
+- `setup-node` v5.0.0;
+- `configure-pages` v6.0.0, `deploy-pages` v5.0.1 and `upload-pages-artifact` v5.0.0, bumped
+  together.
+
+Codex advised the smallest Node 24 major; agy advised the newest at least two weeks old. The
+smallest major was chosen because it means fewer breaking changes. `validate-fixtures.py` now
+fails on any action not pinned to a 40-character SHA with its version noted. It was break-tested
+on `actions/checkout@v5`.
+
 ## 0.9.0 — 2026-10-18
 
 ### Added — DGA's transparency scale, `color.alpha` (42 values)

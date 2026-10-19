@@ -239,14 +239,13 @@ bundle, `text.secondary`, the dark selector, sitemap and robots. It writes
 [harvest/FRESHNESS.md](harvest/FRESHNESS.md) and opens one rolling issue when something needs a
 decision.
 
-> ⚠️ **It cannot currently reach DGA.** GitHub-hosted runners time out connecting to
-> `design.dga.gov.sa` on port 443, so every scheduled run since 2026-08-31 has failed with exit 2
-> — the monitor reports that it could not check, rather than pretending all is well, which is the
-> intended behaviour. Until a runner that can reach DGA is in place, **freshness is unknown**
-> between manual runs: `FRESHNESS.md` describes the last check that completed — run locally on
-> 2026-10-08, after re-harvesting a DGA update — not a current one. Until that changes, the
-> maintainer runs the check locally about weekly, and before every release.
-> Evidence: [the diagnostic report](harvest/diagnostics/2026-08-31-freshness-timeout.md).
+> **It reaches DGA through a proxy in Saudi Arabia.** design.dga.gov.sa answers only from Saudi
+> Arabia, and GitHub-hosted runners timed out on it from 2026-08-31. Since 2026-10-18 the workflow
+> runs through an authenticated forward proxy there ([setup](harvest/KSA-PROXY.md); first
+> completed run: [39164824587](https://github.com/mohamedsamy911/dga-kit/actions/runs/39164824587)).
+> If the proxy is down, the run exits 2 and freshness is **unknown**, never "clean". The
+> maintainer then runs the check locally. History:
+> [the diagnostic report](harvest/diagnostics/2026-08-31-freshness-timeout.md).
 
 **Are we still saying what DGA said?** That is the failure this repo has actually had — invalid
 CSS shipped from a token unit, a template count asserted at 19 when the harvest held 17, and a
