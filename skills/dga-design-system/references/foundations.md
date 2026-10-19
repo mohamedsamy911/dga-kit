@@ -6,9 +6,9 @@
 
 Machine-readable values live in `../assets/tokens.json` — **345 values**, extracted verbatim from
 DGA's own CSS custom properties. Prefer those over anything transcribed here. Every declaration not carried is either a
-stated exclusion or a gradient of carried colours: **0 declarations are not carried** otherwise. DGA's component-role *names* (`--button-*`,
-`--link-*`, `--notification-*`, ...) are not carried, only their values; read a name off the
-live `:root`. See `$meta.$reconciliation` in `tokens.json`.
+stated exclusion or a gradient of carried colours: **0 declarations are not carried** otherwise. DGA's component token *names* (`--button-*`,
+`--link-*`, `--notification-*`, ...) ship separately in `../assets/component-roles.json` and
+`component-roles.css`. See `$meta.$reconciliation` in `tokens.json`.
 
 **Transparency scale** — `color.alpha`, verbatim 8-digit hex: black and white at 0–100% (in
 tens), green at 10–90%, and error, info, primary, success and warning at 10% and 20%. DGA's

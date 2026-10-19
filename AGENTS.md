@@ -29,6 +29,7 @@ python evals/build-codex-agents.py --check         # six native agents match the
 python evals/test-codex-agents.py                 # conversion and isolated installer regressions
 python evals/test-codex-discovery.py              # Codex installs the tree and discovers all 11 skills
 python harvest/reconcile-tokens.py --test         # "reconcile self-check passed" (offline)
+python harvest/build-component-roles.py --check   # "component roles are current" (offline)
 node skills/dga-design-system/assets/check-contrast.mjs --test   # "self-check passed"
 node skills/dga-design-system/assets/generate-tokens.mjs          # then `git diff` must be empty
 node bin/dga-kit.mjs --test                       # "installer self-check passed"; leaves no temp dirs
@@ -82,7 +83,8 @@ accept percentages — every browser drops it. The fix is **not** to edit `token
 `-2%` so a re-harvest diffs clean. `generate-tokens.mjs` converts to `-0.02em` at the boundary.
 Fixtures assert both halves.
 
-**2 · Never hand-edit generated files.** `tokens.css` and `tailwind-preset.js` are outputs. Change
+**2 · Never hand-edit generated files.** `tokens.css`, `tailwind-preset.js`, and
+`component-roles.json`/`.css` (from `harvest/build-component-roles.py`) are outputs. Change
 `tokens.json` or the generator, then:
 
 ```bash

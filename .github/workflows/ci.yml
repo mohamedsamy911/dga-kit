@@ -58,6 +58,11 @@ jobs:
         # succeeded.
         run: python harvest/reconcile-tokens.py --test
 
+      - name: Component token names match the committed snapshot
+        # Rebuilt offline from harvest/raw/component-roles-snapshot.txt; a hand-edited or stale
+        # component-roles.json/.css fails here.
+        run: python harvest/build-component-roles.py --check
+
       - name: Installer self-check leaves no scratch directories
         # Symlink refusal and the agent-payload validation, which the end-to-end matrix below
         # cannot easily reach - and the scratch directories it must clean up. cleanScratch() is

@@ -23,8 +23,9 @@ reads from here rather than carrying its own copy of the rules.
 > - 26 under DGA's inert dark selector;
 > - 9 excluded by name, with evidence.
 >
-> DGA's transparency scale is carried as `color.alpha`. Component-role *names* (`--button-*`,
-> `--link-*`, `--tag-*`, ...) are not carried, only their values. **Never tell a caller a value is absent
+> DGA's transparency scale is carried as `color.alpha`. DGA's 379 component token *names*
+> (`--button-*`, `--link-*`, `--tag-*`, ...) ship in `assets/component-roles.json` and
+> `component-roles.css`. **Never tell a caller a value is absent
 > from DGA because it is absent from `tokens.json`.** Read it off the live `:root`. See
 > `$meta.$reconciliation`.
 >

@@ -44,11 +44,14 @@ the specific mistakes that pass a build, a type check and a casual review.
 DGA's token values are already extracted and machine-readable — **345 of them**, distilled from
 the 1,126 custom properties DGA's stylesheet declares.
 
-⚠️ **Values yes, role names no.** Outside its stated exclusions, a declaration-by-declaration
+**Values and DGA's component names.** Outside its stated exclusions, a declaration-by-declaration
 reconciliation finds **0 values the kit does not hold**. DGA's transparency scale is carried as
-`color.alpha` (`--dga-color-alpha-white-20` and so on). DGA's component-role *names*
-(`--button-*`, `--link-*`, `--notification-*`, `--tag-*`) are not carried, so map each one to
-its value. If the value you need is missing, **read it off the live `:root`** rather than substituting the
+`color.alpha` (`--dga-color-alpha-white-20` and so on). DGA's 379 component token names
+(`--button-*`, `--link-*`, `--tag-*`, `--notification-*`, `--form-*`, ...) ship in
+`component-roles.css`. Load it after `tokens.css`, and look a name up in `component-roles.json`.
+For example, DGA's `--button-background-transparent-hovered` becomes
+`--dga-button-background-transparent-hovered: var(--dga-color-alpha-white-20)`. These are the
+names DGA's stylesheet publishes, not component recipes. If the value you need is missing, **read it off the live `:root`** rather than substituting the
 nearest carried token. See [the reconciliation record](https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/RECONCILIATION.md) for the
 full list.
 

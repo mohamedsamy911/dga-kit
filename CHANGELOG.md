@@ -11,6 +11,48 @@ patch means corrections. Nothing here is a DGA release — see
 `skills/dga-design-system/dga-version.md` for the Platforms Code version this kit is pinned to
 (currently **4.0.0** per DGA's change log, read 2026-10-08; DGA publishes no release date).
 
+## 0.10.0 — 2026-10-19
+
+### Added — DGA's component token names
+
+Every value DGA's stylesheet uses was already carried or excluded by name (0.9.0), but a team
+still had to map `--button-background-transparent-hovered` to a value by hand. DGA's **379
+component token names** now ship as two generated assets in `skills/dga-design-system/assets/`.
+They cover 21 families: button, link, tag, form, notification, featuredicons, border, icon,
+controls, stepper, table, tab, tooltip, accordion, card, pagination, components and others.
+
+- `component-roles.json`: DGA's exact name → `declared`, `resolved` and `kitToken`.
+- `component-roles.css`: each name as `--dga-<name>` on `:root`. Load it after `tokens.css`.
+  Example: `--dga-button-background-transparent-hovered: var(--dga-color-alpha-white-20)`.
+
+**275** names link to a kit token by following DGA's **own alias chain**. Each hop must name a
+kit token *and* match its value. The other **104** are literals:
+- most point into the Untitled-UI red, blue, green and yellow ramps the kit does not carry;
+- the rest point at names with no kit counterpart, such as `--colors-primary-sa-flag-600-primary`.
+
+None is matched by value alone. `#161616` is both `text.default` and `base.black`, and picking
+one would invent a meaning DGA never stated. The files cover the light theme only, because
+DGA's dark selector can never match.
+
+`tokens.json` and its 345-value count are unchanged. Six of the emitted literals are values
+0.9.0 excluded by name, such as `#7a2619`; they appear exactly as DGA declares them.
+
+- **Generator:** `harvest/build-component-roles.py`. It reuses the reconciler's cascade-correct
+  parsing and commits a snapshot of DGA's light `:root`, so
+  `python harvest/build-component-roles.py --check` runs offline. It is a new gate in CI and
+  `AGENTS.md`.
+- **New fixture checks** (`validate-fixtures.py`). Every CSS line must match its JSON row, and
+  every `kitToken` must exist with the same value. Every resolved value must be carried in
+  `tokens.json`, except the reconciler's named exclusions, which are pinned to their values. No
+  generated name may collide with a `tokens.css` name. A tampered CSS line fails both the
+  fixture and `--check`; break-tested.
+- **The docs' counts are checked too.** Every "N component token names" and "N link to a kit
+  token" must equal the generated `$meta`. A stale 378 fails; break-tested.
+
+Design chosen with Codex and agy. Both picked a separate generated file over growing
+`tokens.json`. On naming, the JSON keeps DGA's exact names and the CSS uses the kit's `--dga-`
+prefix: Codex's choice, to avoid colliding with DGA's own stylesheet when both are loaded.
+
 ## 0.9.1 — 2026-10-19
 
 ### Changed — the weekly freshness check runs from GitHub

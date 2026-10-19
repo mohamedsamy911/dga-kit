@@ -1,0 +1,1931 @@
+{
+  "$meta": {
+    "source": "https://design.dga.gov.sa — light :root CSS custom properties",
+    "stylesheetBuild": "CYyqM6kT",
+    "scope": "light",
+    "families": [
+      "accordion",
+      "border",
+      "button",
+      "buttons",
+      "card",
+      "components",
+      "control",
+      "controls",
+      "featuredicons",
+      "form",
+      "icon",
+      "link",
+      "model",
+      "notification",
+      "pagination",
+      "progressindicator",
+      "stepper",
+      "tab",
+      "table",
+      "tag",
+      "tooltip"
+    ],
+    "totalRoles": 379,
+    "linkedToKitToken": 275,
+    "generator": "https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/build-component-roles.py",
+    "$note": "DGA's component token names, generated - do not edit. Keys are DGA's exact names; component-roles.css emits each as --dga-<name> (load it after tokens.css). kitToken follows DGA's own alias chain and is null where no hop names a kit token, never guessed from a shared value. These are stylesheet names DGA publishes, not component recipes."
+  },
+  "roles": {
+    "--accordion-lg-header-gap": {
+      "declared": "var(--spacing-4)",
+      "resolved": "16px",
+      "kitToken": "--dga-space-4"
+    },
+    "--accordion-lg-header-padding": {
+      "declared": "var(--spacing-4)",
+      "resolved": "16px",
+      "kitToken": "--dga-space-4"
+    },
+    "--accordion-md-header-gap": {
+      "declared": "var(--spacing-3)",
+      "resolved": "12px",
+      "kitToken": "--dga-space-3"
+    },
+    "--accordion-md-header-padding": {
+      "declared": "var(--spacing-3)",
+      "resolved": "12px",
+      "kitToken": "--dga-space-3"
+    },
+    "--accordion-sm-header-gap": {
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2"
+    },
+    "--accordion-sm-header-padding": {
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2"
+    },
+    "--border-background-neutral": {
+      "declared": "var(--colors-neutral-300)",
+      "resolved": "#d2d6db",
+      "kitToken": "--dga-color-neutral-300"
+    },
+    "--border-background-white": {
+      "declared": "var(--colors-neutral-100)",
+      "resolved": "#f3f4f6",
+      "kitToken": "--dga-color-neutral-100"
+    },
+    "--border-black": {
+      "declared": "var(--colors-base-black)",
+      "resolved": "#161616",
+      "kitToken": "--dga-color-base-black"
+    },
+    "--border-disabled": {
+      "declared": "var(--colors-neutral-400)",
+      "resolved": "#9da4ae",
+      "kitToken": "--dga-color-neutral-400"
+    },
+    "--border-error": {
+      "declared": "var(--colors-red-700)",
+      "resolved": "#b42318",
+      "kitToken": null
+    },
+    "--border-error-light": {
+      "declared": "var(--colors-red-200)",
+      "resolved": "#fecdca",
+      "kitToken": null
+    },
+    "--border-info": {
+      "declared": "var(--colors-blue-700)",
+      "resolved": "#175cd3",
+      "kitToken": null
+    },
+    "--border-info-light": {
+      "declared": "var(--colors-blue-200)",
+      "resolved": "#b2ddff",
+      "kitToken": null
+    },
+    "--border-neutral-primary": {
+      "declared": "var(--colors-neutral-300)",
+      "resolved": "#d2d6db",
+      "kitToken": "--dga-color-neutral-300"
+    },
+    "--border-neutral-secondary": {
+      "declared": "var(--colors-neutral-200)",
+      "resolved": "#e5e7eb",
+      "kitToken": "--dga-color-neutral-200"
+    },
+    "--border-neutral-tertiary": {
+      "declared": "var(--colors-neutral-100)",
+      "resolved": "#f3f4f6",
+      "kitToken": "--dga-color-neutral-100"
+    },
+    "--border-oncolor-transparent-30": {
+      "declared": "var(--colors-alpha-alpha-white-30)",
+      "resolved": "#ffffff4c",
+      "kitToken": "--dga-color-alpha-white-30"
+    },
+    "--border-primary": {
+      "declared": "var(--colors-primary-sa-flag-600-primary)",
+      "resolved": "#1b8354",
+      "kitToken": null
+    },
+    "--border-primary-light": {
+      "declared": "var(--colors-primary-sa-flag-200)",
+      "resolved": "#b8eacb",
+      "kitToken": "--dga-color-primary-sa-flag-200"
+    },
+    "--border-secondary": {
+      "declared": "var(--colors-secondary-gold-600-primary)",
+      "resolved": "#dba102",
+      "kitToken": null
+    },
+    "--border-secondary-light": {
+      "declared": "var(--colors-secondary-gold-200)",
+      "resolved": "#fcf3bd",
+      "kitToken": "--dga-color-secondary-gold-200"
+    },
+    "--border-success": {
+      "declared": "var(--colors-green-700)",
+      "resolved": "#067647",
+      "kitToken": null
+    },
+    "--border-success-light": {
+      "declared": "var(--colors-green-200)",
+      "resolved": "#abefc6",
+      "kitToken": null
+    },
+    "--border-tertiary": {
+      "declared": "var(--colors-tertiary-lavendar-500-primary)",
+      "resolved": "#80519f",
+      "kitToken": null
+    },
+    "--border-tertiary-light": {
+      "declared": "var(--colors-tertiary-lavendar-200)",
+      "resolved": "#e1cce8",
+      "kitToken": "--dga-color-tertiary-lavendar-200"
+    },
+    "--border-transparent-10": {
+      "declared": "var(--alpha-white-10)",
+      "resolved": "#ffffff19",
+      "kitToken": "--dga-color-alpha-white-10"
+    },
+    "--border-warning": {
+      "declared": "var(--colors-yellow-700)",
+      "resolved": "#b54707",
+      "kitToken": null
+    },
+    "--border-warning-light": {
+      "declared": "var(--colors-yellow-200)",
+      "resolved": "#fedf89",
+      "kitToken": null
+    },
+    "--border-white": {
+      "declared": "var(--colors-base-white)",
+      "resolved": "#ffffff",
+      "kitToken": "--dga-color-base-white"
+    },
+    "--border-white-40": {
+      "declared": "var(--alpha-white-40)",
+      "resolved": "#ffffff66",
+      "kitToken": "--dga-color-alpha-white-40"
+    },
+    "--button-background-black-default": {
+      "declared": "var(--colors-neutral-950)",
+      "resolved": "#0c111b",
+      "kitToken": "--dga-color-neutral-950"
+    },
+    "--button-background-black-focused": {
+      "declared": "var(--colors-neutral-950)",
+      "resolved": "#0c111b",
+      "kitToken": "--dga-color-neutral-950"
+    },
+    "--button-background-black-hovered": {
+      "declared": "var(--colors-neutral-800)",
+      "resolved": "#1f2a37",
+      "kitToken": "--dga-color-neutral-800"
+    },
+    "--button-background-black-pressed": {
+      "declared": "var(--colors-neutral-600)",
+      "resolved": "#4d5761",
+      "kitToken": "--dga-color-neutral-600"
+    },
+    "--button-background-black-selected": {
+      "declared": "var(--colors-neutral-700)",
+      "resolved": "#384250",
+      "kitToken": "--dga-color-neutral-700"
+    },
+    "--button-background-danger-primary-default": {
+      "declared": "var(--colors-red-600)",
+      "resolved": "#d92c20",
+      "kitToken": null
+    },
+    "--button-background-danger-primary-focused": {
+      "declared": "var(--colors-red-600)",
+      "resolved": "#d92c20",
+      "kitToken": null
+    },
+    "--button-background-danger-primary-hovered": {
+      "declared": "var(--colors-red-700)",
+      "resolved": "#b42318",
+      "kitToken": null
+    },
+    "--button-background-danger-primary-pressed": {
+      "declared": "var(--colors-red-900)",
+      "resolved": "#7a2619",
+      "kitToken": null
+    },
+    "--button-background-danger-primary-selected": {
+      "declared": "var(--colors-red-800)",
+      "resolved": "#912018",
+      "kitToken": null
+    },
+    "--button-background-danger-secondary-default": {
+      "declared": "var(--colors-red-50)",
+      "resolved": "#fef3f2",
+      "kitToken": null
+    },
+    "--button-background-danger-secondary-focused": {
+      "declared": "var(--colors-red-50)",
+      "resolved": "#fef3f2",
+      "kitToken": null
+    },
+    "--button-background-danger-secondary-hovered": {
+      "declared": "var(--colors-red-100)",
+      "resolved": "#fee4e2",
+      "kitToken": null
+    },
+    "--button-background-danger-secondary-pressed": {
+      "declared": "var(--colors-red-200)",
+      "resolved": "#fecdca",
+      "kitToken": null
+    },
+    "--button-background-danger-secondary-selected": {
+      "declared": "var(--colors-red-50)",
+      "resolved": "#fef3f2",
+      "kitToken": null
+    },
+    "--button-background-disabled-on-color": {
+      "declared": "var(--alpha-white-20)",
+      "resolved": "#ffffff33",
+      "kitToken": "--dga-color-alpha-white-20"
+    },
+    "--button-background-neutral-default": {
+      "declared": "var(--colors-neutral-100)",
+      "resolved": "#f3f4f6",
+      "kitToken": "--dga-color-neutral-100"
+    },
+    "--button-background-neutral-focused": {
+      "declared": "var(--colors-neutral-100)",
+      "resolved": "#f3f4f6",
+      "kitToken": "--dga-color-neutral-100"
+    },
+    "--button-background-neutral-hovered": {
+      "declared": "var(--colors-neutral-100)",
+      "resolved": "#f3f4f6",
+      "kitToken": "--dga-color-neutral-100"
+    },
+    "--button-background-neutral-pressed": {
+      "declared": "var(--colors-neutral-200)",
+      "resolved": "#e5e7eb",
+      "kitToken": "--dga-color-neutral-200"
+    },
+    "--button-background-neutral-selected": {
+      "declared": "var(--colors-neutral-200)",
+      "resolved": "#e5e7eb",
+      "kitToken": "--dga-color-neutral-200"
+    },
+    "--button-background-oncolor-default": {
+      "declared": "var(--colors-base-white)",
+      "resolved": "#ffffff",
+      "kitToken": "--dga-color-base-white"
+    },
+    "--button-background-oncolor-focused": {
+      "declared": "var(--alpha-white-100)",
+      "resolved": "#ffffff",
+      "kitToken": "--dga-color-alpha-white-100"
+    },
+    "--button-background-oncolor-hovered": {
+      "declared": "var(--alpha-white-80)",
+      "resolved": "#ffffffcc",
+      "kitToken": "--dga-color-alpha-white-80"
+    },
+    "--button-background-oncolor-pressed": {
+      "declared": "var(--alpha-white-60)",
+      "resolved": "#ffffff99",
+      "kitToken": "--dga-color-alpha-white-60"
+    },
+    "--button-background-oncolor-selected": {
+      "declared": "var(--alpha-white-70)",
+      "resolved": "#ffffffb2",
+      "kitToken": "--dga-color-alpha-white-70"
+    },
+    "--button-background-primary-default": {
+      "declared": "var(--colors-primary-sa-flag-600-primary)",
+      "resolved": "#1b8354",
+      "kitToken": null
+    },
+    "--button-background-primary-focused": {
+      "declared": "var(--colors-primary-sa-flag-600-primary)",
+      "resolved": "#1b8354",
+      "kitToken": null
+    },
+    "--button-background-primary-hovered": {
+      "declared": "var(--colors-primary-sa-flag-700)",
+      "resolved": "#166a45",
+      "kitToken": "--dga-color-primary-sa-flag-700"
+    },
+    "--button-background-primary-pressed": {
+      "declared": "var(--colors-primary-sa-flag-900)",
+      "resolved": "#104631",
+      "kitToken": "--dga-color-primary-sa-flag-900"
+    },
+    "--button-background-primary-selected": {
+      "declared": "var(--colors-primary-sa-flag-800)",
+      "resolved": "#14573a",
+      "kitToken": "--dga-color-primary-sa-flag-800"
+    },
+    "--button-background-transparent-default": {
+      "declared": "var(--alpha-white-0)",
+      "resolved": "#ffffff00",
+      "kitToken": "--dga-color-alpha-white-0"
+    },
+    "--button-background-transparent-focused": {
+      "declared": "var(--alpha-white-0)",
+      "resolved": "#ffffff00",
+      "kitToken": "--dga-color-alpha-white-0"
+    },
+    "--button-background-transparent-hovered": {
+      "declared": "var(--alpha-white-20)",
+      "resolved": "#ffffff33",
+      "kitToken": "--dga-color-alpha-white-20"
+    },
+    "--button-background-transparent-pressed": {
+      "declared": "var(--alpha-white-40)",
+      "resolved": "#ffffff66",
+      "kitToken": "--dga-color-alpha-white-40"
+    },
+    "--button-background-transparent-selected": {
+      "declared": "var(--alpha-white-30)",
+      "resolved": "#ffffff4c",
+      "kitToken": "--dga-color-alpha-white-30"
+    },
+    "--button-icon-transparent-hovered-on-color": {
+      "declared": "var(--background-primary-400)",
+      "resolved": "#54c08a",
+      "kitToken": "--dga-background-primary-400"
+    },
+    "--button-icon-transparent-pressed-on-color": {
+      "declared": "var(--colors-primary-sa-flag-300)",
+      "resolved": "#88d8ad",
+      "kitToken": "--dga-color-primary-sa-flag-300"
+    },
+    "--button-icon-transparent-selected-on-color": {
+      "declared": "var(--colors-primary-sa-flag-400)",
+      "resolved": "#54c08a",
+      "kitToken": "--dga-color-primary-sa-flag-400"
+    },
+    "--button-label-danger-primary-default-oncolor": {
+      "declared": "var(--colors-red-200)",
+      "resolved": "#fecdca",
+      "kitToken": null
+    },
+    "--button-label-danger-primary-hovered-oncolor": {
+      "declared": "var(--colors-red-300)",
+      "resolved": "#fca19b",
+      "kitToken": null
+    },
+    "--button-label-danger-primary-pressed-oncolor": {
+      "declared": "var(--colors-red-400)",
+      "resolved": "#f97066",
+      "kitToken": null
+    },
+    "--button-label-transparent-hovered-on-color": {
+      "declared": "var(--colors-primary-sa-flag-400)",
+      "resolved": "#54c08a",
+      "kitToken": "--dga-color-primary-sa-flag-400"
+    },
+    "--button-label-transparent-pressed-on-color": {
+      "declared": "var(--colors-primary-sa-flag-300)",
+      "resolved": "#88d8ad",
+      "kitToken": "--dga-color-primary-sa-flag-300"
+    },
+    "--button-label-transparent-selected-on-color": {
+      "declared": "var(--colors-primary-sa-flag-400)",
+      "resolved": "#54c08a",
+      "kitToken": "--dga-color-primary-sa-flag-400"
+    },
+    "--button-menu-gap": {
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2"
+    },
+    "--button-menu-h-padding": {
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2"
+    },
+    "--button-menu-v-padding": {
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2"
+    },
+    "--buttons-group-gap": {
+      "declared": "var(--spacing-1)",
+      "resolved": "4px",
+      "kitToken": "--dga-space-1"
+    },
+    "--buttons-lg-gap": {
+      "declared": "var(--spacing-1)",
+      "resolved": "4px",
+      "kitToken": "--dga-space-1"
+    },
+    "--buttons-lg-padding": {
+      "declared": "var(--spacing-4)",
+      "resolved": "16px",
+      "kitToken": "--dga-space-4"
+    },
+    "--buttons-md-gap": {
+      "declared": "var(--spacing-1)",
+      "resolved": "4px",
+      "kitToken": "--dga-space-1"
+    },
+    "--buttons-md-padding": {
+      "declared": "var(--spacing-3)",
+      "resolved": "12px",
+      "kitToken": "--dga-space-3"
+    },
+    "--buttons-sm-gap": {
+      "declared": "var(--spacing-1)",
+      "resolved": "4px",
+      "kitToken": "--dga-space-1"
+    },
+    "--buttons-sm-padding": {
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2"
+    },
+    "--card-lg-gap": {
+      "declared": "var(--spacing-4)",
+      "resolved": "16px",
+      "kitToken": "--dga-space-4"
+    },
+    "--card-lg-padding": {
+      "declared": "var(--spacing-4)",
+      "resolved": "16px",
+      "kitToken": "--dga-space-4"
+    },
+    "--card-md-gap": {
+      "declared": "var(--spacing-3)",
+      "resolved": "12px",
+      "kitToken": "--dga-space-3"
+    },
+    "--card-md-padding": {
+      "declared": "var(--spacing-4)",
+      "resolved": "16px",
+      "kitToken": "--dga-space-4"
+    },
+    "--card-sm-gap": {
+      "declared": "var(--spacing-3)",
+      "resolved": "12px",
+      "kitToken": "--dga-space-3"
+    },
+    "--card-sm-padding": {
+      "declared": "var(--spacing-4)",
+      "resolved": "16px",
+      "kitToken": "--dga-space-4"
+    },
+    "--components-card-radius": {
+      "declared": "var(--spacing-4)",
+      "resolved": "16px",
+      "kitToken": "--dga-space-4"
+    },
+    "--control-disabled": {
+      "declared": "var(--colors-neutral-400)",
+      "resolved": "#9da4ae",
+      "kitToken": "--dga-color-neutral-400"
+    },
+    "--control-radio-description-padding": {
+      "declared": "var(--spacing-12)",
+      "resolved": "48px",
+      "kitToken": "--dga-space-12"
+    },
+    "--control-radio-error-icon-gap": {
+      "declared": "var(--spacing-12)",
+      "resolved": "48px",
+      "kitToken": "--dga-space-12"
+    },
+    "--control-switch-description-padding": {
+      "declared": "var(--spacing-16)",
+      "resolved": "64px",
+      "kitToken": "--dga-space-16"
+    },
+    "--control-switch-error-icon-gap": {
+      "declared": "var(--spacing-1)",
+      "resolved": "4px",
+      "kitToken": "--dga-space-1"
+    },
+    "--control-title-error-gap": {
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2"
+    },
+    "--control-vertical-gap": {
+      "declared": "var(--spacing-1)",
+      "resolved": "4px",
+      "kitToken": "--dga-space-1"
+    },
+    "--controls-control-border": {
+      "declared": "var(--colors-neutral-500)",
+      "resolved": "#6c727e",
+      "kitToken": "--dga-color-neutral-500"
+    },
+    "--controls-control-icon-disabled": {
+      "declared": "var(--colors-base-white)",
+      "resolved": "#ffffff",
+      "kitToken": "--dga-color-base-white"
+    },
+    "--controls-control-icon-hovered": {
+      "declared": "var(--icon-oncolor)",
+      "resolved": "#ffffff",
+      "kitToken": "--dga-color-base-white"
+    },
+    "--controls-control-icon-pressed": {
+      "declared": "var(--icon-oncolor)",
+      "resolved": "#ffffff",
+      "kitToken": "--dga-color-base-white"
+    },
+    "--controls-control-neutral-checked": {
+      "declared": "var(--colors-neutral-950)",
+      "resolved": "#0c111b",
+      "kitToken": "--dga-color-neutral-950"
+    },
+    "--controls-control-neutral-focused": {
+      "declared": "var(--colors-neutral-950)",
+      "resolved": "#0c111b",
+      "kitToken": "--dga-color-neutral-950"
+    },
+    "--controls-control-neutral-hovered": {
+      "declared": "var(--colors-neutral-600)",
+      "resolved": "#4d5761",
+      "kitToken": "--dga-color-neutral-600"
+    },
+    "--controls-control-neutral-pressed": {
+      "declared": "var(--colors-neutral-600)",
+      "resolved": "#4d5761",
+      "kitToken": "--dga-color-neutral-600"
+    },
+    "--controls-control-pressed": {
+      "declared": "var(--colors-neutral-300)",
+      "resolved": "#d2d6db",
+      "kitToken": "--dga-color-neutral-300"
+    },
+    "--controls-control-primary": {
+      "declared": "var(--alpha-white-0)",
+      "resolved": "#ffffff00",
+      "kitToken": "--dga-color-alpha-white-0"
+    },
+    "--controls-control-primary--readonly": {
+      "declared": "var(--alpha-white-0)",
+      "resolved": "#ffffff00",
+      "kitToken": "--dga-color-alpha-white-0"
+    },
+    "--controls-control-primary-checked": {
+      "declared": "var(--colors-primary-sa-flag-600-primary)",
+      "resolved": "#1b8354",
+      "kitToken": null
+    },
+    "--controls-control-primary-focused": {
+      "declared": "var(--colors-primary-sa-flag-600-primary)",
+      "resolved": "#1b8354",
+      "kitToken": null
+    },
+    "--controls-control-primary-hovered": {
+      "declared": "var(--colors-primary-sa-flag-800)",
+      "resolved": "#14573a",
+      "kitToken": "--dga-color-primary-sa-flag-800"
+    },
+    "--controls-control-primary-pressed": {
+      "declared": "var(--colors-primary-sa-flag-800)",
+      "resolved": "#14573a",
+      "kitToken": "--dga-color-primary-sa-flag-800"
+    },
+    "--controls-control-ripple-effect": {
+      "declared": "var(--colors-neutral-200)",
+      "resolved": "#e5e7eb",
+      "kitToken": "--dga-color-neutral-200"
+    },
+    "--controls-control-text-error": {
+      "declared": "var(--text-error)",
+      "resolved": "#b42318",
+      "kitToken": "--dga-text-error"
+    },
+    "--featuredicons-background-brand-light": {
+      "declared": "var(--colors-primary-sa-flag-50)",
+      "resolved": "#f3fcf6",
+      "kitToken": "--dga-color-primary-sa-flag-50"
+    },
+    "--featuredicons-background-default-light": {
+      "declared": "var(--colors-neutral-50)",
+      "resolved": "#f9fafb",
+      "kitToken": "--dga-color-neutral-50"
+    },
+    "--featuredicons-background-error-light": {
+      "declared": "var(--colors-red-50)",
+      "resolved": "#fef3f2",
+      "kitToken": null
+    },
+    "--featuredicons-background-info-light": {
+      "declared": "var(--colors-blue-50)",
+      "resolved": "#eff8ff",
+      "kitToken": null
+    },
+    "--featuredicons-background-success-light": {
+      "declared": "var(--colors-green-50)",
+      "resolved": "#ecfdf3",
+      "kitToken": null
+    },
+    "--featuredicons-background-warning-light": {
+      "declared": "var(--colors-yellow-50)",
+      "resolved": "#fffaeb",
+      "kitToken": null
+    },
+    "--featuredicons-bg-icon-brand-light": {
+      "declared": "var(--colors-primary-sa-flag-50)",
+      "resolved": "#f3fcf6",
+      "kitToken": "--dga-color-primary-sa-flag-50"
+    },
+    "--featuredicons-bg-icon-error-light": {
+      "declared": "var(--background-error-50)",
+      "resolved": "#fef3f2",
+      "kitToken": "--dga-background-error-50"
+    },
+    "--featuredicons-bg-icon-info-light": {
+      "declared": "var(--background-info-50)",
+      "resolved": "#eff8ff",
+      "kitToken": "--dga-background-info-50"
+    },
+    "--featuredicons-bg-icon-success-light": {
+      "declared": "var(--background-success-50)",
+      "resolved": "#ecfdf3",
+      "kitToken": "--dga-background-success-50"
+    },
+    "--featuredicons-bg-icon-warning-light": {
+      "declared": "var(--background-warning-50)",
+      "resolved": "#fffaeb",
+      "kitToken": "--dga-background-warning-50"
+    },
+    "--featuredicons-icon-default": {
+      "declared": "var(--colors-base-black)",
+      "resolved": "#161616",
+      "kitToken": "--dga-color-base-black"
+    },
+    "--featuredicons-icon-default-400": {
+      "declared": "var(--colors-neutral-400)",
+      "resolved": "#9da4ae",
+      "kitToken": "--dga-color-neutral-400"
+    },
+    "--featuredicons-icon-default-500": {
+      "declared": "var(--colors-neutral-500)",
+      "resolved": "#6c727e",
+      "kitToken": "--dga-color-neutral-500"
+    },
+    "--featuredicons-icon-error": {
+      "declared": "var(--colors-red-700)",
+      "resolved": "#b42318",
+      "kitToken": null
+    },
+    "--featuredicons-icon-info": {
+      "declared": "var(--colors-blue-700)",
+      "resolved": "#175cd3",
+      "kitToken": null
+    },
+    "--featuredicons-icon-info-light": {
+      "declared": "var(--colors-blue-50)",
+      "resolved": "#eff8ff",
+      "kitToken": null
+    },
+    "--featuredicons-icon-neutral": {
+      "declared": "var(--colors-neutral-700)",
+      "resolved": "#384250",
+      "kitToken": "--dga-color-neutral-700"
+    },
+    "--featuredicons-icon-neutral-light": {
+      "declared": "var(--colors-neutral-50)",
+      "resolved": "#f9fafb",
+      "kitToken": "--dga-color-neutral-50"
+    },
+    "--featuredicons-icon-oncolor": {
+      "declared": "var(--colors-base-white)",
+      "resolved": "#ffffff",
+      "kitToken": "--dga-color-base-white"
+    },
+    "--featuredicons-icon-primary": {
+      "declared": "var(--colors-primary-sa-flag-600-primary)",
+      "resolved": "#1b8354",
+      "kitToken": null
+    },
+    "--featuredicons-icon-primary-400": {
+      "declared": "var(--colors-primary-sa-flag-400)",
+      "resolved": "#54c08a",
+      "kitToken": "--dga-color-primary-sa-flag-400"
+    },
+    "--featuredicons-icon-primary-light": {
+      "declared": "var(--colors-primary-sa-flag-50)",
+      "resolved": "#f3fcf6",
+      "kitToken": "--dga-color-primary-sa-flag-50"
+    },
+    "--featuredicons-icon-secondary": {
+      "declared": "var(--colors-secondary-gold-600-primary)",
+      "resolved": "#dba102",
+      "kitToken": null
+    },
+    "--featuredicons-icon-secondary-light": {
+      "declared": "var(--colors-secondary-gold-50)",
+      "resolved": "#fffef2",
+      "kitToken": "--dga-color-secondary-gold-50"
+    },
+    "--featuredicons-icon-success": {
+      "declared": "var(--colors-green-700)",
+      "resolved": "#067647",
+      "kitToken": null
+    },
+    "--featuredicons-icon-success-light": {
+      "declared": "var(--colors-green-50)",
+      "resolved": "#ecfdf3",
+      "kitToken": null
+    },
+    "--featuredicons-icon-tertiary": {
+      "declared": "var(--colors-tertiary-lavendar-500-primary)",
+      "resolved": "#80519f",
+      "kitToken": null
+    },
+    "--featuredicons-icon-tertiary-light": {
+      "declared": "var(--colors-tertiary-lavendar-50)",
+      "resolved": "#f9f5fa",
+      "kitToken": "--dga-color-tertiary-lavendar-50"
+    },
+    "--featuredicons-icon-warning": {
+      "declared": "var(--colors-yellow-700)",
+      "resolved": "#b54707",
+      "kitToken": null
+    },
+    "--form-datecell-background-100": {
+      "declared": "var(--colors-primary-sa-flag-100)",
+      "resolved": "#dff6e7",
+      "kitToken": "--dga-color-primary-sa-flag-100"
+    },
+    "--form-datecell-background-200": {
+      "declared": "var(--colors-primary-sa-flag-200)",
+      "resolved": "#b8eacb",
+      "kitToken": "--dga-color-primary-sa-flag-200"
+    },
+    "--form-datecell-background-300": {
+      "declared": "var(--colors-primary-sa-flag-300)",
+      "resolved": "#88d8ad",
+      "kitToken": "--dga-color-primary-sa-flag-300"
+    },
+    "--form-datecell-background-600": {
+      "declared": "var(--colors-primary-sa-flag-600-primary)",
+      "resolved": "#1b8354",
+      "kitToken": null
+    },
+    "--form-datecell-background-default": {
+      "declared": "var(--colors-primary-sa-flag-600-primary)",
+      "resolved": "#1b8354",
+      "kitToken": null
+    },
+    "--form-datecell-background-disabled": {
+      "declared": "#ffffff",
+      "resolved": "#ffffff",
+      "kitToken": null
+    },
+    "--form-datecell-background-focused": {
+      "declared": "var(--colors-primary-sa-flag-600-primary)",
+      "resolved": "#1b8354",
+      "kitToken": null
+    },
+    "--form-datecell-background-hovered": {
+      "declared": "var(--colors-primary-sa-flag-700)",
+      "resolved": "#166a45",
+      "kitToken": "--dga-color-primary-sa-flag-700"
+    },
+    "--form-datecell-background-pressed": {
+      "declared": "var(--colors-primary-sa-flag-900)",
+      "resolved": "#104631",
+      "kitToken": "--dga-color-primary-sa-flag-900"
+    },
+    "--form-datecell-today-background-default": {
+      "declared": "var(--alpha-white-0)",
+      "resolved": "#ffffff00",
+      "kitToken": "--dga-color-alpha-white-0"
+    },
+    "--form-datecell-today-background-focused": {
+      "declared": "var(--alpha-white-0)",
+      "resolved": "#ffffff00",
+      "kitToken": "--dga-color-alpha-white-0"
+    },
+    "--form-datecell-today-background-hovered": {
+      "declared": "var(--colors-neutral-200)",
+      "resolved": "#e5e7eb",
+      "kitToken": "--dga-color-neutral-200"
+    },
+    "--form-datecell-today-background-pressed": {
+      "declared": "var(--colors-neutral-300)",
+      "resolved": "#d2d6db",
+      "kitToken": "--dga-color-neutral-300"
+    },
+    "--form-field-background-darker": {
+      "declared": "var(--colors-neutral-100)",
+      "resolved": "#f3f4f6",
+      "kitToken": "--dga-color-neutral-100"
+    },
+    "--form-field-background-default": {
+      "declared": "var(--background-card)",
+      "resolved": "#ffffff",
+      "kitToken": "--dga-background-card"
+    },
+    "--form-field-background-lighter": {
+      "declared": "var(--colors-neutral-25)",
+      "resolved": "#fcfcfd",
+      "kitToken": "--dga-color-neutral-25"
+    },
+    "--form-field-background-pressed": {
+      "declared": "var(--colors-neutral-100)",
+      "resolved": "#f3f4f6",
+      "kitToken": "--dga-color-neutral-100"
+    },
+    "--form-field-border-default": {
+      "declared": "var(--colors-neutral-400)",
+      "resolved": "#9da4ae",
+      "kitToken": "--dga-color-neutral-400"
+    },
+    "--form-field-border-error": {
+      "declared": "var(--border-error)",
+      "resolved": "#b42318",
+      "kitToken": null
+    },
+    "--form-field-border-hovered": {
+      "declared": "var(--colors-neutral-700)",
+      "resolved": "#384250",
+      "kitToken": "--dga-color-neutral-700"
+    },
+    "--form-field-border-pressed": {
+      "declared": "var(--colors-neutral-950)",
+      "resolved": "#0c111b",
+      "kitToken": "--dga-color-neutral-950"
+    },
+    "--form-field-label-gap": {
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2"
+    },
+    "--form-field-text-filled": {
+      "declared": "var(--text-default)",
+      "resolved": "#161616",
+      "kitToken": "--dga-text-default"
+    },
+    "--form-field-text-focused": {
+      "declared": "var(--text-primary-paragraph)",
+      "resolved": "#384250",
+      "kitToken": "--dga-text-primary-paragraph"
+    },
+    "--form-field-text-helper": {
+      "declared": "var(--text-secondary-paragraph)",
+      "resolved": "#6c727e",
+      "kitToken": "--dga-text-secondary-paragraph"
+    },
+    "--form-field-text-hovered": {
+      "declared": "var(--text-default)",
+      "resolved": "#161616",
+      "kitToken": "--dga-text-default"
+    },
+    "--form-field-text-label": {
+      "declared": "var(--text-default)",
+      "resolved": "#161616",
+      "kitToken": "--dga-text-default"
+    },
+    "--form-field-text-placeholder": {
+      "declared": "var(--text-secondary-paragraph)",
+      "resolved": "#6c727e",
+      "kitToken": "--dga-text-secondary-paragraph"
+    },
+    "--form-field-text-pressed": {
+      "declared": "var(--text-primary-paragraph)",
+      "resolved": "#384250",
+      "kitToken": "--dga-text-primary-paragraph"
+    },
+    "--form-field-text-readonly": {
+      "declared": "var(--text-default)",
+      "resolved": "#161616",
+      "kitToken": "--dga-text-default"
+    },
+    "--form-input-gap": {
+      "declared": "var(--spacing-0)",
+      "resolved": "0px",
+      "kitToken": "--dga-space-0"
+    },
+    "--form-input-padding": {
+      "declared": "var(--spacing-0)",
+      "resolved": "0px",
+      "kitToken": "--dga-space-0"
+    },
+    "--form-label-gap": {
+      "declared": "var(--spacing-1)",
+      "resolved": "4px",
+      "kitToken": "--dga-space-1"
+    },
+    "--form-option-background-hover": {
+      "declared": "var(--colors-neutral-100)",
+      "resolved": "#f3f4f6",
+      "kitToken": "--dga-color-neutral-100"
+    },
+    "--form-option-background-pressed": {
+      "declared": "var(--colors-neutral-200)",
+      "resolved": "#e5e7eb",
+      "kitToken": "--dga-color-neutral-200"
+    },
+    "--form-select-gap": {
+      "declared": "var(--spacing-0)",
+      "resolved": "0px",
+      "kitToken": "--dga-space-0"
+    },
+    "--form-select-padding": {
+      "declared": "var(--spacing-0)",
+      "resolved": "0px",
+      "kitToken": "--dga-space-0"
+    },
+    "--form-text-form-paragraph": {
+      "declared": "var(--text-secondary-paragraph)",
+      "resolved": "#6c727e",
+      "kitToken": "--dga-text-secondary-paragraph"
+    },
+    "--form-text-form-title": {
+      "declared": "var(--text-default)",
+      "resolved": "#161616",
+      "kitToken": "--dga-text-default"
+    },
+    "--form-textarea-gap": {
+      "declared": "var(--spacing-0)",
+      "resolved": "0px",
+      "kitToken": "--dga-space-0"
+    },
+    "--form-textarea-padding": {
+      "declared": "var(--spacing-0)",
+      "resolved": "0px",
+      "kitToken": "--dga-space-0"
+    },
+    "--icon-default": {
+      "declared": "var(--colors-base-black)",
+      "resolved": "#161616",
+      "kitToken": "--dga-color-base-black"
+    },
+    "--icon-default-400": {
+      "declared": "var(--colors-neutral-400)",
+      "resolved": "#9da4ae",
+      "kitToken": "--dga-color-neutral-400"
+    },
+    "--icon-default-500": {
+      "declared": "var(--colors-neutral-500)",
+      "resolved": "#6c727e",
+      "kitToken": "--dga-color-neutral-500"
+    },
+    "--icon-default-disabled": {
+      "declared": "var(--colors-neutral-400)",
+      "resolved": "#9da4ae",
+      "kitToken": "--dga-color-neutral-400"
+    },
+    "--icon-default-oncolor-disabled": {
+      "declared": "var(--colors-alpha-alpha-white-40)",
+      "resolved": "#ffffff66",
+      "kitToken": "--dga-color-alpha-white-40"
+    },
+    "--icon-error": {
+      "declared": "var(--colors-red-700)",
+      "resolved": "#b42318",
+      "kitToken": null
+    },
+    "--icon-error-light": {
+      "declared": "var(--colors-red-50)",
+      "resolved": "#fef3f2",
+      "kitToken": null
+    },
+    "--icon-info": {
+      "declared": "var(--colors-blue-700)",
+      "resolved": "#175cd3",
+      "kitToken": null
+    },
+    "--icon-info-light": {
+      "declared": "var(--colors-blue-50)",
+      "resolved": "#eff8ff",
+      "kitToken": null
+    },
+    "--icon-neutral": {
+      "declared": "var(--colors-neutral-700)",
+      "resolved": "#384250",
+      "kitToken": "--dga-color-neutral-700"
+    },
+    "--icon-neutral-light": {
+      "declared": "var(--colors-neutral-50)",
+      "resolved": "#f9fafb",
+      "kitToken": "--dga-color-neutral-50"
+    },
+    "--icon-oncolor": {
+      "declared": "var(--colors-base-white)",
+      "resolved": "#ffffff",
+      "kitToken": "--dga-color-base-white"
+    },
+    "--icon-primary": {
+      "declared": "var(--colors-primary-sa-flag-600-primary)",
+      "resolved": "#1b8354",
+      "kitToken": null
+    },
+    "--icon-primary-400": {
+      "declared": "var(--colors-primary-sa-flag-400)",
+      "resolved": "#54c08a",
+      "kitToken": "--dga-color-primary-sa-flag-400"
+    },
+    "--icon-primary-light": {
+      "declared": "var(--colors-primary-sa-flag-50)",
+      "resolved": "#f3fcf6",
+      "kitToken": "--dga-color-primary-sa-flag-50"
+    },
+    "--icon-secondary": {
+      "declared": "var(--colors-secondary-gold-600-primary)",
+      "resolved": "#dba102",
+      "kitToken": null
+    },
+    "--icon-secondary-light": {
+      "declared": "var(--colors-secondary-gold-50)",
+      "resolved": "#fffef2",
+      "kitToken": "--dga-color-secondary-gold-50"
+    },
+    "--icon-success": {
+      "declared": "var(--colors-green-700)",
+      "resolved": "#067647",
+      "kitToken": null
+    },
+    "--icon-success-light": {
+      "declared": "var(--colors-green-50)",
+      "resolved": "#ecfdf3",
+      "kitToken": null
+    },
+    "--icon-tertiary": {
+      "declared": "var(--colors-tertiary-lavendar-500-primary)",
+      "resolved": "#80519f",
+      "kitToken": null
+    },
+    "--icon-tertiary-light": {
+      "declared": "var(--colors-tertiary-lavendar-50)",
+      "resolved": "#f9f5fa",
+      "kitToken": "--dga-color-tertiary-lavendar-50"
+    },
+    "--icon-text-gap": {
+      "declared": "var(--spacing-1)",
+      "resolved": "4px",
+      "kitToken": "--dga-space-1"
+    },
+    "--icon-warning": {
+      "declared": "var(--colors-yellow-700)",
+      "resolved": "#b54707",
+      "kitToken": null
+    },
+    "--icon-warning-light": {
+      "declared": "var(--colors-yellow-50)",
+      "resolved": "#fffaeb",
+      "kitToken": null
+    },
+    "--link-danger": {
+      "declared": "var(--colors-red-600)",
+      "resolved": "#d92c20",
+      "kitToken": null
+    },
+    "--link-danger-focused": {
+      "declared": "var(--colors-red-600)",
+      "resolved": "#d92c20",
+      "kitToken": null
+    },
+    "--link-danger-hovered": {
+      "declared": "var(--colors-red-700)",
+      "resolved": "#b42318",
+      "kitToken": null
+    },
+    "--link-danger-pressed": {
+      "declared": "var(--colors-red-900)",
+      "resolved": "#7a2619",
+      "kitToken": null
+    },
+    "--link-danger-visited": {
+      "declared": "var(--colors-red-800)",
+      "resolved": "#912018",
+      "kitToken": null
+    },
+    "--link-icon-danger-focused": {
+      "declared": "var(--colors-red-600)",
+      "resolved": "#d92c20",
+      "kitToken": null
+    },
+    "--link-icon-danger-hovered": {
+      "declared": "var(--colors-red-700)",
+      "resolved": "#b42318",
+      "kitToken": null
+    },
+    "--link-icon-danger-pressed": {
+      "declared": "var(--colors-red-900)",
+      "resolved": "#7a2619",
+      "kitToken": null
+    },
+    "--link-icon-danger-visited": {
+      "declared": "var(--colors-red-800)",
+      "resolved": "#912018",
+      "kitToken": null
+    },
+    "--link-icon-neutral-focused": {
+      "declared": "var(--colors-neutral-700)",
+      "resolved": "#384250",
+      "kitToken": "--dga-color-neutral-700"
+    },
+    "--link-icon-neutral-hovered": {
+      "declared": "var(--colors-neutral-500)",
+      "resolved": "#6c727e",
+      "kitToken": "--dga-color-neutral-500"
+    },
+    "--link-icon-neutral-pressed": {
+      "declared": "var(--colors-neutral-400)",
+      "resolved": "#9da4ae",
+      "kitToken": "--dga-color-neutral-400"
+    },
+    "--link-icon-neutral-visited": {
+      "declared": "var(--colors-neutral-600)",
+      "resolved": "#4d5761",
+      "kitToken": "--dga-color-neutral-600"
+    },
+    "--link-icon-oncolor-disabled": {
+      "declared": "var(--alpha-white-30)",
+      "resolved": "#ffffff4c",
+      "kitToken": "--dga-color-alpha-white-30"
+    },
+    "--link-icon-oncolor-hovered": {
+      "declared": "var(--alpha-white-80)",
+      "resolved": "#ffffffcc",
+      "kitToken": "--dga-color-alpha-white-80"
+    },
+    "--link-icon-oncolor-pressed": {
+      "declared": "var(--alpha-white-60)",
+      "resolved": "#ffffff99",
+      "kitToken": "--dga-color-alpha-white-60"
+    },
+    "--link-icon-oncolor-visited": {
+      "declared": "var(--alpha-white-90)",
+      "resolved": "#ffffffe5",
+      "kitToken": "--dga-color-alpha-white-90"
+    },
+    "--link-icon-primary-focused": {
+      "declared": "var(--colors-primary-sa-flag-600-primary)",
+      "resolved": "#1b8354",
+      "kitToken": null
+    },
+    "--link-icon-primary-hovered": {
+      "declared": "var(--colors-primary-sa-flag-400)",
+      "resolved": "#54c08a",
+      "kitToken": "--dga-color-primary-sa-flag-400"
+    },
+    "--link-icon-primary-pressed": {
+      "declared": "var(--colors-primary-sa-flag-300)",
+      "resolved": "#88d8ad",
+      "kitToken": "--dga-color-primary-sa-flag-300"
+    },
+    "--link-icon-primary-visited": {
+      "declared": "var(--colors-primary-sa-flag-800)",
+      "resolved": "#14573a",
+      "kitToken": "--dga-color-primary-sa-flag-800"
+    },
+    "--link-link-oncolor-focused": {
+      "declared": "var(--colors-base-white)",
+      "resolved": "#ffffff",
+      "kitToken": "--dga-color-base-white"
+    },
+    "--link-links-group-gap": {
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2"
+    },
+    "--link-md-gap": {
+      "declared": "var(--spacing-1)",
+      "resolved": "4px",
+      "kitToken": "--dga-space-1"
+    },
+    "--link-neutral": {
+      "declared": "var(--colors-neutral-700)",
+      "resolved": "#384250",
+      "kitToken": "--dga-color-neutral-700"
+    },
+    "--link-neutral-focused": {
+      "declared": "var(--colors-neutral-700)",
+      "resolved": "#384250",
+      "kitToken": "--dga-color-neutral-700"
+    },
+    "--link-neutral-hovered": {
+      "declared": "var(--colors-neutral-500)",
+      "resolved": "#6c727e",
+      "kitToken": "--dga-color-neutral-500"
+    },
+    "--link-neutral-pressed": {
+      "declared": "var(--colors-neutral-400)",
+      "resolved": "#9da4ae",
+      "kitToken": "--dga-color-neutral-400"
+    },
+    "--link-neutral-visited": {
+      "declared": "var(--colors-neutral-600)",
+      "resolved": "#4d5761",
+      "kitToken": "--dga-color-neutral-600"
+    },
+    "--link-oncolor": {
+      "declared": "var(--colors-base-white)",
+      "resolved": "#ffffff",
+      "kitToken": "--dga-color-base-white"
+    },
+    "--link-oncolor-disabled": {
+      "declared": "var(--colors-alpha-alpha-white-30)",
+      "resolved": "#ffffff4c",
+      "kitToken": "--dga-color-alpha-white-30"
+    },
+    "--link-oncolor-focused": {
+      "declared": "var(--colors-base-white)",
+      "resolved": "#ffffff",
+      "kitToken": "--dga-color-base-white"
+    },
+    "--link-oncolor-hovered": {
+      "declared": "var(--colors-alpha-alpha-white-80)",
+      "resolved": "#ffffffcc",
+      "kitToken": "--dga-color-alpha-white-80"
+    },
+    "--link-oncolor-pressed": {
+      "declared": "var(--colors-alpha-alpha-white-60)",
+      "resolved": "#ffffff99",
+      "kitToken": "--dga-color-alpha-white-60"
+    },
+    "--link-oncolor-visited": {
+      "declared": "var(--colors-alpha-alpha-white-90)",
+      "resolved": "#ffffffe5",
+      "kitToken": "--dga-color-alpha-white-90"
+    },
+    "--link-primary": {
+      "declared": "var(--colors-primary-sa-flag-600-primary)",
+      "resolved": "#1b8354",
+      "kitToken": null
+    },
+    "--link-primary-focused": {
+      "declared": "var(--colors-primary-sa-flag-600-primary)",
+      "resolved": "#1b8354",
+      "kitToken": null
+    },
+    "--link-primary-hovered": {
+      "declared": "var(--colors-primary-sa-flag-400)",
+      "resolved": "#54c08a",
+      "kitToken": "--dga-color-primary-sa-flag-400"
+    },
+    "--link-primary-pressed": {
+      "declared": "var(--colors-primary-sa-flag-300)",
+      "resolved": "#88d8ad",
+      "kitToken": "--dga-color-primary-sa-flag-300"
+    },
+    "--link-primary-visited": {
+      "declared": "var(--colors-primary-sa-flag-800)",
+      "resolved": "#14573a",
+      "kitToken": "--dga-color-primary-sa-flag-800"
+    },
+    "--link-secondary": {
+      "declared": "var(--colors-secondary-gold-600-primary)",
+      "resolved": "#dba102",
+      "kitToken": null
+    },
+    "--link-secondary-focused": {
+      "declared": "var(--colors-secondary-gold-600-primary)",
+      "resolved": "#dba102",
+      "kitToken": null
+    },
+    "--link-secondary-hovered": {
+      "declared": "var(--colors-secondary-gold-400)",
+      "resolved": "#f7d54d",
+      "kitToken": "--dga-color-secondary-gold-400"
+    },
+    "--link-secondary-pressed": {
+      "declared": "var(--colors-secondary-gold-300)",
+      "resolved": "#fae996",
+      "kitToken": "--dga-color-secondary-gold-300"
+    },
+    "--link-secondary-visited": {
+      "declared": "var(--colors-secondary-gold-900)",
+      "resolved": "#6e3c00",
+      "kitToken": "--dga-color-secondary-gold-900"
+    },
+    "--link-sm-gap": {
+      "declared": "var(--spacing-1)",
+      "resolved": "4px",
+      "kitToken": "--dga-space-1"
+    },
+    "--link-tertiary": {
+      "declared": "var(--colors-tertiary-lavendar-500-primary)",
+      "resolved": "#80519f",
+      "kitToken": null
+    },
+    "--link-tertiary-focused": {
+      "declared": "var(--colors-tertiary-lavendar-500-primary)",
+      "resolved": "#80519f",
+      "kitToken": null
+    },
+    "--link-tertiary-hovered": {
+      "declared": "var(--colors-tertiary-lavendar-400)",
+      "resolved": "#a57bba",
+      "kitToken": "--dga-color-tertiary-lavendar-400"
+    },
+    "--link-tertiary-pressed": {
+      "declared": "var(--colors-tertiary-lavendar-300)",
+      "resolved": "#ccadd9",
+      "kitToken": "--dga-color-tertiary-lavendar-300"
+    },
+    "--link-tertiary-visited": {
+      "declared": "var(--colors-tertiary-lavendar-800)",
+      "resolved": "#3d1d5e",
+      "kitToken": "--dga-color-tertiary-lavendar-800"
+    },
+    "--model-content-bottom-padding": {
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2"
+    },
+    "--model-gap": {
+      "declared": "var(--spacing-1)",
+      "resolved": "4px",
+      "kitToken": "--dga-space-1"
+    },
+    "--model-padding": {
+      "declared": "var(--spacing-4)",
+      "resolved": "16px",
+      "kitToken": "--dga-space-4"
+    },
+    "--notification-alert-h-padding": {
+      "declared": "var(--spacing-4)",
+      "resolved": "16px",
+      "kitToken": "--dga-space-4"
+    },
+    "--notification-alert-v-padding": {
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2"
+    },
+    "--notification-background-brand-25": {
+      "declared": "var(--background-primary-25)",
+      "resolved": "#f7fdf9",
+      "kitToken": "--dga-background-primary-25"
+    },
+    "--notification-background-brand-50": {
+      "declared": "var(--colors-primary-sa-flag-50)",
+      "resolved": "#f3fcf6",
+      "kitToken": "--dga-color-primary-sa-flag-50"
+    },
+    "--notification-background-brand-light": {
+      "declared": "var(--colors-primary-sa-flag-50)",
+      "resolved": "#f3fcf6",
+      "kitToken": "--dga-color-primary-sa-flag-50"
+    },
+    "--notification-background-default-25": {
+      "declared": "var(--background-neutral-25)",
+      "resolved": "#fcfcfd",
+      "kitToken": "--dga-background-neutral-25"
+    },
+    "--notification-background-default-50": {
+      "declared": "var(--background-neutral-50)",
+      "resolved": "#f9fafb",
+      "kitToken": "--dga-background-neutral-50"
+    },
+    "--notification-background-default-light": {
+      "declared": "var(--colors-neutral-50)",
+      "resolved": "#f9fafb",
+      "kitToken": "--dga-color-neutral-50"
+    },
+    "--notification-background-error-25": {
+      "declared": "var(--background-error-25)",
+      "resolved": "#fffbfa",
+      "kitToken": "--dga-background-error-25"
+    },
+    "--notification-background-error-50": {
+      "declared": "var(--background-error-50)",
+      "resolved": "#fef3f2",
+      "kitToken": "--dga-background-error-50"
+    },
+    "--notification-background-error-light": {
+      "declared": "var(--colors-red-50)",
+      "resolved": "#fef3f2",
+      "kitToken": null
+    },
+    "--notification-background-info-25": {
+      "declared": "var(--background-info-25)",
+      "resolved": "#f5faff",
+      "kitToken": "--dga-background-info-25"
+    },
+    "--notification-background-info-50": {
+      "declared": "var(--background-info-50)",
+      "resolved": "#eff8ff",
+      "kitToken": "--dga-background-info-50"
+    },
+    "--notification-background-info-light": {
+      "declared": "var(--colors-blue-50)",
+      "resolved": "#eff8ff",
+      "kitToken": null
+    },
+    "--notification-background-success-25": {
+      "declared": "var(--background-success-25)",
+      "resolved": "#f6fef9",
+      "kitToken": "--dga-background-success-25"
+    },
+    "--notification-background-success-50": {
+      "declared": "var(--background-success-50)",
+      "resolved": "#ecfdf3",
+      "kitToken": "--dga-background-success-50"
+    },
+    "--notification-background-success-light": {
+      "declared": "var(--colors-green-50)",
+      "resolved": "#ecfdf3",
+      "kitToken": null
+    },
+    "--notification-background-warning-25": {
+      "declared": "var(--background-warning-25)",
+      "resolved": "#fffcf5",
+      "kitToken": "--dga-background-warning-25"
+    },
+    "--notification-background-warning-50": {
+      "declared": "var(--background-warning-50)",
+      "resolved": "#fffaeb",
+      "kitToken": "--dga-background-warning-50"
+    },
+    "--notification-background-warning-light": {
+      "declared": "var(--colors-yellow-50)",
+      "resolved": "#fffaeb",
+      "kitToken": null
+    },
+    "--notification-gap": {
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2"
+    },
+    "--notification-h-padding": {
+      "declared": "var(--spacing-4)",
+      "resolved": "16px",
+      "kitToken": "--dga-space-4"
+    },
+    "--notification-padding": {
+      "declared": "var(--spacing-3)",
+      "resolved": "12px",
+      "kitToken": "--dga-space-3"
+    },
+    "--notification-text-brand": {
+      "declared": "var(--text-primary)",
+      "resolved": "#1b8354",
+      "kitToken": "--dga-text-primary"
+    },
+    "--notification-text-error": {
+      "declared": "var(--text-error)",
+      "resolved": "#b42318",
+      "kitToken": "--dga-text-error"
+    },
+    "--notification-text-info": {
+      "declared": "var(--text-info)",
+      "resolved": "#175cd3",
+      "kitToken": "--dga-text-info"
+    },
+    "--notification-text-success": {
+      "declared": "var(--text-success)",
+      "resolved": "#067647",
+      "kitToken": "--dga-text-success"
+    },
+    "--notification-text-warning": {
+      "declared": "var(--text-warning)",
+      "resolved": "#b54707",
+      "kitToken": "--dga-text-warning"
+    },
+    "--notification-toast-desktop-h-padding": {
+      "declared": "var(--spacing-4)",
+      "resolved": "16px",
+      "kitToken": "--dga-space-4"
+    },
+    "--notification-toast-mobile-h-padding": {
+      "declared": "var(--spacing-4)",
+      "resolved": "16px",
+      "kitToken": "--dga-space-4"
+    },
+    "--notification-toast-v-padding": {
+      "declared": "var(--spacing-3)",
+      "resolved": "12px",
+      "kitToken": "--dga-space-3"
+    },
+    "--pagination-item-lg-padding": {
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2"
+    },
+    "--pagination-item-md-padding": {
+      "declared": "var(--spacing-1-5)",
+      "resolved": "6px",
+      "kitToken": "--dga-space-1-5"
+    },
+    "--pagination-item-sm-padding": {
+      "declared": "var(--spacing-1)",
+      "resolved": "4px",
+      "kitToken": "--dga-space-1"
+    },
+    "--pagination-items-padding": {
+      "declared": "var(--spacing-1)",
+      "resolved": "4px",
+      "kitToken": "--dga-space-1"
+    },
+    "--progressindicator-progress-indicator-gap": {
+      "declared": "var(--spacing-4)",
+      "resolved": "16px",
+      "kitToken": "--dga-space-4"
+    },
+    "--progressindicator-progress-text-content-side-padding": {
+      "declared": "var(--spacing-3)",
+      "resolved": "12px",
+      "kitToken": "--dga-space-3"
+    },
+    "--stepper-button-background": {
+      "declared": "var(--colors-base-white)",
+      "resolved": "#ffffff",
+      "kitToken": "--dga-color-base-white"
+    },
+    "--stepper-button-completed": {
+      "declared": "var(--colors-primary-sa-flag-600-primary)",
+      "resolved": "#1b8354",
+      "kitToken": null
+    },
+    "--stepper-button-completed-hovered": {
+      "declared": "var(--colors-primary-sa-flag-700)",
+      "resolved": "#166a45",
+      "kitToken": "--dga-color-primary-sa-flag-700"
+    },
+    "--stepper-button-current": {
+      "declared": "var(--colors-primary-sa-flag-600-primary)",
+      "resolved": "#1b8354",
+      "kitToken": null
+    },
+    "--stepper-button-current-hovered": {
+      "declared": "var(--colors-primary-sa-flag-700)",
+      "resolved": "#166a45",
+      "kitToken": "--dga-color-primary-sa-flag-700"
+    },
+    "--stepper-button-upcomming": {
+      "declared": "var(--colors-neutral-300)",
+      "resolved": "#d2d6db",
+      "kitToken": "--dga-color-neutral-300"
+    },
+    "--stepper-button-upcomming-hovered": {
+      "declared": "var(--colors-neutral-400)",
+      "resolved": "#9da4ae",
+      "kitToken": "--dga-color-neutral-400"
+    },
+    "--stepper-line-completed": {
+      "declared": "var(--colors-primary-sa-flag-600-primary)",
+      "resolved": "#1b8354",
+      "kitToken": null
+    },
+    "--stepper-line-completed-hovered": {
+      "declared": "var(--colors-primary-sa-flag-700)",
+      "resolved": "#166a45",
+      "kitToken": "--dga-color-primary-sa-flag-700"
+    },
+    "--stepper-line-current": {
+      "declared": "var(--colors-neutral-300)",
+      "resolved": "#d2d6db",
+      "kitToken": "--dga-color-neutral-300"
+    },
+    "--stepper-line-upcomming": {
+      "declared": "var(--colors-neutral-300)",
+      "resolved": "#d2d6db",
+      "kitToken": "--dga-color-neutral-300"
+    },
+    "--stepper-line-upcomming-hovered": {
+      "declared": "var(--colors-neutral-400)",
+      "resolved": "#9da4ae",
+      "kitToken": "--dga-color-neutral-400"
+    },
+    "--stepper-text-primary": {
+      "declared": "var(--text-display)",
+      "resolved": "#1f2a37",
+      "kitToken": "--dga-text-display"
+    },
+    "--stepper-text-secondary": {
+      "declared": "var(--text-primary-paragraph)",
+      "resolved": "#384250",
+      "kitToken": "--dga-text-primary-paragraph"
+    },
+    "--stepper-text-tertiary": {
+      "declared": "var(--text-secondary-paragraph)",
+      "resolved": "#6c727e",
+      "kitToken": "--dga-text-secondary-paragraph"
+    },
+    "--tab-button-gap": {
+      "declared": "var(--spacing-1)",
+      "resolved": "4px",
+      "kitToken": "--dga-space-1"
+    },
+    "--tab-horizontal-tab-md-button-h-padding": {
+      "declared": "var(--spacing-3)",
+      "resolved": "12px",
+      "kitToken": "--dga-space-3"
+    },
+    "--tab-horizontal-tab-md-button-v-padding": {
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2"
+    },
+    "--tab-horizontal-tab-sm-button-h-padding": {
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2"
+    },
+    "--tab-horizontal-tab-sm-button-v-padding": {
+      "declared": "var(--spacing-1)",
+      "resolved": "4px",
+      "kitToken": "--dga-space-1"
+    },
+    "--tab-vertical-tab-md-button-h-padding": {
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2"
+    },
+    "--tab-vertical-tab-md-button-v-padding": {
+      "declared": "var(--spacing-1)",
+      "resolved": "4px",
+      "kitToken": "--dga-space-1"
+    },
+    "--tab-vertical-tab-sm-button-h-padding": {
+      "declared": "var(--spacing-1)",
+      "resolved": "4px",
+      "kitToken": "--dga-space-1"
+    },
+    "--tab-vertical-tab-sm-button-v-padding": {
+      "declared": "var(--spacing-0-5)",
+      "resolved": "2px",
+      "kitToken": "--dga-space-0-5"
+    },
+    "--table-background-disabled": {
+      "declared": "var(--background-disabled)",
+      "resolved": "#e5e7eb",
+      "kitToken": "--dga-background-disabled"
+    },
+    "--table-background-header": {
+      "declared": "var(--colors-neutral-100)",
+      "resolved": "#f3f4f6",
+      "kitToken": "--dga-color-neutral-100"
+    },
+    "--table-background-hover-selected": {
+      "declared": "var(--colors-neutral-50)",
+      "resolved": "#f9fafb",
+      "kitToken": "--dga-color-neutral-50"
+    },
+    "--table-background-row": {
+      "declared": "var(--colors-neutral-50)",
+      "resolved": "#f9fafb",
+      "kitToken": "--dga-color-neutral-50"
+    },
+    "--table-cell-border": {
+      "declared": "var(--colors-neutral-300)",
+      "resolved": "#d2d6db",
+      "kitToken": "--dga-color-neutral-300"
+    },
+    "--table-cell-border-inverse": {
+      "declared": "var(--border-black)",
+      "resolved": "#161616",
+      "kitToken": "--dga-color-base-black"
+    },
+    "--table-cell-gap": {
+      "declared": "var(--spacing-1)",
+      "resolved": "4px",
+      "kitToken": "--dga-space-1"
+    },
+    "--table-cell-h-padding": {
+      "declared": "var(--spacing-3)",
+      "resolved": "12px",
+      "kitToken": "--dga-space-3"
+    },
+    "--table-cell-v-padding": {
+      "declared": "var(--spacing-1)",
+      "resolved": "4px",
+      "kitToken": "--dga-space-1"
+    },
+    "--table-text-body": {
+      "declared": "var(--text-default)",
+      "resolved": "#161616",
+      "kitToken": "--dga-text-default"
+    },
+    "--table-text-head": {
+      "declared": "var(--colors-neutral-700)",
+      "resolved": "#384250",
+      "kitToken": "--dga-color-neutral-700"
+    },
+    "--tag-background-error": {
+      "declared": "var(--colors-red-600)",
+      "resolved": "#d92c20",
+      "kitToken": null
+    },
+    "--tag-background-error-light": {
+      "declared": "var(--colors-red-50)",
+      "resolved": "#fef3f2",
+      "kitToken": null
+    },
+    "--tag-background-info": {
+      "declared": "var(--colors-blue-600)",
+      "resolved": "#156fee",
+      "kitToken": null
+    },
+    "--tag-background-info-light": {
+      "declared": "var(--colors-blue-50)",
+      "resolved": "#eff8ff",
+      "kitToken": null
+    },
+    "--tag-background-neutral": {
+      "declared": "var(--colors-neutral-600)",
+      "resolved": "#4d5761",
+      "kitToken": "--dga-color-neutral-600"
+    },
+    "--tag-background-neutral-light": {
+      "declared": "var(--colors-neutral-50)",
+      "resolved": "#f9fafb",
+      "kitToken": "--dga-color-neutral-50"
+    },
+    "--tag-background-on-color": {
+      "declared": "var(--colors-alpha-alpha-white-20)",
+      "resolved": "#ffffff33",
+      "kitToken": "--dga-color-alpha-white-20"
+    },
+    "--tag-background-success": {
+      "declared": "var(--colors-green-700)",
+      "resolved": "#067647",
+      "kitToken": null
+    },
+    "--tag-background-success-light": {
+      "declared": "var(--colors-green-50)",
+      "resolved": "#ecfdf3",
+      "kitToken": null
+    },
+    "--tag-background-warning": {
+      "declared": "var(--colors-yellow-700)",
+      "resolved": "#b54707",
+      "kitToken": null
+    },
+    "--tag-background-warning-light": {
+      "declared": "var(--colors-yellow-50)",
+      "resolved": "#fffaeb",
+      "kitToken": null
+    },
+    "--tag-border-error": {
+      "declared": "var(--colors-red-700)",
+      "resolved": "#b42318",
+      "kitToken": null
+    },
+    "--tag-border-error-light": {
+      "declared": "var(--colors-red-200)",
+      "resolved": "#fecdca",
+      "kitToken": null
+    },
+    "--tag-border-info": {
+      "declared": "var(--colors-blue-700)",
+      "resolved": "#175cd3",
+      "kitToken": null
+    },
+    "--tag-border-info-light": {
+      "declared": "var(--colors-blue-200)",
+      "resolved": "#b2ddff",
+      "kitToken": null
+    },
+    "--tag-border-neutral": {
+      "declared": "var(--colors-neutral-600)",
+      "resolved": "#4d5761",
+      "kitToken": "--dga-color-neutral-600"
+    },
+    "--tag-border-neutral-light": {
+      "declared": "var(--colors-neutral-50)",
+      "resolved": "#f9fafb",
+      "kitToken": "--dga-color-neutral-50"
+    },
+    "--tag-border-on-color": {
+      "declared": "var(--colors-alpha-alpha-white-60)",
+      "resolved": "#ffffff99",
+      "kitToken": "--dga-color-alpha-white-60"
+    },
+    "--tag-border-success": {
+      "declared": "var(--colors-green-700)",
+      "resolved": "#067647",
+      "kitToken": null
+    },
+    "--tag-border-success-light": {
+      "declared": "var(--colors-green-200)",
+      "resolved": "#abefc6",
+      "kitToken": null
+    },
+    "--tag-border-warning": {
+      "declared": "var(--colors-yellow-700)",
+      "resolved": "#b54707",
+      "kitToken": null
+    },
+    "--tag-border-warning-light": {
+      "declared": "var(--colors-yellow-200)",
+      "resolved": "#fedf89",
+      "kitToken": null
+    },
+    "--tag-dot": {
+      "declared": "var(--colors-alpha-alpha-white-60)",
+      "resolved": "#ffffff99",
+      "kitToken": "--dga-color-alpha-white-60"
+    },
+    "--tag-icon-error": {
+      "declared": "var(--colors-red-800)",
+      "resolved": "#912018",
+      "kitToken": null
+    },
+    "--tag-icon-info": {
+      "declared": "var(--colors-blue-800)",
+      "resolved": "#1849a9",
+      "kitToken": null
+    },
+    "--tag-icon-neutral": {
+      "declared": "var(--colors-neutral-800)",
+      "resolved": "#1f2a37",
+      "kitToken": "--dga-color-neutral-800"
+    },
+    "--tag-icon-success": {
+      "declared": "var(--colors-green-800)",
+      "resolved": "#085d3a",
+      "kitToken": null
+    },
+    "--tag-icon-warning": {
+      "declared": "var(--colors-yellow-800)",
+      "resolved": "#93370c",
+      "kitToken": null
+    },
+    "--tag-text-error": {
+      "declared": "var(--colors-red-800)",
+      "resolved": "#912018",
+      "kitToken": null
+    },
+    "--tag-text-info": {
+      "declared": "var(--colors-blue-800)",
+      "resolved": "#1849a9",
+      "kitToken": null
+    },
+    "--tag-text-neutral": {
+      "declared": "var(--colors-neutral-800)",
+      "resolved": "#1f2a37",
+      "kitToken": "--dga-color-neutral-800"
+    },
+    "--tag-text-success": {
+      "declared": "var(--colors-green-800)",
+      "resolved": "#085d3a",
+      "kitToken": null
+    },
+    "--tag-text-warning": {
+      "declared": "var(--colors-yellow-800)",
+      "resolved": "#93370c",
+      "kitToken": null
+    },
+    "--tooltip-background-dark": {
+      "declared": "var(--colors-neutral-800)",
+      "resolved": "#1f2a37",
+      "kitToken": "--dga-color-neutral-800"
+    },
+    "--tooltip-background-light": {
+      "declared": "var(--colors-base-white)",
+      "resolved": "#ffffff",
+      "kitToken": "--dga-color-base-white"
+    },
+    "--tooltip-gap": {
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2"
+    },
+    "--tooltip-padding": {
+      "declared": "var(--spacing-2)",
+      "resolved": "8px",
+      "kitToken": "--dga-space-2"
+    },
+    "--tooltip-text-heading-dark": {
+      "declared": "var(--colors-neutral-50)",
+      "resolved": "#f9fafb",
+      "kitToken": "--dga-color-neutral-50"
+    },
+    "--tooltip-text-heading-light": {
+      "declared": "var(--text-display)",
+      "resolved": "#1f2a37",
+      "kitToken": "--dga-text-display"
+    },
+    "--tooltip-text-paragraph-dark": {
+      "declared": "var(--colors-neutral-100)",
+      "resolved": "#f3f4f6",
+      "kitToken": "--dga-color-neutral-100"
+    },
+    "--tooltip-text-paragraph-light": {
+      "declared": "var(--text-primary-paragraph)",
+      "resolved": "#384250",
+      "kitToken": "--dga-text-primary-paragraph"
+    }
+  }
+}

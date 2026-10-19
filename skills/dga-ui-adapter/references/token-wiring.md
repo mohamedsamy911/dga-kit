@@ -8,16 +8,20 @@ generated files in `../../dga-design-system/assets/`:
 | `tokens.json` | `{ color, role, space, radius, width, container, shadow, typography, breakpoint, grid }` |
 | `tokens.css` | `--dga-color-*`, `--dga-text-*`, `--dga-background-*`, `--dga-space-*`, `--dga-radius-*` on `:root` |
 | `tailwind-preset.js` | A Tailwind v3 preset — `screens` plus `extend.{colors,spacing,borderRadius,...}` |
+| `component-roles.css` | DGA's 379 component token names as `--dga-<dga-name>`, light theme. Load **after** `tokens.css`: 275 are `var(--dga-…)` links into it, the rest literals |
+| `component-roles.json` | `{ $meta, roles: { "--button-background-transparent-hovered": { declared, resolved, kitToken } } }` |
 
-⚠️ **Only two of those three are generated.** `tokens.json` is the **harvest** — values verbatim
+⚠️ **Four of those five are generated.** `tokens.json` is the **harvest** — values verbatim
 from design.dga.gov.sa — and it is the INPUT. `tokens.css` and `tailwind-preset.js` are derived
-from it. After a re-harvest, regenerate the two outputs:
+from it by `generate-tokens.mjs`. `component-roles.json`/`.css` come from DGA's stylesheet via the
+kit's maintainer script
+([build-component-roles.py](https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/build-component-roles.py)). After a re-harvest, regenerate:
 
 ```bash
 node ../../dga-design-system/assets/generate-tokens.mjs
 ```
 
-Never hand-edit `tokens.css` or `tailwind-preset.js` — the next contributor who regenerates will
+Never hand-edit `tokens.css`, `tailwind-preset.js` or `component-roles.*` — the next contributor who regenerates will
 silently revert you. And never "correct" a value in `tokens.json` because it looks wrong: it
 records what DGA published, defects included. Suspect values go in its `$verify` block. Both
 invariants are stated in [the contributor contract](https://github.com/mohamedsamy911/dga-kit/blob/master/AGENTS.md).

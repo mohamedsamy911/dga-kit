@@ -2046,6 +2046,77 @@ for _fp in _SCAN:
 chk('prose: no adjacent duplicated line', not _dups, str(_dups))
 
 
+# --- component roles: DGA's component token names, generated --------------------------------
+# harvest/build-component-roles.py --check proves the files match the committed snapshot. These
+# checks prove what the files CLAIM: every CSS line matches its JSON row, every kit link points at
+# a token with the same value, and no role carries a value the kit does not (bar the reconciler's
+# named exclusions, pinned to their values).
+_CR_DIR = os.path.join(ROOT, 'skills', 'dga-design-system', 'assets')
+_cr = json.load(open(os.path.join(_CR_DIR, 'component-roles.json'), encoding='utf-8'))
+_cr_css = open(os.path.join(_CR_DIR, 'component-roles.css'), encoding='utf-8').read()
+_kit_css = dict(re.findall(r'(--dga-[\w-]+)\s*:\s*([^;]+);',
+                           open(os.path.join(_CR_DIR, 'tokens.css'), encoding='utf-8').read()))
+_spec = _ilu.spec_from_file_location('_rec', os.path.join(ROOT, 'harvest', 'reconcile-tokens.py'))
+_recm = _ilu.module_from_spec(_spec)
+_spec.loader.exec_module(_recm)
+_carried_light = _recm.carried_values(t)[0]
+
+
+def _cr_errors(roles, css, kit):
+    out, lines = [], dict(re.findall(r'(--dga-[\w-]+)\s*:\s*([^;]+);', css))
+    for _n, _r in roles.items():
+        _want = f"var({_r['kitToken']})" if _r['kitToken'] else _r['resolved']
+        if lines.get('--dga-' + _n[2:]) != _want:
+            out.append(f'{_n}: CSS does not match its JSON row')
+        if _r['kitToken'] and (_r['kitToken'] not in kit
+                               or _recm.norm(kit[_r['kitToken']]) != _recm.norm(_r['resolved'])):
+            out.append(f"{_n}: kitToken {_r['kitToken']} missing or a different value")
+        _exc = _recm.EXCLUDED.get(_n)
+        if (_recm.norm(_r['resolved']) not in _carried_light
+                and not (_exc and _recm.norm(_exc[0]) == _recm.norm(_r['resolved']))):
+            out.append(f"{_n}: resolves to {_r['resolved']}, which tokens.json does not carry")
+    if len(lines) != len(roles):
+        out.append(f'CSS has {len(lines)} declarations for {len(roles)} roles')
+    return out
+
+
+chk('component roles: CSS, JSON and tokens agree', not _cr_errors(_cr['roles'], _cr_css, _kit_css),
+    str(_cr_errors(_cr['roles'], _cr_css, _kit_css)[:5]))
+chk('component roles: the counts in $meta are the file\'s own',
+    _cr['$meta']['totalRoles'] == len(_cr['roles'])
+    and _cr['$meta']['linkedToKitToken'] == sum(1 for r in _cr['roles'].values() if r['kitToken']))
+chk('component roles: no generated name collides with a tokens.css name',
+    not set(re.findall(r'(--dga-[\w-]+)\s*:', _cr_css)) & set(_kit_css))
+# The docs quote both counts; a rebuild that changes them must not leave stale prose behind.
+def _cr_count_errors(texts, total, linked):
+    out = []
+    for _f, _txt in texts:
+        _txt = re.sub(r'[*\s]+', ' ', _txt)
+        for _m in re.finditer(r'(\d+) component token names?', _txt):
+            if int(_m.group(1)) != total:
+                out.append(f'{_f}: "{_m.group(0)}" but the file has {total}')
+        for _m in re.finditer(r'(\d+) (?:are `var\(--dga-…\)` links|names? link to a kit token|link to a kit token)', _txt):
+            if int(_m.group(1)) != linked:
+                out.append(f'{_f}: "{_m.group(0)}" but {linked} are linked')
+    return out
+_cr_docs = [(f, open(os.path.join(ROOT, f), encoding='utf-8').read()) for f in
+            ('COVERAGE.md', 'skills/dga-design-system/SKILL.md', 'skills/dga-ui-adapter/SKILL.md',
+             'skills/dga-ui-adapter/references/token-wiring.md')]
+_cl = open(os.path.join(ROOT, 'CHANGELOG.md'), encoding='utf-8').read()
+_cr_docs.append(('CHANGELOG.md (current entry)', _cl[:_cl.index('\n## ', _cl.index('## ') + 3)]))
+_cre = _cr_count_errors(_cr_docs, _cr['$meta']['totalRoles'], _cr['$meta']['linkedToKitToken'])
+chk('component roles: every doc quotes the generated counts', not _cre, str(_cre))
+chk('component roles: the count check catches a stale figure',
+    _cr_count_errors([('x', 'DGA\'s 378 component token names; **274** names link to a kit token')],
+                     379, 275) != [] and len(_cr_count_errors(
+        [('x', 'DGA\'s 378 component token names; **274** names link to a kit token')], 379, 275)) == 2)
+_bad = dict(_cr['roles'])
+_k = next(k for k, r in _bad.items() if r['kitToken'])
+_bad[_k] = dict(_bad[_k], resolved='#123456')
+chk('component roles: the check catches a role whose value drifted from its kit token',
+    len(_cr_errors(_bad, _cr_css, _kit_css)) >= 2)
+
+
 # --- source strength: DGA's hedges must not come back as obligations --------------------------
 # The 2026-10-18 re-read found the kit had hardened DGA's own wording in ~15 files: "helps" became
 # "required", "consider not having a timeout" became "no timeout", "avoid" became "forbidden".
