@@ -24,9 +24,8 @@ gap is recorded in `dga-brand-overlay`.
 
 **Type.** `heading` and `body` are `"IBM Plex Sans", "IBM Plex Sans Arabic", system-ui,
 sans-serif` — **Latin first**, so Latin renders in the face DGA actually names and Arabic
-falls through per character to the Arabic face. The Arabic face is recorded in
-`dga-brand-overlay` as the project's decision pending DS-DGA@dga.gov.sa — not cited as a DGA
-rule. Saudi Font is exposed only as `fonts.occasion`.
+falls through per character to the Arabic face. The Arabic face is IBM Plex Sans
+Arabic, named by DGA's Assessment Checklist (item 3), not by the typography page. Saudi Font is exposed only as `fonts.occasion`.
 Display tracking is emitted as `-0.02em` (never `-2%`, which is invalid CSS) and scoped
 `:lang(en)`, so an unlabelled document gets **no** tracking rather than tracking on Arabic.
 

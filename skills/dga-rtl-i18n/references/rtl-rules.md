@@ -40,11 +40,19 @@ and never revisit it per-screen.
 
 If DGA states a rule for any of these, DGA wins — check `references/components.md` first.
 
-> ⚠️ **Do not cite a count of DGA's RTL statements.** The kit recorded "six references" without
-> listing them, and a later review named four. The number is `TODO(verify)` until someone
-> enumerates the pages. Cite the specific page you are relying on, never a total. The per-component
-> ⚠️ **RTL** notes in `components.md` are this kit's derived guidance — a different and larger set
-> than DGA's own explicit statements.
+### Where these lists come from
+
+These lists are this kit's guidance from common RTL practice, not DGA's. One item has DGA's
+own words behind it: Steps *"progresses from left to right or right to left for RTL languages"*.
+DGA's guidance states none of the others. DGA's own `dga-*` components, read in the live build on 2026-10-19, agree on three:
+`dga-icon` flips icons named `arrow` or `chevron` in RTL by default, and Pagination and Date Picker
+rotate their arrow buttons under `[dir=rtl]`. That is DGA's code, not a stated rule.
+
+> ⚠️ **Cite the page, never a count of DGA's RTL statements.** Earlier versions of this kit
+> published three different totals. The statements were enumerated on 2026-10-19 and are listed in
+> `../SKILL.md`, *What DGA actually says about RTL*. A total goes stale on DGA's next deploy; a
+> page citation does not. The per-component ⚠️ **RTL** notes in `components.md` are this kit's
+> derived guidance — a different and larger set than DGA's own statements.
 
 ## Bidirectional text
 

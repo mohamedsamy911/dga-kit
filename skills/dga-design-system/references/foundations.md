@@ -70,11 +70,9 @@ be used"* — apply the stricter. DGA:
 *"available under a license agreement from the Ministry of Culture"*; download it from the
 Ministry of Culture website.
 
-⚠️ **Open question — no Arabic typeface is specified for body text.** The page names "IBM Plex
-Sans… developed by IBM in collaboration with Bold Monday, released 2017," which is the Latin
-family. IBM Plex Sans Arabic exists and is the obvious intent, but the guideline does not say
-so, and for an Arabic-first government system that is a material gap. **Confirm with DGA
-(DS-DGA@dga.gov.sa) before locking the font stack.** `TODO(verify)`
+⚠️ **This page names only the Latin family** — "IBM Plex Sans… developed by IBM in collaboration
+with Bold Monday, released 2017." The Arabic face is named elsewhere: DGA's Assessment Checklist,
+item 3, says to use IBM Plex Sans Arabic. Cite the checklist for it; see `brand.md`.
 
 **Two style groups.** *Display* for headings at large sizes; *Text* for body, labels and UI.
 DGA is explicit that display styles are reserved for headings, never body copy.
@@ -273,7 +271,6 @@ Looked for, not found on the site:
 
 - **Motion / animation** — no durations, easings or motion guidance page exists in the sitemap.
   Fall back to a stated house default and label it as such.
-- **Arabic body typeface** — see the typography warning above.
 - **A dark-mode *page*** — but dark theme itself IS defined; see "Token architecture" below.
   What's missing is prose guidance on when to use it.
 

@@ -53,7 +53,7 @@ gradients) get handled, and how you *test* both directions. An LTR app with RTL 
 fully recovers.
 
 **5 · The open decisions DGA does not make.** Numerals (Arabic-Indic or Western), calendar (Hijri,
-Gregorian, both), Arabic body typeface, motion durations, dark theme. DGA publishes no policy on
+Gregorian, both), motion durations, dark theme. DGA publishes no policy on
 any of them. Record the answers in `dga-brand-overlay` so every other decision reads from one
 place — and flag that an inconsistent answer across a product is worse than either choice.
 

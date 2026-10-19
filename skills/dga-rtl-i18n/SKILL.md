@@ -18,25 +18,44 @@ with Arabic poured into it is the single most common failure and it never fully 
 
 ## What DGA actually says about RTL
 
-The harvest is complete, and the answer is: **very little.** Across 50 component pages and 21
-routed templates, these are the statements the harvest found. ⚠️ **Cite them, never a count** — the
-total has not been verified against the live site, and the repo carries it as
-`TODO(verify)` in [the coverage record](https://github.com/mohamedsamy911/dga-kit/blob/master/COVERAGE.md). Item 6 is library code, not guidance, which is exactly the kind of conflation a
-number hides.
+**Very little.** On 2026-10-19 every string in DGA's live site build (`index-BO_6JOKP.js`) was
+searched, in English and Arabic, for a fixed set of direction words, and each hit was checked on
+the rendered page. The list is complete for those words in that build. Cite the page you rely on,
+not a total: the next DGA deploy can change it.
 
-1. **Quote** — the only dedicated RTL accessibility section: *"Support for Right-to-Left (RTL)
-   Languages — use the `dir="rtl"` attribute or apply appropriate CSS styling to ensure the text
-   and layout adapt to RTL languages seamlessly."*
-2. **Steps** — *"progresses from left to right or right to left for RTL languages"*, and the
-   final step *"has no line on the right side (or the left side if it is RTL)"*
-3. **Buttons** — icon placement varies with *"interface directionality"*
-4. **Search / FAQs pages** — applied filter results list *"from right to left"*
-5. **Sitemap page** — indentation measured *"on the right side"*, +16px per level
-6. **Pagination** — the shipped library mirrors arrows via `[dir=rtl]` (code, not guideline)
+**Explicit guidance** — Quote is the one page with an RTL accessibility item:
 
-Notably, DGA writes several measurements RTL-first — it assumes Arabic is the default reading
-direction even where it never says so. **Everything else is this project's responsibility**, and
-that is what this skill exists for.
+<!-- dga -->
+> Support for Right-to-Left (RTL) Languages: Use the dir="rtl" attribute or apply appropriate CSS styling to ensure the text and layout adapt to RTL languages seamlessly.
+<!-- /dga -->
+
+- **Steps** — *"progresses from left to right or right to left for RTL languages"*, and the
+  final step *"has no line on the right side (or the left side if it is RTL)"*
+- **Buttons** — leading or trailing icon use varies with *"interface directionality"*
+- **Change log 1.0.0** — Structured List and Pagination each *"Added RTL variant"*
+
+**Written right-to-left first** — DGA assumes Arabic without saying so:
+
+- **Search and FAQs pages** — applied filter results list *"from right to left"*
+- **Sitemap page** — indentation measured *"on the right side"*, +16px per level
+
+**A physical side, direction unstated** — the English and Arabic text name the same side:
+
+- **Textarea** — *"a scrollbar on the right side"*
+- **Second Nav Header** — quick-action icons *"on the right side of the header"*
+- **Navigation Header** — *"The image on the left likely represents a company or website logo"*
+  (DGA's "likely": a description of the picture, not a placement rule)
+
+⚠️ Do not turn these three into rules in either direction. DGA does not say whether they mirror.
+Kit policy: check the placement visually in DGA's template for each language before choosing a
+side, and build with logical properties so either answer is a one-line change. Record the choice
+in `../dga-brand-overlay/SKILL.md` with the project's other mirroring decisions.
+
+**DGA's own components (code, not guidance)** mirror more than the guidance says: `dga-icon`
+flips any icon named `arrow` or `chevron` in RTL by default, and Pagination and Date Picker
+rotate their arrow buttons under `[dir=rtl]`.
+
+**Everything else is this project's responsibility**, and that is what this skill exists for.
 
 **Numeral system and calendar: DGA states no policy.** Not Arabic-Indic vs Western, not Hijri vs
 Gregorian. DGA's own demos are Gregorian. Say DGA is silent and point at

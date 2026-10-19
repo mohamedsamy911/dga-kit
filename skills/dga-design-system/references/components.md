@@ -124,6 +124,8 @@ range and more visual context).
 **Anatomy** — Month & Year · Date Input (keyboard entry) · Container · Today (circular
 indicator) · Selected Date (circular indicator) · Actions (ghost/tertiary buttons) ·
 Navigation Buttons.
+⚠️ **RTL:** DGA's own component rotates the month navigation buttons under `[dir=rtl]`
+(implementation, not guideline).
 
 ### 🚩 Gregorian only — no Hijri anywhere
 
@@ -407,6 +409,9 @@ Text only · Icon only.
 > ⚠️ **The brand logo must not mirror in RTL**, while the nav layout must. Skip-link is a DGA
 > requirement — `dga-launch-gate` checks for it on every page.
 
+DGA's anatomy text reads *"The image on the left likely represents a company or website logo"*.
+"Likely" describes the picture; it is not a rule to put the logo on the left in either language.
+
 ---
 
 ## Table
@@ -672,6 +677,10 @@ action icons.
 
 > ⚠️ The date in DGA's own demo reads "21 Jan 2024" — **Gregorian**. Same gap as the date
 > picker. If you show a Hijri date here, you build it.
+
+DGA places the quick-action icons *"on the right side of the header"*, in the English and the
+Arabic text alike, and does not say whether that side mirrors. Kit policy: check DGA's template
+for each language before choosing a side, and build with logical properties.
 
 ---
 
@@ -953,6 +962,8 @@ scrollbar). Filled styles: default · lighter · darker. Error feedback for forb
 States: default · hovered · pressed · focused · **read-only** · disabled.
 **A11y:** native `<textarea>` with `<label for>`; `aria-describedby` for format and limits;
 **DGA recommends allowing vertical resize** — `textarea { resize: vertical; }`.
+⚠️ **RTL:** DGA describes *"a scrollbar on the right side"* and does not say whether it mirrors.
+Do not force the scrollbar to one side with CSS.
 
 ### Number input · `/forms-and-inputs/number-input` *(not in nav)*
 States: default · hovered · pressed · focused · read-only · disabled. Anatomy: label · input ·
@@ -967,15 +978,22 @@ numeral policy.
 
 ## Where DGA addresses RTL directly
 
-These are the component pages where the harvest found DGA speaking to RTL. ⚠️ **Cite the
-pages, never a total** — the overall count was not enumerated at capture time and is recorded
-as `TODO(verify)`; this kit has previously published three different totals for it.
+The component pages where DGA's guidance speaks to reading direction, enumerated against the live
+site build on 2026-10-19. ⚠️ **Cite the pages, never a total** — this kit once published three
+different totals, and a total goes stale on DGA's next deploy.
 
 1. **Quote** — a dedicated "Support for Right-to-Left (RTL) Languages" accessibility section
 2. **Steps** — "progresses from left to right or right to left for RTL languages", and the final
    step has "no line on the right side (or the left side if it is RTL)"
 3. **Buttons** — icon placement varies with "interface directionality"
-4. **Pagination** — the shipped library mirrors the arrows via `[dir=rtl]` (implementation, not guideline)
+
+Three more pages name a physical side without saying whether it mirrors: Textarea (scrollbar),
+Second Nav Header (quick-action icons) and Navigation Header (logo, "likely"). Each is noted in its
+section above. Do not treat them as RTL rules.
+
+DGA's own components mirror more than its guidance states — implementation, not guideline:
+`dga-icon` flips icons named `arrow` or `chevron` in RTL by default, and **Pagination** and
+**Date Picker** rotate their arrow buttons under `[dir=rtl]`.
 
 Everywhere else, RTL behaviour is the consuming team's responsibility. That is the gap
 `dga-rtl-i18n` fills.

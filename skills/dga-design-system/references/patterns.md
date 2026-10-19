@@ -446,10 +446,13 @@ Adding to the component-level list, the templates assume RTL as the default read
 
 - **Search page / FAQs page** — applied filter results list *"from right to left"*
 - **Sitemap page** — indentation measured *"on the right side"*, increasing by 16px per level
-- **Language switching** — a direct ar/en toggle that reloads *every* element including
-  interactive content
 
-Together with Quote, Steps and Buttons these are the places DGA speaks to RTL that this harvest
-found. ⚠️ **Do not cite a total** — the count was never enumerated at capture time and is
-`TODO(verify)`; cite the specific page you rely on. See https://github.com/mohamedsamy911/dga-kit/blob/master/COVERAGE.md, *Disputed and unverified
-claims*.
+Together with Quote, Steps and Buttons, these are the places DGA's guidance names a reading
+direction, enumerated against the live site build on 2026-10-19. ⚠️ **Do not cite a total** —
+cite the specific page you rely on; a total goes stale on DGA's next deploy.
+
+Related, but not a direction rule: **language switching** is a direct ar/en toggle that reloads
+*every* element, including interactive content.
+
+The Home page and seasonal templates also carry the sentence *"…an image or an illustration on
+the left hand side"* in DGA's text, but the pages do not display it. Do not cite it.

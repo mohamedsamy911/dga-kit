@@ -11,6 +11,40 @@ patch means corrections. Nothing here is a DGA release — see
 `skills/dga-design-system/dga-version.md` for the Platforms Code version this kit is pinned to
 (currently **4.0.0** per DGA's change log, read 2026-10-08; DGA publishes no release date).
 
+## 0.14.0 — 2026-10-19
+
+### Added — DGA's RTL statements, enumerated
+
+The kit carried the number of places DGA itself speaks to RTL as `TODO(verify)`, after
+publishing three different totals. Every string in the live site build (`index-BO_6JOKP.js`, the
+deploy already in the inventory) was searched for direction words in English and Arabic, and each
+hit was checked on the rendered page: `harvest/raw/2026-10-19-rtl-statements.md`.
+
+- **Explicit guidance** stays as cited: Quote, Steps, Buttons; the Search, FAQs and Sitemap
+  templates; the 1.0.0 change log's two RTL variants. Quote's RTL item is now a verified quote.
+- **New: three pages name a physical side without saying whether it mirrors** — Textarea's
+  scrollbar *"on the right side"*, Second Nav Header's quick-action icons *"on the right side of
+  the header"*, and Navigation Header's logo image *"on the left"* (with DGA's "likely"). Each is
+  noted in `components.md` as not an RTL rule.
+- **New: what DGA's own components mirror** — `dga-icon` flips icons named `arrow` or `chevron`
+  in RTL by default; Pagination and Date Picker rotate their arrow buttons under `[dir=rtl]`.
+  Recorded as DGA's code, not a stated rule. `rtl-rules.md` now says its mirroring lists are the
+  kit's own guidance.
+- **Not cited:** two sentences in DGA's text table that the pages do not display (Layout's
+  "aligning text to the left"; the Home templates' illustration "on the left hand side").
+
+Skills still cite pages, never a total: the list holds for one DGA build.
+
+### Fixed — the Arabic face was still called an open question
+
+0.13.0 cited IBM Plex Sans Arabic to the Assessment Checklist, item 3, in `brand.md` and the
+tokens, but other places still said DGA names no Arabic face: `foundations.md` (with a
+`TODO(verify)` telling teams to email DGA before locking the font stack), `content.md`,
+`dga-brand-overlay` (its description and open-decisions table), `dga-ui-adapter`'s cite-or-omit
+rule, the `dga-frontend-architect` agent, ui-adapter eval case 12, and both capture logs. Each now
+points at the checklist, and the entity decision is removed: DGA made it. A new fixture fails on
+any of those phrasings.
+
 ## 0.13.0 — 2026-10-19
 
 ### Added — DGA's own documents beyond the design site

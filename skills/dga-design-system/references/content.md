@@ -116,7 +116,6 @@ across screens is worse than either option.
 - **Numeral policy** — see above
 - **Hijri dates** — absent everywhere
 - **Arabic tone of voice** — no guidance beyond the per-component notes above
-- **Arabic body typeface** — see `foundations.md`
 
 For each, `dga-design-review` states that DGA is silent and names the fallback rather than
 inventing a rule.

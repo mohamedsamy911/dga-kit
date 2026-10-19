@@ -45,6 +45,7 @@ verbatim from the running site, not transcribed from screenshots.
 | Saudi law (PDPL) | **Personal Data Protection Law, articles 4, 5, 7, 11, 12, 13** — Arabic text as amended, from the Bureau of Experts' official laws portal; cited as law, not DGA guidance | raw evidence: `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-19-pdpl.md` | 2026-10-19 |
 | Live-demo semantics | **What DGA's own components render** — roles, ARIA and native tags inside each `dga-*` demo host, shadow DOM included; 19 lack semantics DGA's guidance asks for | raw evidence: `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-19-live-demo-semantics.md` | 2026-10-19 |
 | Code samples | **Every component page's Code tab** — 50 samples byte-exact from DGA's chunks, each confirmed displayed; the "recommended, not mandatory" note; 9 import `platformscode-react`, 2 are Mongoose placeholders | raw evidence: `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-19-code-samples.md` | 2026-10-19 |
+| RTL statements | **Every place DGA's guidance names a reading direction or a side** — the live build searched in English and Arabic, each hit checked on the rendered page; Quote, Steps, Buttons, Search, FAQs, Sitemap, plus three physical-side mentions and DGA's own component mirroring | raw evidence: `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-19-rtl-statements.md` | 2026-10-19 |
 | Arabic vs English | **Where DGA's two languages disagree** — all 6,182 shared text keys compared number by number, and all 743 normative sentences read in both languages; 9 differences confirmed on both rendered pages | raw evidence: `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-18-en-ar-differences.md` | 2026-10-18 |
 | Arabic copy | **DGA's own Arabic** for every string in the "Copy DGA gives" table, taken from the Arabic twin of DGA's text table and confirmed on the rendered Arabic pages | raw evidence: `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-18-arabic-copy.md` | 2026-10-18 |
 | Reverse audit | **Kit claim → DGA source** — every rule the agents, skill entry files and eval answers attribute to DGA, traced to DGA's text; ~30 corrections, each confirmed on the rendered page | raw evidence: `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-18-reverse-audit.md` | 2026-10-18 |
@@ -84,7 +85,8 @@ Recorded so a skill can distinguish "DGA is silent" from "we didn't check."
 - **Motion tokens** — no durations or easings anywhere. But `prefers-reduced-motion` IS required,
   in three component pages (Filtration, Loading, Skeleton).
 - **Arabic body typeface** — typography names IBM Plex Sans (the Latin family) and gives no
-  Arabic face for body text. Saudi Font is restricted to national occasions, headings only.
+  Arabic face for body text. *Settled 2026-10-19: DGA's Assessment Checklist, item 3, names IBM
+  Plex Sans Arabic.* Saudi Font is restricted to national occasions, headings only.
 - **Hijri calendar** — absent from the datepicker guideline, the live demo, and the official
   npm package.
 - **Dark-mode guidance** — dark theme values exist in the token collections, but there is no

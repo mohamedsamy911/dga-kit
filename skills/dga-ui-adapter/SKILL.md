@@ -117,9 +117,9 @@ Eight rules. Each is library-independent, and each one has burned somebody.
    not `left`. `transform`, `box-shadow` and gradients are *not* logical and need an explicit
    `[dir="rtl"]` override. See `dga-rtl-i18n`.
 
-8. **Cite or omit.** Where DGA is silent — numerals, Hijri, Arabic body typeface, motion
-   durations — name the gap and the fallback you are applying, usually WCAG 2.2 AA. **Never
-   invent a DGA rule to fill one.** A compliance claim that cannot be cited is worse than none.
+8. **Cite or omit.** Where DGA is silent — numerals, Hijri, motion durations — name the gap
+   and the fallback you are applying, usually WCAG 2.2 AA. **Never invent a DGA rule to fill
+   one.** A compliance claim that cannot be cited is worse than none.
 
 ## Step 3 — map the components
 

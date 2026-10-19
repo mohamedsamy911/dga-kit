@@ -39,7 +39,7 @@ add a rule to `references/` and cite it.
 | Transparency mandate (About the Entity, e-Participation) | 2 | `patterns.md` | `dga-launch-gate` |
 | Brand & identity (logos, seasonal, Saudi Font) | across templates | `brand.md` | `dga-brand-overlay` |
 | Content & language | across templates | `content.md` | `dga-design-system` |
-| RTL — DGA's own explicit statements | **`TODO(verify)`** | `rtl-rules.md` + citations | `dga-rtl-i18n` |
+| RTL — where DGA's guidance names a direction | Explicit: Quote, Steps, Buttons. Written RTL-first: Search, FAQs and Sitemap templates. Enumerated 2026-10-19 | `dga-rtl-i18n/SKILL.md`, `components.md`, `patterns.md` | `dga-rtl-i18n` |
 | Developer setup (`/developing`, install) | 2 | `official-packages.md` | `dga-react` |
 | DGA rules expressed in a non-DGA UI library | — | `token-wiring.md`, `component-mapping.md` | `dga-ui-adapter` |
 | Designer setup (`/designing`, Figma install) | 2 | `patterns.md`, `brand.md` | `dga-mockup` |
@@ -374,7 +374,7 @@ name it, and nothing else.
 ## Guarding against our own drift
 
 The monitoring in `dga-tokens-sync` watches **DGA** for changes. `evals/check-quote-fidelity.py`
-watches **us** — it compares the DGA quotes a capture actually covers (44 of 136 blockquotes
+watches **us** — it compares the DGA quotes a capture actually covers (45 of 137 blockquotes
 today; the rest are *unverifiable*, not verified) against the captured page text in
 `harvest/raw/`, and fails on a paragraph that reproduces a capture without matching it.
 
@@ -482,7 +482,7 @@ Recorded rather than quietly resolved, per the kit's own cite-or-omit rule.
 
 | Claim | Status |
 |---|---|
-| **How many places DGA itself states an RTL rule.** This file previously said "6 references across the whole system". Nothing in the kit enumerates them, so the number cannot be checked from its own files, and a review of the derived skills named four (Quote, Steps, Buttons, Pagination). The 16 ⚠️ **RTL** callouts in `components.md` are the kit's *derived* guidance, which is a different count and must not be conflated with DGA's own statements. | **`TODO(verify)`** — settle by re-reading the live site and listing the pages. Until then no skill may cite a number. |
+| ~~**How many places DGA itself states an RTL rule.**~~ This file once said "6 references across the whole system" without listing them. | **Closed 2026-10-19** — every string in the live site build was searched for direction words in English and Arabic, and each hit was checked on the rendered page (`harvest/raw/2026-10-19-rtl-statements.md`). Skills cite the pages, still never a total: the list holds for one DGA build. |
 | Three colour values disputed against an independent extraction | Carried as `$meta.$disputed` in `tokens.json`; see `harvest/CROSSREF-SECOND-EXTRACTION.md` |
 | **How many components DGA ships.** `/about-platforms-code` publishes a **33+** counter. `/guidelines/components/` enumerates **50** routes. | Recorded, not reconciled. This kit cites **50** — the enumerable count. The counter is stale marketing copy. |
 | **When 1.0.0 and 1.0.2 shipped.** `/updates/roadmap` dates them Feb 2024 and Sep 2024; `/updates/change-log` dates the same versions 20 Feb **2025** and 1 Sep **2025**. | Cite the change log — the more specific record. |
@@ -491,7 +491,7 @@ Recorded rather than quietly resolved, per the kit's own cite-or-omit rule.
 
 No skill invents a rule here. Each says DGA is silent and names its fallback.
 
-Numeral policy · Hijri calendar · Arabic body typeface · motion tokens (durations and easings —
+Numeral policy · Hijri calendar · motion tokens (durations and easings —
 though `prefers-reduced-motion` **is** required in three places) · terminology glossary ·
 Arabic tone of voice · **Card accessibility** (DGA's section is Accordion's, pasted in) ·
 **Menu accessibility** (no section exists at all) · Table ARIA roles · carousel pause control

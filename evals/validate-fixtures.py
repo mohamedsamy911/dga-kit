@@ -1915,6 +1915,34 @@ chk('rtl: the detector matches every total this kit has published',
         'Steps is one of only six places DGA speaks to RTL directly.')),
     'the guard would not catch a reintroduced total')
 
+# --- Arabic face: DGA names it (Assessment Checklist, item 3) --------------------------------
+# 0.13.0 cited IBM Plex Sans Arabic to the checklist in brand.md while six other places still
+# told teams DGA names no Arabic face and to email DGA before locking the font stack.
+_ARABIC_FACE_OPEN = re.compile(
+    r'Arabic body typeface|no Arabic (?:body )?(?:type)?face|Plex Sans Arabic is the obvious intent'
+    r'|leaves open \([^)]*Arabic typeface|Arabic face is recorded in\s+`?dga-brand-overlay',
+    re.I)
+_ARABIC_FACE_OK = re.compile(r'checklist|settled|this page|typography', re.I)
+_face_open = []
+for _fp in _SCAN:
+    if os.path.abspath(_fp) == _SELF:
+        continue
+    for _s in _sentences_of(open(_fp, encoding='utf-8').read()):
+        if _ARABIC_FACE_OPEN.search(_s) and not _ARABIC_FACE_OK.search(_s):
+            _face_open.append(os.path.relpath(_fp, ROOT).replace(os.sep, '/') + ': ' + _s[:90])
+chk('font: no doc calls the Arabic face unnamed by DGA (checklist item 3 names it)',
+    not _face_open, str(_face_open))
+chk('font: the detector matches every phrasing the kit shipped',
+    all(_ARABIC_FACE_OPEN.search(x) and not _ARABIC_FACE_OK.search(x) for x in (
+        'Open question — no Arabic typeface is specified for body text.',
+        'IBM Plex Sans Arabic is the obvious intent but is not stated — confirm with DGA.',
+        'Where DGA is silent — numerals, Hijri, Arabic body typeface, motion durations.',
+        'Also the single place a project records the decisions DGA leaves open (numerals, '
+        'calendar, RTL mirroring, Arabic typeface).',
+        "The Arabic face is recorded in `dga-brand-overlay` as the project's decision pending "
+        'DS-DGA@dga.gov.sa — not cited as a DGA rule.')),
+    'the guard would not catch a reintroduced claim')
+
 # --- Hijri: DGA states no calendar policy ---------------------------------------------------
 # Matched per CLAUSE, not per sentence. A sentence-level version merged table rows into one
 # "sentence" (false positives) and read "...itself.** Decide early." as one sentence, so the word

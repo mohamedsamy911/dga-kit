@@ -1,6 +1,6 @@
 ---
 name: dga-brand-overlay
-description: Record and apply one entity's brand layer on top of the DGA Platforms Code baseline — where the entity's identity may override DGA and where DGA always wins. Also the single place a project records the decisions DGA leaves open (numerals, calendar, RTL mirroring, Arabic typeface). Use when entity-specific branding, logos or colours are involved, or when a project needs to settle a question DGA does not answer.
+description: Record and apply one entity's brand layer on top of the DGA Platforms Code baseline — where the entity's identity may override DGA and where DGA always wins. Also the single place a project records the decisions DGA leaves open (numerals, calendar, RTL mirroring). Use when entity-specific branding, logos or colours are involved, or when a project needs to settle a question DGA does not answer.
 tags:
   - dga
   - platforms-code
@@ -36,7 +36,8 @@ retrieval date. If you cannot follow a claim here back to a quote there, do not 
 - **The Digital Stamp** and its verification content →
   `../dga-design-system/references/components.md`, *Digital stamp*
 - **Typography** — IBM Plex Sans, *"the unified font for all platforms in the Kingdom of Saudi
-  Arabia"*. Saudi Font only on occasion templates, headings only, under DGA's stated Ministry of
+  Arabia"*, and for Arabic IBM Plex Sans Arabic, named by DGA's Assessment Checklist (item 3).
+  Saudi Font only on occasion templates, headings only, under DGA's stated Ministry of
   Culture licence agreement → `../dga-design-system/references/brand.md`, *Typeface identity*
 - **The page furniture** — skip link and Accessibility Tools in the footer (required); feedback
   section and both last-modified dates (DGA template guidance, advisory) → `../dga-design-system/references/patterns.md` (the two
@@ -72,7 +73,6 @@ choice.
 |---|---|---|
 | **Numeral system** | Arabic-Indic (٠١٢٣) or Western (0123) | `TODO(entity)` |
 | **Calendar** | Hijri, Gregorian, or both side by side | `TODO(entity)` |
-| **Arabic body typeface** | DGA names only the Latin IBM Plex Sans. IBM Plex Sans Arabic is the obvious intent but is not stated — confirm with DS-DGA@dga.gov.sa | `TODO(entity)` |
 | **Locales shipped** | `ar` only, `ar` + `en`, others | `TODO(entity)` |
 | **Motion durations and easings** | DGA publishes none. `prefers-reduced-motion` **is** required in three places | `TODO(entity)` |
 | **Dark theme** | DGA ships 402 dark role values in its public CSS, but **its selector cannot match**, so dark mode is inert on every Platforms Code platform. An entity enabling dark mode is doing something DGA has not shipped — and must fix `text.error` (2.68:1) and `text.primary` (3.71:1) itself. See `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-08-27-dark-theme-spike.md` | `TODO(entity)` |
