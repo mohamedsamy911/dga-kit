@@ -19,7 +19,11 @@ Saudi Arabia, published by the Digital Government Authority at design.dga.gov.sa
 **scored**, not stylistic: the entity is assessed against the Digital Transformation and Digital
 Experience Maturity indicators.
 
-DGA ships its own React library (`platformscode-new-react`). Most projects don't use it. This
+DGA ships its own React library (`platformscode-new-react`). Most projects don't use it. Under
+every component's code sample DGA writes that the bundled library *"is recommended for optimal
+compatibility and performance, it's not mandatory"*, and that *"You have the flexibility to
+leverage your preferred framework"*. Each component must still be *"styled according to the
+provided examples"*. This
 skill is the bridge: **DGA's rules, expressed against whatever library you already have.**
 
 | Question | Skill |

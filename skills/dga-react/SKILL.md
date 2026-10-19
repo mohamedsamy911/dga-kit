@@ -48,7 +48,11 @@ enforcing DGA's rules in the code you write around it.
 ## Non-negotiables
 
 **Never hardcode a colour.** Every value comes from `../dga-design-system/assets/tokens.json`.
-A literal hex in a component is a review failure.
+A literal hex in a component is a review failure — kit policy. DGA's own Charts sample passes
+literal hexes, so do not copy that part.
+
+**DGA's own code samples** — what each component page's Code tab shows, element names and imports:
+`references/official-code-samples.md`. They are illustrative, not an API contract.
 
 **Reference semantic tokens, not primitives.** DGA separates them deliberately: primitives
 (`brand-600`) are raw; semantic (`text-primary`, `background-card`) carry intent and resolve
@@ -80,7 +84,7 @@ radio groups. `<ol>` for steps. `<nav aria-label="Breadcrumb">`. Per-component r
 
 ## Version discipline
 
-`@platformscode/core` is at `0.0.52` and the React wrappers at `0.1.45`, across 143 releases.
+`@platformscode/core` is at `0.0.53` and the React wrappers at `0.1.45` (npm, 2026-10-19).
 Pre-1.0 gives no breaking-change guarantee. **Pin exact versions** and read the changelog before
 every bump.
 

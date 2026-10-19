@@ -11,6 +11,43 @@ patch means corrections. Nothing here is a DGA release — see
 `skills/dga-design-system/dga-version.md` for the Platforms Code version this kit is pinned to
 (currently **4.0.0** per DGA's change log, read 2026-10-08; DGA publishes no release date).
 
+## 0.10.1 — 2026-10-19
+
+### Added — DGA's code samples, read for the first time
+
+Every DGA component page has a live demo with a **Code** tab, and no previous pass had read
+it. All 50 samples were extracted byte-exact from DGA's lazy-loaded JS files, and each was
+confirmed displayed on the rendered page (`harvest/raw/2026-10-19-code-samples.md`).
+
+- **DGA calls its React library recommended, not mandatory.** Under every sample, DGA writes
+  that the bundled library *"is recommended for optimal compatibility and performance, it's not
+  mandatory"*. It adds that teams have *"the flexibility to leverage your preferred framework"*,
+  provided components are *"styled according to the provided examples"*. That supports
+  `dga-ui-adapter`'s premise, and is now cited there. `official-packages.md` no longer
+  says "do not write DGA components from scratch" without it.
+- **New `dga-react/references/official-code-samples.md`**: per component, the elements the sample
+  shows and the package it imports, labelled *illustrative, not a requirement or an API*.
+- **DGA's samples disagree on the package.** 9 import from `platformscode-react`, which has had
+  no release since 0.1.0 (2024-09-18), and 5 from `platformscode-new-react`. The NavHeader
+  sample imports from both. 35 show no import, and 2 are placeholders. `official-packages.md` no longer calls the old package "abandoned" without that fact.
+- **DGA's sample defects:**
+  - Menu and Footer show an unrelated Mongoose schema.
+  - Progress Bar shows only a `Tag`, with no progress bar.
+  - Radial Stepper spells `DgaRadialSteppe`.
+- npm versions re-checked: `@platformscode/core` 0.0.53 and `@platformscode/react` 0.1.18
+  (2026-10-11); `platformscode-new-react` is unchanged at 0.1.45.
+- `dga-react`'s "a literal hex is a review failure" is now labelled kit policy: DGA's own Charts
+  sample passes literal hexes.
+
+Rejected from the reviews: the Feedback Section template's code. It sits in DGA's JS files but
+no page displays it. The idea that samples "contradict" the kit's build-it-yourself lists was
+also rejected: those lists are for other UI libraries.
+
+### Fixed
+
+- The "N of M blockquotes" check read old CHANGELOG entries; it now reads only the newest, like
+  the count-claim check. README and COVERAGE now say 17 of 99. Break-tested on a stale total.
+
 ## 0.10.0 — 2026-10-19
 
 ### Added — DGA's component token names

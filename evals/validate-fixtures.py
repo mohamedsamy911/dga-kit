@@ -1044,6 +1044,8 @@ _qf_total = sum(1 for _d, _, _fs in os.walk(os.path.join(ROOT, 'skills'))
 _stale_counts = []
 for _rel in ('README.md', 'COVERAGE.md', 'CHANGELOG.md'):
     _txt = open(os.path.join(ROOT, _rel), encoding='utf-8').read()
+    if _rel == 'CHANGELOG.md':           # past entries are dated history; check the newest only
+        _txt = _txt[:_txt.index('\n## ', _txt.index('## ') + 3)]
     for _m in re.finditer(r'(\d+) of (\d+) blockquotes?', _txt):
         if int(_m.group(2)) != _qf_total:
             _stale_counts.append(f'{_rel}: "{_m.group(0)}" but the real total is {_qf_total}')
