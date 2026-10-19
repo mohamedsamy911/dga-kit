@@ -423,6 +423,9 @@ if os.path.exists(_inv_path):
     # like a path ("header/footer rules", "and/or") no longer reaches here.
     _UNTRACKED_OK = {
         # '/some/route': 'why nothing needs to watch this',
+        '//laws.boe.gov.sa/BoeLaws/Laws/LawDetails/b7cfae89-828e-4994-b167-adaa00e37188/1':
+            'Saudi law (PDPL) on the Bureau of Experts portal, not a DGA page; the freshness '
+            'sentinel watches design.dga.gov.sa only. Re-read when the law is amended.',
     }
 
     def _covers(src, route):
@@ -2147,6 +2150,12 @@ _STRENGTH = [
                 r'(?:keyboard )?focus first', re.I),
      re.compile(r'\bmust\b|\brequired?\b|\brequires\b|\bblocker\b|\bmandat', re.I),
      re.compile(r'template guidance|advisory', re.I)),
+    # 2026-10-19: the PDPL articles the kit cites never mention cookies; a cookie rule must not
+    # borrow the law's authority.
+    ('the PDPL cited for cookies (its cited articles do not mention them)',
+     re.compile(r'\bPDPL\b|personal data protection law|نظام حماية البيانات الشخصية', re.I),
+     re.compile(r'(?:requires?|required|must|mandat\w*)\b[^.]*cookie|cookie[^.]*\b(?:requires?|required|must|mandat\w*)\b', re.I),
+     re.compile(r"\b(?:does not|do not|doesn't|never|not)\s+(?:mention|require|cite)", re.I)),
     ('route parity stated as a DGA compliance rule (DGA states none)',
      re.compile(r'parity|both locales|bilingual gap|in one (?:language|locale)', re.I),
      re.compile(r'compliance (?:failure|requirement|rule|violation)|\bblocker\b|\bmandat|'
@@ -2188,6 +2197,7 @@ for _bad in ('6. **Every page needs the feedback section** and **two** last-modi
              '- **Parity is a compliance requirement.** Every route must exist in both locales.',
              'Accessibility Tools must receive keyboard focus first, per DGA\'s Chatbot page.',
              'Both locales are required for DGA compliance.',
+             'The PDPL requires a cookie banner with Reject All.',
              '- Bilingual gap: content present in one locale and absent in the other is a Blocker.'):
     chk('strength: the detector catches "' + _bad[:40] + '"', bool(_strength_hits(_bad)),
         'the source-strength guard cannot fire on a shipped wording')
@@ -2196,7 +2206,10 @@ for _good in ('Feedback section and two last-modified dates are DGA template gui
               'Notifications: "consider not having a timeout" on critical; "typically at least 5 seconds".',
               'Kit policy: we require reason options on every page.',
               'Accessibility Tools first in tab order is required by DGA\'s Chatbot template guidance.',
-              'Parity — kit policy; DGA states no parity rule. A missing locale is a blocker.'):
+              'Parity — kit policy; DGA states no parity rule. A missing locale is a blocker.',
+              'The PDPL does not mention cookies; do not cite it for the cookie banner.',
+              'The PDPL does not require a cookie banner.',
+              'The privacy policy page links from the cookie banner; the PDPL article 12 covers the policy.'):
     chk('strength: the hedged wording passes: "' + _good[:40] + '"', not _strength_hits(_good),
         'the guard would flag correct, hedged guidance')
 

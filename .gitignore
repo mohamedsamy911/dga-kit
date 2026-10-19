@@ -13,3 +13,6 @@ memory/
 .DS_Store
 Thumbs.db
 *.swp
+
+# Drafts for the owner (e.g. reports to DGA); never published
+drafts/

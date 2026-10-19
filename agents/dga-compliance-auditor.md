@@ -40,8 +40,10 @@ on DGA's Chatbot template) are DGA template guidance worded as benefits — repo
 follow DGA's template guidance", never as a Blocker or non-compliance.
 
 **3 · Required pages.** Home, Contact us, Help & Support, FAQs, Sitemap, 404, Search, Content,
-About the Entity, e-Participation, cookies banner with Accept All / Reject All / Manage
-Preferences and Strictly Necessary uneditable.
+About the Entity, e-Participation, a cookies banner (if shown) with Accept All (Reject All and Manage
+Preferences *"if required by regulations"*; Strictly Necessary uneditable where a Manage Cookies
+view is offered). Separately, as Saudi law (not DGA guidance, not legal advice), and reported apart from the
+verdict: the PDPL checks in `dga-launch-gate/references/pdpl.md`.
 
 **4 · The transparency mandate** (About the Entity). The long one, and the one most often half
 done: senior management, departments, **the organisational diagram as a real diagram and not an

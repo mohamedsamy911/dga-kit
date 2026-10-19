@@ -29,11 +29,18 @@ Tickable form of `SKILL.md`. Attach the completed copy to the go-live approval.
 - [ ] 404 with friendly message + "Back to homepage" CTA
 - [ ] Search · [ ] Content
 - [ ] About the Entity (§3) · [ ] e-Participation (§4)
-- [ ] Cookies banner — message, Privacy Policy link, Accept All; Reject All and Manage Preferences
+- [ ] Cookies banner, if shown — message, Privacy Policy link, Accept All; Reject All and Manage Preferences
   *"if required by regulations"*
 - [ ] Cookies: if a Manage Cookies view is offered (DGA: optional), Strictly Necessary always on and uneditable
 - [ ] Nav path `Homepage > About the Entity > e-Participation` reflected in the sitemap
 - [ ] Nav path `Homepage > About the Ministry/Authority/Platform > Contact us` reflected in the sitemap
+
+## 2b · Saudi law — PDPL (not DGA guidance, not legal advice; `pdpl.md`; reported separately)
+
+- [ ] Art. 12: privacy policy available before collection; addresses purpose, data, collection method, storage, processing, destruction, rights, how to exercise them
+- [ ] Art. 13: where data is collected directly, notice before collection begins, incl. whether all or part is mandatory or optional
+- [ ] Art. 5 / 7: except where the law provides otherwise, consent can be withdrawn; no unrelated consent required for the service
+- [ ] Art. 11: only the data the stated purpose needs; no misleading wording
 
 ## 3 · About the Entity — transparency mandate
 

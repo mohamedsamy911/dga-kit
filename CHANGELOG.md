@@ -11,6 +11,51 @@ patch means corrections. Nothing here is a DGA release — see
 `skills/dga-design-system/dga-version.md` for the Platforms Code version this kit is pinned to
 (currently **4.0.0** per DGA's change log, read 2026-10-08; DGA publishes no release date).
 
+## 0.12.0 — 2026-10-19
+
+### Added — a Saudi law tier, starting with the Personal Data Protection Law
+
+The kit's first source outside design.dga.gov.sa. The PDPL's articles 4, 5, 7, 11, 12 and 13 were
+read on the Bureau of Experts' official laws portal (Arabic text as amended) and captured verbatim
+(`harvest/raw/2026-10-19-pdpl.md`). They become launch checks in a separate, labelled tier:
+*Saudi law, not DGA design guidance, and not legal advice*
+(`dga-launch-gate/references/pdpl.md`, the launch gate's new §3b and the checklist). They are
+reported as a separate list and do not change the DGA launch verdict.
+
+- **Art. 12:** a privacy policy is available before collection. It addresses purpose, data,
+  collection method, storage, processing, destruction, rights, and how to exercise them.
+- **Art. 13:** where data is collected directly, notice comes before collection begins. It
+  includes whether collecting all or part of the data is mandatory or optional.
+- **Art. 5 / 7:** except where the law provides otherwise, consent can be withdrawn, and no
+  unrelated consent is required to use the service.
+- **Art. 11:** only the data the stated purpose needs, collected without misleading wording.
+
+What it must not claim is written down: that the PDPL requires a cookie banner (the cited articles
+do not mention cookies), anything only the uncaptured implementing regulations say, or that a
+checklist pass means legal compliance. A new source-strength class fails any sentence citing the
+PDPL for cookies without saying so; break-tested. The law's text is kept out of the kit's
+`<!-- dga -->` quote fences, so it can never pass as DGA's words.
+
+### Fixed
+
+- **Cookie banner:** the launch gate and the compliance-auditor agent made Reject All and Manage
+  Preferences unconditional, and listed the banner as a required page. It is now checked if
+  shown. DGA's template says *"if required by regulations"* and calls the
+  Manage Cookies view *"optional"*; the checklist already said so.
+- **Assessment Criteria:** the launch gate still said "Scored 1–100 in ten named bands". The 0.8.1
+  re-read corrected the reference to a **1–10** scale, and the skill now agrees.
+
+### Not yet captured — needs the owner
+
+dga.gov.sa, my.gov.sa, sdaia.gov.sa and open.data.gov.sa block automated or browser access with a
+challenge this kit will not complete. The DGA documents behind the launch gate's INCOMPLETE
+verdict must be downloaded by a person:
+- the Digital Experience Maturity Index methodology;
+- the Digital Transformation Measurement methodology;
+- the platform and domain registration controls;
+- any DGA digital-accessibility policy;
+- the Assessment Criteria checklist file.
+
 ## 0.11.0 — 2026-10-19
 
 ### Added — what DGA's own components actually render

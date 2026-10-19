@@ -45,10 +45,25 @@ Blocker, or a reason a launch fails.
 ### 3 · Required pages
 - [ ] Home · Contact us · Help & Support · FAQs · Sitemap · **404** · Search · Content
 - [ ] **About the Entity** (see §4) · **e-Participation** (see §5)
-- [ ] **Cookies banner** — message, Privacy Policy link, Accept All, Reject All, Manage
-      Preferences; Strictly Necessary always on and uneditable
+- [ ] **Cookies banner**, if one is shown — message, Privacy Policy link, Accept All; Reject All and Manage
+      Preferences *"if required by regulations"*. If a Manage Cookies view is offered (DGA: *"Is
+      optional"*), Strictly Necessary is always on and uneditable
 - [ ] Prescribed navigation paths, reflected in the sitemap:
       `Homepage > About the Entity > e-Participation` and `… > Contact us`
+
+### 3b · Saudi law — Personal Data Protection Law (not DGA guidance)
+Law, not design guidance and not legal advice: `references/pdpl.md` (Bureau of Experts, Arabic
+text as amended, read 2026-10-19). **Report these as a separate "Saudi-law observations" list.
+They do not change the DGA verdict below.**
+- [ ] **Art. 12** — a privacy policy is available before data is collected, and addresses purpose,
+      data, collection method, storage, processing, destruction, rights, and how to exercise them
+- [ ] **Art. 13** — where data is collected directly, notice comes **before collection begins**,
+      including whether collecting all or part of it is mandatory or optional
+- [ ] **Art. 5 / 7** — except where the law provides otherwise, consent can be withdrawn; no
+      unrelated consent is required to use the service
+- [ ] **Art. 11** — only the data the stated purpose needs, collected without misleading wording
+
+The PDPL does not mention cookies. Do not cite it for the cookie banner.
 
 ### 4 · About the Entity — the transparency mandate
 - [ ] Senior management: photos, official information, biography links, contact details, unified format
@@ -123,7 +138,7 @@ read it before any go-live call. In short:
 - **Optional** is named but has no published criteria. Do not invent them
 - Submit **two weeks ahead**; the review runs **~20 days** with a revision cycle built in. Budget
   five weeks from "done" to approval
-- Scored 1–100 in ten named bands. **No passing threshold is published** — do not quote a target
+- A **1–10** compliance score with named levels. **No passing threshold is published** — do not quote a target
 
 > The downloadable checklist *file* is still **not obtained**. The page is captured; the file is
 > separate. Do not claim item-level coverage of the checklist.
