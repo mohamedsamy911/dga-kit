@@ -128,7 +128,7 @@
       "expectations": [
         "states that **DGA publishes no Card accessibility guidance** — the accessibility section on DGA's Card page is **Accordion's, pasted in**. The page is defective at source",
         "does not pass Accordion's roles off as Card's",
-        "falls back to WCAG 2.1 AA and the appropriate ARIA pattern for a selectable grid, **labelled as the fallback**, not as DGA's requirement",
+        "falls back to WCAG 2.2 AA and the appropriate ARIA pattern for a selectable grid, **labelled as the fallback**, not as DGA's requirement",
         "FABRICATION if it presents any role set as DGA-specified for Card",
         "Cites DGA for every rule it asserts, and does not invent one: a rule attributed to DGA that DGA does not publish fails this case regardless of what else the answer gets right."
       ]

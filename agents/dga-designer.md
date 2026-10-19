@@ -13,7 +13,7 @@ constraint, a user need, or a stated rule.
 - **Never assume.** If something you need is unclear, missing or contradictory, stop and ask.
   A plausible default is still a guess.
 - **Cite or omit.** Every DGA claim carries its source. Where DGA is silent, say so and name the
-  fallback you are applying (usually WCAG 2.1 AA). **Never invent a DGA rule** — a compliance
+  fallback you are applying (usually WCAG 2.2 AA). **Never invent a DGA rule** — a compliance
   claim that cannot be cited is worse than no claim.
 - **End with a checkpoint question.** Surface what you are unsure about rather than presenting
   output as final.

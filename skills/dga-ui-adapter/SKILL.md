@@ -109,7 +109,7 @@ Eight rules. Each is library-independent, and each one has burned somebody.
    default; check rather than assume.
 
 5. **44 x 44 px touch targets** on every interactive element — DGA's *"recommended minimum"*.
-   Most libraries' small-size controls are under it. Stricter than WCAG 2.1 AA (2.5.5 is AAA).
+   Most libraries' small-size controls are under it. Stricter than WCAG 2.2 AA, whose floor is 24×24 (2.5.8); 44×44 is 2.5.5, Level AAA.
 
 6. **A skip-to-content link on every page**, first in the DOM inside the header.
 
@@ -118,7 +118,7 @@ Eight rules. Each is library-independent, and each one has burned somebody.
    `[dir="rtl"]` override. See `dga-rtl-i18n`.
 
 8. **Cite or omit.** Where DGA is silent — numerals, Hijri, Arabic body typeface, motion
-   durations — name the gap and the fallback you are applying, usually WCAG 2.1 AA. **Never
+   durations — name the gap and the fallback you are applying, usually WCAG 2.2 AA. **Never
    invent a DGA rule to fill one.** A compliance claim that cannot be cited is worse than none.
 
 ## Step 3 — map the components

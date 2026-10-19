@@ -9,7 +9,7 @@ For what the kit *is*, read [README.md](README.md). For what it does and does no
 ## The one rule this project lives or dies by
 
 **Cite or omit.** Every rule in `skills/*/references/` names the DGA page set it came from and the
-date it was retrieved. Where DGA is silent, say so and name the fallback (usually WCAG 2.1 AA).
+date it was retrieved. Where DGA is silent, say so and name the fallback (usually WCAG 2.2 AA).
 
 **Never invent a DGA rule to fill a gap.** A compliance tool that is confidently wrong is worse
 than no tool — a team ships believing it is compliant and fails an assessment. If you cannot cite

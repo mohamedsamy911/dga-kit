@@ -106,8 +106,8 @@ Before the cosmetic passes — RTL errors are structural and invalidate what fol
   (Filtration, Loading, Skeleton) and caps flashing at three per second.
 - Loading indicators carry text, use `role="status"`, and are **not focusable**
 - Card and Menu: DGA publishes no accessibility guidance for either (Card's section is
-  Accordion's by mistake; Menu has none). Apply WCAG 2.1 AA and **say DGA is silent**.
-- Cite the DGA rule **and** the WCAG 2.1 AA criterion
+  Accordion's by mistake; Menu has none). Apply WCAG 2.2 AA and **say DGA is silent**.
+- Cite the DGA rule **and** the WCAG 2.2 AA criterion
 
 ### 7 · Content & bilingual parity
 - Terminology, tone, sentence case

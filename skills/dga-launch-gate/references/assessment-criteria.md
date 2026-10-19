@@ -8,10 +8,10 @@ The rubric a Saudi government platform is **actually scored against** before it 
 other file in this kit describes what DGA *says*; this one describes how DGA *marks*.
 
 > ⚠️ Until 2026-08-27 this kit recorded the Assessment Criteria as an unreachable off-site
-> download and left `SKILL.md` §6 incomplete because of it. That was wrong — the page is public.
-> The **downloadable checklist file** is still a separate artefact and is **still not obtained**,
-> so this file covers the published rubric, not the checklist's individual line items. Do not
-> claim item-level coverage.
+> download. That was wrong — the page is public. The **downloadable checklist file** was obtained
+> on 2026-10-19; its 56 items are in `assessment-checklist.md`. This file covers the page. The
+> checklist's two groups (المعايير الأساسية / الثانوية) are not the page's Mandatory /
+> Recommended / Optional, and neither source maps one onto the other.
 
 DGA names the audience explicitly: **designers, developers, stakeholders, project managers, and
 quality assurance specialists.**

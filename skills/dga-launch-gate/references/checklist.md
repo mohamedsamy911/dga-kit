@@ -6,10 +6,16 @@ Tickable form of `SKILL.md`. Attach the completed copy to the go-live approval.
 
 ## 0 · Registration — start in week one, these have lead times
 
+DGA regulatory controls, DGA-1-2-2-106 v2.0 (`registration-controls.md`):
+
+- [ ] DGA approval before launching a new platform (circular 5589)
+- [ ] Registration certificate through Raqmi, "تسجيل منصة جديدة" (2-106-09) — registration alone is not approval
+- [ ] New services, and changes to registered services, approved by DGA before launch (2-106-41)
 - [ ] DGA registration number obtained
 - [ ] Entity License Number obtained
-- [ ] Digital Stamp populated with both
-- [ ] Domain correct for entity type (an authority is `gov.sa`; see DGA's domain table)
+- [ ] Digital Stamp issued (2-106-30), populated with both, **at the top of the page** (DGA checklist item 11)
+- [ ] Domain correct for entity type (an authority is `gov.sa`; seasonal platforms on a subdomain, 2-106-25; internal platforms on a subdomain of the main government domain, 2-106-37)
+- [ ] IPv6 and DNSSEC (2-106-72); servers hosting the entity's domains in Saudi Arabia (2-106-73)
 - [ ] HTTPS live and verifiable through the Digital Stamp
 
 ## 1 · On every page
@@ -20,7 +26,8 @@ Tickable form of `SKILL.md`. Attach the completed copy to the go-live approval.
 - [ ] Accessibility Tools in the footer (DGA's examples: font size, contrast)
 - [ ] *Advisory — DGA template guidance:* Accessibility Tools reachable **first in tab order** (DGA's Chatbot template)
 - [ ] Header and footer, if detached: original structure and style kept — colours and fonts unchanged
-- [ ] Page exists in **both** `ar` and `en` (*kit policy* — DGA states no parity rule)
+- [ ] Switching languages updates the entire content without loss (DGA checklist item 39); every
+      route in **both** `ar` and `en` is the *kit policy* that applies it
 - [ ] Language toggle reloads every element, interactive content included
 
 ## 2 · Required pages
@@ -86,12 +93,15 @@ Tickable form of `SKILL.md`. Attach the completed copy to the go-live approval.
 
 ## 6 · Measurement
 
-- [ ] DGA Assessment Criteria checklist completed
-- [ ] Digital Transformation Measurement Indicator reviewed
-- [ ] Digital Experience Maturity Indicator reviewed
+- [ ] DGA Assessment Checklist completed — all 56 items, each with DGA's own status (تطبيق كلي /
+      تطبيق جزئي / غير مطبق / N/A); see `assessment-checklist.md`
+- [ ] Digital Transformation Measurement (Qiyas): entity's latest results requested — *not
+      assessed by this kit*
+- [ ] Digital Experience Maturity Index: platform's detailed report requested, if it was assessed —
+      *not assessed by this kit*
 
-> ⚠️ §6 is **incomplete in this kit** — the two indicators are published outside
-> design.dga.gov.sa and have not been harvested. Do not treat §6 as sufficient coverage.
+> ⚠️ §6 is **not scorable by this kit** — the two measurement regimes' criteria are not public
+> (`measurement-indicators.md`). The overall verdict is FAIL or INCOMPLETE, never PASS.
 
 ## 7 · DGA Assessment Criteria — the four Mandatory criteria
 

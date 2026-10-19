@@ -31,6 +31,7 @@ import sys
 import tempfile
 import ssl
 import subprocess
+import zipfile
 from unittest.mock import MagicMock, patch
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -302,10 +303,21 @@ _GOOD_JS = (b'"/guidelines/components/actions/buttons","/guidelines/templates/ho
             b'"assets/releases-r1.js"')
 _RELEASES = b'const r=[{version:"4.0.0",type:"major"},{version:"1.0.0",type:"major"}];'
 _PROXY = b'<!DOCTYPE html><html><head><title>Sign in</title></head><body>SSO</body></html>'
+def _zip(names):
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, 'w') as z:
+        for n in names:
+            z.writestr(n, '<x/>')
+    return buf.getvalue()
 
 
-def _serve(css_body, css_status, js_body, js_status):
+_XLSX = _zip(['[Content_Types].xml', 'xl/workbook.xml', 'xl/worksheets/sheet1.xml'])
+
+
+def _serve(css_body, css_status, js_body, js_status, xl=(200, _XLSX)):
     def _f(url, timeout=45):
+        if url.endswith('.xlsx'):
+            return xl
         if url.endswith('.css'):
             return css_status, css_body
         if '/assets/releases-' in url:
@@ -413,6 +425,32 @@ def _refuses(serve, call):
         return True
     finally:
         sources.fetch = _saved
+
+
+for _label, _xl in (('a proxy login page for the checklist', (200, _PROXY)),
+                    ('a 404 for the checklist', (404, b'not found')),
+                    ('a checklist that is not a workbook', (200, b'just text')),
+                    ('a zip signature with no archive behind it', (200, b'PK junk')),
+                    ('a zip that is not a workbook', (200, _zip(['readme.txt'])))):
+    chk('C. a valid shell with ' + _label + ' is refused as a baseline',
+        _refuses(_serve(_GOOD_CSS, 200, _GOOD_JS, 200, _xl), sources.tier_a_baselines),
+        'a checklist hash that is not the workbook would be compared against forever')
+chk('C. a healthy baseline records the checklist hash',
+    (_ok.get('checklist') or {}).get('sha256') == sources.sha(_XLSX) if isinstance(_ok, dict) else False,
+    str(_ok)[:200])
+
+# --- the Assessment Checklist (2026-10-19) ------------------------------------------------
+_BX = dict(BASE, checklist={'sha256': 'XL1'})
+chk('G. an unchanged checklist is quiet',
+    sources.compare(_BX, observed(checklistSha='XL1', checklistLinked=True), CONTRACTS) == [])
+chk('G. an edited checklist is a finding',
+    has(sources.compare(_BX, observed(checklistSha='XL2'), CONTRACTS), 'CHECKLIST CHANGED'))
+chk('G. an unreadable checklist is a finding, not a quiet week',
+    has(sources.compare(_BX, observed(checklistProblem='checklist returned HTTP 404'), CONTRACTS),
+        'NOT READABLE'))
+chk('G. a bundle that stops linking the checklist is a finding',
+    has(sources.compare(_BX, observed(checklistSha='XL1', checklistLinked=False), CONTRACTS),
+        'LINK CHANGED'))
 
 
 chk('F. a bundle naming no releases chunk cannot complete (exit 2), it is not a finding',
@@ -526,6 +564,19 @@ for _label, _exc in (
             patch.object(sources.time, 'sleep') as _sleep, contextlib.redirect_stderr(io.StringIO()):
         chk('retry: ' + _label + ' remains an immediate operational failure',
             sources.check_main() == 2 and _get.call_count == 1 and not _sleep.called)
+
+# A 404 on the checklist is DGA moving the file: a finding (exit 1), not "could not complete".
+def _xlsx_404(url, timeout=45):
+    if url.endswith('.xlsx'):
+        raise urllib.error.HTTPError(url, 404, 'Not Found', {}, None)
+    return _serve(_GOOD_CSS, 200, _GOOD_JS, 200)(url, timeout)
+
+
+with patch.object(sources, 'fetch', _xlsx_404),         patch.object(sources, 'write_freshness') as _write, contextlib.redirect_stdout(io.StringIO()):
+    _rc = sources.check_main()
+    _found = [t for t, _ in (_write.call_args[0][2] if _write.called else [])]
+chk('G. a checklist that answers 404 is a finding (exit 1), not an operational failure',
+    _rc == 1 and 'ASSESSMENT CHECKLIST NOT READABLE' in _found, f'exit {_rc}, findings {_found}')
 
 _real_fetch = sources.fetch
 _FRESH_PATH = os.path.join(ROOT, 'harvest', 'FRESHNESS.md')

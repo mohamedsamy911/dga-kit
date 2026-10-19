@@ -273,10 +273,9 @@ of Culture. `tokens.css` ships `--dga-font-sans` only; if you need Saudi Font, d
 yourself under a name that cannot be reached by accident (`fonts.occasion`,
 `--dga-font-occasion`) and never as a body fallback.
 
-⚠️ **DGA names only the Latin IBM Plex Sans and specifies no Arabic body face.** IBM Plex Sans
-Arabic is the obvious intent, but DGA does not say so. Confirm with DS-DGA@dga.gov.sa before
-locking the stack — a bilingual product with a mismatched Arabic fallback changes texture
-mid-sentence.
+**The Arabic face is IBM Plex Sans Arabic.** The typography page names only the Latin IBM Plex
+Sans; DGA's Assessment Checklist (item 3) names the Arabic one: *"Use the approved font: IBM Plex
+Sans Arabic, as specified in the Platforms Code."* `tokens.css` ships both in `--dga-font-sans`.
 
 **Order the stack Latin-first.** Font fallback resolves *per character*, not per string, so both
 faces get used regardless of order — but the order decides which one renders **Latin**:

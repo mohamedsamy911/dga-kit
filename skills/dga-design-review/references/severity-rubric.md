@@ -6,13 +6,14 @@ Apply the test, don't rank by feel. If two levels seem to fit, take the higher o
 Ships non-compliant, or ships broken for a real user.
 
 - Breaks a stated DGA requirement in a way an auditor would flag
-- Fails WCAG 2.1 AA
+- Fails WCAG 2.2 AA (*kit policy* — the kit's audit target; DGA's accessibility guideline labels AA
+  "Recommended", so cite the criterion, not a DGA mandate)
 - Text or UI below required contrast
 - RTL is structurally wrong — mirrored layout missing, reading order broken
 - A component invented where a DGA component exists for the job
 - Missing a state the screen cannot function without (form with no error state)
-- Bilingual gap: content or a feature present in one locale and absent in the other (kit policy —
-  DGA states no parity rule)
+- Bilingual gap: content or a feature present in one locale and absent in the other (kit policy,
+  applying DGA checklist item 39: switching languages updates the entire content without loss)
 
 **Blockers stop the handoff.** Any blocker means the verdict is "not ready".
 

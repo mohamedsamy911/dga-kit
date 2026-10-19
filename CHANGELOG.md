@@ -11,6 +11,76 @@ patch means corrections. Nothing here is a DGA release — see
 `skills/dga-design-system/dga-version.md` for the Platforms Code version this kit is pinned to
 (currently **4.0.0** per DGA's change log, read 2026-10-08; DGA publishes no release date).
 
+## 0.13.0 — 2026-10-19
+
+### Added — DGA's own documents beyond the design site
+
+The owner downloaded five DGA documents that dga.gov.sa will not serve to an automated client.
+Each is captured with its URL, download date and sha256, and used under its own label.
+
+- **The Assessment Checklist** — the workbook behind *Download Checklist*
+  (`/assets/updated-checkList.xlsx`, byte-identical to the live asset). All **56 items**, Arabic
+  and DGA's English, in `harvest/raw/2026-10-19-assessment-checklist.md`; the table in
+  `dga-launch-gate/references/assessment-checklist.md` quotes each row verbatim, and a fixture
+  holds it to the capture. Items 1–43 sit under **المعايير الأساسية**, 44–56 under
+  **المعايير الثانوية**; DGA does not map these onto the page's Mandatory / Recommended /
+  Optional, and neither does the kit.
+- **Registration controls**, DGA-1-2-2-106 v2.0 (September 2026) — a new **DGA regulatory
+  controls** tier in `dga-launch-gate/references/registration-controls.md`: approval before
+  launching a new platform (circular 5589), the registration certificate through Raqmi
+  (2-106-09), approval for new services (2-106-41), the Digital Stamp (2-106-30), IPv6 and
+  DNSSEC (2-106-72), the servers hosting the entity's domains inside Saudi Arabia (2-106-73), and
+  **2-106-12: the entity applies the Platforms Code on all its platforms, apps and websites.**
+- **Accessibility guideline**, DGA-1-2-4-203 issue 2.0 (May 2024) — built on **WCAG 2.2**. It
+  aligns with *"WCAG 2.2 level AA"* and labels AA **"Recommended"**.
+- **Digital Experience Maturity Index 2026** and **Digital Transformation Measurement (Qiyas)
+  2025** public reports — `dga-launch-gate/references/measurement-indicators.md` says what each
+  measures. DXMI's four interface recommendations (no accessibility overlays, a clear login
+  point with Nafath where applicable, search result counts announced via `aria-live`, WCAG
+  *"no less than "AA""*) are labelled advisory.
+
+### Changed
+
+- **Accessibility target: WCAG 2.2 AA** (was 2.1 AA) across `dga-a11y`, the review skills, the
+  agents and the docs. Both DGA sources are shown: the design site's *"comply with WCAG 2.1 AA"*
+  and the guideline's 2.2 AA. 2.2 AA covers both. The six criteria new in 2.2 at A/AA are
+  checked and cited to the guideline, and AA is never called mandatory on its authority.
+- **The Arabic typeface is IBM Plex Sans Arabic.** Checklist item 3 names it — the first DGA
+  source to. `tokens.json` sets `family.arabic`, and `--dga-font-sans` and the Tailwind preset now
+  carry both faces, Latin first. The `$arabicBodyFace` "DGA is silent" entry is removed.
+- **Language switching is cited to DGA.** Checklist item 39: switching languages updates *"the
+  entire content … without any loss or omission of information."* Every route in both locales
+  stays kit policy, now stated as how the kit applies item 39.
+- **Launch verdict.** Still FAIL or INCOMPLETE, never PASS, now for a stated reason: the two
+  measurement regimes cannot be scored from outside the entity, and go-live approval is DGA's. The
+  INCOMPLETE wording says what was and was not verified, and only a cited launch requirement can
+  decide FAIL — advisory guidance, DXMI recommendations, checklist statuses and Saudi-law
+  observations are reported in their own lists. The compliance-auditor agent's
+  "launch / launch at risk / do not launch" verdict is replaced by the gate's.
+- **Freshness sentinel** hashes the checklist workbook on every run — its name carries no build
+  hash, so a DGA edit would otherwise be invisible — and reports a changed, unreadable or
+  unlinked workbook as a finding. A 404 is a finding (exit 1), not "could not complete"; the
+  workbook must open as a real `.xlsx`, not merely start with a zip signature. Break-tested.
+- A fixture holds every abbreviated hash in the kit (`44b5e003…4251`) to a full sha256 in a raw
+  capture. A reviewer caught a typo in one before release.
+- New source-strength classes, each break-tested: WCAG 2.2 AA stated as a DGA requirement;
+  domain suspension stated as automatic (2-106-87 says DGA *may*); 2-106-73 widened past the
+  servers hosting the domains; the checklist's first group called "Mandatory".
+
+### Fixed
+
+- README listed freshness monitoring as "not running"; it has run weekly through the KSA proxy
+  since 2026-10-18.
+
+### Observed in DGA's documents (for the owner's report to DGA)
+
+- The checklist's English gives the rating and feedback sub-rows of item 8 the same text; the
+  Arabic names two components.
+- The accessibility guideline's framework graphic says *"Web Content Accessibility Guidelines
+  2.3"*; its 2.5.8 page files WCAG's exceptions under *"Nonconforming Content"*.
+- The DXMI 2026 report's stage diagram labels two stages "Stage 4".
+- The design site says WCAG 2.1 AA; DGA's guideline says 2.2 AA.
+
 ## 0.12.0 — 2026-10-19
 
 ### Added — a Saudi law tier, starting with the Personal Data Protection Law

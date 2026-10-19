@@ -63,7 +63,7 @@ add a rule to `references/` and cite it.
 | **dga-react** | Code, **when the project uses DGA's own `platformscode-new-react`** — the gap layer over it | Apply to a project on any other UI library; that is `dga-ui-adapter` |
 | **dga-ui-adapter** | Code, **on every other UI library** — wiring DGA tokens into your theme, 50 component mappings, the build list | Teach you your own UI library |
 | **dga-rtl-i18n** | Arabic-first mechanics. Mirroring, bidi, Arabic typography, Intl formats, next-intl | Component specs |
-| **dga-a11y** | Auditing *running code* against DGA's per-component ARIA + WCAG 2.1 AA | Review static designs |
+| **dga-a11y** | Auditing *running code* against DGA's per-component ARIA + WCAG 2.2 AA | Review static designs |
 | **dga-launch-gate** | Everything beyond design: registration, transparency mandate, required pages, Open Data, measurement indicators | Design or accessibility detail |
 | **dga-tokens-sync** | Re-harvesting tokens and diffing them | Anything at build time |
 | **dga-brand-overlay** | One entity's overlay, and the project's open decisions (numerals, calendar, mirroring) | Override anything DGA fixes |
@@ -374,7 +374,7 @@ name it, and nothing else.
 ## Guarding against our own drift
 
 The monitoring in `dga-tokens-sync` watches **DGA** for changes. `evals/check-quote-fidelity.py`
-watches **us** — it compares the DGA quotes a capture actually covers (17 of 101 blockquotes
+watches **us** — it compares the DGA quotes a capture actually covers (44 of 136 blockquotes
 today; the rest are *unverifiable*, not verified) against the captured page text in
 `harvest/raw/`, and fails on a paragraph that reproduces a capture without matching it.
 
@@ -463,9 +463,9 @@ Stated plainly so no skill implies coverage it lacks.
 
 | Gap | Impact | Fix |
 |---|---|---|
-| **Digital Transformation Measurement Indicator** | `dga-launch-gate` §6 incomplete | Harvest — published outside design.dga.gov.sa |
-| **Digital Experience Maturity Indicator** | same | same |
-| **Assessment Criteria *checklist file*** | The scoring page is captured (`harvest/raw/2026-08-27-section-sweep.md`); the downloadable checklist is a separate file | `Download Checklist` on `/AssessmentCriteria` |
+| **Measurement criteria — Digital Transformation (Qiyas) and Digital Experience Maturity Index** | Both public reports are captured (2026-10-19, `harvest/raw/2026-10-19-measurement-indicators.md`), so `dga-launch-gate` §6 says what each measures. Their item-level criteria are not public — Qiyas's 95 criteria live in DGA's measurement system, DXMI's detailed reports go to owning entities — so the gate records both as *not assessed by this kit* and never issues PASS | The entity's own results; nothing public to harvest |
+| ~~**Assessment Criteria *checklist file***~~ | **Closed 2026-10-19** — all 56 items, Arabic and English, in `harvest/raw/2026-10-19-assessment-checklist.md` and `dga-launch-gate/references/assessment-checklist.md`; the workbook's hash is checked on every freshness run | — |
+| **DGA documents on dga.gov.sa** (registration controls DGA-1-2-2-106, accessibility guideline DGA-1-2-4-203, the measurement reports) | Captured 2026-10-19 from copies the owner downloaded. dga.gov.sa challenges automated clients, so no sentinel watches them | Re-download by hand; compare against the sha256 in each raw capture |
 | **Component token names: light theme only, and 104 not linked to a kit token** | Since 0.10.0, DGA's 379 component token names (21 families: `--button-*`, `--link-*`, `--tag-*`, `--form-*`, ...) ship in `component-roles.json`/`.css`, generated from build `CYyqM6kT` by `harvest/build-component-roles.py`. 275 link to a kit token through DGA's own alias chain. 104 are literals: they point into the Untitled-UI ramps the kit does not carry, or into names like `--colors-primary-sa-flag-600-primary` with no kit counterpart. They are never matched by value alone. Dark is not emitted. Triage closed 2026-10-18: DGA's transparency scale is carried as `color.alpha` (42 values).  26 dark declarations are excluded by policy and 9 by name, with evidence. The 12 `--gradient-*` declarations: every colour in them is carried; the gradient definition is not. **A skill must not tell a caller a value is absent from DGA because it is absent from `tokens.json`.** Full list in the reconciliation report | Regenerate with `python harvest/build-component-roles.py` after each DGA deploy. The 104 literals link only if DGA publishes the ramps they point into, or names for them the kit carries |
 | **The upstream Untitled-UI generic ramp** (246 declarations) | *Deliberately excluded*, not missing: blue, cyan, fuchsia, indigo, moss, orange, pink, purple, red, teal, violet, yellow and seven separate grey ramps. DGA ships them in CSS but does not publish them as Platforms Code colours. The exclusion list is **explicit, name by name** — an inferred "not semantic, therefore decorative" rule wrongly swept up `--colors-border-primary`, `--colors-text-primary` and the `--colors-alpha-*` primitives, and a wrong exclusion hides a real gap | None — but never quote these as DGA colours |
 | **Responsive radius & spacing values** | Per-breakpoint tokens can't be resolved; treating them as constants is wrong on two of three breakpoints | PC 1.0 Foundations Figma variable collections |
@@ -495,7 +495,7 @@ Numeral policy · Hijri calendar · Arabic body typeface · motion tokens (durat
 though `prefers-reduced-motion` **is** required in three places) · terminology glossary ·
 Arabic tone of voice · **Card accessibility** (DGA's section is Accordion's, pasted in) ·
 **Menu accessibility** (no section exists at all) · Table ARIA roles · carousel pause control
-(WCAG 2.1 AA 2.2.2 requires one — apply WCAG) · colour-blind-safe chart palettes · dark-mode
+(WCAG 2.2 AA 2.2.2 requires one — apply WCAG) · colour-blind-safe chart palettes · dark-mode
 usage guidance · accessibility-statement page.
 
 ## Where DGA's own tokens fail WCAG

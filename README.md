@@ -107,7 +107,7 @@ Then restart Claude Code, and start a new Codex session.
 | `dga-design-review` | Auditing a design against DGA. Seven passes, severity rubric, verdict. |
 | `dga-mockup` | Producing a compliant screen or wireframe, Arabic-first. |
 | `dga-handoff` | Turning an approved design into a developer spec. |
-| `dga-a11y` | Auditing a running app against DGA's per-component ARIA and WCAG 2.1 AA. |
+| `dga-a11y` | Auditing a running app against DGA's per-component ARIA and WCAG 2.2 AA. |
 | `dga-launch-gate` | Everything beyond design: registration, the transparency mandate, required pages, Open Data. |
 | `dga-tokens-sync` | Re-harvesting DGA's tokens and diffing them against this repo. |
 | `dga-brand-overlay` | Your entity's brand on top of DGA, and the decisions DGA leaves open. |
@@ -154,7 +154,7 @@ in about a second and downloads nothing.
 **Cite or omit.** Every reference file names the DGA page set it was gathered from and the date
 it was retrieved. Component and foundation rules cite an exact page URL; cross-cutting references
 (brand, content, mobile) name the page set, because DGA publishes no single page for them.
-Where DGA is silent, a skill says so and names its fallback — WCAG 2.1 AA, or a stated project
+Where DGA is silent, a skill says so and names its fallback — WCAG 2.2 AA, or a stated project
 default. Nothing is invented.
 
 **This is auditable, and it is not yet per-rule.** A handful of rules carry the page set rather
@@ -207,7 +207,8 @@ reconciliation reproduced unchanged.
 | **Assessment Criteria** — the rubric a platform is actually scored against | ✅ Captured |
 | 11 skills, 6 agents | ✅ |
 | Contrast checker, self-tested — light **and dark** | ✅ |
-| **Freshness monitoring** — weekly, review-gated | ⚠️ **Built and tested, not running.** Every hosted run since 2026-08-31 has failed to reach DGA (exit 2). See below |
+| **Freshness monitoring** — weekly, review-gated | ✅ Running weekly through a proxy in Saudi Arabia since 2026-10-18; also hashes the Assessment Checklist workbook. See below |
+| **DGA documents beyond the design site** — the Assessment Checklist (56 items), registration controls DGA-1-2-2-106, accessibility guideline DGA-1-2-4-203, the two measurement reports | ✅ Captured 2026-10-19, each labelled with its tier |
 | **Codex plugin install path** | ✅ Skills only. Codex CLI 0.160.1 installs the tree and discovers all 11 skills — verified 2026-10-08 on Windows and on every CI run (Linux). Passed Codex's `validate_plugin.py` on 2026-08-28; Codex no longer ships it |
 | **Codex-native agents** | Six generated TOML definitions; separate installer with offline safety/parity checks. Confirm runtime discovery in your Codex session. |
 | **Designer sign-off** | ⚠️ **Outstanding** — values are exact, interpretation unverified |
@@ -254,7 +255,7 @@ deployment" into an unconditional block. No amount of watching DGA catches those
 `evals/check-quote-fidelity.py` compares the DGA quotes it *can* — those whose source page has
 been captured — against that captured text, and fails on a quote that reproduces a capture
 without matching it. It found two real defects on its first run. Be clear about its reach: raw
-captures cover **a minority of DGA's pages**, so 17 of 101 blockquotes are checkable and the other 84 are
+captures cover **a minority of DGA's pages**, so 44 of 136 blockquotes are checkable and the other 92 are
 **unverifiable, not verified**. A quote fenced as DGA's own words with no capture behind it fails
 the run.
 

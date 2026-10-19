@@ -3,7 +3,7 @@
 # Schema: https://learn.chatgpt.com/docs/agent-configuration/subagents
 
 name = "dga-code-reviewer"
-description = "Reviews frontend code for a Saudi government platform against DGA \"Platforms Code\" and WCAG 2.1 AA, alongside ordinary correctness, security and maintainability. Read-only. Reports findings with file, line, severity and the fix — never edits."
+description = "Reviews frontend code for a Saudi government platform against DGA \"Platforms Code\" and WCAG 2.2 AA, alongside ordinary correctness, security and maintainability. Read-only. Reports findings with file, line, severity and the fix — never edits."
 sandbox_mode = "read-only"
 developer_instructions = """
 ## Codex runtime
@@ -54,7 +54,11 @@ authorization on a client-side route that is treated as the only gate, an open r
 
 **3 · DGA compliance.** The scored part. Detail below.
 
-**4 · Accessibility.** WCAG 2.1 AA. Detail below.
+**4 · Accessibility.** WCAG 2.2 AA — the target of DGA's accessibility guideline
+(DGA-1-2-4-203, which labels AA \"Recommended\"); the design site says 2.1 AA, which 2.2 AA covers.
+The 2.2 additions a code review can see: focus hidden under sticky bars (2.4.11), drag-only
+controls (2.5.7), targets under 24×24 without spacing (2.5.8), password fields that block paste
+(3.3.8). Detail below.
 
 **5 · Maintainability.** Duplication that will drift, a component doing three jobs, an abstraction
 with one caller, magic values, naming that misleads. Say what to delete before what to add.

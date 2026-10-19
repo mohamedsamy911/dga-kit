@@ -63,6 +63,7 @@ import sys
 import time
 import urllib.error
 import urllib.request
+import zipfile
 from datetime import date, timezone, datetime
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -108,6 +109,11 @@ DS = 'skills/dga-design-system/references/'
 # with a non-ASCII acute, so an [A-Za-z0-9_-] ident class drops 14 real properties. Verified
 # against an independent block parser (harvest/reconcile-tokens.py): both give 1,126 exactly.
 CUSTOM_PROP = rb'[{;]\s*(--[^\s:{};,\[\]()]+)\s*:'
+
+
+# The Assessment Checklist the site's "Download Checklist" buttons serve. Its name carries no
+# build hash, so a DGA edit to the workbook changes nothing the shell or bundle hashes can see.
+CHECKLIST_PATH = '/assets/updated-checkList.xlsx'
 
 
 def fetch(url, timeout=45):
@@ -169,6 +175,13 @@ def asset_problem(kind, status, body):
         if n < 100:
             return (f'stylesheet declares {n} custom properties; DGA publishes over a thousand, '
                     f'so this is not the token surface')
+    elif kind == 'checklist':
+        try:
+            names = set(zipfile.ZipFile(io.BytesIO(body)).namelist())
+        except zipfile.BadZipFile:
+            return 'checklist is not an .xlsx workbook (not a zip archive)'
+        if not {'[Content_Types].xml', 'xl/workbook.xml'} <= names:
+            return 'checklist is a zip but not an .xlsx workbook (no xl/workbook.xml)'
     elif kind == 'bundle':
         r = routes_from_js(body)
         empty = [g for g in ('components', 'templates', 'foundations') if not r[g]]
@@ -248,9 +261,17 @@ def tier_a_baselines():
                 'released?" answerable without a browser. Only page prose still needs one.',
     }
 
-    if 'stylesheet' in out:
-        # re-read the stylesheet we already fetched above for the critical token facts
-        pass
+    status, xl = fetch(BASE + CHECKLIST_PATH)
+    bad = asset_problem('checklist', status, xl)
+    if bad:
+        raise NotTheSite(
+            bad + f' ({BASE + CHECKLIST_PATH}, {len(xl)} bytes). Refusing to record a checklist '
+            f'hash that is not the workbook - every later check would compare against it.')
+    out['checklist'] = {
+        'url': BASE + CHECKLIST_PATH, 'status': status, 'bytes': len(xl), 'sha256': sha(xl),
+        'note': 'The Assessment Checklist workbook. Captured item by item in '
+                'harvest/raw/2026-10-19-assessment-checklist.md; a new hash means re-capture it.',
+    }
 
     status, sm = fetch(BASE + '/sitemap.xml')
     urls = [u.replace(BASE, '') or '/' for u in re.findall(r'<loc>(.*?)</loc>', sm.decode('utf-8'))]
@@ -472,6 +493,7 @@ def sources():
         s('/thoughts/responsive-design', 'guidance', [DS + 'foundations.md'], why=why_b),
         s('/AssessmentCriteria', 'assessment',
           ['skills/dga-launch-gate/references/assessment-criteria.md',
+           'skills/dga-launch-gate/references/assessment-checklist.md',
            'skills/dga-launch-gate/references/checklist.md'],
           why=why_b,
           watch='The four Mandatory criteria, and DGA\'s hedge "typically cannot proceed to '
@@ -638,6 +660,16 @@ def compare(base, obs, contracts):
         out.append(('sitemap changed', f'+{sorted(live - was)} -{sorted(was - live)}'))
     if obs.get('robotsSha') and obs['robotsSha'] != base.get('robots', {}).get('sha256'):
         out.append(('robots.txt changed', obs.get('robotsText', '')))
+    if obs.get('checklistProblem'):
+        out.append(('ASSESSMENT CHECKLIST NOT READABLE', obs['checklistProblem']))
+    elif obs.get('checklistSha') and obs['checklistSha'] != (base.get('checklist') or {}).get('sha256'):
+        out.append(('ASSESSMENT CHECKLIST CHANGED',
+                    f"{(base.get('checklist') or {}).get('sha256')} -> {obs['checklistSha']}. "
+                    f'Re-capture harvest/raw/*-assessment-checklist.md and '
+                    f'skills/dga-launch-gate/references/assessment-checklist.md.'))
+    if obs.get('checklistLinked') is False:
+        out.append(('CHECKLIST LINK CHANGED',
+                    f'the bundle no longer references {CHECKLIST_PATH}; find the new download.'))
 
     routes = obs.get('routes')
     if routes:
@@ -726,6 +758,13 @@ def check():
     _, rb = fetch(BASE + '/robots.txt')
     obs['robotsSha'] = sha(rb)
     obs['robotsText'] = rb.decode('utf-8').strip()
+    # Every run: 59 KB, and no build hash would reveal an edit to it.
+    try:
+        xs, xl = fetch(BASE + CHECKLIST_PATH)
+    except urllib.error.HTTPError as exc:      # DGA answered: the file moved or went - a finding
+        xs, xl = exc.code, b''
+    obs['checklistProblem'] = asset_problem('checklist', xs, xl)
+    obs['checklistSha'] = None if obs['checklistProblem'] else sha(xl)
 
     if missing:
         notes.append('Deep read skipped - the shell asset pattern did not match, so there was '
@@ -764,6 +803,7 @@ def check():
             obs['counts'] = {k: len(v) for k, v in live_routes.items()}
             obs['releases'] = live_routes['releases']
             obs['facts'] = facts_from_css(css)
+            obs['checklistLinked'] = CHECKLIST_PATH.encode() in js
 
     findings += compare(base, obs, inv['contracts'])
     write_freshness(inv, obs, findings, notes)
@@ -809,6 +849,7 @@ def write_freshness(inv, obs, findings, notes):
         f'| DGA version | {ver_row} |',
         f'| CSS build | {cmp_hash(obs["cssHash"], ta.get("stylesheet", {}).get("buildHash"))} |',
         f'| JS build | {cmp_hash(obs["jsHash"], ta.get("bundle", {}).get("buildHash"))} |',
+        f'| Assessment checklist | {cmp_hash((obs.get("checklistSha") or "")[:16] or None, ((ta.get("checklist") or {}).get("sha256") or "")[:16])} |',
         f'| Deep read this run | {"yes" if obs["deepRead"] else "no"} |',
         f'| Review pending | {"**YES**" if findings else "no"} |',
         '',
@@ -853,8 +894,10 @@ def write_freshness(inv, obs, findings, notes):
           '',
           'Carried from `COVERAGE.md`; the sentinel does not measure these.',
           '',
-          '- The Assessment Criteria **checklist file** (the rubric page is captured, the file is not)',
-          '- Digital Transformation and Digital Experience Maturity indicators (published off-site)',
+          '- The item-level criteria of the Digital Transformation and Digital Experience Maturity '
+          'measurements (not public)',
+          '- DGA documents on dga.gov.sa (registration controls, accessibility guideline, '
+          'measurement reports): it challenges automated clients, so re-download them by hand',
           '- PC 1.0 Figma files — responsive radius and spacing resolve per breakpoint there only',
           '- The Arabic-language terminology harvest',
           '',

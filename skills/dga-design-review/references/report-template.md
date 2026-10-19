@@ -21,10 +21,10 @@
 ### B1 · {Short title}   <!-- illustrative example below — not a real DGA value -->
 **Severity:** Blocker · **Pass:** Colour & contrast · **Instances:** 3
 
-**What:** Body text `#7A8A82` on `#F5F7F4` measures 3.1:1. WCAG 2.1 AA requires 4.5:1 for text
+**What:** Body text `#7A8A82` on `#F5F7F4` measures 3.1:1. WCAG 2.2 AA requires 4.5:1 for text
 under 18.66px.
 
-**Rule:** {DGA rule and its source URL} · WCAG 2.1 AA 1.4.3 Contrast (Minimum)
+**Rule:** {DGA rule and its source URL} · WCAG 2.2 AA 1.4.3 Contrast (Minimum)
 
 **Fix:** Use `{token}` (`#…`), which measures {…}:1 on this background.
 

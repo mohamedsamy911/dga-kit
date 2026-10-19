@@ -64,8 +64,8 @@ L.push('')
 L.push('  /* --- elevation --- */')
 for (const [k, v] of Object.entries(t.shadow)) if (!skip(k)) L.push(`  --dga-shadow-${k}: ${v};`)
 L.push('')
-L.push('  /* --- typography: IBM Plex Sans. Arabic face TODO(verify) with DGA --- */')
-L.push(`  --dga-font-sans: "IBM Plex Sans", system-ui, sans-serif;`)
+L.push('  /* --- typography: IBM Plex Sans; Arabic from IBM Plex Sans Arabic (DGA checklist item 3). Latin-first: see token-wiring.md --- */')
+L.push(`  --dga-font-sans: "${t.typography.family.primary}", "${t.typography.family.arabic}", system-ui, sans-serif;`)
 for (const [name, v] of Object.entries(t.typography.scale)) {
   if (skip(name)) continue
   L.push(`  --dga-text-${name}-size: ${v.size};`)
@@ -157,7 +157,7 @@ export default {
       boxShadow: ${JSON.stringify(shadow, null, 6).replace(/\n/g, '\n    ')},
       fontSize: ${JSON.stringify(fontSize, null, 6).replace(/\n/g, '\n    ')},
       maxWidth: { paragraph: '${t.container['paragraph-max-width']}', container: '${t.container['max-width-desktop']}' },
-      fontFamily: { sans: ['IBM Plex Sans', 'system-ui', 'sans-serif'] },
+      fontFamily: { sans: ${JSON.stringify([t.typography.family.primary, t.typography.family.arabic, 'system-ui', 'sans-serif']).replace(/"/g, "'").replace(/,/g, ', ')} },
     },
   },
 }

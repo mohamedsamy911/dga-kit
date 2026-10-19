@@ -334,8 +334,8 @@
   --dga-shadow-2xl: 0px 24px 48px -12px rgba(16, 24, 40, .18);
   --dga-shadow-3xl: 0px 32px 64px -12px rgba(16, 24, 40, .14);
 
-  /* --- typography: IBM Plex Sans. Arabic face TODO(verify) with DGA --- */
-  --dga-font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  /* --- typography: IBM Plex Sans; Arabic from IBM Plex Sans Arabic (DGA checklist item 3). Latin-first: see token-wiring.md --- */
+  --dga-font-sans: "IBM Plex Sans", "IBM Plex Sans Arabic", system-ui, sans-serif;
   --dga-text-display-2xl-size: 72px;
   --dga-text-display-2xl-line: 90px;
   --dga-text-display-2xl-tracking: -0.02em;

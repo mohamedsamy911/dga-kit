@@ -41,6 +41,7 @@ verbatim from the running site, not transcribed from screenshots.
 | Other | Support + 15 FAQs | `/support` | 2026-08-27 |
 | Other | Roadmap | `/updates/roadmap` | 2026-08-27 |
 | Other | Change log + 4 version pages | `/updates/change-log`, `/updates/change-log/version-history-1-0-{0,1,2,3}` | 2026-08-27 |
+| DGA documents | **Assessment Checklist** (56 items, Arabic and English, from `/assets/updated-checkList.xlsx`); **registration controls** DGA-1-2-2-106 v2.0; **accessibility guideline** DGA-1-2-4-203 v2.0 (WCAG 2.2); **DXMI 2026** and **Qiyas 2025** public reports — the last four downloaded by the owner from dga.gov.sa | raw evidence: `harvest/raw/2026-10-19-assessment-checklist.md`, `-registration-controls.md`, `-a11y-guideline.md`, `-measurement-indicators.md` | 2026-10-19 |
 | Saudi law (PDPL) | **Personal Data Protection Law, articles 4, 5, 7, 11, 12, 13** — Arabic text as amended, from the Bureau of Experts' official laws portal; the first source outside design.dga.gov.sa, cited as law, not DGA guidance | raw evidence: `harvest/raw/2026-10-19-pdpl.md` | 2026-10-19 |
 | Live-demo semantics | **What DGA's own components render** — roles, ARIA and native tags inside each `dga-*` demo host, shadow DOM included; 19 lack semantics DGA's guidance asks for | raw evidence: `harvest/raw/2026-10-19-live-demo-semantics.md` | 2026-10-19 |
 | Code samples | **Every component page's Code tab** — 50 samples byte-exact from DGA's chunks, each confirmed displayed; the "recommended, not mandatory" note; 9 import `platformscode-react`, 2 are Mongoose placeholders | raw evidence: `harvest/raw/2026-10-19-code-samples.md` | 2026-10-19 |
@@ -64,8 +65,8 @@ spacing, radius, shadow, width, container, and per-component role tokens.
 | ~~Principles~~ | — | **Closed 2026-08-27** — all three captured; Thoughts is now 6 of 6. |
 | ~~Other~~ | — | **Closed 2026-08-27** — `/support` (with its 15 FAQs), `/updates/roadmap`, `/updates/change-log` and its four version pages, `/about-platforms-code`, and `/AssessmentCriteria` captured. |
 | Site | `/sitemap` | The site's own sitemap page. Navigation only — no rule on it. Not planned. |
-| **Off-site** | Digital Transformation Measurement + Digital Experience Maturity indicators | Needed for `dga-launch-gate`; published outside this site |
-| **Off-site** | **Assessment Criteria checklist file** | The *page* is now captured; the downloadable checklist itself is a separate file and is still not obtained |
+| ~~Off-site~~ | Digital Transformation Measurement + Digital Experience Maturity indicators | **Public reports captured 2026-10-19**; their item-level criteria are not public |
+| ~~Off-site~~ | ~~Assessment Criteria checklist file~~ | **Closed 2026-10-19** — `/assets/updated-checkList.xlsx`, all 56 items |
 | **Off-site** | PC 1.0 Figma files | Responsive radius/spacing values live only in the Figma variable collections |
 
 > **Correction, 2026-08-27.** This row previously read *"All 19"* and listed `open-data` and

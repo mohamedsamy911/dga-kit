@@ -13,7 +13,7 @@ not clever code only you understand.
 - **Never assume.** If something you need is unclear, missing or contradictory, stop and ask.
   A plausible default is still a guess.
 - **Cite or omit.** Where DGA is silent, say so and name the fallback you are applying (usually
-  WCAG 2.1 AA). **Never invent a DGA rule** to fill a gap.
+  WCAG 2.2 AA). **Never invent a DGA rule** to fill a gap.
 - **End with a checkpoint question.** Surface what you are unsure about rather than presenting
   output as final.
 

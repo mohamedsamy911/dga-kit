@@ -74,11 +74,12 @@ DGA's four stated reasons:
 - *"Extensive studies and tests have been conducted to ensure it provides a smooth and easy
   reading experience"*
 
-> ⚠️ **This page still names no Arabic body face.** It says IBM Plex Sans is the unified font and
-> stops there. The gap recorded in `capture-log.md` stands: DGA is silent on the Arabic typeface
-> for body text, and Saudi Font is restricted to national occasions, headings only. Do not read
-> *"supports 100 global languages"* as a statement that IBM Plex Sans Arabic is mandated — DGA
-> does not name it.
+> ⚠️ **This page names no Arabic body face** — it says IBM Plex Sans is the unified font and stops
+> there. Do not read *"supports 100 global languages"* as naming one. **DGA's Assessment Checklist
+> does** (item 3, retrieved 2026-10-19): *"Use the approved font: IBM Plex Sans Arabic, as
+> specified in the Platforms Code."* Cite the checklist for the Arabic face, not this page; see
+> `../../dga-launch-gate/references/assessment-checklist.md`. Saudi Font stays restricted to
+> national occasions, headings only.
 
 > The **Latin-first stack order** matters and is this kit's guidance, not DGA's:
 > `"IBM Plex Sans", "IBM Plex Sans Arabic", system-ui, sans-serif`. Reversing it makes the Arabic

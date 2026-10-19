@@ -43,7 +43,7 @@ enforcing DGA's rules in the code you write around it.
 | **Hijri calendar** — absent from the package entirely | Wrap or replace `dga-datepicker`. `../dga-rtl-i18n/references/formats.md` has the `Intl` recipe. Decide early — it touches every date field. |
 | **i18n** — one component references `locale` | `../dga-rtl-i18n/references/i18n-setup.md` |
 | **Responsive tokens** | DGA's radius and spacing semantic tokens resolve differently per breakpoint. Values live in the PC 1.0 Figma collections, not in CSS. `TODO(harvest)` |
-| **Arabic typeface** | DGA names IBM Plex Sans (the Latin family) and no Arabic face. Confirm with DGA before locking the stack. |
+| **Arabic typeface** | IBM Plex Sans Arabic — named by DGA's Assessment Checklist (item 3), not by the typography page. `--dga-font-sans` carries both faces, Latin first. |
 
 ## Non-negotiables
 

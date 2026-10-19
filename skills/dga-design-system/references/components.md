@@ -426,7 +426,7 @@ Feedback icon · Actions · Avatar · Checkbox · Custom.
 
 > ⚠️ Thinnest accessibility section of any component page — no mention of `<caption>`,
 > `scope`, `<th>`, sort announcement, or `aria-sort`. For a government service with data
-> tables this is a real gap. Fall back to WCAG 2.1 AA and say so.
+> tables this is a real gap. Fall back to WCAG 2.2 AA and say so.
 > ⚠️ **RTL:** column order mirrors. Numeric columns keep `dir="ltr"` with `tabular-nums`.
 
 ---
@@ -705,7 +705,7 @@ Tags · Rating · Actions · Container; plus expand/collapse icon (expandable) a
 > ⚠️ **The card page's entire accessibility section is copy-pasted from Accordion** — it refers
 > to "Accordions", "accordion headers" and "accordion panels" throughout. **Cards have no
 > accessibility guidance of their own.** For selectable cards (checkbox semantics, group
-> labelling) and expandable cards this is a real gap. Fall back to WCAG 2.1 AA and say so.
+> labelling) and expandable cards this is a real gap. Fall back to WCAG 2.2 AA and say so.
 
 ---
 
@@ -721,7 +721,7 @@ below).
 `aria-roledescription`; `aria-live` for auto-rotating carousels; focus must not be lost or
 trapped; Tab/Enter/Space/arrows; high contrast against varied backgrounds.
 
-> ⚠️ DGA gives **no pause/stop control requirement** for auto-rotating carousels. WCAG 2.1 AA
+> ⚠️ DGA gives **no pause/stop control requirement** for auto-rotating carousels. WCAG 2.2 AA
 > 2.2.2 (Pause, Stop, Hide) requires one. Apply WCAG and flag the gap.
 > ⚠️ **RTL:** arrows mirror, and dot order reverses.
 
@@ -993,7 +993,7 @@ Everywhere else, RTL behaviour is the consuming team's responsibility. That is t
 | 7 | List | Accessibility intro says "link components" |
 | 8 | Notification | Section heading reads "Tips to effectively use tags" |
 | 9 | Table | Names no ARIA roles, while Structured List specifies the full set |
-| 10 | Carousel | No pause/stop requirement for auto-rotation (WCAG 2.1 AA 2.2.2) |
+| 10 | Carousel | No pause/stop requirement for auto-rotation (WCAG 2.2 AA 2.2.2) |
 | 11 | Charts | No colour-blind-safe guidance; series distinguished by colour alone |
 
 Report to DS-DGA@dga.gov.sa alongside the foundations defects.

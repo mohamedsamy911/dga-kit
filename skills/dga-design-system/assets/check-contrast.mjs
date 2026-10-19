@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * WCAG 2.1 contrast check over DGA's own semantic token pairings.
+ * WCAG 2.x contrast check (same formula in 2.1 and 2.2) over DGA's own semantic token pairings.
  *
  *   node check-contrast.mjs               # both themes, every text role x surface
  *   node check-contrast.mjs --theme dark  # one theme only (light | dark)

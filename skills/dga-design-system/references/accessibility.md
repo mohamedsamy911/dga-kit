@@ -3,10 +3,13 @@
 **Sources:** https://design.dga.gov.sa/thoughts/AccessibilityEase · https://design.dga.gov.sa/guidelines/foundations/* · and the Accessibility
 section of every component page · **Retrieved:** 2026-08-26
 
-DGA's stated target is **WCAG 2.1 AA**:
+The design site's stated target is **WCAG 2.1 AA**:
 
 > Our aim is to comply with WCAG 2.1 AA accessibility standards.
 > — /guidelines/foundations/typography
+
+DGA's separate accessibility guideline (2024) is built on **WCAG 2.2** — see *DGA's accessibility
+guideline* below. The kit audits to **WCAG 2.2 AA**, which covers both.
 
 DGA does not publish a separate numbered rule set. Its accessibility requirements are stated
 per component, in prose, on each component page. This file consolidates them so `dga-a11y` and
@@ -156,7 +159,53 @@ DGA publishes no guidance on these. A skill must say so rather than implying a D
   Pagination in the shipped code. The total is unverified — cite these pages, not a count. Focus
   order under RTL is not among them; it is the consuming team's responsibility.
 - **Cognitive accessibility specifics** — named as an area, but with no testable criteria
-- **Accessibility statement page** — not covered in the design system; likely lives in the
-  separate DGA digital-government standards. `TODO(harvest)`
+- **Accessibility statement page** — not covered in the design system, nor in DGA's 2024
+  accessibility guideline (read 2026-10-19). `TODO(harvest)`
 
-For each of these, `dga-a11y` falls back to WCAG 2.1 AA and says explicitly that it is doing so.
+For each of these, `dga-a11y` falls back to WCAG 2.2 AA and says explicitly that it is doing so.
+
+## DGA's accessibility guideline
+
+*Guideline For Web Accessibility of Digital Channels Content to Serve People with Disabilities and
+the Elderly* — DGA-1-2-4-203, issue 2.0, May 2024, on dga.gov.sa (not the design site). Retrieved
+2026-10-19. Raw capture:
+[the raw capture](https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-19-a11y-guideline.md).
+
+It walks through all 86 WCAG 2.2 success criteria, one page each, and names its audience as
+government entities and the private sector working on government digital services. Its target:
+
+<!-- dga -->
+> The framework provides 4 steps on how to use this document to better understand web
+> accessibility and align web content with the international industry standard of web
+> accessibility (WCAG 2.2 level AA).
+<!-- /dga -->
+
+Its levels table — keep these labels when citing it:
+
+| Level | DGA's label |
+|---|---|
+| A | Essential |
+| AA | **Recommended** |
+| AAA | Optimal |
+
+> 🚩 **Do not call AA mandatory on this document's authority.** It aligns with 2.2 AA and labels AA
+> "Recommended". DGA's Digital Experience Maturity Index 2026 recommends WCAG *"with a compliance
+> level of no less than "AA""* — also a recommendation. Say "DGA's guideline targets WCAG 2.2 AA",
+> not "DGA requires".
+
+### The six criteria new in WCAG 2.2 at A or AA
+
+| SC | Level | DGA's one-line description (abridged) | Check |
+|---|---|---|---|
+| 2.4.11 Focus Not Obscured (Minimum) | AA | the focused element is at least partly visible while navigating by keyboard | Sticky headers, footers, cookie banners never cover the focused element |
+| 2.5.7 Dragging Movement | AA | *"a pointer alternative instead of dragging movements"* | Sliders, sortable lists, maps: a tap or click alternative exists |
+| 2.5.8 Target Size (Minimum) | AA | at least **24×24 CSS px**, or enough spacing | Below 24×24, a 24px circle around each target does not overlap another |
+| 3.2.6 Consistent Help | A | help mechanisms *"in a consistent location"* across pages | Contact, chat and FAQ links sit in the same place on every page |
+| 3.3.7 Redundant Entry | A | the user *"doesn't have to enter the same information multiple times"* in a process | Multi-step forms prefill or offer what was already entered |
+| 3.3.8 Accessible Authentication (Minimum) | AA | login relying on memory, transcription or problem-solving offers *"at least one alternative"* | Paste and password managers work; a type-the-characters CAPTCHA has an alternative |
+
+> ⚠️ **2.5.8 in DGA's guideline.** Its example says *"buttons must be 24x24 CSS"*, then lists the
+> spacing rule, inline links and equivalent controls under *"Nonconforming Content"* — the
+> document's heading for cases not assessed. Those are WCAG's exceptions. A 20×20 icon button
+> with enough spacing passes 2.5.8. DGA's own recommended minimum, 44×44 (Buttons page), is
+> stricter still and is a recommendation.

@@ -1,6 +1,6 @@
 interface:
   display_name: "DGA Accessibility Audit"
-  short_description: "Audit against WCAG 2.1 AA and DGA rules"
+  short_description: "Audit against WCAG 2.2 AA and DGA rules"
   brand_color: "#1B8354"
   default_prompt: "Use $dga-a11y to audit this interface for accessibility issues."
 

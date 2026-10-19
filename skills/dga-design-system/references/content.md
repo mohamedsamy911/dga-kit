@@ -17,9 +17,11 @@ languages, a **dropdown**.
 
 The site itself ships in Arabic and English (`العربية` toggle).
 
-**Parity — kit policy:** every route must exist in both locales. DGA states no parity rule; it
-only says the toggle updates *all* elements of the page. The kit treats a page present in one
-language and missing in the other as a defect, not a content backlog item.
+**Parity — kit policy:** every route must exist in both locales. DGA states no route rule as
+such. The toggle updates *all* elements of the page, and DGA's Assessment Checklist (item 39)
+asks that *"When switching between Arabic and English, the entire content must be accurately
+updated without any loss or omission of information."* The kit applies that by treating a page
+present in one language and missing in the other as a defect, not a content backlog item.
 
 ### Where DGA's Arabic pages differ from its English
 

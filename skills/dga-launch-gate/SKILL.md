@@ -11,25 +11,44 @@ accessibility is `dga-a11y`'s. This skill owns everything else.
 
 Sourced from DGA's template guidelines, chiefly **About the Entity** and **e-Participation** —
 the two pages carrying the transparency mandate. Full detail in
-`../dga-design-system/references/patterns.md`.
+`../dga-design-system/references/patterns.md`. Also from DGA documents outside the design site,
+each labelled where it is used: the **Assessment Checklist** (`references/assessment-checklist.md`),
+the **registration controls** DGA-1-2-2-106 (`references/registration-controls.md`), and the two
+**measurement reports** (`references/measurement-indicators.md`).
 
 ## Run in this order — registration first
 
 ### 1 · Registration and identity (start early — these have lead times)
-- [ ] **DGA registration number** obtained, tied to the entity's **License Number**
-- [ ] **Digital Stamp** component present and populated with both
-- [ ] Domain correct for entity type — authorities and ministries are **`gov.sa`**
+DGA regulatory controls, DGA-1-2-2-106 v2.0 — `references/registration-controls.md`. Report these
+as their own list, citing the control number.
+- [ ] **DGA approval before launching a new platform** (circular 5589), and a **registration
+      certificate** through Raqmi's "تسجيل منصة جديدة" service (2-106-09). DGA defines the
+      certificate as granted before development begins; registering data alone is **not** approval
+- [ ] On a platform registered with DGA, **new services and changes to registered services** have
+      DGA's approval before launch (2-106-41)
+- [ ] **Digital Stamp** issued (2-106-30) and displayed — the stamp page's registration number,
+      tied to the entity's **License Number**; DGA's checklist (item 11) puts it **at the top of
+      the page**, its certificate number linked, at most two secondary elements beside it
+- [ ] Domain correct for entity type — authorities and ministries are **`gov.sa`**; seasonal
+      platforms launch on a **subdomain** (2-106-25); internal platforms are registered on a
+      subdomain of the entity's main government domain (2-106-37)
+- [ ] **IPv6** and **DNSSEC** on the domain (2-106-72); the **servers hosting the entity's
+      domains** inside Saudi Arabia (2-106-73) — domain hosting, not every server
 - [ ] HTTPS, verifiable through the Digital Stamp
 
-> 🚩 The registration number is a procurement dependency, not a build task. Chase it in week one.
+> 🚩 The certificate and registration number are a procurement dependency, not a build task. Chase
+> them in week one. **2-106-12** is why any of this applies: the entity applies the Platforms
+> Code on all its platforms, apps and websites, new or already registered.
 
 ### 2 · Required on every page
 - [ ] **Skip-to-content link** at the start of the header
 - [ ] **Accessibility Tools** in the footer — DGA: *"may include features like font size
   adjustment or contrast settings"*
 - [ ] Header and footer, if detached: original structure and style kept — colours and fonts unchanged
-- [ ] Both locales exist (*kit policy* — DGA states no parity rule); language toggle reloads
-  **every** element including interactive content
+- [ ] Arabic is the primary language, and switching languages updates **the entire content**
+  without loss (DGA checklist item 39: *"without any loss or omission of information"*); the
+  toggle reloads **every** element including interactive content. That every route exists in
+  both locales is *kit policy*, the way the kit applies item 39
 
 ### 2b · DGA template guidance on every page — advisory
 DGA repeats these on every template page but words them as benefits, not obligations. Check for
@@ -50,6 +69,10 @@ Blocker, or a reason a launch fails.
       optional"*), Strictly Necessary is always on and uneditable
 - [ ] Prescribed navigation paths, reflected in the sitemap:
       `Homepage > About the Entity > e-Participation` and `… > Contact us`
+- [ ] From DGA's checklist (`references/assessment-checklist.md`): the footer carries official
+      links, the entity's logos, contact information and privacy policies (item 27); privacy and
+      security notices are linked at login, registration and wherever user data is collected
+      (item 41); the sitemap is comprehensive and up to date (item 37)
 
 ### 3b · Saudi law — Personal Data Protection Law (not DGA guidance)
 Law, not design guidance and not legal advice: `references/pdpl.md` (Bureau of Experts, Arabic
@@ -98,30 +121,31 @@ The PDPL does not mention cookies. Do not cite it for the cookie banner.
       without hover; totals and per-reason counts; support tables **≤10 rows × 10 columns**
 
 ### 6 · Measurement regimes
-The entity is scored against these; adopting Platforms Code feeds both:
-- [ ] **Digital Transformation Measurement Indicator**
-- [ ] **Digital Experience Maturity Indicator**
-- [ ] DGA's own **Assessment Criteria** — `/AssessmentCriteria`, captured 2026-08-27
+The entity is scored against these; adopting Platforms Code feeds both. Both are now described in
+`references/measurement-indicators.md` (DGA's public reports, read 2026-10-19):
+- [ ] **Digital Transformation Measurement** (Qiyas) — measures the **entity**: 95 criteria answered
+      in DGA's measurement system. The criteria are not public. Record: *not assessed by this kit*;
+      ask the entity for its latest results
+- [ ] **Digital Experience Maturity Index** — an annual expert assessment of **selected**
+      platforms (59 in 2026); detailed criteria go only to the owning entities. Record: *not
+      assessed by this kit*; ask for the platform's detailed report if it was assessed. Its four
+      interface recommendations (overlays, login, search, WCAG AA) are advisory; see the
+      reference
+- [ ] DGA's own **Assessment Criteria** — `/AssessmentCriteria`, and the **checklist** DGA asks
+      teams to submit: `references/assessment-checklist.md`, all 56 items
 
-> `TODO(harvest)` — the **two indicators** are published **outside** design.dga.gov.sa and have
-> NOT been captured. This skill is not complete until they are.
->
-> ## The verdict is INCOMPLETE, not PASS
->
-> While the two indicators are uncaptured, **this skill may not issue a PASS.** The permitted
-> overall verdicts are:
+> ## The verdict is FAIL or INCOMPLETE — never PASS
 >
 > | Verdict | When |
 > |---|---|
-> | **FAIL** | any checked item fails. A failure found against a partial rubric is still a real failure. |
-> | **INCOMPLETE** | everything checked passes, but the two Measurement Indicators were not scored because the kit does not hold them. |
+> | **FAIL** | a checked, cited launch requirement fails. A failure found against a partial rubric is still a real failure. Advisory template guidance, DXMI recommendations, checklist statuses and Saudi-law observations are reported in their own lists and never decide FAIL. |
+> | **INCOMPLETE** | no cited applicable failure was found in the items checked. Write it out in full: *"INCOMPLETE — no cited applicable failure found in the checked items; DGA's assessment and approval, and the entity's measurement results, were not verified. This is not a DGA go-live approval."* |
 >
-> **PASS is unavailable.** It would assert that the platform meets DGA's requirements, and this
-> skill cannot see two of the regimes it is scored against — so a PASS would be an unearned
-> go-live approval carrying this kit's name. Report INCOMPLETE, name the two missing inputs, and
-> say plainly that clearing them requires the entity's own reading of the indicators. A green
-> artefact that quietly excludes part of the rubric is worse than no artefact: it gets forwarded
-> to people who will not read this paragraph.
+> **PASS is unavailable, and stays unavailable.** Go-live approval is DGA's to give, through its
+> own assessment — the next step after an INCOMPLETE is to submit to it (two weeks ahead; see
+> below). The two measurement regimes cannot be scored from outside the entity. A PASS from this
+> kit would be an approval it has no standing to issue, and a green artefact gets forwarded to
+> people who will not read this paragraph.
 
 **The Assessment Criteria are published.** Full rubric in `references/assessment-criteria.md` —
 read it before any go-live call. In short:
@@ -140,8 +164,9 @@ read it before any go-live call. In short:
   five weeks from "done" to approval
 - A **1–10** compliance score with named levels. **No passing threshold is published** — do not quote a target
 
-> The downloadable checklist *file* is still **not obtained**. The page is captured; the file is
-> separate. Do not claim item-level coverage of the checklist.
+> **The checklist file is captured** (2026-10-19): `references/assessment-checklist.md`. Its 56
+> items sit in two groups, المعايير الأساسية (1–43) and المعايير الثانوية (44–56). DGA does not map
+> them onto the page's Mandatory / Recommended / Optional; keep them apart.
 
 ## Output
 

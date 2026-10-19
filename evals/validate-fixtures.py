@@ -6,7 +6,7 @@ Covers both suites: evals/dga-design-review/ and evals/dga-ui-adapter/.
 An eval asserting a wrong value is worse than no eval — it teaches the skill a false rule.
 Run after every token re-harvest:  python3 evals/validate-fixtures.py
 """
-import json, os, re, subprocess, sys
+import glob, json, os, re, subprocess, sys
 
 # PyYAML is not in the standard library, and the openai.yaml checks below genuinely need a parser
 # - regex-scraping them is what made an earlier version of that guard vacuous. A missing parser
@@ -426,6 +426,13 @@ if os.path.exists(_inv_path):
         '//laws.boe.gov.sa/BoeLaws/Laws/LawDetails/b7cfae89-828e-4994-b167-adaa00e37188/1':
             'Saudi law (PDPL) on the Bureau of Experts portal, not a DGA page; the freshness '
             'sentinel watches design.dga.gov.sa only. Re-read when the law is amended.',
+        '//dga.gov.sa/sites/default/files/2026-10/V2.0':
+            'DGA registration controls (DGA-1-2-2-106) on dga.gov.sa, which challenges automated '
+            'clients, so no sentinel can fetch it. Its sha256 is in the raw capture; re-download '
+            'by hand when DGA issues a new version.',
+        '/assets/updated-checkList.xlsx':
+            'The Assessment Checklist workbook. Not a page: tier A hashes it on every --check '
+            '(source-inventory.json tierA.checklist), which is stricter than a page source.',
     }
 
     def _covers(src, route):
@@ -2015,7 +2022,10 @@ _diag = os.path.join(ROOT, 'harvest/diagnostics/2026-08-31-freshness-timeout.md'
 _readme = open(os.path.join(ROOT, 'README.md'), encoding='utf-8').read()
 _fresh_row = next((l for l in _readme.split('\n') if l.startswith('| **Freshness monitoring**')), '')
 chk('freshness: the diagnostic report is published under harvest/', os.path.isfile(_diag))
-if os.path.isfile(_diag) and 'not resolved' in open(_diag, encoding='utf-8').read():
+# The record keeps its history: "not resolved" stays in the 2026-10-08 update below a dated
+# "**Resolved, 2026-10-18.**" line, so only an unresolved record blocks the tick.
+_diag_txt = open(_diag, encoding='utf-8').read() if os.path.isfile(_diag) else ''
+if 'not resolved' in _diag_txt and not re.search(r'^> \*\*Resolved, \d{4}-\d\d-\d\d\.\*\*', _diag_txt, re.M):
     chk('freshness: README does not tick a monitor that is recorded as blocked',
         '✅' not in _fresh_row and _fresh_row != '',
         _fresh_row[:120] + ' - the diagnostic record says the blocker is not resolved')
@@ -2122,6 +2132,65 @@ chk('component roles: the check catches a role whose value drifted from its kit 
     len(_cr_errors(_bad, _cr_css, _kit_css)) >= 2)
 
 
+# --- the Assessment Checklist: the reference table is the workbook, row for row ---------------
+# The table's English is copied from the capture; a hand-edit or a dropped row would leave the
+# launch gate quoting a criterion DGA never wrote. Compare against the raw capture, which the
+# freshness sentinel's workbook hash keeps honest.
+def _ck_raw(text):
+    """{n: (group, english)} from the raw capture: the last paragraph of each item's first fence."""
+    out, group = {}, None
+    for part in re.split(r'^(##+ .*)$', text, flags=re.M):
+        if part.startswith('## ') and not part.startswith('### '):
+            group = part[3:].strip()
+        elif part.startswith('### '):
+            n = int(part[4:].strip())
+            out[n] = [group, None]
+        elif out and out[max(out)][1] is None and '<!-- dga -->' in part:
+            body = part.split('<!-- dga -->', 1)[1].split('<!-- /dga -->', 1)[0]
+            paras = [p for p in re.split(r'\n>\s*\n', body) if p.strip()]
+            out[max(out)][1] = ' '.join(l.lstrip('>').strip() for l in paras[-1].splitlines())
+    return out
+
+
+def _ck_table(text):
+    """{n: english} from the reference's item tables."""
+    rows = re.findall(r'^\| (\d+) \| (.*?) \| [^|]* \| [^|]* \|$', text, flags=re.M)
+    return {int(n): ' '.join(e.replace('\\|', '|').split()) for n, e in rows}
+
+
+_ck_r = _ck_raw(open(os.path.join(ROOT, 'harvest/raw/2026-10-19-assessment-checklist.md'),
+                     encoding='utf-8').read())
+_ck_t = _ck_table(open(os.path.join(ROOT, 'skills/dga-launch-gate/references/assessment-checklist.md'),
+                       encoding='utf-8').read())
+chk('checklist: the capture holds items 1-56, 43 in the first group',
+    sorted(_ck_r) == list(range(1, 57))
+    and sum(1 for g, _ in _ck_r.values() if g == 'المعايير الأساسية') == 43,
+    f'{len(_ck_r)} items')
+_ck_bad = [n for n in range(1, 57) if _ck_t.get(n) != ' '.join((_ck_r.get(n) or [0, ''])[1].split())]
+chk('checklist: every reference row is the workbook\'s English, verbatim', not _ck_bad,
+    f'rows that differ or are missing: {_ck_bad[:8]}')
+_ck_inv = json.load(open(os.path.join(ROOT, 'harvest/source-inventory.json'), encoding='utf-8'))
+chk('checklist: the sentinel baseline hashes the same workbook the capture describes',
+    (_ck_inv['tierA'].get('checklist') or {}).get('sha256', '-') in
+    open(os.path.join(ROOT, 'harvest/raw/2026-10-19-assessment-checklist.md'), encoding='utf-8').read())
+
+
+# An abbreviated hash in a skill ("44b5e003…4251") must abbreviate a full sha256 recorded in a raw
+# capture. 0.13.0 shipped a reviewer-caught typo in one; nothing else compares them.
+_raw_shas = set()
+for _f in glob.glob(os.path.join(ROOT, 'harvest', 'raw', '*.md')):
+    _raw_shas |= set(re.findall(r'\b[0-9a-f]{64}\b', open(_f, encoding='utf-8').read()))
+_bad_abbr = []
+for _f in _SCAN:
+    if not _f.endswith('.md'):
+        continue
+    for _a, _z in re.findall(r'`([0-9a-f]{8})…([0-9a-f]{4})`', open(_f, encoding='utf-8').read()):
+        if not any(s.startswith(_a) and s.endswith(_z) for s in _raw_shas):
+            _bad_abbr.append(f'{os.path.relpath(_f, ROOT)}: {_a}…{_z}')
+chk('hashes: every abbreviated sha256 in the kit matches one in a raw capture', not _bad_abbr,
+    str(_bad_abbr))
+
+
 # --- source strength: DGA's hedges must not come back as obligations --------------------------
 # The 2026-10-18 re-read found the kit had hardened DGA's own wording in ~15 files: "helps" became
 # "required", "consider not having a timeout" became "no timeout", "avoid" became "forbidden".
@@ -2156,6 +2225,29 @@ _STRENGTH = [
      re.compile(r'\bPDPL\b|personal data protection law|نظام حماية البيانات الشخصية', re.I),
      re.compile(r'(?:requires?|required|must|mandat\w*)\b[^.]*cookie|cookie[^.]*\b(?:requires?|required|must|mandat\w*)\b', re.I),
      re.compile(r"\b(?:does not|do not|doesn't|never|not)\s+(?:mention|require|cite)", re.I)),
+    # 2026-10-19: DGA's accessibility guideline (DGA-1-2-4-203) aligns with WCAG 2.2 AA and labels
+    # AA "Recommended"; the design site says 2.1 AA. Neither makes AA a DGA requirement.
+    ('WCAG 2.2 AA stated as a DGA requirement (its guideline labels AA "Recommended")',
+     re.compile(r'WCAG 2\.2|DGA-1-2-4-203|accessibility guideline', re.I),
+     re.compile(r'DGA (?:requires|mandates)|\bmandatory\b|required by DGA|DGA[- ]mandated', re.I),
+     # The exemption is a NEGATION of the claim. A clause that asserts the requirement and then
+     # mentions "Recommended" still asserts it, so "Recommended" alone no longer exempts.
+     re.compile(r'do not call|never called|not mandatory|not "DGA requires', re.I)),
+    # DGA-1-2-2-106 2-106-87 opens "يحق للهيئة" - a power to suspend, not an automatic outcome.
+    ('domain suspension stated as automatic (DGA-1-2-2-106 says DGA may suspend)',
+     re.compile(r'suspen', re.I),
+     re.compile(r'will be suspended|is suspended|gets suspended|must suspend|DGA suspends', re.I),
+     re.compile(r'\bmay\b|allow|right to|يحق|never as', re.I)),
+    # 2-106-73 covers the servers hosting the entity's DOMAINS, nothing wider.
+    ('2-106-73 widened beyond the servers hosting the domains',
+     re.compile(r'2-106-73|(?:in|inside) (?:Saudi Arabia|the Kingdom)', re.I),
+     re.compile(r'(?:all|every) (?:application |web )?servers?|all hosting|every CDN|all data', re.I),
+     re.compile(r'domain|does not say|not every|do not widen', re.I)),
+    # The checklist groups items 1-43 under "المعايير الأساسية"; DGA maps that to no compliance level.
+    ('the checklist' + "'" + 's primary group called "Mandatory"',
+     re.compile(r'المعايير الأساسية|الأساسية item|primary group|items? 1[–-]43', re.I),
+     re.compile(r'\bmandatory\b|typically cannot proceed', re.I),
+     re.compile(r'do not call|neither source maps|does not map|not the page|are not|not "?Mandatory', re.I)),
     ('route parity stated as a DGA compliance rule (DGA states none)',
      re.compile(r'parity|both locales|bilingual gap|in one (?:language|locale)', re.I),
      re.compile(r'compliance (?:failure|requirement|rule|violation)|\bblocker\b|\bmandat|'
@@ -2198,6 +2290,12 @@ for _bad in ('6. **Every page needs the feedback section** and **two** last-modi
              'Accessibility Tools must receive keyboard focus first, per DGA\'s Chatbot page.',
              'Both locales are required for DGA compliance.',
              'The PDPL requires a cookie banner with Reject All.',
+             'DGA requires WCAG 2.2 AA on every platform.',
+             'DGA requires WCAG 2.2 AA, although the guideline labels it Recommended.',
+             'WCAG 2.2 AA is mandatory under DGA-1-2-4-203.',
+             'A platform that ignores the Platforms Code will be suspended under 2-106-87.',
+             '2-106-73: all servers must be inside Saudi Arabia.',
+             'Items 1–43 (المعايير الأساسية) are mandatory.',
              '- Bilingual gap: content present in one locale and absent in the other is a Blocker.'):
     chk('strength: the detector catches "' + _bad[:40] + '"', bool(_strength_hits(_bad)),
         'the source-strength guard cannot fire on a shipped wording')
@@ -2209,6 +2307,10 @@ for _good in ('Feedback section and two last-modified dates are DGA template gui
               'Parity — kit policy; DGA states no parity rule. A missing locale is a blocker.',
               'The PDPL does not mention cookies; do not cite it for the cookie banner.',
               'The PDPL does not require a cookie banner.',
+              "DGA's guideline targets WCAG 2.2 AA and labels AA \"Recommended\".",
+              "DGA's controls allow suspension of the domain (2-106-87.05).",
+              "The servers hosting the entity's domains are inside Saudi Arabia (2-106-73).",
+              "The المعايير الأساسية group is not the page's Mandatory level; neither source maps one onto the other.",
               'The privacy policy page links from the cookie banner; the PDPL article 12 covers the policy.'):
     chk('strength: the hedged wording passes: "' + _good[:40] + '"', not _strength_hits(_good),
         'the guard would flag correct, hedged guidance')

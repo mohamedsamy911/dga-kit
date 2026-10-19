@@ -6,7 +6,7 @@ cards."
 - must state: **DGA publishes no card accessibility guidance.** The Card page's accessibility
   section is Accordion's, pasted in error — it refers to "accordion headers" and "accordion
   panels" throughout.
-- should fall back to WCAG 2.1 AA for selectable/expandable cards **and label the fallback**
+- should fall back to WCAG 2.2 AA for selectable/expandable cards **and label the fallback**
 - should flag it as a documentation defect worth reporting to DS-DGA@dga.gov.sa
 - 🔴 **Fabrication if** it presents the Accordion requirements as Card requirements
 

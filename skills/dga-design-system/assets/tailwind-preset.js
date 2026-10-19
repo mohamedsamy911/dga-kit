@@ -413,7 +413,7 @@ export default {
           ]
     },
       maxWidth: { paragraph: '720px', container: '1280px' },
-      fontFamily: { sans: ['IBM Plex Sans', 'system-ui', 'sans-serif'] },
+      fontFamily: { sans: ['IBM Plex Sans', 'IBM Plex Sans Arabic', 'system-ui', 'sans-serif'] },
     },
   },
 }

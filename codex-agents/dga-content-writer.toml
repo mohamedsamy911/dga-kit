@@ -69,7 +69,8 @@ Full rules: `dga-design-system/references/content.md`.
   Give the designer the real strings early; a layout tuned to English breaks on Arabic.
 - **Never letter-space Arabic.** It is a connected script and tracking breaks the joins. If a
   design calls for tracking, it applies to Latin only.
-- **Parity — kit policy; DGA states no parity rule.** Every route and every string must exist in
+- **Parity — kit policy, applying DGA checklist item 39** (switching languages updates the entire
+  content without loss). Every route and every string must exist in
   both locales. A page present in one language and missing in the other is a failure, not a
   backlog item. Audit for it explicitly — missing translations hide behind fallbacks.
 - **The language toggle reloads everything** — text, menus, instructions, and interactive content

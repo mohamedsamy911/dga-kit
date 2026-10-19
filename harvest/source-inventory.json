@@ -2,7 +2,7 @@
   "$meta": {
     "purpose": "Authoritative map of every design.dga.gov.sa page this kit depends on, which reference file owns it, and what a change would invalidate.",
     "source": "https://design.dga.gov.sa/",
-    "generated": "2026-10-08",
+    "generated": "2026-10-19",
     "generatedBy": "harvest/sources.py --baseline",
     "publishedVersion": "4.0.0",
     "publishedVersionDate": null,
@@ -212,6 +212,13 @@
         "releases": 18
       },
       "note": "The SPA bundle carries the router table, and names the releases chunk the release list is read from. This is what makes the route contract and \"has DGA released?\" answerable without a browser. Only page prose still needs one."
+    },
+    "checklist": {
+      "url": "https://design.dga.gov.sa/assets/updated-checkList.xlsx",
+      "status": 200,
+      "bytes": 59394,
+      "sha256": "117d10c52ea5767bc3cad75bb2f4fce276323c0413885b8a73ec076674248075",
+      "note": "The Assessment Checklist workbook. Captured item by item in harvest/raw/2026-10-19-assessment-checklist.md; a new hash means re-capture it."
     },
     "sitemap": {
       "url": "https://design.dga.gov.sa/sitemap.xml",
@@ -546,6 +553,7 @@
       "category": "assessment",
       "owns": [
         "skills/dga-launch-gate/references/assessment-criteria.md",
+        "skills/dga-launch-gate/references/assessment-checklist.md",
         "skills/dga-launch-gate/references/checklist.md"
       ],
       "tier": "B",

@@ -351,8 +351,9 @@ will be scored against, both tied to Saudi Vision 2030:
 DGA states the system aligns with United Nations requirements, feeding the Kingdom's standing
 in international digital-government indices.
 
-This is what `dga-launch-gate` checks against. Both indicators need their own harvest — they
-are published outside design.dga.gov.sa. `TODO(harvest)`
+This is what `dga-launch-gate` checks against. Both indicators' public reports were read on
+2026-10-19 — see `../../dga-launch-gate/references/measurement-indicators.md`. Their item-level
+criteria are not public.
 
 DGA's own **Assessment Criteria** — the rubric a project is actually scored against before
 go-live — *is* published on the site and is captured in
