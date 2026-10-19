@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Check, CircleCheck, Clock3, FileText, Globe2, Info, ListChecks, ShieldCheck, Users } from 'lucide-react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { Check, CircleCheck, Star, Clock3, FileText, Globe2, Info, ListChecks, ShieldCheck, Users } from 'lucide-react';
 import { categories, services, type Category, type Service } from '../data';
 import { useI18n } from '../i18n';
 import { Breadcrumb, DemoNote, EmptyResults, FlowArrow, PageIntro, ServiceCard, ServiceFilters, ServiceIcon } from '../components/ui';
@@ -37,7 +37,28 @@ export function ServiceDetailPage({ service }: { service: Service }) {
       <section className="content-section" aria-labelledby="documents-title"><h2 id="documents-title" tabIndex={-1}><FileText size={23} aria-hidden="true" />{t('المستندات المطلوبة', 'Required Documents')}</h2><ul className="check-list">{service.documents.map(item => <li key={item.en}><Check size={18} aria-hidden="true" /><span>{local(item)}</span></li>)}</ul></section>
       <section className="content-section" aria-labelledby="steps-title"><h2 id="steps-title" tabIndex={-1}><ListChecks size={23} aria-hidden="true" />{t('الخطوات', 'Steps')}</h2><ol className="detail-steps">{steps.map((step, index) => <li key={step.title}><span className="step-number">{index + 1}</span><div><h3>{step.title}</h3><p>{step.body}</p></div></li>)}</ol></section>
     </div><aside className="service-summary" aria-labelledby="summary-title"><h2 id="summary-title" tabIndex={-1}>{t('بطاقة تفاصيل الخدمة', 'Service Details Card')}</h2><dl><div><dt><Users size={19} aria-hidden="true" />{t('الفئة المستهدفة', 'Target audience')}</dt><dd>{local(categories.find(item => item.id === service.category)!.label)}</dd></div><div><dt><Clock3 size={19} aria-hidden="true" />{t('المدة التوضيحية', 'Illustrative timeframe')}</dt><dd>{local(service.duration)}</dd></div><div><dt><CircleCheck size={19} aria-hidden="true" />{t('رسوم التجربة', 'Demo fees')}</dt><dd>{t('بدون رسوم', 'Free')}</dd></div><div><dt><Globe2 size={19} aria-hidden="true" />{t('قنوات تقديم الخدمة', 'Service channels')}</dt><dd>{t('هذا الموقع التجريبي فقط', 'This demo website only')}</dd></div><div><dt><ShieldCheck size={19} aria-hidden="true" />{t('تسجيل الدخول', 'Sign-in')}</dt><dd>{t('غير مطلوب', 'Not required')}</dd></div></dl><a className="button primary full-width" href={`#/apply/${service.id}`}>{t('ابدأ الخدمة التجريبية', 'Start demo service')}<FlowArrow /></a><p className="summary-disclaimer">{t('لا ينشئ هذا الإجراء طلبًا رسميًا. لا ترفع مستندات أو تُدخل بيانات شخصية حقيقية.', 'This does not create an official request. Do not upload documents or enter real personal details.')}</p><a className="text-action" href="#/track">{t('لديك رقم طلب تجريبي؟', 'Already have a demo reference?')}</a></aside></div>
+    <RatingSection key={service.id} />
   </div>;
+}
+
+// DGA's rating-section template: "How would you rate this service?" with the star Rating component,
+// the number shown beside the stars, then a confirmation. Native radios give the radiogroup
+// semantics, arrow keys and single Tab stop DGA's Rating component asks for.
+function RatingSection() {
+  const { t, number } = useI18n();
+  const [value, setValue] = useState(0);
+  const [done, setDone] = useState(false);
+  const confirmation = useRef<HTMLParagraphElement>(null);
+  useEffect(() => { if (done) confirmation.current?.focus(); }, [done]);
+  const submit = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); if (value) setDone(true); };
+  return <section className="rating-section" aria-labelledby="rating-title"><h2 id="rating-title">{t('كيف تقيّم هذه الخدمة؟', 'How would you rate this service?')}</h2>
+    {done ? <p className="feedback-thanks" role="status" ref={confirmation} tabIndex={-1}><Check size={20} aria-hidden="true" />{t(`شكرًا لك. سُجّل تقييمك (${number(value)} من ${number(5)}) في هذه الجلسة فقط.`, `Thank you. Your rating (${number(value)} of ${number(5)}) was recorded in this session only.`)}</p>
+      : <form onSubmit={submit}>
+        <div className="rating-stars" role="radiogroup" aria-labelledby="rating-title">{[1, 2, 3, 4, 5].map(star => <label key={star} className={`rating-star ${star <= value ? 'is-selected' : ''}`}><input type="radio" name="service-rating" value={star} checked={value === star} onChange={() => setValue(star)} /><Star size={28} aria-hidden="true" /><span className="sr-only">{star === 1 ? t('نجمة واحدة', '1 star') : star === 2 ? t('نجمتان', '2 stars') : t(`${number(star)} نجوم`, `${number(star)} stars`)}</span></label>)}
+          <span className="rating-value" aria-hidden="true"><bdi>{value ? `${number(value)} / ${number(5)}` : `— / ${number(5)}`}</bdi></span></div>
+        <div className="feedback-form-bottom"><p>{t('تجربة توضيحية فقط؛ لا يُرسل التقييم إلى أي جهة.', 'Demonstration only; the rating is not sent anywhere.')}</p><button type="submit" className="button primary" disabled={!value}>{t('تسجيل التقييم التجريبي', 'Record demo rating')}</button></div>
+      </form>}
+  </section>;
 }
 
 

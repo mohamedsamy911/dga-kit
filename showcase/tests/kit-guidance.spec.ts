@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 
 // Guidance added to dga-kit after the showcase was first built (0.8.0-0.13.0), mostly from DGA's
 // Assessment Checklist. Each check names the item it holds the showcase to.
-const routes = ['/', '/services', '/services/home-permit', '/apply/home-permit', '/track', '/about', '/privacy', '/accessibility']
+const routes = ['/', '/services', '/services/home-permit', '/apply/home-permit', '/track', '/about', '/privacy', '/accessibility', '/sitemap']
 
 for (const locale of ['ar', 'en']) {
   const t = (ar: string, en: string) => locale === 'ar' ? ar : en
@@ -56,5 +56,47 @@ for (const locale of ['ar', 'en']) {
       return !!privacy && !!firstField && !!(privacy.compareDocumentPosition(firstField) & Node.DOCUMENT_POSITION_FOLLOWING)
     })
     expect(order).toBe(true)
+  })
+
+  test(`${locale}: checklist item 37 - the sitemap lists every navigation and footer link, DGA's way`, async ({ page }) => {
+    await open(page, '/sitemap')
+    const listed = new Set(await page.locator('nav.sitemap a').evaluateAll(as => as.map(a => a.getAttribute('href'))))
+    const navigation = await page.locator('header nav a, footer a').evaluateAll(as => as.map(a => a.getAttribute('href')))
+    expect(navigation.length).toBeGreaterThan(5)
+    for (const href of navigation) expect(listed.has(href), href ?? '').toBe(true)
+    await expect(page.locator('nav.sitemap .sitemap-sub')).toHaveCount(12)
+    // Subpages sit at least 16px further in from the reading-start edge (the right in Arabic).
+    const main = await page.locator('nav.sitemap .sitemap-main > a').nth(1).boundingBox()
+    const sub = await page.locator('nav.sitemap .sitemap-sub > a').first().boundingBox()
+    const indent = locale === 'ar' ? (main!.x + main!.width) - (sub!.x + sub!.width) : sub!.x - main!.x
+    expect(Math.round(indent)).toBe(16)
+    // The nesting follows the breadcrumb: a service sits under Services, as in Home > Services > service.
+    const parent = await page.locator('nav.sitemap a[href="#/services/home-permit"]').evaluate(a => a.closest('ul')?.closest('li')?.querySelector(':scope > a')?.getAttribute('href'))
+    expect(parent).toBe('#/services')
+    const applyParent = await page.locator('nav.sitemap a[href="#/apply/home-permit"]').evaluate(a => a.closest('ul')?.closest('li')?.querySelector(':scope > a')?.getAttribute('href'))
+    expect(applyParent).toBe('#/services/home-permit')
+  })
+
+  test(`${locale}: rating section - star radios, arrow keys, the number, and a confirmation`, async ({ page }) => {
+    await open(page, '/services/home-permit')
+    const section = page.locator('section.rating-section')
+    await expect(section.getByRole('heading', { name: t('كيف تقيّم هذه الخدمة؟', 'How would you rate this service?') })).toBeVisible()
+    await expect(section.getByRole('radiogroup', { name: t('كيف تقيّم هذه الخدمة؟', 'How would you rate this service?') }).getByRole('radio')).toHaveCount(5)
+    const submit = section.getByRole('button', { name: t('تسجيل التقييم التجريبي', 'Record demo rating') })
+    await expect(submit).toBeDisabled()
+    // Nothing chosen yet: Tab from the first star must leave the group, not walk through five stars.
+    await section.getByRole('radio', { name: t('نجمة واحدة', '1 star') }).focus()
+    await page.keyboard.press('Tab')
+    expect(await page.evaluate(() => (document.activeElement as HTMLInputElement | null)?.type)).not.toBe('radio')
+    await section.getByRole('radio', { name: t('3 نجوم', '3 stars') }).check()
+    await page.keyboard.press(locale === 'ar' ? 'ArrowLeft' : 'ArrowRight')
+    await expect(section.getByRole('radio', { name: t('4 نجوم', '4 stars') })).toBeChecked()
+    await expect(section.locator('.rating-value')).toHaveText('4 / 5')
+    // One Tab stop: Tab leaves the star group straight for the submit button.
+    await page.keyboard.press('Tab')
+    await expect(submit).toBeFocused()
+    await submit.click()
+    await expect(section.getByRole('status')).toContainText(t('4 من 5', '4 of 5'))
+    await expect(section.getByRole('status')).toBeFocused()
   })
 }

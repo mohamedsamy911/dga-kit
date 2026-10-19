@@ -9,6 +9,7 @@ import { ServiceDetailPage, ServicesPage } from './pages/Services';
 import { ApplicationPage } from './pages/Application';
 import { TrackPage } from './pages/Track';
 import { AboutPage, InformationPage } from './pages/About';
+import { SitemapPage } from './pages/Sitemap';
 
 function readLocation() { return window.location.hash.slice(1) || '/'; }
 
@@ -47,7 +48,7 @@ export function App() {
   }, [location]);
   useEffect(() => {
     const service = getService(route.split('/')[2] || '');
-    const pageTitle = route === '/' ? (locale === 'ar' ? 'خدمات أقرب. حياة أسهل.' : 'Services closer. Life simpler.') : service ? service.title[locale] : route === '/services' ? (locale === 'ar' ? 'الخدمات' : 'Services') : route === '/track' ? (locale === 'ar' ? 'متابعة طلب' : 'Track a request') : route === '/privacy' ? (locale === 'ar' ? 'الخصوصية' : 'Privacy') : route === '/accessibility' ? (locale === 'ar' ? 'إمكانية الوصول' : 'Accessibility') : (locale === 'ar' ? 'عن التجربة' : 'About the showcase');
+    const pageTitle = route === '/' ? (locale === 'ar' ? 'خدمات أقرب. حياة أسهل.' : 'Services closer. Life simpler.') : service ? service.title[locale] : route === '/services' ? (locale === 'ar' ? 'الخدمات' : 'Services') : route === '/track' ? (locale === 'ar' ? 'متابعة طلب' : 'Track a request') : route === '/privacy' ? (locale === 'ar' ? 'الخصوصية' : 'Privacy') : route === '/accessibility' ? (locale === 'ar' ? 'إمكانية الوصول' : 'Accessibility') : route === '/sitemap' ? (locale === 'ar' ? 'خريطة الموقع' : 'Sitemap') : (locale === 'ar' ? 'عن التجربة' : 'About the showcase');
     document.title = `${pageTitle} | ${locale === 'ar' ? 'وصل — نموذج تجريبي' : 'WASL — Demo showcase'}`;
   }, [locale, route]);
   function createRequest(serviceId: string) {
@@ -64,6 +65,7 @@ export function App() {
   else if (route.startsWith('/apply/') && service) page = <ApplicationPage service={service} onCreate={createRequest} />;
   else if (route === '/track') page = <TrackPage initialReference={params.get('ref') || ''} requests={requests} />;
   else if (route === '/about') page = <AboutPage />;
+  else if (route === '/sitemap') page = <SitemapPage />;
   else if (route === '/privacy' || route === '/accessibility') page = <InformationPage kind={route === '/privacy' ? 'privacy' : 'accessibility'} />;
   else page = <NotFound />;
   return <LocaleProvider locale={locale}><Header key={`header:${route}`} route={route} onLanguage={() => setLocale(value => value === 'ar' ? 'en' : 'ar')} /><main id="main-content" ref={main} tabIndex={-1}><div key={location}>{page}</div></main><Feedback key={`feedback:${location}`} /><Footer fontScale={fontScale} theme={theme} contrast={contrast} onFontScale={setFontScale} onTheme={() => setTheme(value => value === 'light' ? 'dark' : 'light')} onContrast={() => setContrast(value => !value)} /></LocaleProvider>;

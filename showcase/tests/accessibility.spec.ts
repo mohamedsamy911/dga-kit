@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 
-const pages = ['/', '/services', '/services/home-permit', '/about', '/track', '/apply/home-permit']
+const pages = ['/', '/services', '/services/home-permit', '/about', '/track', '/apply/home-permit', '/sitemap']
 
 for (const locale of ['ar', 'en']) {
   for (const width of [390, 1440]) {

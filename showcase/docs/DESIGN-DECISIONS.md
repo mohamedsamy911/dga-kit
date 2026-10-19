@@ -46,9 +46,17 @@ absent and nothing here counts as meeting them: the Digital Stamp (checklist ite
 2-106-30), registration and approval under DGA-1-2-2-106, and entity logos and official contact
 details in the footer (item 27).
 
-**Not implemented — gaps, not boundaries.** A fictional site could provide these; it does not
-yet: a sitemap page (item 37) and the star rating section (item 8, `rating-section` template; the
-per-page feedback section is present).
+**Added 2026-10-19 — sitemap and rating section.**
+
+| Change | Source |
+| --- | --- |
+| Sitemap page (`#/sitemap`, linked in the footer; each service's demo request page sits under it, matching the breadcrumb): filled points for main pages, empty for subpages; main links medium, subpages small; subpage links indented 16px from the reading-start edge (the right in Arabic); external resources listed apart, with the external-link icon. A test holds it to every header-navigation and footer link, and to the breadcrumb nesting of a service and its request page | Checklist item 37; kit `patterns.md`, *Sitemap page* |
+| Rating section on each service page: *"How would you rate this service?"* / «كيف تقيّم هذه الخدمة؟» with five stars built from native radios in a `radiogroup` named by the question (arrow keys; the browser's single Tab stop for a same-name radio group, tested selected and unselected; "1 star"… labels; focus moves to the confirmation); normal, hover, pressed and selected states; the chosen number shown beside the stars ("4 / 5") | Rating-section template and checklist item 8; Rating component and checklist item 32 |
+
+**Adaptations, stated plainly.** DGA's rating and feedback templates call for a submission
+confirmation **page**; both here confirm inline with `role="status"` and record nothing beyond the
+session. The Rating component also lists a **half** state; this showcase takes whole-star input only, a
+showcase choice. No average, aggregate score or review count is shown or invented.
 
 ## Tokens and contrast
 

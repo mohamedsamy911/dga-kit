@@ -17,6 +17,11 @@ Windows, Node.js 22.17.1, Playwright Chromium, production build under `/dga-kit/
   nothing to keep consistent; editing a request keeps what was entered (3.3.7);
   there is no sign-in (3.3.8). Not a conformance claim.
 
+Later the same day the sitemap page and the rating section were added: **42 Playwright tests
+pass**, the sitemap joins the axe and overflow scans in both languages and widths, and the four
+new checks (sitemap membership, 16px indentation, breadcrumb nesting; star radiogroup, arrow keys,
+single Tab stop selected and unselected, the number, focused confirmation) were each break-tested.
+
 The record below is the original 0.7.2 build.
 
 ## Build and theme

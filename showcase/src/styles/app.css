@@ -179,6 +179,24 @@ input[type='search']::-webkit-search-cancel-button { display: none; }
 .choice-label input { accent-color: var(--color-brand); inline-size: 20px; block-size: 20px; margin: 0; }
 .feedback-form-bottom { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-block-start: 12px; }
 .feedback-form-bottom p { font-size: .75rem; color: var(--color-muted); }
+.sitemap ul { list-style: none; margin: 0; padding: 0; }
+.sitemap ul ul { padding-inline-start: 16px; }
+.sitemap h2 { font-size: 1.125rem; margin-block: 24px 4px; }
+.sitemap a { display: inline-flex; align-items: center; gap: 8px; min-block-size: 44px; }
+.sitemap a::before { content: ''; flex: none; inline-size: 8px; block-size: 8px; border-radius: 50%; border: 2px solid var(--color-brand); box-sizing: border-box; }
+.sitemap .sitemap-main > a::before { background: var(--color-brand); }
+.sitemap .sitemap-main > a { font-size: 1rem; font-weight: 500; }
+.sitemap .sitemap-sub > a { font-size: .875rem; }
+.rating-section { margin-block-start: 32px; padding: 28px; border: 1px solid var(--color-border); border-radius: var(--radius-md); }
+.rating-section h2 { font-size: 1.25rem; margin-block-end: 12px; }
+.rating-stars { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.rating-star { flex: none; position: relative; display: inline-flex; align-items: center; justify-content: center; inline-size: 44px; block-size: 44px; color: var(--color-muted); cursor: pointer; border-radius: var(--radius-sm); }
+.rating-star input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+.rating-star:hover, .rating-star:active, .rating-star.is-selected { color: var(--color-accent); }
+.rating-star:active { background: var(--color-accent-surface); }
+.rating-star.is-selected svg { fill: currentColor; }
+.rating-star:has(input:focus-visible) { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+.rating-value { margin-inline-start: 12px; font-weight: 600; }
 .feedback-thanks { display: flex; align-items: center; gap: 8px; color: var(--color-brand) !important; }
 .site-footer { background: var(--color-footer); color: var(--color-footer-text); }
 .site-footer a { color: var(--color-footer-text); }
