@@ -49,6 +49,8 @@ verbatim from the running site, not transcribed from screenshots.
 | Token re-check | **The last open token values** — `neutral.500`/`950` (CSS and Figma one unit apart; see the Figma capture), `info.50` (still blue), and radius (three `:root` blocks merge; no page lists values), read from the live stylesheet and the rendered page | raw evidence: `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-19-token-recheck.md` | 2026-10-19 |
 | Numerals | **Which digits DGA's own Arabic text uses** — Western in 252 of the build's Arabic strings, Arabic-Indic in 15, Western only in the checklist and controls; no stated policy; no ID display rule | raw evidence: `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-19-numerals.md` | 2026-10-19 |
 | Figma Foundations | **DGA's Figma variables** — 784 in 7 collections, read with the plugin API from the owner's copy: radius constant, 39 spacing and 36 type values per mode, CSS one unit off Figma in 22 colours, CSS dark block 80 roles off Figma's, a CSS media-query order defect | raw evidence: `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-19-figma-foundations.md` | 2026-10-19 |
+| Figma Mobile Components | **DGA's mobile kit structure** — 57 component sets on 31 pages: variants, sizes, padding and bound tokens; Top Bar, Tab Bar, Nav Drawer, bottom-sheet Modal, mobile Date Picker, Splash Screen | raw evidence: `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-20-figma-mobile-components.md` | 2026-10-20 |
+| Figma Components Library | **DGA's web component sizes** — 141 component sets on 59 pages: variants, drawn sizes, padding and bound tokens; buttons 40/32/24px, Skeleton sizes match the English page | raw evidence: `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-20-figma-components-library.md` | 2026-10-20 |
 | Arabic vs English | **Where DGA's two languages disagree** — all 6,182 shared text keys compared number by number, and all 743 normative sentences read in both languages; 9 differences confirmed on both rendered pages | raw evidence: `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-18-en-ar-differences.md` | 2026-10-18 |
 | Arabic copy | **DGA's own Arabic** for every string in the "Copy DGA gives" table, taken from the Arabic twin of DGA's text table and confirmed on the rendered Arabic pages | raw evidence: `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-18-arabic-copy.md` | 2026-10-18 |
 | Reverse audit | **Kit claim → DGA source** — every rule the agents, skill entry files and eval answers attribute to DGA, traced to DGA's text; ~30 corrections, each confirmed on the rendered page | raw evidence: `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-18-reverse-audit.md` | 2026-10-18 |
@@ -71,7 +73,7 @@ spacing, radius, shadow, width, container, and per-component role tokens.
 | Site | `/sitemap` | The site's own sitemap page. Navigation only — no rule on it. Not planned. |
 | ~~Off-site~~ | Digital Transformation Measurement + Digital Experience Maturity indicators | **Public reports captured 2026-10-19**; their item-level criteria are not public |
 | ~~Off-site~~ | ~~Assessment Criteria checklist file~~ | **Closed 2026-10-19** — `/assets/updated-checkList.xlsx`, all 56 items |
-| ~~Off-site~~ | ~~PC 1.0 Figma Foundations variables~~ | **Read 2026-10-19** — all 784 variables of DGA's Figma Foundations file; the six mobile component specs remain Figma-only |
+| ~~Off-site~~ | ~~PC 1.0 Figma Foundations variables~~ | **Read 2026-10-19** — all 784 variables of DGA's Figma Foundations file; the mobile component specs were read 2026-10-20 |
 
 > **Correction, 2026-08-27.** This row previously read *"All 19"* and listed `open-data` and
 > `performance-statistics` as templates. Neither is a template route — both are **required
@@ -101,10 +103,9 @@ Recorded so a skill can distinguish "DGA is silent" from "we didn't check."
 
 ## Downloads not yet obtained
 
-- PC 1.0 Foundations · PC 1.0 icon pack · PC 1.0 Components Desktop UI Kit ·
-  PC 1.0 Components Mobile UI Kit (Figma) — needed for responsive token values
+- PC 1.0 icon pack (Figma). *Foundations read 2026-10-19; Mobile Components and the Components
+  Library read 2026-10-20, through the owner's Figma account.*
 - Saudi Font — DGA: *"available under a license agreement from the Ministry of Culture"*
-- Assessment Criteria checklist (download link on `/designing` and `/developing`)
 
 ## Errors found in DGA's published documentation
 

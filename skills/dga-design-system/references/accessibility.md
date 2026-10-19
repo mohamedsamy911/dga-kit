@@ -41,6 +41,12 @@ From `/thoughts/AccessibilityEase`:
 | **Body line height** | **≥ 1.5 × font size** — *"WCAG suggests"* | layout-and-spacing |
 | Auto-dismissing notification duration | **≥ 5 seconds** | notification |
 
+DGA's own Figma components are often drawn smaller than 44px — web buttons 40 / 32 / 24px,
+checkboxes down to 16px, close buttons down to 20px (read 2026-10-20; both Figma captures are
+linked from `components.md`, *Buttons*). Kit policy: treat 44px as the hit area, not the drawn
+size, and pad the clickable area. Check each target against WCAG 2.2 SC 2.5.8 (24×24 CSS px, or
+enough spacing around a smaller target).
+
 ⚠️ **DGA contradicts itself on the large-text boundary** — the colour page says 24px, the
 typography page says "above 18.5 Bold or 24 Regular". Apply the stricter reading.
 

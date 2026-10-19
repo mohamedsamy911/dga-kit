@@ -31,7 +31,7 @@ The kit cites the English unless the row says otherwise.
 
 | Page | English | Arabic | Use |
 |---|---|---|---|
-| Skeleton — circle/square sizes | *"between 24px to 240px"* | «بين 24px إلى 48px» | Unresolved — ask DS-DGA@dga.gov.sa |
+| Skeleton — circle/square sizes | *"between 24px to 240px"* | «بين 24px إلى 48px» | English: DGA's Figma library draws 24 to 240px (read 2026-10-20). The Arabic page still says 48px |
 | Search — pagination | after *"the 10 available items"*; bottom of the list | no count; bottom, *and* «في أعلى الصفحة إذا كانت القائمة طويلة جدًا» | Both are DGA guidance; top placement appears only on the Arabic page |
 | Typography — Saudi Font in body text | *"not recommended"* | «يُحظر» (prohibited) | The stricter — never in body text |
 | Dropdown — focus on open | *"should typically be moved"* to the selected option | «يجب» (must) | Move it |

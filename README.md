@@ -213,7 +213,7 @@ reconciliation reproduced unchanged.
 | **Codex-native agents** | Six generated TOML definitions; separate installer with offline safety/parity checks. Confirm runtime discovery in your Codex session. |
 | **Designer sign-off** | ⚠️ **Outstanding** — values are exact, interpretation unverified |
 | **Responsive spacing and type** (DGA's Figma Foundations file, read 2026-10-19) | ✅ `references/responsive-tokens.md`; radius does not change by size |
-| **Mobile kit component specs** | ❌ Figma-only. Omitted, not guessed. |
+| **Mobile kit components** (DGA's Figma file, read 2026-10-20) | ✅ Structure, sizes and variants in `references/mobile.md`; behaviour not captured |
 
 **Dark theme: found, and broken upstream.** This kit used to list dark values as Figma-only. They
 are not — DGA ships **402 dark declarations** in its public CSS. But they sit under the selector

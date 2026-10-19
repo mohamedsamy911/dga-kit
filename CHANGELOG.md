@@ -11,6 +11,39 @@ patch means corrections. Nothing here is a DGA release — see
 `skills/dga-design-system/dga-version.md` for the Platforms Code version this kit is pinned to
 (currently **4.0.0** per DGA's change log, read 2026-10-08; DGA publishes no release date).
 
+## 0.16.0 — 2026-10-20
+
+### Added — DGA's Figma component files
+
+With the owner's approval, two more DGA Figma files (CC BY 4.0, `@sdga`) were opened into the
+owner's drafts and read with read-only plugin-API calls. Exports and captures are in `harvest/raw/`.
+
+- **Mobile Components** (57 named component sets on 31 pages, last updated about two years ago).
+  `mobile.md` now describes the mobile-only components from the file instead of a
+  `TODO(harvest)`:
+  - **Top Bar**: 102px, five styles. The site lists "Mobile Navigation Bar" and "Top Bar"; the
+    file's Navigation Bar page holds only Top Bar.
+  - **Tab Bar**: the site's "Tap Bar". 84px, selection variants Tab 1 to Tab 5.
+  - **Modal**: 375px wide, only the top corners rounded.
+  - **Date Picker**: 375×696 with 44px cells.
+  - **Splash Screen**: one frame.
+  - **Nav Drawer**: not on the site's list.
+- **Components Library** (141 component sets on 59 pages, updated to 3 Nov 2025): drawn sizes
+  for every web component set, linked from `components.md`.
+
+### Changed
+
+- **Touch targets.** DGA recommends 44×44px, but draws web buttons 40 / 32 / 24px, mobile buttons
+  44 / 40 / 32px, checkboxes down to 16px and close buttons down to 20px. `components.md` and
+  `accessibility.md` now say, as kit policy: treat 44px as the hit area, not the drawn size. WCAG
+  2.2 SC 2.5.8 needs 24×24px or enough spacing.
+- **Skeleton sizes.** The English page says 24px to 240px and the Arabic page 24px to 48px. DGA's
+  Figma library draws 24 to 240px. The kit follows the English and the Figma file; the Arabic page
+  still says 48px.
+- **Known gaps.** The `dga-design-system` skill still listed the Assessment Checklist as missing,
+  although 0.13.0 captured it, as did both capture logs' download lists. Fixed. The remaining
+  gap is the mobile components' behaviour, which these files do not capture.
+
 ## 0.15.0 — 2026-10-19
 
 ### Added — DGA's Figma Foundations variables

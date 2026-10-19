@@ -127,9 +127,11 @@ from elsewhere in DGA's guidance, kept here because they land in the same build.
 
 ## Mobile
 
-DGA ships a separate Mobile UI Kit with six components that have **no public spec pages and no
-equivalent in any web library**: Mobile Navigation Bar, Tap Bar, Top Bar, Splash Screen, Mobile
-Modal, mobile Date Picker. Specs are Figma-only.
+DGA ships a separate Mobile UI Kit with components that have **no public spec pages**: Top Bar
+(the site lists Mobile Navigation Bar and Top Bar; the file has only Top Bar), Tab Bar (the site
+spells it Tap Bar), Splash Screen, Mobile Modal (top corners rounded, bottom square), mobile Date
+Picker, and a Nav Drawer, which the web library also has. Their sizes and variants come from DGA's
+Figma file.
 See `../../dga-design-system/references/mobile.md`.
 
 ## The build list

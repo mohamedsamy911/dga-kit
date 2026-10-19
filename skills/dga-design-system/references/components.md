@@ -101,7 +101,11 @@ the right.
 - Always use the `<button>` element. Non-semantic `<div>` must not be used for actions.
 - An `<a>` used as a button must actually navigate and must have a valid `href`.
 - Contrast of label text or icon against the button background: **at least 4.5:1**.
-- Touch target: DGA gives **44×44px** as *"a recommended minimum"*.
+- Touch target: DGA gives **44×44px** as *"a recommended minimum"*. DGA's Figma library draws
+  buttons **40 / 32 / 24px** tall (Large / Medium / Small) and its mobile kit **44 / 40 / 32px**
+  (read 2026-10-20; mobile: `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-20-figma-mobile-components.md`). A button can look smaller than 44px; kit
+  policy is to pad its hit area to 44×44px. WCAG 2.2 SC 2.5.8 needs 24×24 CSS px, or enough
+  spacing around a smaller target. Sizes for every web component set: `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-20-figma-components-library.md`.
 - `aria-label` required on any button whose visible content doesn't describe its function —
   icon buttons especially: `<button aria-label="Close"><img src="icon.svg" alt=""></button>`
 - Buttons must be focusable; `<button>` is by default.
@@ -859,7 +863,8 @@ visually."* The Form template uses it on mobile in place of the Progress Indicat
 `/guidelines/components/loading-and-status/skeleton` · retrieved 2026-10-18
 
 **Variants** — Circle and Square (English: *"between 24px to 240px"*; DGA's Arabic page:
-«بين 24px إلى 48px» — the two disagree, confirm with DS-DGA@dga.gov.sa) · Rectangle (large, medium, small;
+«بين 24px إلى 48px». DGA's Figma library draws 24, 48, 64, 80, 120, 170 and 240px. The kit
+follows the English and the Figma file; the Arabic page still says 48px) · Rectangle (large, medium, small;
 short or long) · Line (small, large).
 **Accessibility** — `role="status"`; `tabindex="-1"` so it is skipped; removed from the
 accessibility tree once content loads; *"If animations are used, provide an option to pause them

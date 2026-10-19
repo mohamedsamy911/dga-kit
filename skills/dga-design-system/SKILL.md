@@ -29,10 +29,9 @@ reads from here rather than carrying its own copy of the rules.
 > from DGA because it is absent from `tokens.json`.** Read it off the live `:root`. See
 > `$meta.$reconciliation`.
 >
-> **Known gaps, stated so no answer implies coverage it lacks:** the Digital Transformation and
-> Digital Experience Maturity indicators (published outside design.dga.gov.sa); the six mobile-only
-> component specs; the Assessment Criteria **checklist file** (the rubric page itself is captured — see
-> `../dga-launch-gate/references/assessment-criteria.md`).
+> **Known gaps, stated so no answer implies coverage it lacks:** the item-level criteria of the
+> Digital Transformation and Digital Experience Maturity indicators (not public); the mobile
+> components' behaviour beyond their Figma structure (`references/mobile.md`).
 >
 > **Dark theme: published, and unusable.** Not Figma-only, as this kit used to say. DGA ships
 > **402 dark declarations** in its public CSS — under `[data-theme=dark] :root`, a selector that
