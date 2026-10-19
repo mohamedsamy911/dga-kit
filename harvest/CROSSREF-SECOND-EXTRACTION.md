@@ -40,6 +40,9 @@ than either repo's own internal consistency.
 | Their read, 2026-06-21 | `#ECFDF3` — **green**, character-identical to `success.50` |
 | Our read, 2026-08-26 | `#eff8ff` — blue, consistent with the rest of the `info` ramp |
 
+> **2026-10-19:** the live build still reads `#eff8ff`. The account below of when and why it
+> changed is inference from two reads; the live site cannot confirm it.
+
 They flagged this themselves as a suspected source typo and told readers to verify before
 relying on it. Our later read shows a plausible blue. **Most likely DGA corrected the page
 between June and August.**
@@ -55,9 +58,13 @@ It also means their `VERIFY` note is now resolved — worth telling them.
 | Ours | `#6c727e` | 4.83:1 |
 | Theirs | `#6c737f` | 4.78:1 |
 
-One unit apart in two channels. **`TODO(verify)`.**
+One unit apart in two channels.
 
-Weak evidence for ours: the value appears twice in our extraction, as the `neutral.500`
+> **Settled, 2026-10-19.** Both are DGA values, for two different names: `--colors-neutral-500`
+> is `#6c727e` (the kit's) and `--colors-gray-neutral-500` is `#6c737f`, in a generic grey ramp the
+> kit excludes. Their read matches the second name. Evidence: `harvest/raw/2026-10-19-token-recheck.md`.
+
+*Before the settlement (historical):* weak evidence for ours: the value appears twice in our extraction, as the `neutral.500`
 primitive *and* as the `text.secondary-paragraph` role, from two separate CSS custom properties
 that agree. Reading a rendered page cannot cross-check itself that way. Not proof — a systematic
 extraction error would produce exactly the same agreement.
@@ -68,7 +75,8 @@ gold `text.secondary`. The recommendation does not move; only the fourth signifi
 
 ### 3 · `neutral.950` / their `gray.950`
 
-Ours `#0c111b`, theirs `#0d121c`. Same one-unit pattern, same `TODO(verify)`. No contrast
+Ours `#0c111b`, theirs `#0d121c`. Same one-unit pattern. **Settled, 2026-10-19:**
+`--colors-neutral-950` is `#0c111b`, `--colors-gray-neutral-950` is `#0d121c`. No contrast
 consequence — nothing in DGA pairs text against it.
 
 ## Where their read fills a gap in ours
@@ -86,8 +94,9 @@ mislabelled role, it is the **primary step of a brand palette**, designated for 
 
 ## Actions
 
-- [ ] Next harvest: settle `neutral.500` and `neutral.950` by re-reading the CSS variables
-- [ ] Next harvest: confirm `info.50` is now blue, and if so tell them their `VERIFY` note is resolved
+- [x] Settle `neutral.500` and `neutral.950` — done 2026-10-19, two DGA names (see above)
+- [x] Confirm `info.50` is now blue — `#eff8ff` in the live build on 2026-10-19
+- [ ] Tell them their `info.50` `VERIFY` note is resolved
 - [ ] Record `gold 600` and `lavender 500` as **page-labelled palette steps**, not just semantic roles
 - [ ] Credit this repository in `README.md`
 

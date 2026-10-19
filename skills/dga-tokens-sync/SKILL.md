@@ -209,6 +209,8 @@ above stands on its own.
 - DGA's `.5` spacing variables use **U+2024 ONE DOT LEADER**, not a full stop (`--spacing-0․5`).
   Generated CSS must match or the lookup fails.
 - Radius is **not monotonic**: `2xl` (16px) and `3xl` (20px) are smaller than `xl` (24px).
-  Don't "fix" it — mirror the source and flag it.
+  Don't "fix" it — mirror the source and flag it. The cause: DGA's stylesheet declares two radius
+  sets on `:root`, and the later one overrides `none`, `xs`–`xl` and `full`. Read the values a browser
+  applies, never the first block alone — that one has `lg` 10px and `xl` 12px.
 - `primary-sa-flag` has no `600` step; `tertiary-lavendar` has no `500`; `gray` has an extra
   `1000`. All faithful to source.

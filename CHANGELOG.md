@@ -35,6 +35,20 @@ hit was checked on the rendered page: `harvest/raw/2026-10-19-rtl-statements.md`
 
 Skills still cite pages, never a total: the list holds for one DGA build.
 
+### Verified — the last open token values
+
+Every `TODO(verify)` in `tokens.json` is settled against the live stylesheet and the rendered page
+(`harvest/raw/2026-10-19-token-recheck.md`). No value changed.
+
+- **`neutral.500` and `neutral.950`**, disputed with an independent extraction since August: both
+  readings are real DGA values for two names. `--colors-neutral-500` is `#6c727e` (the kit's);
+  `--colors-gray-neutral-500` is `#6c737f`, in a generic grey ramp the kit excludes. Same for 950.
+- **`info.50`** still reads blue (`#eff8ff`).
+- **Radius:** no DGA page lists values; `/thoughts/designToken` only describes the collection. The
+  scale is out of order because DGA declares two radius sets on `:root` and the later one overrides
+  part of the earlier. Copying DGA's first block gives `lg` 10px and `xl` 12px, not what its pages
+  render — now noted in `dga-tokens-sync` and `token-wiring.md`.
+
 ### Verified — the white date-cell value in DGA's dark block
 
 `form.datecell-background-disabled` is `#ffffff` in DGA's dark block, flagged in 2026-08 as a

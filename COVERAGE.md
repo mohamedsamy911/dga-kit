@@ -483,7 +483,7 @@ Recorded rather than quietly resolved, per the kit's own cite-or-omit rule.
 | Claim | Status |
 |---|---|
 | ~~**How many places DGA itself states an RTL rule.**~~ This file once said "6 references across the whole system" without listing them. | **Closed 2026-10-19** — every string in the live site build was searched for direction words in English and Arabic, and each hit was checked on the rendered page (`harvest/raw/2026-10-19-rtl-statements.md`). Skills cite the pages, still never a total: the list holds for one DGA build. |
-| Three colour values disputed against an independent extraction | Carried as `$meta.$disputed` in `tokens.json`; see `harvest/CROSSREF-SECOND-EXTRACTION.md` |
+| ~~Three colour values disputed against an independent extraction~~ | **Closed 2026-10-19** — `neutral.500`/`950` are two DGA names (`neutral`, `gray-neutral`); `info.50` reads blue in the live build. Kept in `$meta.$disputed` as a record; see `harvest/raw/2026-10-19-token-recheck.md` |
 | **How many components DGA ships.** `/about-platforms-code` publishes a **33+** counter. `/guidelines/components/` enumerates **50** routes. | Recorded, not reconciled. This kit cites **50** — the enumerable count. The counter is stale marketing copy. |
 | **When 1.0.0 and 1.0.2 shipped.** `/updates/roadmap` dates them Feb 2024 and Sep 2024; `/updates/change-log` dates the same versions 20 Feb **2025** and 1 Sep **2025**. | Cite the change log — the more specific record. |
 

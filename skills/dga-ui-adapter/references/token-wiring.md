@@ -419,7 +419,10 @@ Two consequences:
 
 Faithful to DGA, and deliberately not "fixed":
 
-- **Radius is not monotonic** — `2xl` (16px) and `3xl` (20px) are smaller than `xl` (24px)
+- **Radius is not monotonic** — `2xl` (16px) and `3xl` (20px) are smaller than `xl` (24px). DGA's
+  stylesheet declares two radius sets; copying its first `:root` block gives `lg` 10px and `xl`
+  12px, which is not what DGA's pages render (live stylesheet and rendered page, checked 2026-10-19;
+  `../../dga-design-system/assets/tokens.json` → `radius.$verify`)
 - `primary-sa-flag` has no `600` step; `brand.600` (#1b8354) fills that role
 - `tertiary-lavendar` has no `500`, and that is DGA's spelling
 - `gray` carries an extra `1000` step that no other ramp has

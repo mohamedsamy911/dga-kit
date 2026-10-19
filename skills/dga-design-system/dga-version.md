@@ -26,6 +26,6 @@ changelog.
 
 ## Open at the next harvest
 
-- `neutral.500` and `neutral.950` — one unit apart from the second extraction. No contrast impact.
-- `info.50` — they read green (`#ecfdf3`) in June, we read blue (`#eff8ff`) in August. Confirm the
-  page was corrected upstream.
+- No open token disputes from the second extraction. Settled 2026-10-19: `neutral.500` and `neutral.950` differ
+  because DGA declares two names (`neutral` and `gray-neutral`); `info.50` reads blue (`#eff8ff`)
+  in the live build. When DGA changed `info.50` cannot be established.
