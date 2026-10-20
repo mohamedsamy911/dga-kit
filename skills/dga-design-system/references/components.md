@@ -10,6 +10,10 @@ a contradiction rather than reconciled (see the coverage record).
 Implementation is **not** hand-built — DGA ships an official library. See
 `../../dga-react/references/official-packages.md` before writing any component code.
 
+DGA's Assessment Checklist asks, for the components in items 12–36, that each be used as
+defined, without customising its base design (shape, radius, colour, spacing). Item 13 allows
+adding Dropdown list items, item 28 two card adjustments. Exact wording: `../../dga-launch-gate/references/assessment-checklist.md`.
+
 ## Page template
 
 Component pages follow a common structure. When extracting one, expect most of these — but do
@@ -303,6 +307,9 @@ Helper text · Prefix · Suffix.
 `/guidelines/components/forms-and-inputs/file-uploader` · retrieved 2026-08-26
 
 **Variants** — Single file · Multi file.
+Checklist item 20 also asks for each file's name, status (Uploading, Completed, Failed) and
+associated options (e.g., Remove), and clear messages with guidance for failures, size limits
+and unsupported types (`../../dga-launch-gate/references/assessment-checklist.md`).
 **States** — Default · **Drag + Hovered** · Disabled.
 **Anatomy** — Drag-and-drop area · Title · Helper text (including accepted file types) ·
 Browse files button · Featured icon · Upload status icon · File name · File bar helper text ·
@@ -534,7 +541,7 @@ and adds Selected / Unselected.
 `/guidelines/components/feedback/tooltip` · retrieved 2026-08-26
 
 **Variants** — Default · **Inverted** (darker background, for dark mode) · plus beak position:
-Top · Bottom · Left · Right.
+Top · Bottom · Left · Right. Checklist item 33 adds alignment: start, center, end.
 **Anatomy** — Help icon · Title · Body message · Container · Beak (the pointer).
 
 **Accessibility — DGA requirements**
@@ -710,6 +717,9 @@ Link · Legal text · Company logo.
 > designed to improve usability for people with disabilities, which may include font size
 > adjustment or contrast settings." This is a *feature* the entity must build, not just styling.
 > Most teams miss it because it isn't a WCAG requirement. `dga-launch-gate` checks for it.
+
+Checklist item 27 asks for footer links grouped under clear headings, such as *"Important
+Links"* or *"Support & Help"* (`../../dga-launch-gate/references/assessment-checklist.md`).
 
 **Accessibility** — `role="contentinfo"`; all links keyboard reachable; visible focus;
 descriptive link text; skip link; WCAG contrast.

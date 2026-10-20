@@ -115,6 +115,8 @@ Built for **multi-step** forms.
 
 ## Search page
 
+- Checklist item 10: *"A search bar must be available on the results page"*, and results are
+  organized using the platform's predefined categories, with selectable filters (`../../dga-launch-gate/references/assessment-checklist.md`)
 - **Pagination** — *"(optional)"* on search pages; when used: after **10 items**, at the bottom of
   the list, current page clearly highlighted, Next/Previous arrows included. DGA's **Arabic**
   Search page differs: no count («بعد تصفح جميع العناصر المتاحة في الصفحة الحالية»), and it adds
@@ -198,6 +200,10 @@ menu.
 
 Citizen engagement in decision-making — opinions on upcoming laws, economic projects and
 developmental initiatives.
+
+Checklist item 9 asks for *"the 8 main sections as per the template"*. The template page's
+written guidance does not list them, and the two below are not all eight: take the full
+structure from DGA's template design (`../../dga-launch-gate/references/assessment-checklist.md`).
 
 **Breadcrumb path is prescribed:** `Homepage > About The Entity > e-Participation`, and it must be
 reflected in the sitemap, visible on the homepage, and reachable from the top nav.

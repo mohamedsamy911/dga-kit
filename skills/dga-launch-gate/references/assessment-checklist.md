@@ -96,11 +96,31 @@ unnumbered sub-rows that say what DGA looks for. Each row has a status dropdown:
 Quoted from the workbook's English. Each was absent from, or weaker in, the design.dga.gov.sa
 pages the kit had read.
 
+**Item 2 — on coloured backgrounds:**
+
+<!-- dga -->
+> Ensure that any elements placed on colored backgrounds meet the required contrast and clarity standards for usability and accessibility, by applying the On Color property provided in the component.
+<!-- /dga -->
+
 **Item 3 — the Arabic typeface.** The first time a DGA source names it:
 
 <!-- dga -->
 > Use the approved font: IBM Plex Sans Arabic, as specified in the Platforms Code.
 <!-- /dga -->
+
+**Item 4 — spacing tokens.** The English and Arabic differ:
+
+<!-- dga -->
+> الالتزام باستخدام رموز المسافات للتصميم (Global Spacing Design Tokens). مع الالتزام بعدم استخدام المسافات المخصصة للعناصر.
+>
+> Use only the Global spacing design tokens, as defined in the system.
+<!-- /dga -->
+
+The Arabic adds «مع الالتزام بعدم استخدام المسافات المخصصة للعناصر», which the English omits.
+«المخصصة» can mean *custom* (ad-hoc values) or *dedicated to elements* (DGA's component-level
+spacing variables, which this kit ships in `component-roles.css`). The workbook does not say
+which, so it does not establish whether those component-level variables comply with the Arabic
+wording.
 
 **Item 6 — icons** (item 26 says the same of tags):
 
@@ -118,7 +138,7 @@ pages the kit had read.
 
 The link in the reference column is `https://survey.dga.gov.sa/survey/start/91ed577e-38dd-4181-9d12-1b91b4456c94`.
 
-**Item 7 — the home page's first section after the hero:**
+**Item 7 — the home page:**
 
 <!-- dga -->
 > For informational platforms, include a news or info section directly below the hero section.
@@ -128,10 +148,45 @@ The link in the reference column is `https://survey.dga.gov.sa/survey/start/91ed
 > For service platforms, include a services section directly below the hero section.
 <!-- /dga -->
 
+<!-- dga -->
+> Adhere to using the hero section and apply one of its approved types in Figma, whether it is an image, a colored background, or an object.
+<!-- /dga -->
+
+<!-- dga -->
+> For sections similar to template actions (e.g., partners), use the standardized design.
+<!-- /dga -->
+
+<!-- dga -->
+> For new sections, use the approved foundations (colors, fonts, buttons, etc.).
+<!-- /dga -->
+
 **Item 8 — the service page's wording:**
 
 <!-- dga -->
 > Full adherence to the approved service page template is required, including the use of the same terms and headings, such as: Steps, Requirements, Required Documents, Service Details Card, and others, without any modification or changes.
+<!-- /dga -->
+
+**Item 9 — e-Participation:**
+
+<!-- dga -->
+> Follow the 8 main sections as per the template.
+<!-- /dga -->
+
+<!-- dga -->
+> If there are no subpages for e-participation, the links available in the sections may be used. (For further clarification, please refer to the guidelines provided in the template.)
+<!-- /dga -->
+
+The template page's written guidance does not list the eight sections; they are in the template
+design. The kit records two of them (`../../dga-design-system/references/patterns.md`).
+
+**Item 10 — search results:**
+
+<!-- dga -->
+> A search bar must be available on the results page.
+<!-- /dga -->
+
+<!-- dga -->
+> Display the results in an organized manner based on the platform’s predefined categories (such as News, Services, Articles, etc.). Allow users to filter the results using selectable criteria, like content type or publication date, to help them quickly and accurately find the information they need.
 <!-- /dga -->
 
 **Item 11 — the Digital Stamp's placement:**
@@ -158,13 +213,31 @@ the page's list in *Standard state set*, `../../dga-design-system/references/com
 Report a state only the checklist names here, not as a page violation; mark it N/A, with the
 reason, where it does not apply.
 
+**Items 12–36 — the base design.** Items 12, 14, 15 and 17–36 each carry this row:
+
+<!-- dga -->
+> Use the component as defined in the Platforms Code, including its properties (shape, border radius, color, spacing, etc.) without any customization to the base design.
+<!-- /dga -->
+
+Item 13 (Dropdown) allows one addition, and item 16 (Menu) words it differently:
+
+<!-- dga -->
+> Use the component as defined in the Platforms Code in terms of properties (shape, border-radius, color, spacing, etc.) without modifying the original design, except for adding Dropdown List Items.
+<!-- /dga -->
+
+<!-- dga -->
+> Use the component as defined without modifications to properties such as shape, color, spacing, etc.
+<!-- /dga -->
+
+Item 28 allows two adjustments to cards (below).
+
 **Items 14 and 29 — external links:**
 
 <!-- dga -->
 > If the link leads to an external page, an external link icon (Link Square) must be included with it.
 <!-- /dga -->
 
-**Item 18 — which notification to use:**
+**Item 18 — notifications:**
 
 <!-- dga -->
 > If the notification is temporary, use Notification Toasts.
@@ -178,16 +251,38 @@ reason, where it does not apply.
 > For high-priority permanent alerts at the top of the page, use Notification.
 <!-- /dga -->
 
+<!-- dga -->
+> Use notifications in their appropriate context (e.g., success notifications should be used to indicate the successful completion of an action).
+<!-- /dga -->
+
+<!-- dga -->
+> Follow recommended notification behavior (e.g., closeable interactive alerts).
+<!-- /dga -->
+
 **Item 19 — modals:**
 
 <!-- dga -->
 > Avoid using pop-ups for detailed data entry — for extensive data input, please use the form template.
 <!-- /dga -->
 
+**Item 20 — file upload:**
+
+<!-- dga -->
+> Display the file name, its status (Uploading, Completed, Failed), and the associated options (e.g., Remove) in a clear and platform-consistent manner.
+<!-- /dga -->
+
+<!-- dga -->
+> Provide clear instructional or warning messages in cases of upload failure, file size exceeding the limit, or unsupported file types. Include helpful examples or guidance on how to resolve the issue.
+<!-- /dga -->
+
 **Item 27 — footer:**
 
 <!-- dga -->
 > Ensure the footer includes mandatory elements like official links, organization logos, contact information, and privacy policies, as specified in the Design System (Code of Platforms).
+<!-- /dga -->
+
+<!-- dga -->
+> Categorize footer links into organized groups with clear, general, or specialized headings, such as "Important Links" or "Support & Help."
 <!-- /dga -->
 
 **Item 28 — cards:**
@@ -206,7 +301,21 @@ reason, where it does not apply.
 > Maintain consistency between the breadcrumb and the hierarchical structure of the sitemap to ensure accurate navigation and user guidance.
 <!-- /dga -->
 
-**Item 38 — motion:**
+**Item 33 — tooltip placement:**
+
+<!-- dga -->
+> Apply the spatial positioning of the element (placement: top, bottom, right, left; and alignment: start, center, end) as defined in the Platform Design Code.
+<!-- /dga -->
+
+**Item 38 — interaction feedback and motion:**
+
+<!-- dga -->
+> Enable immediate and clear visual feedback upon interacting with elements (such as buttons and links).
+<!-- /dga -->
+
+<!-- dga -->
+> Support basic gesture interactions (like swipe, long press, and scroll) naturally and smoothly on touch devices.
+<!-- /dga -->
 
 <!-- dga -->
 > Avoid hiding important elements (such as buttons or content) behind animations or effects; these elements must always be visible without requiring scrolling or additional interaction.
@@ -233,6 +342,10 @@ Item 40 asks for *"a clear method for users to submit feedback"*. It does not ma
 per-page "Was this page useful?" section mandatory; that stays DGA template guidance.
 
 **Item 41 — privacy and security notices:**
+
+<!-- dga -->
+> Place notifications in familiar locations like the footer or as a popup displayed on the user’s first visit to the site.
+<!-- /dga -->
 
 <!-- dga -->
 > Provide clear links or messages at key interaction points—such as login, registration pages, or when collecting user data—to inform users about privacy and security notices.

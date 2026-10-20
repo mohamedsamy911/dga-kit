@@ -11,6 +11,34 @@ patch means corrections. Nothing here is a DGA release — see
 `skills/dga-design-system/dga-version.md` for the Platforms Code version this kit is pinned to
 (currently **4.0.0** per DGA's change log, read 2026-10-08; DGA publishes no release date).
 
+## 0.18.0 — 2026-10-20
+
+### Added — the rest of the Assessment Checklist's sub-rows
+
+The kit quoted the checklist sub-rows that added to its guidance, but missed about a dozen. All
+21 new quotes are verbatim and checked against the captured workbook (66 of 160 blockquotes are
+now checkable, up from 45 of 139).
+
+- **The base design (items 12–36).** Nearly every component item asks that the component be used
+  *"without any customization to the base design"*: shape, radius, colour, spacing. Item 13
+  allows adding Dropdown list items; item 28 allows two card adjustments. `components.md` now
+  says so at the top.
+- **Item 4, spacing.** The English says to use only the global spacing tokens. The Arabic adds
+  «مع الالتزام بعدم استخدام المسافات المخصصة للعناصر», which the English omits and which can mean
+  ad-hoc values or DGA's component-level spacing variables (shipped in `component-roles.css`).
+  The kit quotes both and does not pick a reading, so whether those variables comply stays
+  open; `token-wiring.md` notes it.
+- **Item 9, e-Participation**: *"the 8 main sections as per the template"*. The template page's
+  written guidance does not list them; `patterns.md` now says its two recorded sections are not
+  all eight.
+- **Item 10**: a search bar on the results page; results organized using the platform's
+  categories, with selectable filters.
+- **Item 20**: file name, status (Uploading, Completed, Failed) and associated options (e.g.,
+  Remove); clear failure messages with guidance.
+- Also items 2 (On Color property), 7 (hero types; template-like sections, e.g. partners; new
+  sections), 18 (context; recommended behaviour, e.g. closeable alerts), 27 (footer link groups), 33 (tooltip placement and alignment), 38 (immediate feedback,
+  gestures) and 41 (where privacy notices go).
+
 ## 0.17.0 — 2026-10-20
 
 ### Corrected — component states now come from two DGA sources

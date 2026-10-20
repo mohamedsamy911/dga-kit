@@ -11,6 +11,12 @@ generated files in `../../dga-design-system/assets/`:
 | `component-roles.css` | DGA's 379 component token names as `--dga-<dga-name>`, light theme. Load **after** `tokens.css`: 275 are `var(--dga-…)` links into it, the rest literals |
 | `component-roles.json` | `{ $meta, roles: { "--button-background-transparent-hovered": { declared, resolved, kitToken } } }` |
 
+Checklist item 4 asks for the global spacing tokens. Its Arabic adds «مع الالتزام بعدم استخدام
+المسافات المخصصة للعناصر», which can mean ad-hoc values or these component-level variables; the
+workbook does not say which (`../../dga-launch-gate/references/assessment-checklist.md`). Use the
+global spacing scale between elements; whether these component-level variables comply with the
+Arabic wording is unresolved.
+
 ⚠️ **Four of those five are generated.** `tokens.json` is the **harvest** — values verbatim
 from design.dga.gov.sa — and it is the INPUT. `tokens.css` and `tailwind-preset.js` are derived
 from it by `generate-tokens.mjs`. `component-roles.json`/`.css` come from DGA's stylesheet via the

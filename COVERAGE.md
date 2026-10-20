@@ -374,7 +374,7 @@ name it, and nothing else.
 ## Guarding against our own drift
 
 The monitoring in `dga-tokens-sync` watches **DGA** for changes. `evals/check-quote-fidelity.py`
-watches **us** — it compares the DGA quotes a capture actually covers (45 of 139 blockquotes
+watches **us** — it compares the DGA quotes a capture actually covers (66 of 160 blockquotes
 today; the rest are *unverifiable*, not verified) against the captured page text in
 `harvest/raw/`, and fails on a paragraph that reproduces a capture without matching it.
 
