@@ -11,6 +11,23 @@ patch means corrections. Nothing here is a DGA release — see
 `skills/dga-design-system/dga-version.md` for the Platforms Code version this kit is pinned to
 (currently **4.0.0** per DGA's change log, read 2026-10-08; DGA publishes no release date).
 
+## 0.19.0 — 2026-10-20
+
+### Added — DGA's rendered Service and e-Participation templates
+
+DGA's site serves templates as live pages under `/templates/`, besides the guideline pages that
+show them as images. Two were read in English and Arabic
+(`harvest/raw/2026-10-20-live-templates.md`):
+
+- **Service page** (checklist item 8 asks for the template's *"same terms and headings"*):
+  `patterns.md` now lists the tabs, service-card labels and sections in both languages. The
+  second tab is "Conditions" / «شروط الاستخدام», where the checklist's example says
+  "Requirements" / «الشروط»; the kit records both, does not choose, and says to note the choice
+  in the assessment submission.
+- **e-Participation** (item 9, *"the 8 main sections"*): the eight sections are now listed in
+  order, replacing 0.18.0's note that the kit could not name them. DGA displays the first as
+  «الإكترونية»; the kit shows that verbatim with the standard spelling beside it.
+
 ## 0.18.0 — 2026-10-20
 
 ### Added — the rest of the Assessment Checklist's sub-rows

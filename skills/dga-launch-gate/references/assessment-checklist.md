@@ -166,6 +166,10 @@ The link in the reference column is `https://survey.dga.gov.sa/survey/start/91ed
 > Full adherence to the approved service page template is required, including the use of the same terms and headings, such as: Steps, Requirements, Required Documents, Service Details Card, and others, without any modification or changes.
 <!-- /dga -->
 
+The service page's headings, as DGA's rendered template (`/templates/service`) shows them, are in
+`../../dga-design-system/references/patterns.md`, *Service page*. Its second tab reads
+"Conditions" / «شروط الاستخدام», not this row's "Requirements" / «الشروط».
+
 **Item 9 — e-Participation:**
 
 <!-- dga -->
@@ -176,8 +180,9 @@ The link in the reference column is `https://survey.dga.gov.sa/survey/start/91ed
 > If there are no subpages for e-participation, the links available in the sections may be used. (For further clarification, please refer to the guidelines provided in the template.)
 <!-- /dga -->
 
-The template page's written guidance does not list the eight sections; they are in the template
-design. The kit records two of them (`../../dga-design-system/references/patterns.md`).
+The template guideline page does not list the eight sections in text. DGA's rendered template,
+`/templates/e-participation`, shows them; they are listed in
+`../../dga-design-system/references/patterns.md`, *e-Participation page*.
 
 **Item 10 — search results:**
 

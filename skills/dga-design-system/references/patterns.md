@@ -90,6 +90,25 @@ stacked vertically on mobile**.
 - **Service card**: target audience · service duration · channels · cost. Contact details and
   the FAQ link *"should be easy to access and interact with"* — DGA does not place them in the card
 
+Checklist item 8 asks for the template's *"same terms and headings … without any modification or
+changes"* (`../../dga-launch-gate/references/assessment-checklist.md`). Labels and headings
+observed on DGA's rendered service template (`/templates/service`, read 2026-10-20); not an
+exhaustive list of required copy:
+
+| Part | English | Arabic |
+|---|---|---|
+| Tabs | Steps · Conditions · Required Documents | الخطوات · شروط الاستخدام · المستندات المطلوبة |
+| Service card | Target audience · Service duration · Service channels · Service cost | الفئة المستهدفة · مدة الخدمة · قنوات الخدمة · تكلفة الخدمة |
+| More in the card | Payment channels · Frequently Asked Questions · Phone · Email · Mobile Application | قنوات الدفع · الاسئلة الشائعة · الهاتف · البريد الالكتروني · تطبيقات الجوال |
+| Link under the description | Service Level Agreement | اتفاقية مستوى الخدمة |
+| Further down | Related Services · Comments & suggestions | خدمات ذات صلة · التعليقات والاقتراحات |
+
+⚠️ Checklist item 8 gives *"Requirements"* / «الشروط» as an example; DGA's rendered template
+labels the second tab "Conditions" / «شروط الاستخدام». The published sources differ. Record which
+wording the project uses, and why, in the assessment submission notes, and ask DGA before treating
+that choice as satisfying item 8.
+Evidence: `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-20-live-templates.md`.
+
 ---
 
 ## Form page
@@ -201,9 +220,21 @@ menu.
 Citizen engagement in decision-making — opinions on upcoming laws, economic projects and
 developmental initiatives.
 
-Checklist item 9 asks for *"the 8 main sections as per the template"*. The template page's
-written guidance does not list them, and the two below are not all eight: take the full
-structure from DGA's template design (`../../dga-launch-gate/references/assessment-checklist.md`).
+Checklist item 9 asks for *"the 8 main sections as per the template"* (`../../dga-launch-gate/references/assessment-checklist.md`).
+DGA's rendered template (`/templates/e-participation`, read 2026-10-20) shows them under
+"Engagement Topics" / «مواضيع المشاركة», in this order:
+
+1. e-Participation Policy · سياسة المشاركة الإكترونية (as displayed; standard spelling
+   «الإلكترونية», which DGA's section 2 uses)
+2. Consultations · الإستشارات الإلكترونية
+3. Co-Creation and Ideas · التطوير المشترك والافكار
+4. Open Data · البيانات المفتوحة
+5. Complaints and Suggestions · الشكاوى والمقترحات
+6. Beneficiary Voice Reports · تقارير صوت المستفيد
+7. Website and Services Statistics · إحصائيات الموقع والخدمات
+8. Social Media · وسائل التواصل الاجتماعي
+
+The template guideline details two of the eight, below. Evidence: `https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-20-live-templates.md`.
 
 **Breadcrumb path is prescribed:** `Homepage > About The Entity > e-Participation`, and it must be
 reflected in the sitemap, visible on the homepage, and reachable from the top nav.
