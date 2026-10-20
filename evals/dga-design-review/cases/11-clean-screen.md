@@ -2,8 +2,8 @@
 A Contact Us page: DGA template structure, all colours on-token, type from the DGA scale,
 44px targets, skip link present, footer with Accessibility Tools and both last-modified dates,
 feedback section with "Was this page useful?" plus reason options, ar and en at parity, RTL
-correct, the five states DGA lists for inputs (Default, Hovered, Pressed, Focused, Disabled) specified on
-the form inputs.
+correct, the five states DGA's Input page lists (Default, Hovered, Pressed, Focused, Disabled) specified on
+the form inputs. No field on the screen is read-only.
 
 ## expect
 - verdict: **Ready for development**

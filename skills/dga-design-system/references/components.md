@@ -32,12 +32,57 @@ DGA's state vocabulary has six names:
 
 `Default` · `Hovered` · `Pressed` · `Selected` · `Focused` · `Disabled`
 
-**It is a vocabulary, not a per-component requirement.** Each component page lists its own
-states, and most list fewer or different ones — inputs, tabs and menus have five with no
-`Selected`, file uploader three, pagination four (with *Current page*), breadcrumbs seven, and
-link and search box swap `Selected` for *Visited* or *Read-only*. A design must cover the states
-**its component's page lists** — see that component below. Do not report a component as
-non-compliant for lacking a state its own page does not list.
+**It is a vocabulary, not a per-component requirement.** DGA lists each component's states in two
+places, and they do not always agree:
+
+- **The component page** — design guidance. Most pages list fewer or different states; some list
+  none.
+- **DGA's Assessment Checklist**, items 12–36 (`../../dga-launch-gate/references/assessment-checklist.md`)
+  — what DGA asks teams to submit for assessment. It separates *interactive* states from
+  *contextual* ones such as Selected, Expanded or Checked.
+
+Kit policy for reviews:
+
+- A missing state that the component's page lists is a design-guidance finding.
+- A missing state that only the checklist lists is reported in the checklist list, as
+  `dga-launch-gate` does, never as a violation of the page.
+- Where a checklist state does not apply to the design (no field is ever read-only, say), the
+  workbook's own **N/A** status covers it; record the reason.
+- Never report a component for lacking a state neither source lists, and never require all six.
+
+| Component (checklist item) | Checklist: interactive | Checklist: contextual | Component page |
+|---|---|---|---|
+| Buttons (12) | Default, Hovered, Pressed, Selected, Focused, Disabled | — | same six |
+| Dropdown (13) | Default, Hovered, Pressed, Focused, Read-only, Disabled | — | no state list |
+| Link (14) | Default, Hovered, Pressed, Focused, Visited, Disabled | — | same six |
+| Accordion (15) | Default, Hovered, Pressed, Focused, Disabled | Expanded / Collapsed | same five |
+| Menu (16) | Default, Hovered, Pressed, Focused, Disabled | Selected | same five |
+| Content switcher (17) | Normal, Hovered, Focused | Selected | normal, hovered, selected, focused |
+| File uploader (20) | Default, Drag + Hover, Disabled | Uploaded / Not Uploaded | Default, Drag + Hovered, Disabled |
+| Checkbox (21) | Default, Hovered, Focused, Read-only, Disabled | Checked / Unchecked / Indeterminate | no state list |
+| Radio (22) | Default, Hovered, Focused, Read-only, Disabled | Selected / Unselected | **all six, with Pressed and Selected; no Read-only** |
+| Switch (23) | Default, Hovered, Focused, Disabled | On / Off | **five, with Pressed** |
+| Textarea (24) | Default, Hovered, Pressed, Focused, Read-only, Disabled | — | same six |
+| Tabs (25) | Default, Hovered, Focused, Disabled | Selected / Unselected | **five, with Pressed; no Selected** |
+| Card (28) | Default, Hover, Focused, Disabled | — | Default, Hovered, Focused, Disabled |
+| Nav header (29) | Default, Hovered, Pressed, Focused, Disabled | Selected | same five, plus Selected / Unselected |
+| Breadcrumbs (30) | Default, Hovered, Pressed, Focused, Disabled | — | **"seven": enabled, hover, active, focus, visited, disabled, read-only** |
+| Rating (32) | Normal, Pressed | Selected, Half | normal, pressed, selected, half |
+| Input (34) | Default, Hovered, Pressed, Focused, Read-only, Disabled | — | **five; Read-only is listed as a type** |
+| Date picker (36) | Default, Hovered, Pressed, Focused, Disabled | Selected, Today, Next/Prev | no state list |
+
+**Bold**: the page and the checklist differ. Item 29 says *"tab and submenu states"*; item 30 adds
+*"Current page should be disabled and non-interactive."* Checklist read 2026-10-19; pages as
+recorded below, nine re-read 2026-10-20. Pages the checklist does not cover: pagination lists four
+(with *Current page*), search box six with Read-only. DGA's Figma library draws the checklist's
+states for most rows but has no Drag + Hover variant for File Upload (implementation). Evidence:
+`https://github.com/mohamedsamy911/dga-kit/blob/master/harvest/raw/2026-10-20-component-states.md`.
+
+⚠️ Web-platform note, not DGA guidance: HTML's `readonly` attribute does not apply to checkboxes
+or radio buttons (https://html.spec.whatwg.org/multipage/input.html#the-readonly-attribute), so a
+"read-only" one built with it still toggles. WAI-ARIA 1.2 allows `aria-readonly` on the
+`checkbox` and `radiogroup` roles — on the group, not on each `radio`
+(https://www.w3.org/TR/wai-aria-1.2/#aria-readonly). Block the change in code as well.
 
 `Focused` is called out explicitly as an accessibility requirement for keyboard navigation.
 
@@ -72,12 +117,14 @@ cancelling important processes; DGA requires user confirmation) · Menu (toggles
 options) · Icon (any type rendered icon-only).
 
 ⚠️ DGA's own text is inconsistent: the Appearance paragraph lists *five* types including a
-close button, then the Types list gives four and drops it. Treat close as a variant of icon
-button.
+close button, then the Types list gives four and drops it. DGA's Figma library has a separate
+`Button-Close` component, 20 / 24 / 32 / 40px (implementation, read 2026-10-20).
 
 **Emphasis** — three levels: high (critical CTAs and primary actions), medium, low (secondary
 or less critical). The page says "four styles" then describes three levels. Another internal
-inconsistency.
+inconsistency. DGA's Figma `Button` has six `Style` values (Primary, Neutral, Secondary-Solid,
+Secondary-Outline, Subtle, Transparent), with Destructive and On-color as separate properties;
+the page does not map them to its levels.
 
 **Icons** — leading (precedes label, draws attention first, for emphasising a specific action)
 or trailing (follows label, complements it when the text carries the meaning). DGA explicitly
@@ -176,7 +223,7 @@ Darker (no stroke, darker background).
 **Helper text** — standard (guidance) and error (red, for failed validation).
 
 **States** — Default · Hovered · Pressed · Focused · Disabled. *(No Selected — inputs use five
-of the six.)*
+of the six.)* Checklist item 34 adds Read-only (see *Standard state set*).
 
 **Anatomy** — Container · Input label · Placeholder · Icon · Feedback icon (entry validity) ·
 Helper text · Prefix · Suffix.
@@ -218,7 +265,8 @@ Helper text · Prefix · Suffix.
 
 `/guidelines/components/forms-and-inputs/radio` · retrieved 2026-08-26
 
-**Variants** — Unselected · Selected. **States** — all six.
+**Variants** — Unselected · Selected. **States** — all six. Checklist item 22 differs (see
+*Standard state set*).
 **Anatomy** — Radio input (nothing preselected by default) · Label · Helper text · Alert message.
 
 **Accessibility — DGA requirements**
@@ -238,7 +286,7 @@ Helper text · Prefix · Suffix.
 `/guidelines/components/forms-and-inputs/switch` · retrieved 2026-08-26
 
 **Variants** — On · Off, plus helper text and alert message.
-**States** — Default · Hovered · Pressed · Focused · Disabled.
+**States** — Default · Hovered · Pressed · Focused · Disabled. Checklist item 23 has no Pressed.
 **Anatomy** — Switch (off by default) · Label · Helper text · Alert message.
 
 **Accessibility — DGA requirements**
@@ -360,7 +408,8 @@ buttons) · Featured icon / Feedback icon · Link · Close button (optional).
 `/guidelines/components/navigational/breadcrumbs` · retrieved 2026-08-26
 
 **States** — seven: enabled, hover, active, focus, **visited**, disabled, read-only.
-*(Visited, because it contains links — the Link page lists a Visited state too.)*
+*(Visited, because it contains links — the Link page lists a Visited state too.)* Checklist
+item 30 lists five, without visited or read-only (see *Standard state set*).
 
 **Truncation** — up to **five** items by default; beyond that, first and last with an ellipsis
 that expands on click. Wraps to a second line when it exceeds the width.
@@ -448,7 +497,8 @@ Feedback icon · Actions · Avatar · Checkbox · Custom.
 **Overflow rule:** a horizontal tablist is confined to the container width and **does not
 scroll or wrap** — for more tabs DGA says *"it is recommended to incorporate an overflow menu button"* ("More", three
 dots).
-**States** — Default · Hovered · Pressed · Focused · Disabled.
+**States** — Default · Hovered · Pressed · Focused · Disabled. Checklist item 25 has no Pressed
+and adds Selected / Unselected.
 **Anatomy** — Container · Tab title · Icon · Selection indicator · More button · Divider.
 
 **Accessibility — DGA requirements**

@@ -131,7 +131,7 @@
     {
       "id": 11,
       "name": "clean-screen",
-      "prompt": "Use the dga-design-review skill.\n\nA Contact Us page: DGA template structure, all colours on-token, type from the DGA scale,\n44px targets, skip link present, footer with Accessibility Tools and both last-modified dates,\nfeedback section with \"Was this page useful?\" plus reason options, ar and en at parity, RTL\ncorrect, the five states DGA lists for inputs (Default, Hovered, Pressed, Focused, Disabled) specified on\nthe form inputs.",
+      "prompt": "Use the dga-design-review skill.\n\nA Contact Us page: DGA template structure, all colours on-token, type from the DGA scale,\n44px targets, skip link present, footer with Accessibility Tools and both last-modified dates,\nfeedback section with \"Was this page useful?\" plus reason options, ar and en at parity, RTL\ncorrect, the five states DGA's Input page lists (Default, Hovered, Pressed, Focused, Disabled) specified on\nthe form inputs. No field on the screen is read-only.",
       "expected_output": "A reviewer that always finds something. The correct answer is that this one passes.",
       "expectations": [
         "verdict: **Ready for development**",

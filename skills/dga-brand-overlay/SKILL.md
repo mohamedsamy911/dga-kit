@@ -45,8 +45,9 @@ retrieval date. If you cannot follow a claim here back to a quote there, do not 
   footer anatomy*)
 - **Component anatomy and each component's listed states** —
   `../dga-design-system/references/components.md`. ⚠️ The six-name state set is a vocabulary;
-  each component page lists its own subset (inputs and tabs use five, no Selected). Do not report
-  a component as non-compliant for lacking a state its own page does not list.
+  each component's page and DGA's Assessment Checklist list its own subset (tabs: the page lists
+  five with no Selected; checklist item 25 adds Selected / Unselected). Report each under its own
+  source, and never for a state neither lists (`components.md`, *Standard state set*).
 - **The colour roles themselves.** An entity may supply brand colours; it may not repoint
   `text.default` at one that fails contrast. Run
   `../dga-design-system/assets/check-contrast.mjs` against any override before adopting it. →

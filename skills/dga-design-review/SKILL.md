@@ -75,9 +75,11 @@ Before the cosmetic passes — RTL errors are structural and invalidate what fol
 ### 5 · Components & states
 - Is each component a DGA component, a modified one, or invented? Flag the latter two and name
   the DGA component it should be.
-- **DGA's six states: Default · Hovered · Pressed · Selected · Focused · Disabled.** A design
-  that omits states the screen needs is incomplete — a form with only default-state inputs is
-  not compliant.
+- **States: DGA's vocabulary is Default · Hovered · Pressed · Selected · Focused · Disabled.**
+  Each component's page and the Assessment Checklist list its own subset (`components.md`,
+  *Standard state set*). A design that omits states the screen needs is incomplete — a form with
+  only default-state inputs is not compliant. A missing page state is a finding; a state only the
+  checklist lists goes in the checklist list.
 - Anatomy matches the documented parts for that component (`components.md`)
 - Icon sizes from the DGA bands: 10/14/16 XS · 18/20 S · **24 standard** · 28/32 L
 - Breadcrumbs truncate past **five** items; mobile shows back arrow + previous page only

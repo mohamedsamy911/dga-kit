@@ -151,6 +151,13 @@ The link in the reference column is `https://survey.dga.gov.sa/survey/start/91ed
 "Left" is the workbook's word, written for the Arabic layout. It does not say where these go in
 an LTR layout; report the placement you found rather than inventing a rule.
 
+**Items 12–36 — component states.** Eighteen items name the states to apply, often split into
+interactive and contextual ones (*"Apply contextual states (Selected / Unselected)"*). Five differ
+from the component page: Radio, Switch, Tabs, Input and Breadcrumbs. All 18 are tabulated beside
+the page's list in *Standard state set*, `../../dga-design-system/references/components.md`.
+Report a state only the checklist names here, not as a page violation; mark it N/A, with the
+reason, where it does not apply.
+
 **Items 14 and 29 — external links:**
 
 <!-- dga -->

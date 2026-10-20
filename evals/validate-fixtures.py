@@ -1847,8 +1847,9 @@ _SELF = os.path.abspath(__file__)
 
 # --- interaction states: a vocabulary, never a universal per-component requirement -----------
 # DGA's component pages list their OWN states - inputs/tabs/menus five with no Selected, file
-# uploader three, pagination four, breadcrumbs seven. Stating all six as a universal rule made
-# review skills and the reviewer agent flag compliant components, and two eval fixtures SCORED it.
+# uploader three, pagination four, breadcrumbs seven - and the Assessment Checklist lists its own
+# for 18 components, differing in five. Stating all six as a universal rule made review skills and
+# the reviewer agent flag compliant components, and two eval fixtures SCORED it.
 _UNIVERSAL_STATES = re.compile(
     r'six states,?\s+always'
     r'|ship all six states'
@@ -1892,6 +1893,26 @@ chk('states: components.md still carries per-component state lists', len(_state_
 chk('states: at least one component page lists five states without Selected',
     any('Selected' not in _l and _l.count('·') == 4 for _l in _state_lines),
     'the premise of the vocabulary note no longer holds - re-read the component pages')
+# The checklist columns of the state table must be the workbook's own lists. A hand-typed state
+# here becomes a "DGA requires" in every review; compare each row with the raw capture.
+_st_rows = re.findall(r'^\| [^|(]+\((\d+)\) \| ([^|]+?) \| ([^|]+?) \| [^|]+ \|$',
+                      _comp_txt.split('## Standard state set', 1)[1].split('\n## ', 1)[0], re.M)
+_ck_secs = dict((int(n), b) for n, b in re.findall(
+    r'^### (\d+)\s*$(.*?)(?=^### |\Z)',
+    open(os.path.join(ROOT, 'harvest/raw/2026-10-19-assessment-checklist.md'), encoding='utf-8').read(),
+    re.M | re.S))
+_ck_state_items = sorted(n for n, b in _ck_secs.items()
+                         if re.search(r'^> Apply [^\n(]*\bstates\b[^\n(]*\(', b, re.M))
+_st_bad = []
+for _n, _i, _c in _st_rows:
+    _sec = _ck_secs.get(int(_n), '')
+    _ctx = re.search(r'contextual states[^\n(]*\(([^)]+)\)', _sec)
+    if '(%s)' % _i not in _sec or _c != (_ctx.group(1).strip() if _ctx else '—'):
+        _st_bad.append(_n)
+chk("states: the checklist columns are the workbook's lists, item for item",
+    not _st_bad and sorted(int(n) for n, _, _ in _st_rows) == _ck_state_items,
+    f'rows not in the capture: {_st_bad}; table items {sorted(int(n) for n, _, _ in _st_rows)} '
+    f'vs checklist items naming states {_ck_state_items}')
 
 # --- RTL: never cite a total --------------------------------------------------------------
 # COVERAGE records the total as TODO(verify); rtl-rules.md says never cite one. The kit still

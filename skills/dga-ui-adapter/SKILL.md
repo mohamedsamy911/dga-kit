@@ -100,11 +100,12 @@ Eight rules. Each is library-independent, and each one has burned somebody.
    connected script — tracking breaks the joins. Scope `letter-spacing` to Latin, or zero it
    under `[dir="rtl"]`.
 
-4. **The states each component's page lists.** DGA's vocabulary is Default, Hovered, Pressed,
-   Selected, Focused and Disabled, but each component page specifies its own subset — inputs and
-   tabs list five with no Selected. Build what that component's spec in
-   `../dga-design-system/references/components.md` lists; never require Selected where it does
-   not. A keyboard-operable control with no visible focus state is not compliant — focus is an
+4. **The states each component's page and the Assessment Checklist list.** DGA's vocabulary is
+   Default, Hovered, Pressed, Selected, Focused and Disabled, but each component has its own
+   subset, and the two sources can differ — tabs: the page lists five with no Selected; checklist
+   item 25 adds Selected / Unselected. Build what *Standard state set* in
+   `../dga-design-system/references/components.md` lists; never require a state neither source
+   lists. A keyboard-operable control with no visible focus state is not compliant — focus is an
    accessibility requirement, not polish. Most libraries let focus fall back to the browser
    default; check rather than assume.
 

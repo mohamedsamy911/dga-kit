@@ -12,8 +12,8 @@ constraint. If the cell says **build**, no mainstream library ships one — see
 primitives) and Ant Design v5; a library not listed almost certainly has the same component under
 a name from one of these four.
 
-Everything below applies on top of the eight rules in `../SKILL.md` — semantic tokens, six
-states, 44px targets, no Arabic letter-spacing, logical properties.
+Everything below applies on top of the eight rules in `../SKILL.md` — semantic tokens, the
+states each component's page and the Assessment Checklist list, 44px targets, no Arabic letter-spacing, logical properties.
 
 ---
 

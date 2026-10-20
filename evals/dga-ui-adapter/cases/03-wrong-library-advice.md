@@ -8,7 +8,8 @@ DGA-compliant?"
   PrimeVue calls the component
 - the DGA rule: a horizontal tablist does **not scroll or wrap**; DGA recommends an overflow
   "More" button. Most libraries default to scrolling
-- also: the states DGA lists for tabs (five, including Focused — no Selected), 44px targets,
+- also: the states DGA lists for tabs (the page's five, including Focused, no Selected; checklist
+  item 25 adds Selected / Unselected), 44px targets,
   RTL mirroring
 - FAIL (library confusion) if it answers with `Tabs` props from MUI, Chakra or Ant as though they
   were PrimeVue's, or invents a PrimeVue API

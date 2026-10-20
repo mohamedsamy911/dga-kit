@@ -101,7 +101,8 @@ Everything here is cited in `references/`.
 
 **Components**
 13. State vocabulary: **Default · Hovered · Pressed · Selected · Focused · Disabled** — each
-    component page lists **its own** subset; follow that page, not all six (`components.md`)
+    component's page and the Assessment Checklist list **its own** subset, not all six; the two
+    can differ (`components.md`, *Standard state set*)
 14. Icons: 10/14/16 XS · 18/20 S · **24 standard** · 28/32 L. Avatars: 24/32 S · **40/48 M** ·
     64/80/120 L
 15. **Content switcher takes 2–4 options only** — use Tabs beyond four

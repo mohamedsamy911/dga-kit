@@ -11,6 +11,39 @@ patch means corrections. Nothing here is a DGA release — see
 `skills/dga-design-system/dga-version.md` for the Platforms Code version this kit is pinned to
 (currently **4.0.0** per DGA's change log, read 2026-10-08; DGA publishes no release date).
 
+## 0.17.0 — 2026-10-20
+
+### Corrected — component states now come from two DGA sources
+
+The kit took each component's states from its page alone. DGA's Assessment Checklist, what DGA
+asks teams to submit, names states for 18 components (items 12–36), split into *interactive* and
+*contextual* ones. It differs from the page in five: **Radio**, **Switch**, **Tabs**, **Input**
+and **Breadcrumbs**. Checkbox, Dropdown and Date picker pages list no states, so the checklist is
+DGA's only list for them.
+
+- The kit said, in five skills and the code-reviewer agent, that tabs have *"no Selected"*. That
+  is true of the Tabs page, but checklist item 25 adds Selected / Unselected. Each now names both
+  sources.
+- `components.md`, *Standard state set*: a table of the checklist's lists beside the page's.
+  Kit policy: a missing page state is a design finding; a state only the checklist names is
+  reported in the checklist list, as `dga-launch-gate` does; where one does not apply, the
+  workbook's own N/A status covers it.
+- A trap the checklist exposes: HTML's `readonly` does nothing on a checkbox or radio button.
+- Nine pages were re-read on the rendered site; each matched the kit's record. Evidence:
+  `harvest/raw/2026-10-20-component-states.md`.
+- New fixture: the table's checklist columns must match the captured workbook, item for item.
+  Break-tested with a wrong state, a dropped row, and a contextual list changed or removed.
+- Eval case 03 (ui-adapter) names both tab lists. Case 11 (design-review) now says no field on
+  its clean screen is read-only, so N/A applies.
+
+### Changed — Buttons
+
+- The page's Appearance paragraph names a close button its Types list omits. The kit told teams
+  to treat it as an icon button; it now records that DGA's Figma has a separate `Button-Close`
+  component (20 / 24 / 32 / 40px), and that the Figma `Button` has six `Style` values the page
+  does not map to its three emphasis levels.
+- The capture logs no longer call the mobile Modal a bottom sheet, which 0.16.0 removed elsewhere.
+
 ## 0.16.0 — 2026-10-20
 
 ### Added — DGA's Figma component files
